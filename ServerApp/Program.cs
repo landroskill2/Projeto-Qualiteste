@@ -1,6 +1,20 @@
+using Microsoft.EntityFrameworkCore;
+using Qualiteste.ServerApp.DataAccess;
+using Qualiteste.ServerApp.DataAccess.Concrete;
+using Qualiteste.ServerApp.DataAccess.Repository;
+using Qualiteste.ServerApp.Models;
+using Qualiteste.ServerApp.Services;
+using Qualiteste.ServerApp.Services.Concrete;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddDbContext<PostgresContext>();
+builder.Services.AddScoped<DbContext, PostgresContext>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IConsumerService, ConsumerService>();
+builder.Services.AddScoped<ISessionService, SessionService>();
+builder.Services.AddScoped<ITestService, TestService>();
 
 builder.Services.AddControllersWithViews();
 
@@ -18,9 +32,7 @@ app.UseStaticFiles();
 app.UseRouting();
 
 
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller}/{action=Index}/{id?}");
+app.MapControllers();
 
 app.MapFallbackToFile("index.html");
 

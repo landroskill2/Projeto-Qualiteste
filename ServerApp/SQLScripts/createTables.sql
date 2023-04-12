@@ -2,7 +2,8 @@ CREATE TABLE CONSUMER(
     Id int GENERATED ALWAYS AS IDENTITY,
     FullName varchar(200) NOT NULL,
     NIF varchar(15) PRIMARY KEY,
-    DateOfBirth date NOT NULL,
+    Sex varchar(1) NOT NULL check (Sex in ('F', 'M')),
+    DateOfBirth date,
     Contact int unique NOT NULL,
     Email varchar
 );
@@ -17,7 +18,6 @@ CREATE TABLE TEST(
     Product int REFERENCES PRODUCT(ProductID) NOT NULL,
     TestType varchar(2) NOT NULL check (TestType in ('HT', 'SP')),
     ConsumersNumber int NOT NULL,
-    ProductsNumber int NOT NULL,
     RequestDate date NOT NULL,
     ValidationDate date,
     DueDate date,
@@ -31,17 +31,18 @@ CREATE TABLE PRODUCT(
     Brand varchar(50)
 ); 
 
-CREATE TABLE SAMPLE(
-    TestID varchar(20) REFERENCES TEST(InternalID),
-    ProductID int REFERENCES PRODUCT(ProductID),
-    ReceptionDate date
-)
-
 CREATE TABLE CLIENT(
     Acronym varchar(10) PRIMARY KEY,
     CompanyName varchar(50) NOT NULL
 );
 
+
+
+CREATE TABLE SAMPLE(
+    TestID varchar(20) REFERENCES TEST(InternalID),
+    ProductID int REFERENCES PRODUCT(ProductID),
+    ReceptionDate date
+)
 
 CREATE TABLE CONSUMER_HT(
     InternalID varchar(20) REFERENCES TEST(InternalID),
@@ -65,7 +66,7 @@ CREATE TABLE SESSION_TESTS(
 );
 
 CREATE TABLE CONSUMER_SESSION(
-    varchar(20) REFERENCES SESSION(SessionID),
+    SessionID varchar(20) REFERENCES SESSION(SessionID),
     ConsumerID varchar(15) REFERENCES CONSUMER(NIF),
     ContactedDate date,
     ConfirmationDate date,
@@ -73,6 +74,3 @@ CREATE TABLE CONSUMER_SESSION(
     Attendance boolean,
     StampDate date,
 );
-
-
-CREATE TABLE 
