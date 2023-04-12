@@ -21,8 +21,7 @@ CREATE TABLE TEST(
     RequestDate date NOT NULL,
     ValidationDate date,
     DueDate date,
-    ReportDeliveryDate date,
-
+    ReportDeliveryDate date
 );
 
 CREATE TABLE PRODUCT(
@@ -55,22 +54,21 @@ CREATE TABLE CONSUMER_HT(
 
 CREATE TABLE CONSUMER_SP(
     InternalID varchar(20) REFERENCES TEST(InternalID),
-    ConsumerID varchar(15) REFERENCES CONSUMER(NIF),
+    ConsumerID varchar(15) REFERENCES CONSUMER(NIF)
     /* REFERENCIA PARA A TABELA FIZZ */
 );
 
 CREATE TABLE SESSION_TESTS(
-    SessionID int REFERENCES SESSION(SessionID),
-    TestID varchar(20) REFERENCES Test(InternalID),
-
+    SessionID varchar(8) REFERENCES SESSION(SessionID),
+    TestID varchar(20) REFERENCES Test(InternalID)
 );
 
 CREATE TABLE CONSUMER_SESSION(
-    SessionID varchar(20) REFERENCES SESSION(SessionID),
+    SessionID varchar(8) REFERENCES SESSION(SessionID),
     ConsumerID varchar(15) REFERENCES CONSUMER(NIF),
     ContactedDate date,
     ConfirmationDate date,
     SessionTime time,
     Attendance boolean,
-    StampDate date,
+    StampDate date
 );
