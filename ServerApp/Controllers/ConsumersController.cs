@@ -21,15 +21,15 @@ namespace Qualiteste.ServerApp.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
 
-        public IActionResult GetConsumerById([FromRoute] int id)
+        public IActionResult GetConsumerById(int id)
         {
             try {
                 ConsumerOutputModel consumer = _consumerService.GetConsumerById(id);
                 return Ok(consumer);
             }
-            catch(NoConsumerFoundWithId ex) 
+            catch(CustomError ex) 
             {
-                return NotFound(ex.Message);
+                return Problem(statusCode: ex.StatusCode, title : ex.Message);
             }
             catch(Exception ex)
             {
@@ -54,6 +54,10 @@ namespace Qualiteste.ServerApp.Controllers
                 }
                 return Ok(consumers);
             }
+            catch (CustomError ex)
+            {
+                return Problem(statusCode: ex.StatusCode, title: ex.Message);
+            }
             catch (Exception ex)
             {
                 return Problem(statusCode: 500, title:"Ocorreu um erro inesperado");
@@ -68,9 +72,13 @@ namespace Qualiteste.ServerApp.Controllers
                 int res = _consumerService.CreateNewConsumer(consumer);
                 var actionName = nameof(ConsumersController.GetConsumerById);
                 var routeValue = new { id = res };
-                return CreatedAtAction(actionName, routeValue);
+                return CreatedAtAction(actionName, routeValue, consumer);
             }
-            catch(Exception ex)
+            catch (CustomError ex)
+            {
+                return Problem(statusCode: ex.StatusCode, title: ex.Message);
+            }
+            catch (Exception ex)
             {
                 return Problem(statusCode: 500, title: "Ocorreu um erro inesperado");
             }

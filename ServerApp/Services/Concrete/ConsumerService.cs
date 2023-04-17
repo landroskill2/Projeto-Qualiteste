@@ -1,4 +1,5 @@
-﻿using Qualiteste.ServerApp.DataAccess;
+﻿using Microsoft.EntityFrameworkCore;
+using Qualiteste.ServerApp.DataAccess;
 using Qualiteste.ServerApp.Dtos;
 using Qualiteste.ServerApp.Models;
 using Qualiteste.ServerApp.Services.Errors;
@@ -22,8 +23,21 @@ namespace Qualiteste.ServerApp.Services.Concrete
                 _unitOfWork.Complete();
                 return (int)dbConsumer.Id;
             }
-            catch (Exception ex)
+            catch (Microsoft.EntityFrameworkCore.DbUpdateException ex)
             {
+                var dbException = ex.InnerException as Npgsql.NpgsqlException;
+                if (dbException != null)
+                {
+                    var state = dbException.Data["SqlState"];
+                    var constraint = dbException.Data["ConstraintName"];
+                    if (state.Equals("23505") && constraint.Equals("consumer_pkey")) 
+                        throw new ConsumerWithIdAlreadyPresent();
+                    if (state.Equals("23505") && constraint.Equals("consumer_contact_key"))
+                        throw new ConsumerWithContactAlreadyPresent();
+                    //dbException
+                }
+                //ex.InnerException
+                //if(dbException.)
                 throw ex;
             }
         }
