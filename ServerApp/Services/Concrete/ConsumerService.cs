@@ -33,11 +33,8 @@ namespace Qualiteste.ServerApp.Services.Concrete
                     if (state.Equals("23505") && constraint.Equals("consumer_pkey")) 
                         throw new ConsumerWithIdAlreadyPresent();
                     if (state.Equals("23505") && constraint.Equals("consumer_contact_key"))
-                        throw new ConsumerWithContactAlreadyPresent();
-                    //dbException
+                        throw new ConsumerWithContactAlreadyPresent(); 
                 }
-                //ex.InnerException
-                //if(dbException.)
                 throw ex;
             }
         }
@@ -45,8 +42,7 @@ namespace Qualiteste.ServerApp.Services.Concrete
         public ConsumerOutputModel GetConsumerById(int id)
         {
             Consumer? consumer = _unitOfWork.Consumers.GetConsumerById(id);
-            if (consumer == null) throw new NoConsumerFoundWithId();
-            return consumer.ToOutputModel();
+            return consumer == null ? throw new NoConsumerFoundWithId() : consumer.ToOutputModel();
         }
 
         public IEnumerable<ConsumerOutputModel> GetConsumersAlphabetically()
@@ -59,9 +55,14 @@ namespace Qualiteste.ServerApp.Services.Concrete
             
         }
 
-        public IEnumerable<ConsumerOutputModel> GetConsumersFiltered(string sex)
+        public IEnumerable<ConsumerOutputModel> GetConsumersFiltered(string? sex = "*", string? age = "0")
         {
-            throw new NotImplementedException();
+
+            //Might be a problem, there are consumers with no specified dateOfBirth
+            int iage = int.Parse(age);
+            IEnumerable<ConsumerOutputModel> consumers = _unitOfWork.Consumers.GetConsumersFiltered(sex, iage)
+                .Select(c => c.ToOutputModel());
+            return consumers;
         }
     }
 }

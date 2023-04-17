@@ -44,9 +44,9 @@ namespace Qualiteste.ServerApp.Controllers
         {
             IEnumerable<ConsumerOutputModel> consumers;
             try {
-                if (sex != null)
+                if (sex != null || age != null)
                 {
-                    consumers = _consumerService.GetConsumersFiltered(sex);
+                    consumers = _consumerService.GetConsumersFiltered(sex,age);
                 }
                 else 
                 {

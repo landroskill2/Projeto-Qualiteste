@@ -7,6 +7,6 @@ namespace Qualiteste.ServerApp.Services
         int CreateNewConsumer(ConsumerInputModel consumer);
         ConsumerOutputModel GetConsumerById(int id);
         IEnumerable<ConsumerOutputModel> GetConsumersAlphabetically();
-        IEnumerable<ConsumerOutputModel> GetConsumersFiltered(string sex);
+        IEnumerable<ConsumerOutputModel> GetConsumersFiltered(string? sex, string? age);
     }
 }
