@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "KqvaO2f+pvWFuEUStKYSKD/ZVm8amn91ubFL+Qsc4fyFHwaQAGHpM2xloJOJi3rCkiz/TOeSvsoRV/ehaCexwg==",
+  "dgSpecHash": "H/rQWQyFsEHvP3Cb6+EaqOxWswsV76Zqq9EyKvTJfhpBJ2b0WPDsw1hgt1Eu6eBe77k+vYj1M1o+wH8Y5KGj7g==",
   "success": true,
   "projectFilePath": "C:\\Users\\landr\\Desktop\\Qualiteste\\Tests\\Tests.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\landr\\.nuget\\packages\\castle.core\\5.1.0\\castle.core.5.1.0.nupkg.sha512",
     "C:\\Users\\landr\\.nuget\\packages\\coverlet.collector\\3.1.2\\coverlet.collector.3.1.2.nupkg.sha512",
     "C:\\Users\\landr\\.nuget\\packages\\microsoft.aspnetcore.spaproxy\\7.0.3\\microsoft.aspnetcore.spaproxy.7.0.3.nupkg.sha512",
     "C:\\Users\\landr\\.nuget\\packages\\microsoft.codecoverage\\17.3.2\\microsoft.codecoverage.17.3.2.nupkg.sha512",
@@ -11,6 +12,7 @@
     "C:\\Users\\landr\\.nuget\\packages\\microsoft.entityframeworkcore\\7.0.4\\microsoft.entityframeworkcore.7.0.4.nupkg.sha512",
     "C:\\Users\\landr\\.nuget\\packages\\microsoft.entityframeworkcore.abstractions\\7.0.4\\microsoft.entityframeworkcore.abstractions.7.0.4.nupkg.sha512",
     "C:\\Users\\landr\\.nuget\\packages\\microsoft.entityframeworkcore.analyzers\\7.0.4\\microsoft.entityframeworkcore.analyzers.7.0.4.nupkg.sha512",
+    "C:\\Users\\landr\\.nuget\\packages\\microsoft.entityframeworkcore.proxies\\7.0.4\\microsoft.entityframeworkcore.proxies.7.0.4.nupkg.sha512",
     "C:\\Users\\landr\\.nuget\\packages\\microsoft.entityframeworkcore.relational\\7.0.3\\microsoft.entityframeworkcore.relational.7.0.3.nupkg.sha512",
     "C:\\Users\\landr\\.nuget\\packages\\microsoft.extensions.caching.abstractions\\7.0.0\\microsoft.extensions.caching.abstractions.7.0.0.nupkg.sha512",
     "C:\\Users\\landr\\.nuget\\packages\\microsoft.extensions.caching.memory\\7.0.0\\microsoft.extensions.caching.memory.7.0.0.nupkg.sha512",
@@ -36,6 +38,7 @@
     "C:\\Users\\landr\\.nuget\\packages\\nunit3testadapter\\4.3.0\\nunit3testadapter.4.3.0.nupkg.sha512",
     "C:\\Users\\landr\\.nuget\\packages\\system.collections\\4.0.11\\system.collections.4.0.11.nupkg.sha512",
     "C:\\Users\\landr\\.nuget\\packages\\system.diagnostics.debug\\4.0.11\\system.diagnostics.debug.4.0.11.nupkg.sha512",
+    "C:\\Users\\landr\\.nuget\\packages\\system.diagnostics.eventlog\\6.0.0\\system.diagnostics.eventlog.6.0.0.nupkg.sha512",
     "C:\\Users\\landr\\.nuget\\packages\\system.diagnostics.tools\\4.0.1\\system.diagnostics.tools.4.0.1.nupkg.sha512",
     "C:\\Users\\landr\\.nuget\\packages\\system.dynamic.runtime\\4.0.11\\system.dynamic.runtime.4.0.11.nupkg.sha512",
     "C:\\Users\\landr\\.nuget\\packages\\system.globalization\\4.0.11\\system.globalization.4.0.11.nupkg.sha512",

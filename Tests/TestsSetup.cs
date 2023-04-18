@@ -9,6 +9,7 @@ namespace Tests
         [SetUp]
         public void Setup()
         {
+            //context = new PostgresContext()
             createDB();
             populateDB();
         }

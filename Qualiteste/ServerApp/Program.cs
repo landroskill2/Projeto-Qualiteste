@@ -11,6 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddDbContext<PostgresContext>();
 builder.Services.AddScoped<DbContext, PostgresContext>();
+builder.Services.AddSingleton(provider => builder.Configuration);
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IConsumerService, ConsumerService>();
 builder.Services.AddScoped<ISessionService, SessionService>();
