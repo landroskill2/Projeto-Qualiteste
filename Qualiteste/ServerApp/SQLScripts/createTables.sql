@@ -41,7 +41,7 @@ CREATE TABLE SAMPLE(
     TestID varchar(20) REFERENCES TEST(InternalID),
     ProductID int REFERENCES PRODUCT(ProductID),
     ReceptionDate date
-)
+);
 
 CREATE TABLE CONSUMER_HT(
     InternalID varchar(20) REFERENCES TEST(InternalID),
