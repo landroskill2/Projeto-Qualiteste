@@ -58,6 +58,10 @@
               "target": "Package",
               "version": "[7.0.4, )"
             },
+            "Npgsql": {
+              "target": "Package",
+              "version": "[7.0.2, )"
+            },
             "Npgsql.EntityFrameworkCore.PostgreSQL": {
               "target": "Package",
               "version": "[7.0.3, )"
@@ -141,6 +145,10 @@
             "NUnit3TestAdapter": {
               "target": "Package",
               "version": "[4.3.0, )"
+            },
+            "Npgsql": {
+              "target": "Package",
+              "version": "[7.0.2, )"
             },
             "coverlet.collector": {
               "target": "Package",

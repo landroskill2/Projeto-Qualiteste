@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Qualiteste.ServerApp.Models;
 
 namespace Tests
@@ -9,9 +10,14 @@ namespace Tests
         [SetUp]
         public void Setup()
         {
-            //context = new PostgresContext()
+            var app = new ConfigurationBuilder()
+                        .SetBasePath(Directory.GetCurrentDirectory())
+                        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                        .Build();
+            context = new PostgresContext(app, true);
             createDB();
             populateDB();
+
         }
 
         [TearDown]
@@ -28,8 +34,9 @@ namespace Tests
 
         public void populateDB()
         {
-            var sql = 0; //usar System.IO.File.ReadAllText(ficheiro com inserts)
-            //context.Database.ExecuteSqlRaw(sql);
+
+            var sql = System.IO.File.ReadAllText("../../../../Qualiteste/ServerApp/SQLScripts/testConsumerData.sql");
+            context.Database.ExecuteSqlRaw(sql);
         }
     }
 }
