@@ -18,8 +18,8 @@ export default defineConfig(({command, mode}) => {
                 key: env['SSL_KEY_FILE']
             },
             proxy: {
-                '/api': {target: 'https://localhost:7197', secure: false},
-                '/swagger': {target: 'https://localhost:7197', secure: false},
+                '/api': {target: 'https://localhost:7160', secure: false},
+                '/swagger': {target: 'https://localhost:7160', secure: false},
             }
         },
     }
