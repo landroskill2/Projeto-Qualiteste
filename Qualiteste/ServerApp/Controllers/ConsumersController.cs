@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Qualiteste.ServerApp.Dtos;
+using Qualiteste.ServerApp.Models;
 using Qualiteste.ServerApp.Services;
 using Qualiteste.ServerApp.Services.Errors;
 
@@ -40,13 +41,13 @@ namespace Qualiteste.ServerApp.Controllers
         [HttpGet]
         [ProducesResponseType(200, Type = typeof(IEnumerable<ConsumerOutputModel>))]
         [ProducesResponseType(500)]
-        public IActionResult GetConsumersList([FromQuery] string? sex, [FromQuery] string? age) 
+        public IActionResult GetConsumersList([FromQuery] string? sex, [FromQuery] string? age, [FromQuery] string? name) 
         {
             IEnumerable<ConsumerOutputModel> consumers;
             try {
-                if (sex != null || age != null)
+                if (sex != null || age != null || name != null)
                 {
-                    consumers = _consumerService.GetConsumersFiltered(sex,age);
+                    consumers = _consumerService.GetConsumersFiltered(sex,age,name);
                 }
                 else 
                 {
@@ -84,5 +85,24 @@ namespace Qualiteste.ServerApp.Controllers
             }
         }
 
+        [HttpPut("{id}")]
+        [ProducesResponseType(200, Type = typeof(ConsumerOutputModel))]
+
+        public IActionResult UpdateConsumer(int id, [FromBody] ConsumerInputModel consumer)
+        {
+            try 
+            {
+                ConsumerOutputModel c = _consumerService.UpdateConsumer(id, consumer);
+                return Ok(c);
+            }
+            catch (CustomError e)
+            {
+                return Problem(statusCode: e.StatusCode, title: e.Message);
+            }
+            catch(Exception e)
+            {
+                return Problem(statusCode: 500, title: "Ocorreu um erro inesperado");
+            }
+        }
     }
 }
