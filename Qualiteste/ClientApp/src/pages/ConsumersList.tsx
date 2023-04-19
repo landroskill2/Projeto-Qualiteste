@@ -28,7 +28,7 @@ export default function Consumers(): React.ReactElement{
 
   useEffect(() => {
     populateData() 
-  }, [sex]);
+  }, [sex, age, searchString]);
 
   const redirectToConsumerCreation = () => {
     // TODO: Implement createConsumer function
@@ -39,7 +39,7 @@ export default function Consumers(): React.ReactElement{
       {},
       sex === null ? null : {sex: sex},
       age === null ? null : {age: age},
-      searchString === null ? null : {nome: searchString}
+      searchString === null ? null : {name: searchString}
     )
 
     const response = await fetchConsumers(filters).then(res => res.json())
@@ -48,23 +48,26 @@ export default function Consumers(): React.ReactElement{
   }
 
   return (
-    <div className="flex flex-col h-full" style={{ height: "100vh" }}>
-      <div className="p-6 flex-grow overflow-y-auto">
-        <h1 className="text-2xl font-bold text-center">Consumers</h1>
-        <div className="flex-grow" style={{ flexShrink: 0 }}>
+    <div className="flex flex-col h-full" style={{ height: "calc(100vh - 115px)" }}>
+      <div className="p-6 flex-grow overflow-y-hidden">
+        <h1 className="text-5xl font-bold text-center">Provadores</h1>
           {consumers === null ? (
             <div className="flex justify-center items-center h-full">
               <Spinner size="lg" />
             </div>
           ) : (
             <>
+            <div className="mb-10" style={{ position: "sticky", top: "4rem", zIndex: 1 }}>
               <FilterBar
                 setSex={setSex}
                 setAge={setAge}
                 setSearchString={setSearchString}
                 searchBar
               />
-              <Table mt={4} variant="striped">
+            </div>
+              
+              <div className="mt-10" style={{ maxHeight: 'calc(100vh - 220px)', overflowY: 'auto' }}>
+              <Table variant="unstyled" overflow="auto">
                 <Thead>
                   <Tr>
                     <Th>Fullname</Th>
@@ -75,7 +78,7 @@ export default function Consumers(): React.ReactElement{
                 </Thead>
                 <Tbody>
                   {consumers.map((consumer) => (
-                    <Tr key={consumer.contact}>
+                    <Tr className="hover:bg-slate-200 cursor-pointer" key={consumer.contact}>
                       <Td>{consumer.fullname}</Td>
                       <Td>{consumer.age}</Td>
                       <Td>{consumer.sex}</Td>
@@ -84,9 +87,9 @@ export default function Consumers(): React.ReactElement{
                   ))}
                 </Tbody>
               </Table>
+              </div>
             </>
           )}
-        </div>
       </div>
       <div className="p-6 bg-white" style={{ flexShrink: 0 }}>
         <Button colorScheme="blue" onClick={redirectToConsumerCreation}>
