@@ -45,6 +45,11 @@ export default function NavMenu() {
                   Home
                 </CustomNavLink>
               </li>
+              <li className="text-white">
+                <CustomNavLink href="/consumers" toggleNavBar={changeToggle}>
+                  Provadores
+                </CustomNavLink>
+              </li>
             </ul>
           </div>
         </div>
