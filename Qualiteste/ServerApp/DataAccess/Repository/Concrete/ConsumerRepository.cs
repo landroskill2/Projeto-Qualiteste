@@ -27,13 +27,14 @@ namespace Qualiteste.ServerApp.DataAccess.Repository.Concrete
             IEnumerable<Consumer> consumers;
             if (sex.Equals("*"))
             {
-                consumers = PostgresContext.Consumers.Where(c => (DateTime.Today.Year - c.Dateofbirth.Value.Year) >= iage).OrderBy(c => c.Dateofbirth);
+                consumers = PostgresContext.Consumers.Where(c => (DateTime.Today.Year - c.Dateofbirth.Value.Year) >= iage).OrderBy(c => c.Fullname);
             }
             else 
             {
                 consumers = PostgresContext.Consumers.Where(c =>
                     c.Sex == sex &&
-                    (DateTime.Today.Year - c.Dateofbirth.Value.Year) >= iage).OrderBy(c => c.Dateofbirth);
+                    (DateTime.Today.Year - c.Dateofbirth.Value.Year) >= iage
+                ).OrderBy(c => c.Fullname);
             }
             if (name.Equals("*")) return consumers;
             return consumers.Where(c => c.Fullname.Contains(name));
