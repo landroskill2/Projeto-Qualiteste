@@ -55,14 +55,60 @@ namespace Qualiteste.ServerApp.Services.Concrete
             
         }
 
-        public IEnumerable<ConsumerOutputModel> GetConsumersFiltered(string? sex = "*", string? age = "0")
+        public IEnumerable<ConsumerOutputModel> GetConsumersFiltered(string sex, string age, string name)
+        {
+            sex = sex != null ? sex.ToUpper() : "*";
+            age ??= "0";
+            name = name != null ? name.ToUpper() : "*";
+            //Might be a problem, there are consumers with no specified dateOfBirth
+            //Handle parse in case of exception
+            try
+            {
+                if (sex.Equals("*") || sex.Equals("M") || sex.Equals("F")) {
+                    int iage = int.Parse(age);
+                    IEnumerable<ConsumerOutputModel> consumers = _unitOfWork.Consumers.GetConsumersFiltered(sex, iage, name)
+                        .Select(c => c.ToOutputModel());
+                    return consumers;
+                }else throw new ConsumerFilterNotValid();
+            }
+            catch(FormatException ex){
+                throw new ConsumerFilterNotValid();
+            }
+            catch(ArgumentNullException ex)
+            {
+                throw new ConsumerFilterNotValid();
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
+           
+            
+            
+            
+        }
+
+        //Throwing exception on Complete.
+        //Might be because id is defined as generated always as Identity on Consumer create table script
+        public ConsumerOutputModel UpdateConsumer(int id, ConsumerInputModel consumer)
         {
 
-            //Might be a problem, there are consumers with no specified dateOfBirth
-            int iage = int.Parse(age);
-            IEnumerable<ConsumerOutputModel> consumers = _unitOfWork.Consumers.GetConsumersFiltered(sex, iage)
-                .Select(c => c.ToOutputModel());
-            return consumers;
+            try {
+                Consumer c = _unitOfWork.Consumers.GetConsumerById(id);
+                c.Fullname = consumer.Fullname;
+                c.Dateofbirth = consumer.DateOfBirth;
+                c.Nif = consumer.Nif;
+                c.Email = consumer.Email;
+                c.Contact = consumer.Contact;
+                c.Sex = consumer.Sex;
+                _unitOfWork.Consumers.Update(c);
+                _unitOfWork.Complete();
+                return c.ToOutputModel();
+            }
+            catch(Exception e)
+            {
+                throw e;
+            }
         }
     }
 }

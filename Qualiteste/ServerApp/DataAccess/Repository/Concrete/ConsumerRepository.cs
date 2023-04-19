@@ -22,11 +22,21 @@ namespace Qualiteste.ServerApp.DataAccess.Repository.Concrete
             return PostgresContext.Consumers.Single(c => c.Id == id);
         }
 
-        public IEnumerable<Consumer> GetConsumersFiltered(string sex, int iage)
+        public IEnumerable<Consumer> GetConsumersFiltered(string sex, int iage, string name)
         {
-            return PostgresContext.Consumers.Where(c =>
-                c.Sex == sex &&
-                (DateTime.Today.Year - c.Dateofbirth.Value.Year) >= iage).OrderBy(c => c.Dateofbirth);
+            IEnumerable<Consumer> consumers;
+            if (sex.Equals("*"))
+            {
+                consumers = PostgresContext.Consumers.Where(c => (DateTime.Today.Year - c.Dateofbirth.Value.Year) >= iage).OrderBy(c => c.Dateofbirth);
+            }
+            else 
+            {
+                consumers = PostgresContext.Consumers.Where(c =>
+                    c.Sex == sex &&
+                    (DateTime.Today.Year - c.Dateofbirth.Value.Year) >= iage).OrderBy(c => c.Dateofbirth);
+            }
+            if (name.Equals("*")) return consumers;
+            return consumers.Where(c => c.Fullname.Contains(name));
         }
 
         public PostgresContext PostgresContext
