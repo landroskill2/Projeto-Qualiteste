@@ -4772,19 +4772,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\jamendes\\.nuget\\packages\\": {}
+    "C:\\Users\\landr\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\jamendes\\Desktop\\Projeto-Qualiteste\\Tests\\Tests.csproj",
+      "projectUniqueName": "C:\\Users\\landr\\Desktop\\Qualiteste\\Tests\\Tests.csproj",
       "projectName": "Tests",
-      "projectPath": "C:\\Users\\jamendes\\Desktop\\Projeto-Qualiteste\\Tests\\Tests.csproj",
-      "packagesPath": "C:\\Users\\jamendes\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\jamendes\\Desktop\\Projeto-Qualiteste\\Tests\\obj\\",
+      "projectPath": "C:\\Users\\landr\\Desktop\\Qualiteste\\Tests\\Tests.csproj",
+      "packagesPath": "C:\\Users\\landr\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\landr\\Desktop\\Qualiteste\\Tests\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\jamendes\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\landr\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -4798,8 +4798,8 @@
         "net7.0": {
           "targetAlias": "net7.0",
           "projectReferences": {
-            "C:\\Users\\jamendes\\Desktop\\Projeto-Qualiteste\\Qualiteste\\Qualiteste.csproj": {
-              "projectPath": "C:\\Users\\jamendes\\Desktop\\Projeto-Qualiteste\\Qualiteste\\Qualiteste.csproj"
+            "C:\\Users\\landr\\Desktop\\Qualiteste\\Qualiteste\\Qualiteste.csproj": {
+              "projectPath": "C:\\Users\\landr\\Desktop\\Qualiteste\\Qualiteste\\Qualiteste.csproj"
             }
           }
         }
@@ -4855,7 +4855,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.202\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.201\\RuntimeIdentifierGraph.json"
       }
     }
   }

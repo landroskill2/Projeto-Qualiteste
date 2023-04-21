@@ -1,6 +1,7 @@
 ﻿using Qualiteste.ServerApp.DataAccess.Repository.Concrete;
 using Qualiteste.ServerApp.Dtos;
 using Qualiteste.ServerApp.Models;
+using Qualiteste.ServerApp.Services.Errors;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -102,6 +103,28 @@ namespace Tests.RepositoryTests
             Assert.True(consumers.Any(c => c.Nif == consumer.Nif));
         }
 
+        [Test]
+        public void UpdateConsumerTest()
+        {
+            Consumer consumer = context.Consumers.First();
+            int consumerID = consumer.Id;
+            consumer.Sex = "F";
+            consumer.Email = "testEmail";
+            consumer.Fullname = "Testing update";
+            consumer.Contact = 2;
+            consumer.Nif = "2";
+            consumerRepository.Update(consumer);
+
+            context.SaveChanges();
+
+            Consumer updatedConsumer = context.Consumers.Where(c => c.Id == consumerID).FirstOrDefault();
+
+            Assert.True(updatedConsumer.Sex == "F");
+            Assert.True(updatedConsumer.Email == "testEmail");
+            Assert.True(updatedConsumer.Fullname == "Testing update");
+            Assert.True(updatedConsumer.Contact == 2);
+            Assert.True(updatedConsumer.Nif == "2");
+        }
         
         [Test]
         public void GetLastIDTest()

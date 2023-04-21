@@ -97,8 +97,6 @@ namespace Qualiteste.ServerApp.Services.Concrete
             
         }
 
-        //Throwing exception on Complete.
-        //Might be because id is defined as generated always as Identity on Consumer create table script
         public Either<CustomError, ConsumerOutputModel> UpdateConsumer(int id, ConsumerInputModel consumer)
         {
 
@@ -116,6 +114,8 @@ namespace Qualiteste.ServerApp.Services.Concrete
             }
             catch(Exception e)
             {
+
+            // TODO: HANDLE EXCEPTIONS
                 throw e;
             }
         }
