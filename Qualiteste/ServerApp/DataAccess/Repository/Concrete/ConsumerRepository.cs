@@ -27,22 +27,33 @@ namespace Qualiteste.ServerApp.DataAccess.Repository.Concrete
         }
 
         public IEnumerable<Consumer> GetConsumersFiltered(string sex, int iage, string name) {
-            Expression<Func<Consumer, bool>> p = c => Filter(c, sex, iage, name);
-            return GetConsumersFiltered(p);
+            Expression<Func<Consumer, bool>> sexPredicate = c => sex.Equals("*") ? true : c.Sex == sex;
+            Expression<Func<Consumer, bool>> namePredicate = c => name.Equals("*") ? true : c.Fullname.Contains(name);
+            Expression<Func<Consumer, bool>> agePredicate = c => (DateTime.Today.Year - c.Dateofbirth.Value.Year) >= iage;
+
+            return GetConsumersFiltered(sexPredicate, namePredicate, agePredicate);
         }
 
-        public bool Filter(Consumer c, string sex, int iage, string name)
+        /*public bool Filter(Consumer c, string sex, int iage, string name)
         {
-            bool sexCondition = sex == "*" ? true : c.Sex == sex;
-            bool nameCondition = name == "*" ? true : c.Fullname.Contains(name);
+            bool sexCondition = sex.Equals("*") ? true : c.Sex == sex;
+            bool nameCondition = name.Equals("*") ? true : c.Fullname.Contains(name);
             bool ageCondition = (DateTime.Today.Year - c.Dateofbirth.Value.Year) >= iage;
 
             return sexCondition && nameCondition && ageCondition;
-        }
-        public IEnumerable<Consumer> GetConsumersFiltered(Expression<Func<Consumer, bool>> p)
+        }*/
+        public IEnumerable<Consumer> GetConsumersFiltered(
+            Expression<Func<Consumer, bool>> sexP,
+            Expression<Func<Consumer, bool>> nameP,
+            Expression<Func<Consumer, bool>> ageP
+            )
         {
             IEnumerable<Consumer> consumers;
-            consumers = PostgresContext.Consumers.Where(p).OrderBy(c => c.Fullname);
+            consumers = PostgresContext.Consumers
+                .Where(sexP)
+                .Where(ageP)
+                .Where(nameP)
+                .OrderBy(c => c.Fullname);
             return consumers;
         }
 
