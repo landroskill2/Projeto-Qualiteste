@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace Tests.RepositoryTests
 {
+    [TestFixture]
     internal class ConsumerRepositoryTests : TestsSetup
     {
         private ConsumerRepository consumerRepository;
@@ -26,8 +27,8 @@ namespace Tests.RepositoryTests
             var nifFirst = "111111111111119";
             var nifLast = "444444444444444";
             var consumers = consumerRepository.GetConsumersAlphabetically();
-            Assert.That(nifFirst, Is.EqualTo(consumers.First().Nif));
-            Assert.That(nifLast, Is.EqualTo(consumers.Last().Nif));
+            Assert.That(consumers.First().Nif, Is.EqualTo(nifFirst));
+            Assert.That(consumers.Last().Nif, Is.EqualTo(nifLast));
         }
         [Test]
         public void GetConsumersWithSexFilteredTest()
@@ -85,7 +86,7 @@ namespace Tests.RepositoryTests
         {
             Consumer consumer = new ConsumerInputModel
             {
-                Fullname = "TEST",
+                Fullname = "It's a TEST",
                 Nif = "123123123123123",
                 Sex = "F",
                 DateOfBirth = DateOnly.Parse("1969-03-29"),
