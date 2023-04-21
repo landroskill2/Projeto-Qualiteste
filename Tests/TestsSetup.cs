@@ -4,10 +4,11 @@ using Qualiteste.ServerApp.Models;
 
 namespace Tests
 {
+    [SetUpFixture]
     public class TestsSetup
     {
         protected PostgresContext context;
-        [SetUp]
+        [OneTimeSetUp]
         public void Setup()
         {
             var app = new ConfigurationBuilder()
@@ -20,7 +21,7 @@ namespace Tests
 
         }
 
-        [TearDown]
+        [OneTimeTearDown]
         public void TearDown()
         {
             context.Database.EnsureDeleted();

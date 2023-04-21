@@ -3,6 +3,8 @@ using Qualiteste.ServerApp.Dtos;
 using Qualiteste.ServerApp.Models;
 using Qualiteste.ServerApp.Services;
 using Qualiteste.ServerApp.Services.Errors;
+using Qualiteste.ServerApp.Utils;
+using System.Reflection.Metadata.Ecma335;
 
 namespace Qualiteste.ServerApp.Controllers
 {
@@ -24,18 +26,22 @@ namespace Qualiteste.ServerApp.Controllers
 
         public IActionResult GetConsumerById(int id)
         {
-            try {
-                ConsumerOutputModel consumer = _consumerService.GetConsumerById(id);
-                return Ok(consumer);
-            }
-            catch(CustomError ex) 
+            IActionResult ret = Problem(statusCode: 500, title: "Ocorreu um erro inesperado");
+
+            try
             {
-                return Problem(statusCode: ex.StatusCode, title : ex.Message);
+                Either<CustomError, ConsumerOutputModel> result = _consumerService.GetConsumerById(id);
+
+                return result.Match(
+                    error => Problem(statusCode: error.StatusCode, title: error.Message),
+                    success => Ok(success)
+                );
             }
             catch(Exception ex)
             {
-                return Problem(statusCode: 500, title: "Ocorreu um erro inesperado");
+                return ret;
             }
+            return ret;
         }
 
         [HttpGet]

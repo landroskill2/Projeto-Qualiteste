@@ -3,6 +3,7 @@ using Qualiteste.ServerApp.DataAccess;
 using Qualiteste.ServerApp.Dtos;
 using Qualiteste.ServerApp.Models;
 using Qualiteste.ServerApp.Services.Errors;
+using Qualiteste.ServerApp.Utils;
 
 namespace Qualiteste.ServerApp.Services.Concrete
 {
@@ -39,10 +40,10 @@ namespace Qualiteste.ServerApp.Services.Concrete
             }
         }
 
-        public ConsumerOutputModel GetConsumerById(int id)
+        public Either<CustomError, ConsumerOutputModel> GetConsumerById(int id)
         {
             Consumer? consumer = _unitOfWork.Consumers.GetConsumerById(id);
-            return consumer == null ? throw new NoConsumerFoundWithId() : consumer.ToOutputModel();
+            return consumer == null ? new NoConsumerFoundWithId() : consumer.ToOutputModel();
         }
 
         public IEnumerable<ConsumerOutputModel> GetConsumersAlphabetically()

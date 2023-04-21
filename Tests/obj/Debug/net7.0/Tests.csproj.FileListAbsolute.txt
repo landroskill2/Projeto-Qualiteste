@@ -3,7 +3,6 @@ C:\Users\landr\Desktop\Qualiteste\Tests\bin\Debug\net7.0\testhost.dll
 C:\Users\landr\Desktop\Qualiteste\Tests\bin\Debug\net7.0\Qualiteste.deps.json
 C:\Users\landr\Desktop\Qualiteste\Tests\bin\Debug\net7.0\Qualiteste.runtimeconfig.json
 C:\Users\landr\Desktop\Qualiteste\Tests\bin\Debug\net7.0\spa.proxy.json
-C:\Users\landr\Desktop\Qualiteste\Tests\bin\Debug\net7.0\appsettings.Development.json
 C:\Users\landr\Desktop\Qualiteste\Tests\bin\Debug\net7.0\appsettings.json
 C:\Users\landr\Desktop\Qualiteste\Tests\bin\Debug\net7.0\Qualiteste.exe
 C:\Users\landr\Desktop\Qualiteste\Tests\bin\Debug\net7.0\testhost.exe
@@ -227,3 +226,5 @@ C:\Users\jamendes\Desktop\Projeto-Qualiteste\Tests\obj\Debug\net7.0\refint\Tests
 C:\Users\jamendes\Desktop\Projeto-Qualiteste\Tests\obj\Debug\net7.0\Tests.pdb
 C:\Users\jamendes\Desktop\Projeto-Qualiteste\Tests\obj\Debug\net7.0\Tests.genruntimeconfig.cache
 C:\Users\jamendes\Desktop\Projeto-Qualiteste\Tests\obj\Debug\net7.0\ref\Tests.dll
+C:\Users\landr\Desktop\Qualiteste\Tests\bin\Debug\net7.0\Castle.Core.dll
+C:\Users\landr\Desktop\Qualiteste\Tests\bin\Debug\net7.0\Microsoft.EntityFrameworkCore.Proxies.dll

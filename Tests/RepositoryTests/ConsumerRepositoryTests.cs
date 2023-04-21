@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Tests.RepositoryTests
 {
-    internal class ConsumerTests : TestsSetup
+    internal class ConsumerRepositoryTests : TestsSetup
     {
         private ConsumerRepository consumerRepository;
 
