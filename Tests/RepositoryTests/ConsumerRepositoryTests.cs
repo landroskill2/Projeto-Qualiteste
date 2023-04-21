@@ -15,7 +15,7 @@ namespace Tests.RepositoryTests
         private ConsumerRepository consumerRepository;
 
 
-        [SetUp]
+        [OneTimeSetUp]
         public void SetUp()
         {
             consumerRepository = new ConsumerRepository(context);
@@ -86,6 +86,7 @@ namespace Tests.RepositoryTests
         {
             Consumer consumer = new ConsumerInputModel
             {
+                Id = 999999,
                 Fullname = "It's a TEST",
                 Nif = "123123123123123",
                 Sex = "F",
@@ -101,7 +102,7 @@ namespace Tests.RepositoryTests
             Assert.True(consumers.Any(c => c.Nif == consumer.Nif));
         }
 
-        [TearDown]
+        [OneTimeTearDown]
         public void TearDown()
         {
             var addedConsumer = context.Consumers.Single(c => c.Nif == "123123123123123");

@@ -16,22 +16,26 @@ namespace Tests.ServiceTests
         private UnitOfWork unitOfWork;
 
 
-        private ConsumerInputModel consumer = new()
+        private static int insertedID = 123123123;
+        private Consumer insertedConsumer = new ConsumerInputModel()
         {
+            Id = insertedID,
             Fullname = "It's a TEST",
-            Nif = "123123123123123",
+            Nif = "321321321321321",
             Sex = "F",
             DateOfBirth = DateOnly.Parse("1969-03-29"),
             Contact = 974585214,
             Email = "thisisaemail@email.com"
-        };
+        }.ToDbConsumer();
 
 
-        [SetUp]
+        [OneTimeSetUp]
         public void SetUp()
         {
             unitOfWork = new UnitOfWork(context);
             consumerService = new ConsumerService(unitOfWork);
+            unitOfWork.Consumers.Add(insertedConsumer);
+            unitOfWork.Complete();
         }
 
         [Test]
@@ -42,7 +46,7 @@ namespace Tests.ServiceTests
 
             IEnumerable<ConsumerOutputModel> consumers;
             Either<CustomError, IEnumerable<ConsumerOutputModel>> res = consumerService.GetConsumersAlphabetically();
-            consumers = res.Match(error => throw error,
+            consumers = res.Match(error => throw new Exception("Not supposed to fail"),
                                   success => success);
 
 
@@ -58,7 +62,7 @@ namespace Tests.ServiceTests
             var sexFilter = "F";
             IEnumerable<ConsumerOutputModel> consumers;
             Either<CustomError, IEnumerable<ConsumerOutputModel>> res = consumerService.GetConsumersFiltered(sexFilter, ageFilter, nameFilter);
-            consumers = res.Match(error => throw error,
+            consumers = res.Match(error => throw new Exception("Not supposed to fail"),
                                   success => success);
 
 
@@ -78,7 +82,7 @@ namespace Tests.ServiceTests
 
             IEnumerable<ConsumerOutputModel> consumers;
             Either<CustomError, IEnumerable<ConsumerOutputModel>> res = consumerService.GetConsumersFiltered("*", "0", nameFilter);
-            consumers = res.Match(error => throw error,
+            consumers = res.Match(error => throw new Exception("Not supposed to fail"),
                                   success => success);
 
 
@@ -95,7 +99,7 @@ namespace Tests.ServiceTests
 
             IEnumerable<ConsumerOutputModel> consumers;
             Either<CustomError, IEnumerable<ConsumerOutputModel>> res = consumerService.GetConsumersFiltered("*", ageFilter, "*");
-            consumers = res.Match(error => throw error,
+            consumers = res.Match(error => throw new Exception("Not supposed to fail"),
                                   success => success);
 
 
@@ -112,7 +116,7 @@ namespace Tests.ServiceTests
 
             IEnumerable<ConsumerOutputModel> consumers;
             Either<CustomError, IEnumerable<ConsumerOutputModel>> res = consumerService.GetConsumersFiltered(sexFilter, "0", "*");
-            consumers = res.Match(error => throw error,
+            consumers = res.Match(error => throw new Exception("Not supposed to fail"),
                                   success => success);
 
 
@@ -172,12 +176,12 @@ namespace Tests.ServiceTests
                 Nif = "123123123123123",
                 Sex = "F",
                 DateOfBirth = DateOnly.Parse("1969-03-29"),
-                Contact = 974585214,
+                Contact = 456456456,
                 Email = "thisisaemail@email.com"
             };
             var res = consumerService.CreateNewConsumer(consumer);
             int id = res.Match(
-                error => throw error,
+                error => throw new Exception("Not supposed to fail"),
                 success => success
                 );
             
@@ -196,7 +200,7 @@ namespace Tests.ServiceTests
 
             var conflictingConsumer = new ConsumerInputModel
             {
-                Fullname = "conflict",
+                Fullname = "conflictContact",
                 Nif = "123412341234123",
                 Sex = "M",
                 DateOfBirth = DateOnly.Parse("1819-03-29"),
@@ -213,17 +217,17 @@ namespace Tests.ServiceTests
             Assert.That(e, Is.TypeOf(typeof(ConsumerWithContactAlreadyPresent)));
         }
 
-        /**[Test]
+        [Test]
         public void CreateConsumerWithConflictingId()
         {
             var conflictingConsumer = new ConsumerInputModel
             {
-
-                Fullname = "conflict",
+                Id = insertedID,
+                Fullname = "conflictID",
                 Nif = "123412341234123",
                 Sex = "M",
                 DateOfBirth = DateOnly.Parse("1819-03-29"),
-                Contact = 974585214,
+                Contact = 12345678,
                 Email = "thisisaemail2@email.com"
             };
 
@@ -233,7 +237,28 @@ namespace Tests.ServiceTests
                     success => throw new Exception("This is supposed to fail")
                 );
 
-            Assert.That(e, Is.TypeOf(typeof(ConsumerWithContactAlreadyPresent)));
-        }*/
+            Assert.That(e, Is.TypeOf(typeof(ConsumerWithIdAlreadyPresent)));
+        }
+        [Test]
+        public void CreateConsumerWithConflictingNif()
+        {
+            var conflictingConsumer = new ConsumerInputModel
+            {
+                Fullname = "conflictNIF",
+                Nif = insertedConsumer.Nif,
+                Sex = "M",
+                DateOfBirth = DateOnly.Parse("1819-03-29"),
+                Contact = 12345678,
+                Email = "thisisaemail2@email.com"
+            };
+
+            var res = consumerService.CreateNewConsumer(conflictingConsumer);
+            CustomError e = res.Match(
+                    error => error,
+                    success => throw new Exception("This is supposed to fail")
+                );
+
+            Assert.That(e, Is.TypeOf(typeof(ConsumerWithNifAlreadyPresent)));
+        }
     }
 }

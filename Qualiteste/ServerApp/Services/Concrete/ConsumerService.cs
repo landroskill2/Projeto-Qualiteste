@@ -30,6 +30,7 @@ namespace Qualiteste.ServerApp.Services.Concrete
             }
             catch (Microsoft.EntityFrameworkCore.DbUpdateException ex)
             {
+                _unitOfWork.UntrackChanges();
                 var dbException = ex.InnerException as Npgsql.NpgsqlException;
                 if (dbException != null)
                 {
@@ -38,11 +39,14 @@ namespace Qualiteste.ServerApp.Services.Concrete
                     if (state.Equals("23505") && constraint.Equals("consumer_pkey")) 
                         return new ConsumerWithIdAlreadyPresent();
                     if (state.Equals("23505") && constraint.Equals("consumer_contact_key"))
-                        return new ConsumerWithContactAlreadyPresent(); 
+                        return new ConsumerWithContactAlreadyPresent();
+                    if (state.Equals("23505") && constraint.Equals("consumer_nif_key"))
+                        return new ConsumerWithNifAlreadyPresent();
                 }
                 throw ex;
-            }
+            }     
         }
+        
 
         public Either<CustomError, ConsumerOutputModel> GetConsumerById(int id)
         {

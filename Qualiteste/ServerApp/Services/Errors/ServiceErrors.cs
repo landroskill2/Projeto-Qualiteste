@@ -23,6 +23,15 @@
         }
     }
 
+    public class ConsumerWithNifAlreadyPresent : CustomError
+    {
+        public ConsumerWithNifAlreadyPresent() : base("Não foi possivel criar um consumidor, NIF já se encontra em uso", 409)
+        {
+
+        }
+    }
+
+
     public class ConsumerFilterNotValid : CustomError
     {
         public ConsumerFilterNotValid() : base("Um dos Filtros usados não é valido", 400)

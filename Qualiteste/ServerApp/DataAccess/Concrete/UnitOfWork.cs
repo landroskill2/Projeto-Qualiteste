@@ -30,6 +30,12 @@ namespace Qualiteste.ServerApp.DataAccess.Concrete
         public void Dispose()
         {
             _context.Dispose();
+            
+        }
+
+        public void UntrackChanges()
+        {
+            _context.ChangeTracker.Clear();
         }
     }
 }
