@@ -1,13 +1,14 @@
 ﻿namespace Qualiteste.ServerApp.Services.Errors
 {
-    public class CustomError : Exception
+    public class CustomError
     {
-        public CustomError(string? message, int statusCode) : base(message)
+        public CustomError(string? message, int statusCode)
         {
             StatusCode = statusCode;
+            Message = message;
         }
-        public override string Message => base.Message;
+        public string Message { get; set; }
 
-        public int StatusCode { get; set; }
+    public int StatusCode { get; set; }
     }
 }

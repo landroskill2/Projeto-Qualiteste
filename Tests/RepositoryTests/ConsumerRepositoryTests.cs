@@ -15,7 +15,7 @@ namespace Tests.RepositoryTests
         private ConsumerRepository consumerRepository;
 
 
-        [SetUp]
+        [OneTimeSetUp]
         public void SetUp()
         {
             consumerRepository = new ConsumerRepository(context);
@@ -60,7 +60,7 @@ namespace Tests.RepositoryTests
             var consumers = consumerRepository.GetConsumersFiltered("*", 0, nameFilter);
             foreach (Consumer c in consumers)
             {
-                Assert.True(c.Fullname.Contains(nameFilter));
+                Assert.True(c.Fullname.Contains(nameFilter.ToUpper()));
             }
 
         }
@@ -77,7 +77,7 @@ namespace Tests.RepositoryTests
             {
                 Assert.That(sexFilter, Is.EqualTo(c.Sex));
                 Assert.That(c.Dateofbirth?.Year, Is.AtMost(yearOfBirth));
-                Assert.True(c.Fullname.Contains(nameFilter));
+                Assert.True(c.Fullname.Contains(nameFilter.ToUpper()));
             }
         }
 
@@ -86,6 +86,7 @@ namespace Tests.RepositoryTests
         {
             Consumer consumer = new ConsumerInputModel
             {
+                Id = 999999,
                 Fullname = "It's a TEST",
                 Nif = "123123123123123",
                 Sex = "F",
@@ -101,6 +102,7 @@ namespace Tests.RepositoryTests
             Assert.True(consumers.Any(c => c.Nif == consumer.Nif));
         }
 
+        
         [Test]
         public void GetLastIDTest()
         {
@@ -108,10 +110,11 @@ namespace Tests.RepositoryTests
             Assert.That(consumerRepository.GetLastID(), Is.EqualTo(lastID));
         }
 
-        [TearDown]
+        [OneTimeTearDown]
         public void TearDown()
         {
-
+            var addedConsumer = context.Consumers.Single(c => c.Nif == "123123123123123");
+            context.Consumers.Remove(addedConsumer);
         }
     }
 }
