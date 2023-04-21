@@ -7,7 +7,7 @@ public partial class ConsumerHt
 {
     public string? Internalid { get; set; }
 
-    public string? Consumerid { get; set; }
+    public int? Consumerid { get; set; }
 
     public DateOnly? Deliverydate { get; set; }
 

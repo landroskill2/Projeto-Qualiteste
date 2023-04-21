@@ -19,6 +19,10 @@ namespace Qualiteste.ServerApp.Services.Concrete
         public Either<CustomError, int> CreateNewConsumer(ConsumerInputModel consumer)
         {
             try {
+                if(consumer.Id == null)
+                {
+                    consumer.Id = _unitOfWork.Consumers.GetLastID() + 1;
+                }
                 Consumer dbConsumer = consumer.ToDbConsumer();
                 _unitOfWork.Consumers.Add(dbConsumer);
                 _unitOfWork.Complete();

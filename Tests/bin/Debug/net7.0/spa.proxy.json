@@ -2,7 +2,7 @@
 "SpaProxyServer": {
 "ServerUrl": "https://localhost:44410",
 "LaunchCommand": "npm start",
-"WorkingDirectory": "C:\\Users\\jamendes\\Desktop\\Projeto-Qualiteste\\Qualiteste\\ClientApp\\",
+"WorkingDirectory": "C:\\Users\\landr\\Desktop\\Qualiteste\\Qualiteste\\ClientApp\\",
 "MaxTimeoutInSeconds": "120"
 }
 }
