@@ -101,6 +101,13 @@ namespace Tests.RepositoryTests
             Assert.True(consumers.Any(c => c.Nif == consumer.Nif));
         }
 
+        [Test]
+        public void GetLastIDTest()
+        {
+            int lastID = context.Consumers.OrderBy(c => c.Id).Last().Id;
+            Assert.That(consumerRepository.GetLastID(), Is.EqualTo(lastID));
+        }
+
         [TearDown]
         public void TearDown()
         {
