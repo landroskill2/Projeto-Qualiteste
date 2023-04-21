@@ -49,21 +49,24 @@ namespace Qualiteste.ServerApp.Controllers
         [ProducesResponseType(500)]
         public IActionResult GetConsumersList([FromQuery] string? sex, [FromQuery] string? age, [FromQuery] string? name) 
         {
-            IEnumerable<ConsumerOutputModel> consumers;
+            Either<CustomError, IEnumerable<ConsumerOutputModel>> result;
             try {
                 if (sex != null || age != null || name != null)
                 {
-                    consumers = _consumerService.GetConsumersFiltered(sex,age,name);
+                    result = _consumerService.GetConsumersFiltered(sex,age,name);
+                    return result.Match(
+                            error => Problem(statusCode: error.StatusCode, title: error.Message),
+                            success => Ok(success)
+                        );
                 }
                 else 
                 {
-                    consumers = _consumerService.GetConsumersAlphabetically();
+                    result = _consumerService.GetConsumersAlphabetically();
+                    return result.Match(
+                            error => Problem(statusCode: error.StatusCode, title: error.Message),
+                            success => Ok(success)
+                        );
                 }
-                return Ok(consumers);
-            }
-            catch (CustomError ex)
-            {
-                return Problem(statusCode: ex.StatusCode, title: ex.Message);
             }
             catch (Exception ex)
             {
@@ -76,14 +79,13 @@ namespace Qualiteste.ServerApp.Controllers
         {
             try
             {
-                int res = _consumerService.CreateNewConsumer(consumer);
+                Either<CustomError, int> result = _consumerService.CreateNewConsumer(consumer);
                 var actionName = nameof(ConsumersController.GetConsumerById);
-                var routeValue = new { id = res };
-                return CreatedAtAction(actionName, routeValue, consumer);
-            }
-            catch (CustomError ex)
-            {
-                return Problem(statusCode: ex.StatusCode, title: ex.Message);
+                return result.Match(
+                    error => Problem(statusCode: error.StatusCode, title: error.Message),
+                    success => CreatedAtAction(actionName, new { id = success }, consumer)
+                    );
+                
             }
             catch (Exception ex)
             {
@@ -98,12 +100,11 @@ namespace Qualiteste.ServerApp.Controllers
         {
             try 
             {
-                ConsumerOutputModel c = _consumerService.UpdateConsumer(id, consumer);
-                return Ok(c);
-            }
-            catch (CustomError e)
-            {
-                return Problem(statusCode: e.StatusCode, title: e.Message);
+                Either<CustomError, ConsumerOutputModel> c = _consumerService.UpdateConsumer(id, consumer);
+                return c.Match(
+                    error => Problem(statusCode: error.StatusCode, title: error.Message),
+                    success => Ok(success)
+                    );
             }
             catch(Exception e)
             {

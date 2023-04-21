@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Qualiteste.ServerApp.DataAccess;
+﻿using Qualiteste.ServerApp.DataAccess;
 using Qualiteste.ServerApp.Dtos;
 using Qualiteste.ServerApp.Models;
 using Qualiteste.ServerApp.Services.Errors;
@@ -23,7 +22,7 @@ namespace Qualiteste.ServerApp.Services.Concrete
                 Consumer dbConsumer = consumer.ToDbConsumer();
                 _unitOfWork.Consumers.Add(dbConsumer);
                 _unitOfWork.Complete();
-                return Either.Success((int)dbConsumer.Id);
+                return (int)dbConsumer.Id;
             }
             catch (Microsoft.EntityFrameworkCore.DbUpdateException ex)
             {
@@ -33,9 +32,9 @@ namespace Qualiteste.ServerApp.Services.Concrete
                     var state = dbException.Data["SqlState"];
                     var constraint = dbException.Data["ConstraintName"];
                     if (state.Equals("23505") && constraint.Equals("consumer_pkey")) 
-                        throw new ConsumerWithIdAlreadyPresent();
+                        return new ConsumerWithIdAlreadyPresent();
                     if (state.Equals("23505") && constraint.Equals("consumer_contact_key"))
-                        throw new ConsumerWithContactAlreadyPresent(); 
+                        return new ConsumerWithContactAlreadyPresent(); 
                 }
                 throw ex;
             }
@@ -50,7 +49,10 @@ namespace Qualiteste.ServerApp.Services.Concrete
         public Either<CustomError, IEnumerable<ConsumerOutputModel>> GetConsumersAlphabetically()
         {
             try {
-                return _unitOfWork.Consumers.GetConsumersAlphabetically().Select(c => c.ToOutputModel());
+                List<ConsumerOutputModel> result = _unitOfWork.Consumers.GetConsumersAlphabetically()
+                    .Select(c => c.ToOutputModel())
+                    .ToList();
+                return result;
             }catch (Exception ex) {
                 throw ex;
             }
@@ -70,15 +72,15 @@ namespace Qualiteste.ServerApp.Services.Concrete
                     int iage = int.Parse(age);
                     IEnumerable<ConsumerOutputModel> consumers = _unitOfWork.Consumers.GetConsumersFiltered(sex, iage, name)
                         .Select(c => c.ToOutputModel());
-                    return consumers;
-                }else throw new ConsumerFilterNotValid();
+                    return consumers.ToList();
+                }else return new ConsumerFilterNotValid();
             }
             catch(FormatException ex){
-                throw new ConsumerFilterNotValid();
+                return new ConsumerFilterNotValid();
             }
             catch(ArgumentNullException ex)
             {
-                throw new ConsumerFilterNotValid();
+                return new ConsumerFilterNotValid();
             }
             catch(Exception ex)
             {
