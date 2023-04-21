@@ -2,6 +2,10 @@
 using Qualiteste.ServerApp.DataAccess.Concrete;
 using Qualiteste.ServerApp.Dtos;
 using Qualiteste.ServerApp.Models;
+using System.Drawing;
+using System;
+using System.Linq.Expressions;
+using System.Xml;
 
 namespace Qualiteste.ServerApp.DataAccess.Repository.Concrete
 {
@@ -22,22 +26,27 @@ namespace Qualiteste.ServerApp.DataAccess.Repository.Concrete
             return PostgresContext.Consumers.SingleOrDefault(c => c.Id == id);
         }
 
-        public IEnumerable<Consumer> GetConsumersFiltered(string sex, int iage, string name)
+        public IEnumerable<Consumer> GetConsumersFiltered(string sex, int iage, string name) {
+            Expression<Func<Consumer, bool>> sexPredicate = c => sex.Equals("*") ? true : c.Sex == sex;
+            Expression<Func<Consumer, bool>> namePredicate = c => name.Equals("*") ? true : c.Fullname.Contains(name);
+            Expression<Func<Consumer, bool>> agePredicate = c => (DateTime.Today.Year - c.Dateofbirth.Value.Year) >= iage;
+
+            return GetConsumersFiltered(sexPredicate, namePredicate, agePredicate);
+        }
+
+        public IEnumerable<Consumer> GetConsumersFiltered(
+            Expression<Func<Consumer, bool>> sexP,
+            Expression<Func<Consumer, bool>> nameP,
+            Expression<Func<Consumer, bool>> ageP
+            )
         {
             IEnumerable<Consumer> consumers;
-            if (sex.Equals("*"))
-            {
-                consumers = PostgresContext.Consumers.Where(c => (DateTime.Today.Year - c.Dateofbirth.Value.Year) >= iage).OrderBy(c => c.Fullname);
-            }
-            else 
-            {
-                consumers = PostgresContext.Consumers.Where(c =>
-                    c.Sex == sex &&
-                    (DateTime.Today.Year - c.Dateofbirth.Value.Year) >= iage
-                ).OrderBy(c => c.Fullname);
-            }
-            if (name.Equals("*")) return consumers;
-            return consumers.Where(c => c.Fullname.Contains(name));
+            consumers = PostgresContext.Consumers
+                .Where(sexP)
+                .Where(ageP)
+                .Where(nameP)
+                .OrderBy(c => c.Fullname);
+            return consumers;
         }
 
         public PostgresContext PostgresContext

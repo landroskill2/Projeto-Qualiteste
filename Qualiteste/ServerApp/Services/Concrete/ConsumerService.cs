@@ -7,6 +7,7 @@ using Qualiteste.ServerApp.Utils;
 
 namespace Qualiteste.ServerApp.Services.Concrete
 {
+    
     public class ConsumerService : IConsumerService
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -16,13 +17,13 @@ namespace Qualiteste.ServerApp.Services.Concrete
             _unitOfWork = unitOfWork;
         }
 
-        public int CreateNewConsumer(ConsumerInputModel consumer)
+        public Either<CustomError, int> CreateNewConsumer(ConsumerInputModel consumer)
         {
             try {
                 Consumer dbConsumer = consumer.ToDbConsumer();
                 _unitOfWork.Consumers.Add(dbConsumer);
                 _unitOfWork.Complete();
-                return (int)dbConsumer.Id;
+                return Either.Success((int)dbConsumer.Id);
             }
             catch (Microsoft.EntityFrameworkCore.DbUpdateException ex)
             {
@@ -46,7 +47,7 @@ namespace Qualiteste.ServerApp.Services.Concrete
             return consumer == null ? new NoConsumerFoundWithId() : consumer.ToOutputModel();
         }
 
-        public IEnumerable<ConsumerOutputModel> GetConsumersAlphabetically()
+        public Either<CustomError, IEnumerable<ConsumerOutputModel>> GetConsumersAlphabetically()
         {
             try {
                 return _unitOfWork.Consumers.GetConsumersAlphabetically().Select(c => c.ToOutputModel());
@@ -56,7 +57,7 @@ namespace Qualiteste.ServerApp.Services.Concrete
             
         }
 
-        public IEnumerable<ConsumerOutputModel> GetConsumersFiltered(string sex, string age, string name)
+        public Either<CustomError, IEnumerable<ConsumerOutputModel>> GetConsumersFiltered(string sex, string age, string name)
         {
             sex = sex != null ? sex.ToUpper() : "*";
             age ??= "0";
@@ -91,7 +92,7 @@ namespace Qualiteste.ServerApp.Services.Concrete
 
         //Throwing exception on Complete.
         //Might be because id is defined as generated always as Identity on Consumer create table script
-        public ConsumerOutputModel UpdateConsumer(int id, ConsumerInputModel consumer)
+        public Either<CustomError, ConsumerOutputModel> UpdateConsumer(int id, ConsumerInputModel consumer)
         {
 
             try {
