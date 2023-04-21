@@ -7,7 +7,7 @@ public partial class ConsumerSession
 {
     public string? Sessionid { get; set; }
 
-    public string? Consumerid { get; set; }
+    public int? Consumerid { get; set; }
 
     public DateOnly? Contacteddate { get; set; }
 

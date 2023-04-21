@@ -1,7 +1,7 @@
 CREATE TABLE CONSUMER(
-    Id int GENERATED ALWAYS AS IDENTITY,
+    Id int PRIMARY KEY,
     FullName varchar(200) NOT NULL,
-    NIF varchar(15) PRIMARY KEY,
+    NIF varchar(15) UNIQUE,
     Sex varchar(1) NOT NULL check (Sex in ('F', 'M')),
     DateOfBirth date,
     Contact int unique NOT NULL,
@@ -12,6 +12,12 @@ CREATE TABLE SESSION(
     SessionID varchar(8) PRIMARY KEY,
     SessionDate date
 );
+
+CREATE TABLE PRODUCT(
+    ProductID int PRIMARY KEY,
+    Designation varchar(200),
+    Brand varchar(50)
+); 
 
 CREATE TABLE TEST(
     InternalID varchar(20) PRIMARY KEY,
@@ -24,11 +30,6 @@ CREATE TABLE TEST(
     ReportDeliveryDate date
 );
 
-CREATE TABLE PRODUCT(
-    ProductID int PRIMARY KEY,
-    Designation varchar(200),
-    Brand varchar(50)
-); 
 
 CREATE TABLE CLIENT(
     Acronym varchar(10) PRIMARY KEY,
@@ -45,7 +46,7 @@ CREATE TABLE SAMPLE(
 
 CREATE TABLE CONSUMER_HT(
     InternalID varchar(20) REFERENCES TEST(InternalID),
-    ConsumerID varchar(15) REFERENCES CONSUMER(NIF),
+    ConsumerID INT REFERENCES CONSUMER(Id),
     DeliveryDate date,
     DueDate date,
     ResponseDate date,
@@ -54,7 +55,7 @@ CREATE TABLE CONSUMER_HT(
 
 CREATE TABLE CONSUMER_SP(
     InternalID varchar(20) REFERENCES TEST(InternalID),
-    ConsumerID varchar(15) REFERENCES CONSUMER(NIF)
+    ConsumerID INT REFERENCES CONSUMER(Id)
     /* REFERENCIA PARA A TABELA FIZZ */
 );
 
@@ -65,7 +66,7 @@ CREATE TABLE SESSION_TESTS(
 
 CREATE TABLE CONSUMER_SESSION(
     SessionID varchar(8) REFERENCES SESSION(SessionID),
-    ConsumerID varchar(15) REFERENCES CONSUMER(NIF),
+    ConsumerID INT REFERENCES CONSUMER(Id),
     ContactedDate date,
     ConfirmationDate date,
     SessionTime time,

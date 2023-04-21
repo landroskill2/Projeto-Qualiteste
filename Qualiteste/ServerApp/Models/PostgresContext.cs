@@ -71,15 +71,17 @@ public partial class PostgresContext : DbContext
 
         modelBuilder.Entity<Consumer>(entity =>
         {
-            entity.HasKey(e => e.Nif).HasName("consumer_pkey");
+            entity.HasKey(e => e.Id).HasName("consumer_pkey");
 
             entity.ToTable("consumer");
 
             entity.HasIndex(e => e.Contact, "consumer_contact_key").IsUnique();
 
-            entity.Property(e => e.Nif)
-                .HasMaxLength(15)
-                .HasColumnName("nif");
+            entity.HasIndex(e => e.Nif, "consumer_nif_key").IsUnique();
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
             entity.Property(e => e.Contact).HasColumnName("contact");
             entity.Property(e => e.Dateofbirth).HasColumnName("dateofbirth");
             entity.Property(e => e.Email)
@@ -88,10 +90,9 @@ public partial class PostgresContext : DbContext
             entity.Property(e => e.Fullname)
                 .HasMaxLength(200)
                 .HasColumnName("fullname");
-            entity.Property(e => e.Id)
-                .ValueGeneratedOnAdd()
-                .UseIdentityAlwaysColumn()
-                .HasColumnName("id");
+            entity.Property(e => e.Nif)
+                .HasMaxLength(15)
+                .HasColumnName("nif");
             entity.Property(e => e.Sex)
                 .HasMaxLength(1)
                 .HasColumnName("sex");
@@ -103,9 +104,7 @@ public partial class PostgresContext : DbContext
                 .HasNoKey()
                 .ToTable("consumer_ht");
 
-            entity.Property(e => e.Consumerid)
-                .HasMaxLength(15)
-                .HasColumnName("consumerid");
+            entity.Property(e => e.Consumerid).HasColumnName("consumerid");
             entity.Property(e => e.Deliverydate).HasColumnName("deliverydate");
             entity.Property(e => e.Duedate).HasColumnName("duedate");
             entity.Property(e => e.Internalid)
@@ -131,9 +130,7 @@ public partial class PostgresContext : DbContext
 
             entity.Property(e => e.Attendance).HasColumnName("attendance");
             entity.Property(e => e.Confirmationdate).HasColumnName("confirmationdate");
-            entity.Property(e => e.Consumerid)
-                .HasMaxLength(15)
-                .HasColumnName("consumerid");
+            entity.Property(e => e.Consumerid).HasColumnName("consumerid");
             entity.Property(e => e.Contacteddate).HasColumnName("contacteddate");
             entity.Property(e => e.Sessionid)
                 .HasMaxLength(8)
@@ -156,9 +153,7 @@ public partial class PostgresContext : DbContext
                 .HasNoKey()
                 .ToTable("consumer_sp");
 
-            entity.Property(e => e.Consumerid)
-                .HasMaxLength(15)
-                .HasColumnName("consumerid");
+            entity.Property(e => e.Consumerid).HasColumnName("consumerid");
             entity.Property(e => e.Internalid)
                 .HasMaxLength(20)
                 .HasColumnName("internalid");

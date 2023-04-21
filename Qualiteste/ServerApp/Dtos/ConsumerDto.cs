@@ -1,4 +1,5 @@
-﻿using Qualiteste.ServerApp.Models;
+﻿using Qualiteste.ServerApp.Dtos;
+using Qualiteste.ServerApp.Models;
 
 namespace Qualiteste.ServerApp.Dtos
 {
@@ -14,6 +15,7 @@ namespace Qualiteste.ServerApp.Dtos
 
     public class ConsumerInputModel
     {
+        public int? Id { get; set; } = null;
         public string Fullname { get; set;}
         public string Nif { get; set; }
         public string Sex { get; set; }
@@ -25,6 +27,7 @@ namespace Qualiteste.ServerApp.Dtos
         {
            return new Consumer
             {
+                Id = (int)Id,
                 Fullname = Fullname,
                 Nif = Nif,
                 Sex = Sex,
