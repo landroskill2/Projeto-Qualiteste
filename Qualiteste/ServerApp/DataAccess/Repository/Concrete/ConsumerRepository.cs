@@ -27,8 +27,8 @@ namespace Qualiteste.ServerApp.DataAccess.Repository.Concrete
         }
 
         public IEnumerable<Consumer> GetConsumersFiltered(string sex, int iage, string name) {
-            Expression<Func<Consumer, bool>> sexPredicate = c => sex.Equals("*") ? true : c.Sex == sex;
-            Expression<Func<Consumer, bool>> namePredicate = c => name.Equals("*") ? true : c.Fullname.Contains(name);
+            Expression<Func<Consumer, bool>> sexPredicate = c => sex.Equals("*") ? true : c.Sex == sex.ToUpper();
+            Expression<Func<Consumer, bool>> namePredicate = c => name.Equals("*") ? true : c.Fullname.Contains(name.ToUpper());
             Expression<Func<Consumer, bool>> agePredicate = c => (DateTime.Today.Year - c.Dateofbirth.Value.Year) >= iage;
 
             return GetConsumersFiltered(sexPredicate, namePredicate, agePredicate);

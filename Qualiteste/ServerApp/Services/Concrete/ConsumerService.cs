@@ -61,25 +61,22 @@ namespace Qualiteste.ServerApp.Services.Concrete
 
         public Either<CustomError, IEnumerable<ConsumerOutputModel>> GetConsumersFiltered(string sex, string age, string name)
         {
-            sex = sex != null ? sex.ToUpper() : "*";
-            age ??= "0";
-            name = name != null ? name.ToUpper() : "*";
-            //Might be a problem, there are consumers with no specified dateOfBirth
-            //Handle parse in case of exception
             try
             {
-                if (sex.Equals("*") || sex.Equals("M") || sex.Equals("F")) {
-                    int iage = int.Parse(age);
-                    IEnumerable<ConsumerOutputModel> consumers = _unitOfWork.Consumers.GetConsumersFiltered(sex, iage, name)
+                //Prepare and Check for invalid filters
+                sex = sex != null ? sex.ToUpper() : "*";
+                age ??= "0";
+                name = name != null ? name.ToUpper() : "*";
+                int iage = int.Parse(age);
+                if (iage < 0) return new ConsumerFilterNotValid();
+                if (!(sex.Equals("*") || sex.Equals("M") || sex.Equals("F"))) return new ConsumerFilterNotValid();
+
+                //Might be a problem, there are consumers with no specified dateOfBirth
+                IEnumerable<ConsumerOutputModel> consumers = _unitOfWork.Consumers.GetConsumersFiltered(sex, iage, name)
                         .Select(c => c.ToOutputModel());
-                    return consumers.ToList();
-                }else return new ConsumerFilterNotValid();
+                return consumers.ToList();
             }
             catch(FormatException ex){
-                return new ConsumerFilterNotValid();
-            }
-            catch(ArgumentNullException ex)
-            {
                 return new ConsumerFilterNotValid();
             }
             catch(Exception ex)

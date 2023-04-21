@@ -60,7 +60,7 @@ namespace Tests.RepositoryTests
             var consumers = consumerRepository.GetConsumersFiltered("*", 0, nameFilter);
             foreach (Consumer c in consumers)
             {
-                Assert.True(c.Fullname.Contains(nameFilter));
+                Assert.True(c.Fullname.Contains(nameFilter.ToUpper()));
             }
 
         }
@@ -77,7 +77,7 @@ namespace Tests.RepositoryTests
             {
                 Assert.That(sexFilter, Is.EqualTo(c.Sex));
                 Assert.That(c.Dateofbirth?.Year, Is.AtMost(yearOfBirth));
-                Assert.True(c.Fullname.Contains(nameFilter));
+                Assert.True(c.Fullname.Contains(nameFilter.ToUpper()));
             }
         }
 
@@ -104,7 +104,8 @@ namespace Tests.RepositoryTests
         [TearDown]
         public void TearDown()
         {
-
+            var addedConsumer = context.Consumers.Single(c => c.Nif == "123123123123123");
+            context.Consumers.Remove(addedConsumer);
         }
     }
 }
