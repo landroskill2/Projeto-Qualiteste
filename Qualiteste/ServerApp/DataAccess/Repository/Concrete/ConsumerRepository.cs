@@ -19,7 +19,7 @@ namespace Qualiteste.ServerApp.DataAccess.Repository.Concrete
 
         public Consumer GetConsumerById(int id)
         {
-            return PostgresContext.Consumers.Single(c => c.Id == id);
+            return PostgresContext.Consumers.SingleOrDefault(c => c.Id == id);
         }
 
         public IEnumerable<Consumer> GetConsumersFiltered(string sex, int iage, string name)
