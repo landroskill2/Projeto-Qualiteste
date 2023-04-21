@@ -34,14 +34,6 @@ namespace Qualiteste.ServerApp.DataAccess.Repository.Concrete
             return GetConsumersFiltered(sexPredicate, namePredicate, agePredicate);
         }
 
-        /*public bool Filter(Consumer c, string sex, int iage, string name)
-        {
-            bool sexCondition = sex.Equals("*") ? true : c.Sex == sex;
-            bool nameCondition = name.Equals("*") ? true : c.Fullname.Contains(name);
-            bool ageCondition = (DateTime.Today.Year - c.Dateofbirth.Value.Year) >= iage;
-
-            return sexCondition && nameCondition && ageCondition;
-        }*/
         public IEnumerable<Consumer> GetConsumersFiltered(
             Expression<Func<Consumer, bool>> sexP,
             Expression<Func<Consumer, bool>> nameP,
