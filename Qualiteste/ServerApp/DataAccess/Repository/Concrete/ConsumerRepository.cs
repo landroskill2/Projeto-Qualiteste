@@ -21,7 +21,7 @@ namespace Qualiteste.ServerApp.DataAccess.Repository.Concrete
             return PostgresContext.Consumers.OrderBy(c => c.Fullname);
         }
 
-        public Consumer GetConsumerById(int id)
+        public Consumer? GetConsumerById(int id)
         {
             return PostgresContext.Consumers.SingleOrDefault(c => c.Id == id);
         }
