@@ -8,5 +8,20 @@ namespace Qualiteste.ServerApp.DataAccess.Repository.Concrete
         public SessionRepository(PostgresContext context) : base(context)
         {
         }
+
+        public Session? GetSessionById(string id)
+        {
+            return PostgresContext.Sessions.SingleOrDefault(s => s.Sessionid == id);
+        }
+
+        public IEnumerable<Session> GetSessionsByDate()
+        {
+            return PostgresContext.Sessions.OrderByDescending(s => s.Sessiondate).ToList();
+        }
+
+        public PostgresContext PostgresContext
+        {
+            get { return Context as PostgresContext; }
+        }
     }
 }

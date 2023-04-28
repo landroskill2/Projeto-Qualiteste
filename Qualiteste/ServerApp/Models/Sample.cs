@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Qualiteste.ServerApp.Models;
 
 namespace Qualiteste.ServerApp.Models;
 

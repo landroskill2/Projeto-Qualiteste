@@ -1,4 +1,9 @@
-﻿using Qualiteste.ServerApp.DataAccess;
+﻿using Microsoft.AspNetCore.Http;
+using Qualiteste.ServerApp.DataAccess;
+using Qualiteste.ServerApp.Dtos;
+using Qualiteste.ServerApp.Models;
+using Qualiteste.ServerApp.Services.Errors;
+using Qualiteste.ServerApp.Utils;
 
 namespace Qualiteste.ServerApp.Services.Concrete
 {
@@ -10,6 +15,57 @@ namespace Qualiteste.ServerApp.Services.Concrete
         public SessionService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
+        }
+
+        public Either<CustomError, IEnumerable<SessionOutputModel>> GetSessionsList()
+        {
+            try
+            {
+                return _unitOfWork.Sessions.GetSessionsByDate().Select(s => s.toOutputModel()).ToList();
+            }catch(Exception ex)
+            {
+                return null;
+            }
+        }
+
+        public Either<CustomError, SessionOutputModel> GetSessionById(string id)
+        {
+            try
+            {
+                return _unitOfWork.Sessions.GetSessionById(id).toOutputModel();
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        public Either<CustomError, string> CreateNewSession(SessionInputModel sessionInput)
+        {
+            try
+            {
+                Session dbSession = sessionInput.toDbSession();
+                _unitOfWork.Sessions.Add(dbSession);
+                return dbSession.Sessionid;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        public Either<CustomError, SessionOutputModel> UpdateSession(int id, SessionInputModel sessionInput)
+        {
+            try
+            {
+                Session dbSession = sessionInput.toDbSession();
+                _unitOfWork.Sessions.Update(dbSession);
+                return dbSession.toOutputModel();
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
     }
 }

@@ -10,7 +10,8 @@ CREATE TABLE CONSUMER(
 
 CREATE TABLE SESSION(
     SessionID varchar(8) PRIMARY KEY,
-    SessionDate date
+    SessionDate date NOT NULL,
+    ConsumersNumber int NOT NULL
 );
 
 CREATE TABLE PRODUCT(
