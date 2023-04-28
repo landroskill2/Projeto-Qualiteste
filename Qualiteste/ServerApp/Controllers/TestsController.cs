@@ -42,11 +42,11 @@ namespace Qualiteste.ServerApp.Controllers
         [HttpGet("{id}")]
         [ProducesResponseType(200, Type = typeof(TestOutputModel))]
         [ProducesResponseType(500)]
-        public IActionResult GetTestById(int id)
+        public IActionResult GetTestById(string id)
         {
             try
             {
-                Either<CustomError, TestOutputModel> result = _testService.GetTestById();
+                Either<CustomError, TestOutputModel> result = _testService.GetTestById(id);
                 return result.Match(
                     error => Problem(statusCode: error.StatusCode, title: error.Message),
                     success => Ok(success)
@@ -59,7 +59,43 @@ namespace Qualiteste.ServerApp.Controllers
             }
 
         }
-    }
 
-    
+        [HttpPost]
+        [ProducesResponseType(201)]
+        public IActionResult CreateNewTest([FromBody] TestInputModel testInput)
+        {
+            try
+            {
+                Either<CustomError, string> result = _testService.CreateNewTest(testInput);
+                var actionName = nameof(TestsController.GetTestById);
+                return result.Match(
+                    error => Problem(statusCode: error.StatusCode, title: error.Message),
+                    success => CreatedAtAction(actionName, new { id = success }, testInput)
+                    );
+
+            }
+            catch (Exception ex)
+            {
+                return Problem(statusCode: 500, title: "Ocorreu um erro inesperado");
+            }
+        }
+
+        [HttpPut("{id}")]
+        [ProducesResponseType(200, Type = typeof(TestOutputModel))]
+        public IActionResult UpdateTest(int id, [FromBody] TestInputModel testInput)
+        {
+            try
+            {
+                Either<CustomError, TestOutputModel> c = _testService.UpdateTest(id, testInput);
+                return c.Match(
+                    error => Problem(statusCode: error.StatusCode, title: error.Message),
+                    success => Ok(success)
+                    );
+            }
+            catch (Exception e)
+            {
+                return Problem(statusCode: 500, title: "Ocorreu um erro inesperado");
+            }
+        }
+    }
 }

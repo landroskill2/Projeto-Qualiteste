@@ -4,7 +4,7 @@ namespace Qualiteste.ServerApp.DataAccess.Repository
 {
     public interface ITestRepository : IRepository<Test>
     {
-        object GetTestById();
+        Test? GetTestById(string id);
         IEnumerable<Test> ListTestsByDate();
     }
 }

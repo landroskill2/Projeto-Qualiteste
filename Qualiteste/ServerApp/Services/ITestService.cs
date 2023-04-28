@@ -6,6 +6,9 @@ namespace Qualiteste.ServerApp.Services
 {
     public interface ITestService
     {
+        Either<CustomError, string> CreateNewTest(TestInputModel testInput);
+        Either<CustomError, TestOutputModel> GetTestById(string id);
         Either<CustomError, IEnumerable<TestOutputModel>> GetTestsList();
+        Either<CustomError, TestOutputModel> UpdateTest(int id, TestInputModel testInput);
     }
 }

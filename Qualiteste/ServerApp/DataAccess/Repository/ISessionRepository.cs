@@ -4,6 +4,7 @@ namespace Qualiteste.ServerApp.DataAccess.Repository
 {
     public interface ISessionRepository : IRepository<Session>
     {
-        IEnumerable<object> GetSessionsByDate();
+        Session? GetSessionById(string id);
+        IEnumerable<Session> GetSessionsByDate();
     }
 }
