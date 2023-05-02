@@ -149,9 +149,37 @@ namespace Tests.ServiceTests
             Assert.That(consumer.Nif, Is.EqualTo(inserted.Nif));
             Assert.That(id, Is.EqualTo(inserted.Id));
 
+
         }
 
-            //Test Errors returned from ConsumerServices
+        [Test]
+        public void UpdateConsumerTest()
+        {
+            ConsumerInputModel consumer = new ConsumerInputModel
+            {
+                Fullname = "testUpdate",
+                Nif = "2",
+                Sex = "M",
+                DateOfBirth = DateOnly.Parse("1969-03-29"),
+                Contact = 974585213,
+                Email = "thisisanewemail@email.com"
+            };
+
+            Either<CustomError, ConsumerOutputModel> result = consumerService.UpdateConsumer(insertedID, consumer);
+
+            ConsumerOutputModel updatedConsumer = result.Match(
+                error => throw new Exception(),
+                success => success
+            );
+
+            //age and nif missing
+            Assert.That("testUpdate", Is.EqualTo(updatedConsumer.Fullname));
+            Assert.That("M", Is.EqualTo(updatedConsumer.Sex));
+            Assert.That(974585213, Is.EqualTo(updatedConsumer.Contact));
+            Assert.That("thisisanewemail@email.com", Is.EqualTo(updatedConsumer.Email));
+        }
+
+        //Test Errors returned from ConsumerServices
 
             [Test]  
         public void GetConsumersWithInvalidSexFilter()
@@ -161,8 +189,10 @@ namespace Tests.ServiceTests
             IEnumerable<ConsumerOutputModel> consumers;
             CustomError e;
             Either<CustomError, IEnumerable<ConsumerOutputModel>> res = consumerService.GetConsumersFiltered(sexFilter, "0", "*");
-            e = res.Match(error => error,
-                                  success => throw new Exception());
+            e = res.Match(
+                error => error,
+                success => throw new Exception()
+            );
 
 
             Assert.That(e, Is.TypeOf(typeof(ConsumerFilterNotValid)));

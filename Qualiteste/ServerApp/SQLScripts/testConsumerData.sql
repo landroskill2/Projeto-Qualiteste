@@ -1,4 +1,3 @@
-DELETE FROM CONSUMER;
 INSERT INTO CONSUMER(Id, FullName, NIF, Sex, DateOfBirth, Contact, Email) VALUES 
 (38, 'MARIA CAROLINA REIS OLIVEIRA', 111111111111111, 'F', '1960-03-29', 31153, null ),
 (14, 'PAULA ALEXANDRA DE ÁGUA', 222222222222222, 'F', '1967-10-21', 18320, null ),
@@ -26,4 +25,62 @@ INSERT INTO CONSUMER(Id, FullName, NIF, Sex, DateOfBirth, Contact, Email) VALUES
 (48, 'CARMINA SILVA SANTOS', 111111111111127, 'F', '1954-02-17', 29702, null),
 (263, 'JORGE RAFAEL CAVALEIRO DA SILVA COUTO', 111111111111128, 'M', '1999-01-09', 94965, null),
 (6, 'ALEXANDRA BERNARDINO', 111111111111129, 'F', '1986-04-19', 91559, null),
-(3, 'MARIA IRENE ALVES', 111111111111131, 'F', '1951-04-11', 2130, null)
+(3, 'MARIA IRENE ALVES', 111111111111131, 'F', '1951-04-11', 2130, null);
+
+INSERT INTO PRODUCT(ProductID, Designation, Brand) VALUES
+(122332, 'Yogurte Grego', 'Continente'),
+(132321, 'Yogurte Grego', 'Pingo Doce'),
+(231233, 'Yogurte Grego', 'Intermarché'),
+(321332, 'Fiambre Fatiado', 'Continente'),
+(324231, 'Fiambre Fatiado', 'Pingo Doce');
+
+INSERT INTO TEST(InternalID, Product, TestType, ConsumersNumber, RequestDate, ValidationDate, DueDate, ReportDeliveryDate) VALUES
+('443244', 122332, 'SP', 10, '2023-03-21', null, null, null),
+('343123', 324231, 'SP', 10, '2023-03-29', null, null, null);
+
+INSERT INTO SAMPLE(TestID, ProductID, ReceptionDate) VALUES
+('443244', 132321, '2023-03-24'),
+('443244', 231233, '2023-03-25'),
+('343123', 321332, '2023-04-01');
+
+INSERT INTO SESSION(SessionID, SessionDate, ConsumersNumber) VALUES
+('040423', '2023-04-04', 10);
+
+INSERT INTO SESSION_TESTS(SessionID, TestID) VALUES
+('040423', '443244'),
+('040423', '343123');
+
+INSERT INTO CONSUMER_SESSION(SessionID, ConsumerID, ContactedDate, ConfirmationDate, SessionTime, Attendance, StampDate) VALUES
+('040423', 6, '2023-03-01', '2023-03-02', '11:00', null, null),
+('040423', 263, '2023-03-01', '2023-03-02', '11:00', null, null),
+('040423', 48, '2023-03-01', '2023-03-02', '11:00', null, null),
+('040423', 86, '2023-03-01', '2023-03-02', '11:00', null, null),
+('040423', 87, '2023-03-01', '2023-03-02', '11:00', null, null),
+('040423', 23, '2023-03-01', '2023-03-02', '11:00', null, null),
+('040423', 168, '2023-03-01', '2023-03-02', '11:00', null, null),
+('040423', 143, '2023-03-01', '2023-03-02', '11:00', null, null),
+('040423', 373, '2023-03-01', '2023-03-02', '11:00', null, null),
+('040423', 67, '2023-03-01', '2023-03-02', '11:00', null, null);
+
+
+INSERT INTO CONSUMER_SP(InternalID, ConsumerID) VALUES
+('443244', 6),
+('343123', 6),
+('443244', 263),
+('343123', 263),
+('443244', 48),
+('343123', 48),
+('443244', 86),
+('343123', 86),
+('443244', 87),
+('343123', 87),
+('443244', 23),
+('343123', 23),
+('443244', 168),
+('343123', 168),
+('443244', 143),
+('343123', 143),
+('443244', 373),
+('343123', 373),
+('443244', 67),
+('343123', 67)

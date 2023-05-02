@@ -214,6 +214,7 @@ public partial class PostgresContext : DbContext
             entity.Property(e => e.Sessionid)
                 .HasMaxLength(8)
                 .HasColumnName("sessionid");
+            entity.Property(e => e.Consumersnumber).HasColumnName("consumersnumber");
             entity.Property(e => e.Sessiondate).HasColumnName("sessiondate");
         });
 
