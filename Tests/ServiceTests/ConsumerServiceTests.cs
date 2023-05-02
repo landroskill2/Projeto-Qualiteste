@@ -126,9 +126,34 @@ namespace Tests.ServiceTests
             }
         }
 
-        //Test Errors returned from ConsumerServices
+        [Test]
+        public void CreateConsumerTest()
+        {
+            ConsumerInputModel consumer = new()
+            {
+                Fullname = "It's a TEST",
+                Nif = "123123123123123",
+                Sex = "F",
+                DateOfBirth = DateOnly.Parse("1969-03-29"),
+                Contact = 456456456,
+                Email = "thisisaemail@email.com"
+            };
+            var res = consumerService.CreateNewConsumer(consumer);
+            int id = res.Match(
+                error => throw new Exception("Not supposed to fail"),
+                success => success
+                );
 
-        [Test]  
+            var inserted = unitOfWork.Consumers.GetConsumerById(id);
+
+            Assert.That(consumer.Nif, Is.EqualTo(inserted.Nif));
+            Assert.That(id, Is.EqualTo(inserted.Id));
+
+        }
+
+            //Test Errors returned from ConsumerServices
+
+            [Test]  
         public void GetConsumersWithInvalidSexFilter()
         {
             var sexFilter = "T";
@@ -165,32 +190,6 @@ namespace Tests.ServiceTests
 
             Assert.That(e, Is.TypeOf(typeof(ConsumerFilterNotValid)));
 
-        }
-
-        [Test]
-        public void CreateConsumerTest()
-        {
-            ConsumerInputModel consumer = new()
-            {
-                Fullname = "It's a TEST",
-                Nif = "123123123123123",
-                Sex = "F",
-                DateOfBirth = DateOnly.Parse("1969-03-29"),
-                Contact = 456456456,
-                Email = "thisisaemail@email.com"
-            };
-            var res = consumerService.CreateNewConsumer(consumer);
-            int id = res.Match(
-                error => throw new Exception("Not supposed to fail"),
-                success => success
-                );
-            
-            var inserted = unitOfWork.Consumers.GetConsumerById(id);
-
-            Assert.That(consumer.Nif, Is.EqualTo(inserted.Nif));
-            Assert.That(id, Is.EqualTo(inserted.Id));
-
-            
         }
 
         [Test]
