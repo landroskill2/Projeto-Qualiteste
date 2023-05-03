@@ -18,7 +18,7 @@
   @apply font-bold text-sky-700 dark:text-sky-400 hover:text-sky-700 dark:hover:!text-sky-400 cursor-pointer;
 }
 .inactive-test-type {
-  @apply hover:text-orange-400 dark:hover:text-orange-400 cursor-pointer;
+  @apply font-bold hover:text-orange-400 dark:hover:text-orange-400 cursor-pointer;
 }
 #nav-title {
   @apply self-center text-3xl font-semibold whitespace-nowrap text-green-700 bg-clip-text bg-[length:100px_500px] cursor-pointer mr-auto

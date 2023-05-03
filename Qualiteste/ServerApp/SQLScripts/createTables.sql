@@ -43,6 +43,7 @@ CREATE TABLE SAMPLE(
     TestID varchar(20) REFERENCES TEST(InternalID),
     ProductID int REFERENCES PRODUCT(ProductID),
     ReceptionDate date
+    primary key(TestID, ProductID)
 );
 
 CREATE TABLE CONSUMER_HT(
@@ -52,6 +53,7 @@ CREATE TABLE CONSUMER_HT(
     DueDate date,
     ResponseDate date,
     StampDate date
+    primary key(ConsumerID, InternalID)
 );
 
 CREATE TABLE CONSUMER_SP(
@@ -63,6 +65,7 @@ CREATE TABLE CONSUMER_SP(
 CREATE TABLE SESSION_TESTS(
     SessionID varchar(8) REFERENCES SESSION(SessionID),
     TestID varchar(20) REFERENCES Test(InternalID)
+    primary key(TestID, SessionID)
 );
 
 CREATE TABLE CONSUMER_SESSION(
@@ -73,4 +76,5 @@ CREATE TABLE CONSUMER_SESSION(
     SessionTime time,
     Attendance boolean,
     StampDate date
+    primary key(ConsumerID, SessionID)
 );
