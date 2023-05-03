@@ -21,6 +21,17 @@ namespace Qualiteste.ServerApp.Services.Concrete
  
         }
 
+        public Either<CustomError, IEnumerable<TestOutputModel>> GetFilteredTestsList(string type)
+        {
+            try
+            {
+                return _unitOfWork.Tests.ListTestsWithFilters(type).Select(t => t.toOutputModel()).ToList();
+            }catch(Exception e)
+            {
+                return null;
+            }
+        }
+
         public Either<CustomError, TestOutputModel> GetTestById(string id)
         {
             Test? test = _unitOfWork.Tests.GetTestById(id);

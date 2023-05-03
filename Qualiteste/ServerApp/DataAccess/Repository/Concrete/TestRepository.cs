@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Qualiteste.ServerApp.Models;
+using System.Linq.Expressions;
 
 namespace Qualiteste.ServerApp.DataAccess.Repository.Concrete
 {
@@ -14,10 +15,30 @@ namespace Qualiteste.ServerApp.DataAccess.Repository.Concrete
             return PostgresContext.Tests.OrderByDescending(t => t.Requestdate);
         }
 
+        public IEnumerable<Test> ListTestsWithFilters(string type)
+        {
+            Expression<Func<Test, bool>> typePredicate = t => type.Equals("*") ? true : t.Testtype == type.ToUpper();
+
+            return ListTestsWithFilters(typePredicate);
+        }
+
+        public IEnumerable<Test> ListTestsWithFilters(
+            Expression<Func<Test, bool>> typeP
+            )
+        {
+            IEnumerable<Test> tests;
+            tests = PostgresContext.Tests
+                .Where(typeP)
+                .OrderByDescending(t => t.Requestdate);
+            return tests;
+        }
+
         public Test? GetTestById(string id)
         {
             return PostgresContext.Tests.SingleOrDefault(t => t.Internalid == id);
         }
+
+
 
         public PostgresContext PostgresContext
         {

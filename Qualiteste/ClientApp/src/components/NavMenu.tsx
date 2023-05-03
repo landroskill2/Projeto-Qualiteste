@@ -50,6 +50,16 @@ export default function NavMenu() {
                   Provadores
                 </CustomNavLink>
               </li>
+              <li className="text-white">
+                <CustomNavLink href="/tests" toggleNavBar={changeToggle}>
+                  Testes
+                </CustomNavLink>
+              </li>
+              <li className="text-white">
+                <CustomNavLink href="/sessions" toggleNavBar={changeToggle}>
+                  Sessões
+                </CustomNavLink>
+              </li>
             </ul>
           </div>
         </div>

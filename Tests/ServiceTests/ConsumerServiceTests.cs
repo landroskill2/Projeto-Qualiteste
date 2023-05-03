@@ -10,9 +10,10 @@ using Qualiteste.ServerApp.Utils;
 namespace Tests.ServiceTests
 {
     [TestFixture]
-    internal class ConsumerServiceTests : TestsSetup
+    internal class ConsumerServiceTests
     {
         private ConsumerService consumerService;
+        private PostgresContext context = TestsSetup.context;
         private UnitOfWork unitOfWork;
 
 

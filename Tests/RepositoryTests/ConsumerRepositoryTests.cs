@@ -11,10 +11,10 @@ using System.Threading.Tasks;
 namespace Tests.RepositoryTests
 {
     [TestFixture]
-    internal class ConsumerRepositoryTests : TestsSetup
+    internal class ConsumerRepositoryTests
     {
         private ConsumerRepository consumerRepository;
-
+        private PostgresContext context = TestsSetup.context;
 
         [OneTimeSetUp]
         public void SetUp()
@@ -99,14 +99,14 @@ namespace Tests.RepositoryTests
             consumerRepository.Add(consumer);
             context.SaveChanges();
 
-            var consumers = consumerRepository.GetConsumersAlphabetically();
-            Assert.True(consumers.Any(c => c.Nif == consumer.Nif));
+            var fetchedConsumer = context.Consumers.SingleOrDefault(c => c.Id == consumer.Id);
+            Assert.True(fetchedConsumer?.Equals(consumer));
         }
 
         [Test]
         public void UpdateConsumerTest()
         {
-            Consumer consumer = context.Consumers.First();
+            Consumer consumer = context.Consumers.SingleOrDefault(c => c.Id == 999999);
             int consumerID = consumer.Id;
             consumer.Sex = "F";
             consumer.Email = "testEmail";
@@ -117,7 +117,7 @@ namespace Tests.RepositoryTests
 
             context.SaveChanges();
 
-            Consumer updatedConsumer = context.Consumers.Where(c => c.Id == consumerID).FirstOrDefault();
+            Consumer updatedConsumer = context.Consumers.SingleOrDefault(c => c.Id == consumerID);
 
             Assert.True(updatedConsumer.Sex == "F");
             Assert.True(updatedConsumer.Email == "testEmail");
@@ -136,7 +136,7 @@ namespace Tests.RepositoryTests
         [OneTimeTearDown]
         public void TearDown()
         {
-            var addedConsumer = context.Consumers.Single(c => c.Nif == "123123123123123");
+            var addedConsumer = context.Consumers.Single(c => c.Nif == "2");
             context.Consumers.Remove(addedConsumer);
         }
     }
