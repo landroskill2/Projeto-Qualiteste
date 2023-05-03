@@ -1,13 +1,22 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Qualiteste.ServerApp.Models;
+using System.Xml.Linq;
 
 namespace Tests
 {
     [SetUpFixture]
     public class TestsSetup
     {
-        protected PostgresContext context;
+        private static PostgresContext _context;
+
+        public static PostgresContext context
+        {
+            get
+            {
+                return _context;
+            }
+        }
         [OneTimeSetUp]
         public void Setup()
         {
@@ -15,7 +24,7 @@ namespace Tests
                         .SetBasePath(Directory.GetCurrentDirectory())
                         .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                         .Build();
-            context = new PostgresContext(app, true);
+            _context = new PostgresContext(app, true);
             createDB();
             populateDB();
 
@@ -24,20 +33,19 @@ namespace Tests
         [OneTimeTearDown]
         public void TearDown()
         {
-            context.Database.EnsureDeleted();
-            context.Dispose();
+            _context.Database.EnsureDeleted();
+            _context.Dispose();
         }
 
         public void createDB()
         {
-            context.Database.EnsureCreated();
+            _context.Database.EnsureCreated();
         }
 
         public void populateDB()
         {
-
             var sql = System.IO.File.ReadAllText("../../../../Qualiteste/ServerApp/SQLScripts/testConsumerData.sql");
-            context.Database.ExecuteSqlRaw(sql);
+            _context.Database.ExecuteSqlRaw(sql);
         }
     }
 }

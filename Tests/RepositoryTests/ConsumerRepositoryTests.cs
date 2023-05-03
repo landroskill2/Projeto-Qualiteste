@@ -11,10 +11,10 @@ using System.Threading.Tasks;
 namespace Tests.RepositoryTests
 {
     [TestFixture]
-    internal class ConsumerRepositoryTests : TestsSetup
+    internal class ConsumerRepositoryTests
     {
         private ConsumerRepository consumerRepository;
-
+        private PostgresContext context = TestsSetup.context;
 
         [OneTimeSetUp]
         public void SetUp()
@@ -106,7 +106,7 @@ namespace Tests.RepositoryTests
         [Test]
         public void UpdateConsumerTest()
         {
-            Consumer consumer = context.Consumers.First();
+            Consumer consumer = context.Consumers.SingleOrDefault(c => c.Id == 999999);
             int consumerID = consumer.Id;
             consumer.Sex = "F";
             consumer.Email = "testEmail";
@@ -136,7 +136,7 @@ namespace Tests.RepositoryTests
         [OneTimeTearDown]
         public void TearDown()
         {
-            var addedConsumer = context.Consumers.Single(c => c.Nif == "123123123123123");
+            var addedConsumer = context.Consumers.Single(c => c.Nif == "2");
             context.Consumers.Remove(addedConsumer);
         }
     }

@@ -11,10 +11,11 @@ using System.Threading.Tasks;
 namespace Tests.RepositoryTests
 {
     [TestFixture]
-    internal class TestRepositoryTests : TestsSetup
+    internal class TestRepositoryTests
     {
 
         private TestRepository testRepository;
+        private PostgresContext context = TestsSetup.context;
 
         [OneTimeSetUp]
         public void SetUp()
@@ -55,7 +56,7 @@ namespace Tests.RepositoryTests
                 Product = 324231,
                 TestType = "SP",
                 ConsumersNumber = 15,
-                RequestDate = DateOnly.Parse("2023-01-03")
+                RequestDate = DateOnly.Parse("2023-03-24")
             }.toDbTest();
 
             testRepository.Add(test);
@@ -96,6 +97,7 @@ namespace Tests.RepositoryTests
             //Assert.True(updatedConsumer.Nif == "2");
         }
 
+        [Test]
         public void UpdateConsumerChangingTypeTest()
         {
             //Test test = context.Tests.SingleOrDefault(t => t.Internalid == "443244");
@@ -105,4 +107,5 @@ namespace Tests.RepositoryTests
 
             //TODO: DAR ERRO QUANDO SE TENTA MUDAR O TIPO
         }
+    }
 }
