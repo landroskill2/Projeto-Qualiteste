@@ -50,7 +50,12 @@ namespace Qualiteste.ServerApp.Services.Concrete
                 var dbException = ex.InnerException as Npgsql.NpgsqlException;
                 if (dbException != null)
                 {
-                    //TODO
+                    var state = dbException.Data["SqlState"];
+                    var constraint = dbException.Data["ConstraintName"];
+                    if (state.Equals("22001"))
+                        return new SessionIdIsToLong();   
+                    else if (state.Equals("23505") && constraint.Equals("session_pkey"))
+                        return new SessionWithConflictingID();
                 }
                 throw ex;
             }
