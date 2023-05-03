@@ -181,7 +181,7 @@ namespace Tests.ServiceTests
 
         //Test Errors returned from ConsumerServices
 
-        [Test]  
+            [Test]  
         public void GetConsumersWithInvalidSexFilter()
         {
             var sexFilter = "T";

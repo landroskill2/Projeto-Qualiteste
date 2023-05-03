@@ -11,5 +11,7 @@ namespace Qualiteste.ServerApp.Services
         Either<CustomError, IEnumerable<ConsumerOutputModel>> GetConsumersAlphabetically();
         Either<CustomError, IEnumerable<ConsumerOutputModel>> GetConsumersFiltered(string sex, string age, string name);
         Either<CustomError, ConsumerOutputModel> UpdateConsumer(int id, ConsumerInputModel consumer);
+        Either<CustomError, ConsumerOutputModel> DeleteConsumer(int id);
+
     }
 }

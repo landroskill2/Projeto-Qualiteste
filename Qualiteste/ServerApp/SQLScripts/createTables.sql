@@ -9,7 +9,7 @@ CREATE TABLE CONSUMER(
 );
 
 CREATE TABLE SESSION(
-    SessionID varchar(8) PRIMARY KEY,
+    SessionID varchar(32) PRIMARY KEY,
     SessionDate date NOT NULL,
     ConsumersNumber int NOT NULL
 );

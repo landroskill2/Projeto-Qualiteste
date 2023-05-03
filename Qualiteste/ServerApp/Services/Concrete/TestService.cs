@@ -16,13 +16,9 @@ namespace Qualiteste.ServerApp.Services.Concrete
 
         public Either<CustomError, IEnumerable<TestOutputModel>> GetTestsList()
         {
-            try
-            {
-               return _unitOfWork.Tests.ListTestsByDate().Select(t => t.toOutputModel()).ToList();
-            }catch (Exception ex)
-            {
-                return null;
-            }
+           
+            return _unitOfWork.Tests.ListTestsByDate().Select(t => t.toOutputModel()).ToList();
+ 
         }
 
         public Either<CustomError, IEnumerable<TestOutputModel>> GetFilteredTestsList(string type)
@@ -38,13 +34,8 @@ namespace Qualiteste.ServerApp.Services.Concrete
 
         public Either<CustomError, TestOutputModel> GetTestById(string id)
         {
-            try
-            {
-                return _unitOfWork.Tests.GetTestById(id).toOutputModel();
-            }catch(Exception ex)
-            {
-                return null;
-            }
+            Test? test = _unitOfWork.Tests.GetTestById(id);
+            return test != null ? test.toOutputModel() : new NoTestFoundWithGivenID();
         }
 
         public Either<CustomError, string> CreateNewTest(TestInputModel testInput)
@@ -53,24 +44,49 @@ namespace Qualiteste.ServerApp.Services.Concrete
             {
                 Test dbTest = testInput.toDbTest();
                 _unitOfWork.Tests.Add(dbTest);
+                _unitOfWork.Complete();
                 return dbTest.Internalid;
             }
-            catch (Exception ex)
+            catch (Microsoft.EntityFrameworkCore.DbUpdateException ex)
             {
-                return null;
+                _unitOfWork.UntrackChanges();
+                var dbException = ex.InnerException as Npgsql.NpgsqlException;
+                if (dbException != null)
+                {
+                    var state = dbException.Data["SqlState"];
+                    var constraint = dbException.Data["ConstraintName"];
+                    if (state.Equals("22001"))
+                        return new TestFieldIsToLong();
+                    else if (state.Equals("23514") && constraint.Equals("test_testtype_check"))
+                        return new InvalidTestType();
+                    else if (state.Equals("23505") && constraint.Equals("test_pkey"))
+                        return new TestWithSameIdAlreadyPresent();
+                    else if (state.Equals("23503") && constraint.Equals("test_product_fkey"))
+                        return new TestReferencesNonExistingProduct();
+                }
+                throw ex;
             }
         }
 
+
+        /*
+         * TODO: Falar com a qualiteste para ver que campos eles entendem que podem ser alterados depois da criação
+         * 
+         * Test.ReportDeliveryDate pode ser alterado
+         * 
+         * **/
         public Either<CustomError, TestOutputModel> UpdateTest(int id, TestInputModel testInput)
         {
             try
             {
                 Test dbTest = testInput.toDbTest();
                 _unitOfWork.Tests.Update(dbTest);
+                _unitOfWork.Complete();
                 return dbTest.toOutputModel();
 
             }catch(Exception ex)
             {
+                _unitOfWork.UntrackChanges();
                 return null;
             }
         }

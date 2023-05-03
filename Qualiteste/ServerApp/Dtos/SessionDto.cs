@@ -10,17 +10,17 @@ namespace Qualiteste.ServerApp.Dtos
     }
 
     public class SessionInputModel 
-    { 
+    {
+        public string Id { get; set; }
         public DateOnly Date { get; set; }
         public int ConsumersNumber { get; set;}
 
         public Session toDbSession()
         {
-            string id = "" + Date.Day.ToString() + Date.Month.ToString() + Date.Year.ToString();
 
             return new Session
             {
-                Sessionid = id,
+                Sessionid = Id,
                 Sessiondate = Date,
                 Consumersnumber = ConsumersNumber,
             };
