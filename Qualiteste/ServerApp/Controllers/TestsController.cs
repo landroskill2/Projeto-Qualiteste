@@ -22,15 +22,27 @@ namespace Qualiteste.ServerApp.Controllers
         [HttpGet]
         [ProducesResponseType(200, Type = typeof(IEnumerable<TestOutputModel>))]
         [ProducesResponseType(500)]
-        public IActionResult GetTestsList()
+        public IActionResult GetTestsList([FromQuery] string? type)
         {
             try
             {
-                Either<CustomError, IEnumerable<TestOutputModel>> result = _testService.GetTestsList();
-                return result.Match(
-                    error => Problem(statusCode: error.StatusCode, title: error.Message),
-                    success => Ok(success)
-                    );
+                if(type != null)
+                {
+                    Either<CustomError, IEnumerable<TestOutputModel>> result = _testService.GetFilteredTestsList(type);
+                    return result.Match(
+                        error => Problem(statusCode: error.StatusCode, title: error.Message),
+                        success => Ok(success)
+                        );
+                }
+                else 
+                {
+                    Either<CustomError, IEnumerable<TestOutputModel>> result = _testService.GetTestsList();
+                    return result.Match(
+                        error => Problem(statusCode: error.StatusCode, title: error.Message),
+                        success => Ok(success)
+                        );
+
+                }
 
             }
             catch (Exception ex)

@@ -28,6 +28,21 @@ export async function createConsumer(
     })
 }
 
+//Tests
+export async function fetchTests(
+    filters: Record<string, string>
+) : Promise<Response>{
+    let path = "/api/tests"
+    path = addFiltersToQuery(path, filters)
+    return fetch(path)
+}
+
+//Sessions
+export async function fetchSessions() : Promise<Response>{
+    let path = "/api/sessions"
+    return fetch(path)
+}
+
 function addFiltersToQuery(
     path: string,
     filters: Record<string, string>

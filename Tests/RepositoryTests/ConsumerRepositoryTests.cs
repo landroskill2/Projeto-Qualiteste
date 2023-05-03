@@ -99,8 +99,8 @@ namespace Tests.RepositoryTests
             consumerRepository.Add(consumer);
             context.SaveChanges();
 
-            var consumers = consumerRepository.GetConsumersAlphabetically();
-            Assert.True(consumers.Any(c => c.Nif == consumer.Nif));
+            var fetchedConsumer = context.Consumers.SingleOrDefault(c => c.Id == consumer.Id);
+            Assert.True(fetchedConsumer?.Equals(consumer));
         }
 
         [Test]
@@ -117,7 +117,7 @@ namespace Tests.RepositoryTests
 
             context.SaveChanges();
 
-            Consumer updatedConsumer = context.Consumers.Where(c => c.Id == consumerID).FirstOrDefault();
+            Consumer updatedConsumer = context.Consumers.SingleOrDefault(c => c.Id == consumerID);
 
             Assert.True(updatedConsumer.Sex == "F");
             Assert.True(updatedConsumer.Email == "testEmail");

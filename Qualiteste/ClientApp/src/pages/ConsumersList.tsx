@@ -67,7 +67,7 @@ export default function Consumers(): React.ReactElement{
             </div>
               
               <div className="mt-10" style={{ maxHeight: 'calc(100vh - 220px)', overflowY: 'auto' }}>
-              <Table variant="unstyled" overflow="auto">
+              <Table variant="simple" overflow="auto">
                 <Thead>
                   <Tr>
                     <Th>Fullname</Th>
@@ -93,7 +93,7 @@ export default function Consumers(): React.ReactElement{
       </div>
       <div className="p-6 bg-white" style={{ flexShrink: 0 }}>
         <Button colorScheme="blue" onClick={redirectToConsumerCreation}>
-          Criar Consumidor
+          Criar Provador
         </Button>
       </div>
     </div>

@@ -1,4 +1,5 @@
-﻿using Qualiteste.ServerApp.DataAccess.Repository.Concrete;
+﻿using Qualiteste.ServerApp.DataAccess.Repository;
+using Qualiteste.ServerApp.DataAccess.Repository.Concrete;
 using Qualiteste.ServerApp.Dtos;
 using Qualiteste.ServerApp.Models;
 using System;
@@ -45,5 +46,63 @@ namespace Tests.RepositoryTests
 
         }
 
-    }
+        [Test]
+        public void CreateTest()
+        {
+            Test test = new TestInputModel
+            {
+                ID = "9999",
+                Product = 324231,
+                TestType = "SP",
+                ConsumersNumber = 15,
+                RequestDate = DateOnly.Parse("2023-01-03")
+            }.toDbTest();
+
+            testRepository.Add(test);
+            context.SaveChanges();
+
+            var fetchedTest = context.Tests.SingleOrDefault(t => t.Internalid == test.Internalid);
+
+            Assert.True(fetchedTest?.Equals(test));
+        }
+
+        [Test]
+        public void UpdateConsumerTest()
+        {
+
+            //TODO: PERCEBER O QUE É QUE SE PODE MUDAR NUM TESTE
+
+            //Test test = context.Tests.SingleOrDefault(t => t.Internalid == "443244");
+            //string testID = test.Internalid;
+            //test.Requestdate = DateOnly.Parse("1999-04-19");
+
+            //Consumer consumer = context.Consumers.First();
+            //int consumerID = consumer.Id;
+            //consumer.Sex = "F";
+            //consumer.Email = "testEmail";
+            //consumer.Fullname = "Testing update";
+            //consumer.Contact = 2;
+            //consumer.Nif = "2";
+            //consumerRepository.Update(consumer);
+
+            //context.SaveChanges();
+
+            //Consumer updatedConsumer = context.Consumers.Where(c => c.Id == consumerID).FirstOrDefault();
+
+            //Assert.True(updatedConsumer.Sex == "F");
+            //Assert.True(updatedConsumer.Email == "testEmail");
+            //Assert.True(updatedConsumer.Fullname == "Testing update");
+            //Assert.True(updatedConsumer.Contact == 2);
+            //Assert.True(updatedConsumer.Nif == "2");
+        }
+
+        public void UpdateConsumerChangingTypeTest()
+        {
+            //Test test = context.Tests.SingleOrDefault(t => t.Internalid == "443244");
+            //string testID = test.Internalid;
+            //test.Requestdate = DateOnly.Parse("1999-04-19");
+            //test.Testtype = "HT";
+
+            //TODO: DAR ERRO QUANDO SE TENTA MUDAR O TIPO
+        }
 }
