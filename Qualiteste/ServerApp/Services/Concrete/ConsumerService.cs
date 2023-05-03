@@ -38,15 +38,25 @@ namespace Qualiteste.ServerApp.Services.Concrete
                     var constraint = dbException.Data["ConstraintName"];
                     if (state.Equals("23505") && constraint.Equals("consumer_pkey")) 
                         return new ConsumerWithIdAlreadyPresent();
-                    if (state.Equals("23505") && constraint.Equals("consumer_contact_key"))
+                    else if (state.Equals("23505") && constraint.Equals("consumer_contact_key"))
                         return new ConsumerWithContactAlreadyPresent();
-                    if (state.Equals("23505") && constraint.Equals("consumer_nif_key"))
+                    else if (state.Equals("23505") && constraint.Equals("consumer_nif_key"))
                         return new ConsumerWithNifAlreadyPresent();
                 }
                 throw ex;
             }     
         }
-        
+
+        public Either<CustomError, ConsumerOutputModel> DeleteConsumer(int id)
+        {
+            Consumer? c = _unitOfWork.Consumers.GetConsumerById(id);
+            if (c != null)
+            {
+                _unitOfWork.Consumers.Remove(c);
+                return c.ToOutputModel();
+            }
+            else return new NoConsumerFoundWithId();
+        }
 
         public Either<CustomError, ConsumerOutputModel> GetConsumerById(int id)
         {
@@ -91,12 +101,13 @@ namespace Qualiteste.ServerApp.Services.Concrete
             {
                 throw ex;
             }
-           
-            
-            
-            
+
         }
 
+
+        /**
+         * TODO: Falar com a qualiteste para ver que campos eles entendem que podem ser alterados depois da criação
+         */
         public Either<CustomError, ConsumerOutputModel> UpdateConsumer(int id, ConsumerInputModel consumer)
         {
 

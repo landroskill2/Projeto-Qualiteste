@@ -111,5 +111,24 @@ namespace Qualiteste.ServerApp.Controllers
                 return Problem(statusCode: 500, title: "Ocorreu um erro inesperado");
             }
         }
+
+        [HttpDelete("{id}")]
+        [ProducesResponseType(200, Type = typeof(ConsumerOutputModel))]
+
+        public IActionResult DeleteConsumer(int id)
+        {
+            try
+            {
+                Either<CustomError, ConsumerOutputModel> c = _consumerService.DeleteConsumer(id);
+                return c.Match(
+                    error => Problem(statusCode: error.StatusCode, title: error.Message),
+                    success => Ok(success)
+                    );
+            }
+            catch (Exception e)
+            {
+                return Problem(statusCode: 500, title: "Ocorreu um erro inesperado");
+            }
+        }
     }
 }

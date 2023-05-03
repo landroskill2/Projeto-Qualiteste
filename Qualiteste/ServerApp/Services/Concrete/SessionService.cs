@@ -19,25 +19,20 @@ namespace Qualiteste.ServerApp.Services.Concrete
 
         public Either<CustomError, IEnumerable<SessionOutputModel>> GetSessionsList()
         {
-            try
-            {
-                return _unitOfWork.Sessions.GetSessionsByDate().Select(s => s.toOutputModel()).ToList();
-            }catch(Exception ex)
-            {
-                return null;
-            }
+         
+            return _unitOfWork.Sessions.GetSessionsByDate().Select(s => s.toOutputModel()).ToList();
+           
         }
 
         public Either<CustomError, SessionOutputModel> GetSessionById(string id)
         {
-            try
+
+            Session? session = _unitOfWork.Sessions.GetSessionById(id);
+            if(session != null)
             {
-                return _unitOfWork.Sessions.GetSessionById(id).toOutputModel();
+                return session.toOutputModel();
             }
-            catch (Exception ex)
-            {
-                return null;
-            }
+            return new NoSessionFoundWithId();
         }
 
         public Either<CustomError, string> CreateNewSession(SessionInputModel sessionInput)
@@ -46,11 +41,18 @@ namespace Qualiteste.ServerApp.Services.Concrete
             {
                 Session dbSession = sessionInput.toDbSession();
                 _unitOfWork.Sessions.Add(dbSession);
+                _unitOfWork.Complete();
                 return dbSession.Sessionid;
             }
-            catch (Exception ex)
+            catch (Microsoft.EntityFrameworkCore.DbUpdateException ex)
             {
-                return null;
+                _unitOfWork.UntrackChanges();
+                var dbException = ex.InnerException as Npgsql.NpgsqlException;
+                if (dbException != null)
+                {
+                    //TODO
+                }
+                throw ex;
             }
         }
 
