@@ -12,9 +12,9 @@ import {
   Spinner,
   Box
 } from "@chakra-ui/react";
-import { ISessionOutputModel } from "../common/Interfaces/Sessions";
+import { ISessionOutputModel } from "../../common/Interfaces/Sessions";
 import { useNavigate } from "react-router-dom";
-import { fetchSessions } from "../common/APICalls";
+import { fetchSessions } from "../../common/APICalls";
 
 
 export default function Sessions(): React.ReactElement{
@@ -26,6 +26,11 @@ export default function Sessions(): React.ReactElement{
   useEffect(() => {
     populateData() 
   }, [type]);
+
+
+  function redirectToSession(id: string): void {
+    navigate(`${id}`)
+  }
 
   const redirectToSessionCreation = () => {
     // TODO: Implement CreateSession function
@@ -59,7 +64,7 @@ export default function Sessions(): React.ReactElement{
                 </Thead>
                 <Tbody>
                   {sessions.map((session) => (
-                    <Tr className="hover:bg-slate-200 cursor-pointer" key={session.id}>
+                    <Tr className="hover:bg-slate-200 cursor-pointer" key={session.id} onClick={() => redirectToSession(session.id)}>
                       <Td>{session.id}</Td>
                       <Td>{session.date}</Td>
                       <Td>{session.consumersNumber.toString()}</Td>

@@ -1,4 +1,5 @@
 export interface IConsumerOutputModel {
+    id: number;
     fullname: string;
     age: string;
     sex: string;

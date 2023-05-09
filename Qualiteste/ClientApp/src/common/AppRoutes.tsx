@@ -1,9 +1,10 @@
 import { createBrowserRouter } from "react-router-dom";
 import { Home } from "../components/Home";
-import Consumers from "../pages/ConsumersList";
-import Consumer from "../pages/Consumer";
+import Consumers from "../pages/consumers/ConsumersList";
+import Consumer from "../pages/consumers/Consumer";
 import Tests from "../pages/TestsList";
-import Sessions from "../pages/SessionsList";
+import Sessions from "../pages/sessions/SessionsList";
+import Session from "../pages/sessions/Session";
 
 const AppRoutes = createBrowserRouter([
   {
@@ -23,8 +24,12 @@ const AppRoutes = createBrowserRouter([
     element: <Tests/>
   },
   {
-    path: "sessions",
+    path: "/sessions",
     element: <Sessions/>
+  },
+  {
+    path: "/sessions/:id",
+    element: <Session/>
   }
 ]);
 export default AppRoutes;

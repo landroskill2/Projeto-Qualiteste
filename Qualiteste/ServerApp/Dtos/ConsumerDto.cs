@@ -5,6 +5,7 @@ namespace Qualiteste.ServerApp.Dtos
 {
     public class ConsumerOutputModel
     {
+        public int Id { get; set; }
         public string Fullname { get; set; }
         public string Age { get; set; }
         public string Sex { get; set; }

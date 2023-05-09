@@ -43,6 +43,11 @@ export async function fetchSessions() : Promise<Response>{
     return fetch(path)
 }
 
+export async function fetchSessionById(id: string) : Promise<Response>{
+    const path = `/api/sessions/${id}`
+    return fetch(path)
+}
+
 function addFiltersToQuery(
     path: string,
     filters: Record<string, string>

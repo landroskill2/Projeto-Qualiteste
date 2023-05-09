@@ -58,10 +58,18 @@ namespace Qualiteste.ServerApp.Services.Concrete
             else return new NoConsumerFoundWithId();
         }
 
-        public Either<CustomError, ConsumerOutputModel> GetConsumerById(int id)
+        public Either<CustomError, ConsumerPageModel> GetConsumerById(int id)
         {
-            Consumer? consumer = _unitOfWork.Consumers.GetConsumerById(id);
-            return consumer == null ? new NoConsumerFoundWithId() : consumer.ToOutputModel();
+            ConsumerPageModel consumerPageModel = new ConsumerPageModel();
+            Consumer consumer = _unitOfWork.Consumers.GetConsumerById(id);
+
+            if (consumer == null) return new NoConsumerFoundWithId();
+
+            consumerPageModel.Consumer = consumer.ToOutputModel();
+            consumerPageModel.Sessions = _unitOfWork.Consumers.GetConsumerSessions(id).Select(s => s.toOutputModel()).ToList();
+            consumerPageModel.Tests = _unitOfWork.Consumers.GetConsumerTests(id).Select(t => t.toOutputModel()).ToList();
+
+            return consumerPageModel;
         }
 
         public Either<CustomError, IEnumerable<ConsumerOutputModel>> GetConsumersAlphabetically()

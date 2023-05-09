@@ -8,6 +8,7 @@ public partial class Consumer
     {
         return new ConsumerOutputModel
         {
+            Id = Id,
             Fullname = Fullname,
             Age = (DateTime.Today.Year - Dateofbirth.Value.Year).ToString(),
             Sex = Sex,

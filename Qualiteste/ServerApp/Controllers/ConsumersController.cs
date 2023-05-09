@@ -28,7 +28,7 @@ namespace Qualiteste.ServerApp.Controllers
         {
             try
             {
-                Either<CustomError, ConsumerOutputModel> result = _consumerService.GetConsumerById(id);
+                Either<CustomError, ConsumerPageModel> result = _consumerService.GetConsumerById(id);
 
                 return result.Match(
                     error => Problem(statusCode: error.StatusCode, title: error.Message),

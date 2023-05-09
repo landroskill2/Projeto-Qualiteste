@@ -12,10 +12,10 @@ import {
   Spinner,
   Box
 } from "@chakra-ui/react";
-import { IConsumerOutputModel } from "../common/Interfaces/Consumers";
+import { IConsumerOutputModel } from "../../common/Interfaces/Consumers";
 import { useNavigate } from "react-router-dom";
-import FilterBar from "../components/FilterBar";
-import { fetchConsumers } from "../common/APICalls";
+import FilterBar from "../../components/FilterBar";
+import { fetchConsumers } from "../../common/APICalls";
 
 
 export default function Consumers(): React.ReactElement{
@@ -33,6 +33,10 @@ export default function Consumers(): React.ReactElement{
   const redirectToConsumerCreation = () => {
     // TODO: Implement createConsumer function
   };
+
+  const redirectToConsumerPage = (id: number) => {
+    navigate(`${id}`)
+  }
 
   async function populateData() {
     const filters = Object.assign(
@@ -70,6 +74,7 @@ export default function Consumers(): React.ReactElement{
               <Table variant="simple" overflow="auto">
                 <Thead>
                   <Tr>
+                    <Th>Id</Th>
                     <Th>Fullname</Th>
                     <Th>Age</Th>
                     <Th>Sex</Th>
@@ -78,7 +83,8 @@ export default function Consumers(): React.ReactElement{
                 </Thead>
                 <Tbody>
                   {consumers.map((consumer) => (
-                    <Tr className="hover:bg-slate-200 cursor-pointer" key={consumer.contact}>
+                    <Tr className="hover:bg-slate-200 cursor-pointer" key={consumer.id} onClick={() => redirectToConsumerPage(consumer.id)}>
+                      <Td>{consumer.id}</Td>
                       <Td>{consumer.fullname}</Td>
                       <Td>{consumer.age}</Td>
                       <Td>{consumer.sex}</Td>
