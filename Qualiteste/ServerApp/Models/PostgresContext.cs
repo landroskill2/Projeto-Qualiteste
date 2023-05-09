@@ -32,8 +32,6 @@ public partial class PostgresContext : DbContext
 
     public virtual DbSet<Session> Sessions { get; set; }
 
-    public virtual DbSet<SessionTest> SessionTests { get; set; }
-
     public virtual DbSet<Test> Tests { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -100,50 +98,54 @@ public partial class PostgresContext : DbContext
 
         modelBuilder.Entity<ConsumerHt>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("consumer_ht");
+            entity.HasKey(e => new { e.Consumerid, e.Internalid }).HasName("consumer_ht_pkey");
+
+            entity.ToTable("consumer_ht");
 
             entity.Property(e => e.Consumerid).HasColumnName("consumerid");
-            entity.Property(e => e.Deliverydate).HasColumnName("deliverydate");
-            entity.Property(e => e.Duedate).HasColumnName("duedate");
             entity.Property(e => e.Internalid)
                 .HasMaxLength(20)
                 .HasColumnName("internalid");
+            entity.Property(e => e.Deliverydate).HasColumnName("deliverydate");
+            entity.Property(e => e.Duedate).HasColumnName("duedate");
             entity.Property(e => e.Responsedate).HasColumnName("responsedate");
             entity.Property(e => e.Stampdate).HasColumnName("stampdate");
 
-            entity.HasOne(d => d.Consumer).WithMany()
+            entity.HasOne(d => d.Consumer).WithMany(p => p.ConsumerHts)
                 .HasForeignKey(d => d.Consumerid)
+                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("consumer_ht_consumerid_fkey");
 
-            entity.HasOne(d => d.Internal).WithMany()
+            entity.HasOne(d => d.Internal).WithMany(p => p.ConsumerHts)
                 .HasForeignKey(d => d.Internalid)
+                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("consumer_ht_internalid_fkey");
         });
 
         modelBuilder.Entity<ConsumerSession>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("consumer_session");
+            entity.HasKey(e => new { e.Consumerid, e.Sessionid }).HasName("consumer_session_pkey");
 
-            entity.Property(e => e.Attendance).HasColumnName("attendance");
-            entity.Property(e => e.Confirmationdate).HasColumnName("confirmationdate");
+            entity.ToTable("consumer_session");
+
             entity.Property(e => e.Consumerid).HasColumnName("consumerid");
-            entity.Property(e => e.Contacteddate).HasColumnName("contacteddate");
             entity.Property(e => e.Sessionid)
                 .HasMaxLength(8)
                 .HasColumnName("sessionid");
+            entity.Property(e => e.Attendance).HasColumnName("attendance");
+            entity.Property(e => e.Confirmationdate).HasColumnName("confirmationdate");
+            entity.Property(e => e.Contacteddate).HasColumnName("contacteddate");
             entity.Property(e => e.Sessiontime).HasColumnName("sessiontime");
             entity.Property(e => e.Stampdate).HasColumnName("stampdate");
 
-            entity.HasOne(d => d.Consumer).WithMany()
+            entity.HasOne(d => d.Consumer).WithMany(p => p.ConsumerSessions)
                 .HasForeignKey(d => d.Consumerid)
+                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("consumer_session_consumerid_fkey");
 
-            entity.HasOne(d => d.Session).WithMany()
+            entity.HasOne(d => d.Session).WithMany(p => p.ConsumerSessions)
                 .HasForeignKey(d => d.Sessionid)
+                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("consumer_session_sessionid_fkey");
         });
 
@@ -186,22 +188,24 @@ public partial class PostgresContext : DbContext
 
         modelBuilder.Entity<Sample>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("sample");
+            entity.HasKey(e => new { e.Testid, e.Productid }).HasName("sample_pkey");
 
-            entity.Property(e => e.Productid).HasColumnName("productid");
-            entity.Property(e => e.Receptiondate).HasColumnName("receptiondate");
+            entity.ToTable("sample");
+
             entity.Property(e => e.Testid)
                 .HasMaxLength(20)
                 .HasColumnName("testid");
+            entity.Property(e => e.Productid).HasColumnName("productid");
+            entity.Property(e => e.Receptiondate).HasColumnName("receptiondate");
 
-            entity.HasOne(d => d.Product).WithMany()
+            entity.HasOne(d => d.Product).WithMany(p => p.Samples)
                 .HasForeignKey(d => d.Productid)
+                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("sample_productid_fkey");
 
-            entity.HasOne(d => d.Test).WithMany()
+            entity.HasOne(d => d.Test).WithMany(p => p.Samples)
                 .HasForeignKey(d => d.Testid)
+                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("sample_testid_fkey");
         });
 
@@ -212,32 +216,10 @@ public partial class PostgresContext : DbContext
             entity.ToTable("session");
 
             entity.Property(e => e.Sessionid)
-                .HasMaxLength(8)
+                .HasMaxLength(32)
                 .HasColumnName("sessionid");
             entity.Property(e => e.Consumersnumber).HasColumnName("consumersnumber");
             entity.Property(e => e.Sessiondate).HasColumnName("sessiondate");
-        });
-
-        modelBuilder.Entity<SessionTest>(entity =>
-        {
-            entity
-                .HasNoKey()
-                .ToTable("session_tests");
-
-            entity.Property(e => e.Sessionid)
-                .HasMaxLength(8)
-                .HasColumnName("sessionid");
-            entity.Property(e => e.Testid)
-                .HasMaxLength(20)
-                .HasColumnName("testid");
-
-            entity.HasOne(d => d.Session).WithMany()
-                .HasForeignKey(d => d.Sessionid)
-                .HasConstraintName("session_tests_sessionid_fkey");
-
-            entity.HasOne(d => d.Test).WithMany()
-                .HasForeignKey(d => d.Testid)
-                .HasConstraintName("session_tests_testid_fkey");
         });
 
         modelBuilder.Entity<Test>(entity =>
@@ -263,6 +245,29 @@ public partial class PostgresContext : DbContext
                 .HasForeignKey(d => d.Product)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("test_product_fkey");
+
+            entity.HasMany(d => d.Sessions).WithMany(p => p.Tests)
+                .UsingEntity<Dictionary<string, object>>(
+                    "SessionTest",
+                    r => r.HasOne<Session>().WithMany()
+                        .HasForeignKey("Sessionid")
+                        .OnDelete(DeleteBehavior.ClientSetNull)
+                        .HasConstraintName("session_tests_sessionid_fkey"),
+                    l => l.HasOne<Test>().WithMany()
+                        .HasForeignKey("Testid")
+                        .OnDelete(DeleteBehavior.ClientSetNull)
+                        .HasConstraintName("session_tests_testid_fkey"),
+                    j =>
+                    {
+                        j.HasKey("Testid", "Sessionid").HasName("session_tests_pkey");
+                        j.ToTable("session_tests");
+                        j.IndexerProperty<string>("Testid")
+                            .HasMaxLength(20)
+                            .HasColumnName("testid");
+                        j.IndexerProperty<string>("Sessionid")
+                            .HasMaxLength(8)
+                            .HasColumnName("sessionid");
+                    });
         });
 
         OnModelCreatingPartial(modelBuilder);

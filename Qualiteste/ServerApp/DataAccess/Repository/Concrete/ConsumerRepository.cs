@@ -54,6 +54,16 @@ namespace Qualiteste.ServerApp.DataAccess.Repository.Concrete
             return PostgresContext.Consumers.Max(c => c.Id);
         }
 
+        public IEnumerable<Session> GetConsumerSessions(int id)
+        {
+            return GetConsumerById(id).ConsumerSessions.Select(cs => cs.Session).ToList();
+        }
+
+        public IEnumerable<Test> GetConsumerTests(int id)
+        {
+            return GetConsumerById(id).ConsumerHts.Select(ch => ch.Internal).ToList();
+        }
+
         public PostgresContext PostgresContext
         { 
             get { return Context as PostgresContext; }

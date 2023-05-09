@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using Qualiteste.ServerApp.Models;
 
 namespace Qualiteste.ServerApp.Models;
 
 public partial class ConsumerHt
 {
-    public string? Internalid { get; set; }
+    public string Internalid { get; set; } = null!;
 
-    public int? Consumerid { get; set; }
+    public int Consumerid { get; set; }
 
     public DateOnly? Deliverydate { get; set; }
 
@@ -18,7 +17,7 @@ public partial class ConsumerHt
 
     public DateOnly? Stampdate { get; set; }
 
-    public virtual Consumer? Consumer { get; set; }
+    public virtual Consumer Consumer { get; set; } = null!;
 
-    public virtual Test? Internal { get; set; }
+    public virtual Test Internal { get; set; } = null!;
 }

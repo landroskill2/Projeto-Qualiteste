@@ -37,4 +37,11 @@ namespace Qualiteste.ServerApp.Dtos
             };
         }
     }
+
+    public class ConsumerPageModel
+    {
+        public ConsumerOutputModel Consumer { get; set; }
+        public List<SessionOutputModel> Sessions { get; set; }
+        public List<TestOutputModel> Tests { get; set; }
+    }
 }

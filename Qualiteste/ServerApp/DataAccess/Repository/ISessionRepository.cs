@@ -6,5 +6,7 @@ namespace Qualiteste.ServerApp.DataAccess.Repository
     {
         Session? GetSessionById(string id);
         IEnumerable<Session> GetSessionsByDate();
+        IEnumerable<Test> GetTestsInSession(string id);
+        IEnumerable<Consumer> GetConsumersInSession(string id);
     }
 }
