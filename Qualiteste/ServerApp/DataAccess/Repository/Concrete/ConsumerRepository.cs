@@ -27,26 +27,13 @@ namespace Qualiteste.ServerApp.DataAccess.Repository.Concrete
         }
 
         public IEnumerable<Consumer> GetConsumersFiltered(string sex, int iage, string name) {
-            Expression<Func<Consumer, bool>> sexPredicate = c => sex.Equals("*") ? true : c.Sex == sex.ToUpper();
-            Expression<Func<Consumer, bool>> namePredicate = c => name.Equals("*") ? true : c.Fullname.Contains(name.ToUpper());
-            Expression<Func<Consumer, bool>> agePredicate = c => (DateTime.Today.Year - c.Dateofbirth.Value.Year) >= iage;
+            Expression<Func<Consumer, bool>> p = c => sex.Equals("*") ? true : c.Sex == sex.ToUpper()
+                                                && name.Equals("*") ? true : c.Fullname.Contains(name.ToUpper())
+                                                && (DateTime.Today.Year - c.Dateofbirth.Value.Year) >= iage;
 
-            return GetConsumersFiltered(sexPredicate, namePredicate, agePredicate);
-        }
+            
 
-        public IEnumerable<Consumer> GetConsumersFiltered(
-            Expression<Func<Consumer, bool>> sexP,
-            Expression<Func<Consumer, bool>> nameP,
-            Expression<Func<Consumer, bool>> ageP
-            )
-        {
-            IEnumerable<Consumer> consumers;
-            consumers = PostgresContext.Consumers
-                .Where(sexP)
-                .Where(ageP)
-                .Where(nameP)
-                .OrderBy(c => c.Fullname);
-            return consumers;
+            return PostgresContext.Consumers.Where(p);
         }
 
         public int? GetLastID()

@@ -38,7 +38,17 @@ namespace Qualiteste.ServerApp.DataAccess.Repository.Concrete
             return PostgresContext.Tests.SingleOrDefault(t => t.Internalid == id);
         }
 
+        public IEnumerable<Consumer> GetConsumersInTest(string id)
+        {
+            IEnumerable<Consumer> res;
+            Test targetTest = GetTestById(id);
+            if (targetTest == null)
+                return null;
+            if (targetTest.Testtype.Equals("HT")) return targetTest.ConsumerHts.Select(c => c.Consumer);
+            //If it's not HT it's SP
+            else throw new NotImplementedException();
 
+        }
 
         public PostgresContext PostgresContext
         {
