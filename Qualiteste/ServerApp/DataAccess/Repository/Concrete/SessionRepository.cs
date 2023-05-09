@@ -19,6 +19,16 @@ namespace Qualiteste.ServerApp.DataAccess.Repository.Concrete
             return PostgresContext.Sessions.OrderByDescending(s => s.Sessiondate).ToList();
         }
 
+        public IEnumerable<Test> GetTestsInSession(string id)
+        {
+            return GetSessionById(id).Tests.ToList();
+        }
+
+        public IEnumerable<Consumer> GetConsumersInSession(string id)
+        {
+            return GetSessionById(id).ConsumerSessions.Select(cs => cs.Consumer).ToList();
+        }
+
         public PostgresContext PostgresContext
         {
             get { return Context as PostgresContext; }

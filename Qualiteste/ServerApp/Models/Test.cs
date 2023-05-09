@@ -21,5 +21,11 @@ public partial class Test
 
     public DateOnly? Reportdeliverydate { get; set; }
 
+    public virtual ICollection<ConsumerHt> ConsumerHts { get; } = new List<ConsumerHt>();
+
     public virtual Product ProductNavigation { get; set; } = null!;
+
+    public virtual ICollection<Sample> Samples { get; } = new List<Sample>();
+
+    public virtual ICollection<Session> Sessions { get; } = new List<Session>();
 }

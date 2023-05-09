@@ -42,27 +42,30 @@ CREATE TABLE CLIENT(
 CREATE TABLE SAMPLE(
     TestID varchar(20) REFERENCES TEST(InternalID),
     ProductID int REFERENCES PRODUCT(ProductID),
-    ReceptionDate date
+    ReceptionDate date,
+    primary key(TestID, ProductID)
 );
 
 CREATE TABLE CONSUMER_HT(
-    InternalID varchar(20) REFERENCES TEST(InternalID),
+    TestID varchar(20) REFERENCES TEST(InternalID),
     ConsumerID INT REFERENCES CONSUMER(Id),
     DeliveryDate date,
     DueDate date,
     ResponseDate date,
-    StampDate date
+    StampDate date,
+    primary key(ConsumerID, InternalID)
 );
 
 CREATE TABLE CONSUMER_SP(
-    InternalID varchar(20) REFERENCES TEST(InternalID),
+    TestID varchar(20) REFERENCES TEST(InternalID),
     ConsumerID INT REFERENCES CONSUMER(Id)
     /* REFERENCIA PARA A TABELA FIZZ */
 );
 
 CREATE TABLE SESSION_TESTS(
     SessionID varchar(8) REFERENCES SESSION(SessionID),
-    TestID varchar(20) REFERENCES Test(InternalID)
+    TestID varchar(20) REFERENCES Test(InternalID),
+    primary key(TestID, SessionID)
 );
 
 CREATE TABLE CONSUMER_SESSION(
@@ -72,5 +75,6 @@ CREATE TABLE CONSUMER_SESSION(
     ConfirmationDate date,
     SessionTime time,
     Attendance boolean,
-    StampDate date
+    StampDate date,
+    primary key(ConsumerID, SessionID)
 );

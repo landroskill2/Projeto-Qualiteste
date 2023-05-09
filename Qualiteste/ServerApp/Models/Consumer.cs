@@ -18,4 +18,8 @@ public partial class Consumer
     public int Contact { get; set; }
 
     public string? Email { get; set; }
+
+    public virtual ICollection<ConsumerHt> ConsumerHts { get; } = new List<ConsumerHt>();
+
+    public virtual ICollection<ConsumerSession> ConsumerSessions { get; } = new List<ConsumerSession>();
 }

@@ -9,5 +9,7 @@ namespace Qualiteste.ServerApp.DataAccess.Repository
         IEnumerable<Consumer> GetConsumersAlphabetically();
         IEnumerable<Consumer> GetConsumersFiltered(string sex, int iage, string name);
         int? GetLastID();
+        IEnumerable<Session> GetConsumerSessions(int id);
+        IEnumerable<Test> GetConsumerTests(int id);
     }
 }

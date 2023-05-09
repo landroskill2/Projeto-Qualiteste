@@ -26,8 +26,6 @@ namespace Qualiteste.ServerApp.Controllers
 
         public IActionResult GetConsumerById(int id)
         {
-            IActionResult ret = Problem(statusCode: 500, title: "Ocorreu um erro inesperado");
-
             try
             {
                 Either<CustomError, ConsumerOutputModel> result = _consumerService.GetConsumerById(id);
@@ -39,9 +37,8 @@ namespace Qualiteste.ServerApp.Controllers
             }
             catch(Exception ex)
             {
-                return ret;
+                return Problem(statusCode: 500, title: "Ocorreu um erro inesperado");
             }
-            return ret;
         }
 
         [HttpGet]
