@@ -47,7 +47,7 @@ CREATE TABLE SAMPLE(
 );
 
 CREATE TABLE CONSUMER_HT(
-    InternalID varchar(20) REFERENCES TEST(InternalID),
+    TestID varchar(20) REFERENCES TEST(InternalID),
     ConsumerID INT REFERENCES CONSUMER(Id),
     DeliveryDate date,
     DueDate date,
@@ -57,7 +57,7 @@ CREATE TABLE CONSUMER_HT(
 );
 
 CREATE TABLE CONSUMER_SP(
-    InternalID varchar(20) REFERENCES TEST(InternalID),
+    TestID varchar(20) REFERENCES TEST(InternalID),
     ConsumerID INT REFERENCES CONSUMER(Id)
     /* REFERENCIA PARA A TABELA FIZZ */
 );
