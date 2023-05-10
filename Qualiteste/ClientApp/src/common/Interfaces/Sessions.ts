@@ -8,9 +8,9 @@ export interface ISessionOutputModel{
 
 export interface IConsumerSessionOutputModel {
     consumer: IConsumerOutputModel;
-    contactedDate: string | undefined;
-    confirmationDate: string | undefined;
-    sessionTime: string | undefined;
+    contacteddate: string | undefined;
+    confirmationdate: string | undefined;
+    sessiontime: string | undefined;
     attendance: boolean;
-    stampDate: string | undefined;
+    stampdate: string | undefined;
 }

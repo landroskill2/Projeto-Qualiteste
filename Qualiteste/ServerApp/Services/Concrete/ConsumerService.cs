@@ -66,7 +66,7 @@ namespace Qualiteste.ServerApp.Services.Concrete
             if (consumer == null) return new NoConsumerFoundWithId();
 
             consumerPageModel.Consumer = consumer.ToOutputModel();
-            consumerPageModel.Sessions = _unitOfWork.Consumers.GetConsumerSessions(id).Select(s => s.toOutputModel()).ToList();
+            consumerPageModel.Sessions = consumer.ConsumerSessions.Select(cs => cs.Session.toOutputModel()).ToList();
             consumerPageModel.Tests = _unitOfWork.Consumers.GetConsumerTests(id).Select(t => t.toOutputModel()).ToList();
 
             return consumerPageModel;

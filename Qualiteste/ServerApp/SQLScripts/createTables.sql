@@ -53,7 +53,7 @@ CREATE TABLE CONSUMER_HT(
     DueDate date,
     ResponseDate date,
     StampDate date,
-    primary key(ConsumerID, InternalID)
+    primary key(ConsumerID, TestID)
 );
 
 CREATE TABLE CONSUMER_SP(

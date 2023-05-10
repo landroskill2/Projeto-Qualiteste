@@ -1,3 +1,96 @@
+DROP TABLE CONSUMER CASCADE;
+DROP TABLE SESSION CASCADE;
+DROP TABLE TEST CASCADE;
+DROP TABLE PRODUCT CASCADE;
+DROP TABLE CLIENT CASCADE;
+DROP TABLE SAMPLE CASCADE;
+DROP TABLE CONSUMER_HT CASCADE;
+DROP TABLE CONSUMER_SP CASCADE;
+DROP TABLE SESSION_TESTS CASCADE;
+DROP TABLE CONSUMER_SESSION CASCADE;
+
+CREATE TABLE CONSUMER(
+    Id int PRIMARY KEY,
+    FullName varchar(200) NOT NULL,
+    NIF varchar(15) UNIQUE,
+    Sex varchar(1) NOT NULL check (Sex in ('F', 'M')),
+    DateOfBirth date,
+    Contact int unique NOT NULL,
+    Email varchar
+);
+
+CREATE TABLE SESSION(
+    SessionID varchar(32) PRIMARY KEY,
+    SessionDate date NOT NULL,
+    ConsumersNumber int NOT NULL
+);
+
+CREATE TABLE PRODUCT(
+    ProductID int PRIMARY KEY,
+    Designation varchar(200),
+    Brand varchar(50)
+); 
+
+CREATE TABLE TEST(
+    InternalID varchar(20) PRIMARY KEY,
+    Product int REFERENCES PRODUCT(ProductID) NOT NULL,
+    TestType varchar(2) NOT NULL check (TestType in ('HT', 'SP')),
+    ConsumersNumber int NOT NULL,
+    RequestDate date NOT NULL,
+    ValidationDate date,
+    DueDate date,
+    ReportDeliveryDate date
+);
+
+
+CREATE TABLE CLIENT(
+    Acronym varchar(10) PRIMARY KEY,
+    CompanyName varchar(50) NOT NULL
+);
+
+
+
+CREATE TABLE SAMPLE(
+    TestID varchar(20) REFERENCES TEST(InternalID),
+    ProductID int REFERENCES PRODUCT(ProductID),
+    ReceptionDate date,
+    primary key(TestID, ProductID)
+);
+
+CREATE TABLE CONSUMER_HT(
+    TestID varchar(20) REFERENCES TEST(InternalID),
+    ConsumerID INT REFERENCES CONSUMER(Id),
+    DeliveryDate date,
+    DueDate date,
+    ResponseDate date,
+    StampDate date,
+    primary key(ConsumerID, InternalID)
+);
+
+CREATE TABLE CONSUMER_SP(
+    TestID varchar(20) REFERENCES TEST(InternalID),
+    ConsumerID INT REFERENCES CONSUMER(Id)
+    /* REFERENCIA PARA A TABELA FIZZ */
+    /* Primary Key */
+);
+
+CREATE TABLE SESSION_TESTS(
+    SessionID varchar(8) REFERENCES SESSION(SessionID),
+    TestID varchar(20) REFERENCES Test(InternalID),
+    primary key(TestID, SessionID)
+);
+
+CREATE TABLE CONSUMER_SESSION(
+    SessionID varchar(8) REFERENCES SESSION(SessionID),
+    ConsumerID INT REFERENCES CONSUMER(Id),
+    ContactedDate date,
+    ConfirmationDate date,
+    SessionTime time,
+    Attendance boolean,
+    StampDate date,
+    primary key(ConsumerID, SessionID)
+);
+
 INSERT INTO CONSUMER(Id, FullName, NIF, Sex, DateOfBirth, Contact, Email) VALUES 
 (3, 'MARIA IRENE ALVES', 111111111111131, 'F', '1951-04-11', 2130, null),
 (6, 'ALEXANDRA BERNARDINO', 111111111111129, 'F', '1986-04-19', 91559, null),
@@ -33,21 +126,15 @@ INSERT INTO PRODUCT(ProductID, Designation, Brand) VALUES
 (231233, 'Yogurte Grego', 'Intermarché'),
 (321332, 'Fiambre Fatiado', 'Continente'),
 (324231, 'Fiambre Fatiado', 'Pingo Doce');
-(123123, 'Mala Eastpack', 'Continente');
 
-
-INSERT INTO TEST(InternalID, Product, TestType, ConsumersNumber, RequestDate, ValidationDate, DueDate, ReportDeliveryDate) VALUES
+INSERT INTO TEST(TestID, Product, TestType, ConsumersNumber, RequestDate, ValidationDate, DueDate, ReportDeliveryDate) VALUES
 ('443244', 122332, 'SP', 10, '2023-03-21', null, null, null),
-('343123', 324231, 'SP', 10, '2023-03-29', null, null, null),
-('041234', 123123, 'HT', 10, '2023-03-29', null, null, null);
-
+('343123', 324231, 'SP', 10, '2023-03-29', null, null, null);
 
 INSERT INTO SAMPLE(TestID, ProductID, ReceptionDate) VALUES
 ('443244', 132321, '2023-03-24'),
 ('443244', 231233, '2023-03-25'),
 ('343123', 321332, '2023-04-01');
-('041234', 123123, '2023-04-01');
-
 
 INSERT INTO SESSION(SessionID, SessionDate, ConsumersNumber) VALUES
 ('040423', '2023-04-04', 10);
@@ -90,15 +177,3 @@ INSERT INTO CONSUMER_SP(TestID, ConsumerID) VALUES
 ('343123', 373),
 ('443244', 67),
 ('343123', 67)
-
-INSERT INTO CONSUMER_HT(TestID, ConsumerID, DeliveryDate, DueDate, ResponseDate, StampDate) VALUES
-('041234', 6, '2023-03-01', null, null, null),
-('041234', 263, '2023-03-01', null, null, null),
-('041234', 48, '2023-03-01', null, null, null),
-('041234', 86, '2023-03-01', null, null, null),
-('041234', 87, '2023-03-01', null, null, null),
-('041234', 23, '2023-03-01', null, null, null),
-('041234', 168, '2023-03-01', null, null, null),
-('041234', 143, '2023-03-01', null, null, null),
-('041234', 373, '2023-03-01', null, null, null),
-('041234', 67, '2023-03-01', null, null, null)

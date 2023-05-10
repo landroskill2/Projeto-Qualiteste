@@ -40,13 +40,13 @@ namespace Qualiteste.ServerApp.Controllers
         }
 
         [HttpGet("{id}")]
-        [ProducesResponseType(200, Type = typeof(SessionOutputModel))]
+        [ProducesResponseType(200, Type = typeof(SessionPageModel))]
         [ProducesResponseType(500)]
         public IActionResult GetSessionById(string id)
         {
             try
             {
-                Either<CustomError, SessionOutputModel> result = _sessionService.GetSessionById(id);
+                Either<CustomError, SessionPageModel> result = _sessionService.GetSessionById(id);
                 return result.Match(
                     error => Problem(statusCode: error.StatusCode, title: error.Message),
                     success => Ok(success)

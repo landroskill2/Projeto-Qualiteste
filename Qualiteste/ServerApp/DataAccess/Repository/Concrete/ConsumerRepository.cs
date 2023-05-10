@@ -48,7 +48,8 @@ namespace Qualiteste.ServerApp.DataAccess.Repository.Concrete
 
         public IEnumerable<Test> GetConsumerTests(int id)
         {
-            return GetConsumerById(id).ConsumerHts.Select(ch => ch.Internal).ToList();
+            //fetch from ConsumerSps too
+            return GetConsumerById(id).ConsumerHts.Select(ch => ch.Test).ToList();
         }
 
         public PostgresContext PostgresContext
