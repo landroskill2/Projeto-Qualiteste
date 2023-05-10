@@ -32,7 +32,7 @@ INSERT INTO PRODUCT(ProductID, Designation, Brand) VALUES
 (132321, 'Yogurte Grego', 'Pingo Doce'),
 (231233, 'Yogurte Grego', 'Intermarché'),
 (321332, 'Fiambre Fatiado', 'Continente'),
-(324231, 'Fiambre Fatiado', 'Pingo Doce');
+(324231, 'Fiambre Fatiado', 'Pingo Doce'),
 (123123, 'Mala Eastpack', 'Continente');
 
 
@@ -45,7 +45,7 @@ INSERT INTO TEST(InternalID, Product, TestType, ConsumersNumber, RequestDate, Va
 INSERT INTO SAMPLE(TestID, ProductID, ReceptionDate) VALUES
 ('443244', 132321, '2023-03-24'),
 ('443244', 231233, '2023-03-25'),
-('343123', 321332, '2023-04-01');
+('343123', 321332, '2023-04-01'),
 ('041234', 123123, '2023-04-01');
 
 
@@ -89,7 +89,7 @@ INSERT INTO CONSUMER_SP(TestID, ConsumerID) VALUES
 ('443244', 373),
 ('343123', 373),
 ('443244', 67),
-('343123', 67)
+('343123', 67);
 
 INSERT INTO CONSUMER_HT(TestID, ConsumerID, DeliveryDate, DueDate, ResponseDate, StampDate) VALUES
 ('041234', 6, '2023-03-01', null, null, null),
@@ -101,4 +101,4 @@ INSERT INTO CONSUMER_HT(TestID, ConsumerID, DeliveryDate, DueDate, ResponseDate,
 ('041234', 168, '2023-03-01', null, null, null),
 ('041234', 143, '2023-03-01', null, null, null),
 ('041234', 373, '2023-03-01', null, null, null),
-('041234', 67, '2023-03-01', null, null, null)
+('041234', 67, '2023-03-01', null, null, null);

@@ -64,7 +64,7 @@ CREATE TABLE CONSUMER_HT(
     DueDate date,
     ResponseDate date,
     StampDate date,
-    primary key(ConsumerID, InternalID)
+    primary key(ConsumerID, TestID)
 );
 
 CREATE TABLE CONSUMER_SP(
@@ -125,16 +125,22 @@ INSERT INTO PRODUCT(ProductID, Designation, Brand) VALUES
 (132321, 'Yogurte Grego', 'Pingo Doce'),
 (231233, 'Yogurte Grego', 'Intermarché'),
 (321332, 'Fiambre Fatiado', 'Continente'),
-(324231, 'Fiambre Fatiado', 'Pingo Doce');
+(324231, 'Fiambre Fatiado', 'Pingo Doce'),
+(123123, 'Mala Eastpack', 'Continente');
 
-INSERT INTO TEST(TestID, Product, TestType, ConsumersNumber, RequestDate, ValidationDate, DueDate, ReportDeliveryDate) VALUES
+
+INSERT INTO TEST(InternalID, Product, TestType, ConsumersNumber, RequestDate, ValidationDate, DueDate, ReportDeliveryDate) VALUES
 ('443244', 122332, 'SP', 10, '2023-03-21', null, null, null),
-('343123', 324231, 'SP', 10, '2023-03-29', null, null, null);
+('343123', 324231, 'SP', 10, '2023-03-29', null, null, null),
+('041234', 123123, 'HT', 10, '2023-03-29', null, null, null);
+
 
 INSERT INTO SAMPLE(TestID, ProductID, ReceptionDate) VALUES
 ('443244', 132321, '2023-03-24'),
 ('443244', 231233, '2023-03-25'),
-('343123', 321332, '2023-04-01');
+('343123', 321332, '2023-04-01'),
+('041234', 123123, '2023-04-01');
+
 
 INSERT INTO SESSION(SessionID, SessionDate, ConsumersNumber) VALUES
 ('040423', '2023-04-04', 10);
@@ -176,4 +182,16 @@ INSERT INTO CONSUMER_SP(TestID, ConsumerID) VALUES
 ('443244', 373),
 ('343123', 373),
 ('443244', 67),
-('343123', 67)
+('343123', 67);
+
+INSERT INTO CONSUMER_HT(TestID, ConsumerID, DeliveryDate, DueDate, ResponseDate, StampDate) VALUES
+('041234', 6, '2023-03-01', null, null, null),
+('041234', 263, '2023-03-01', null, null, null),
+('041234', 48, '2023-03-01', null, null, null),
+('041234', 86, '2023-03-01', null, null, null),
+('041234', 87, '2023-03-01', null, null, null),
+('041234', 23, '2023-03-01', null, null, null),
+('041234', 168, '2023-03-01', null, null, null),
+('041234', 143, '2023-03-01', null, null, null),
+('041234', 373, '2023-03-01', null, null, null),
+('041234', 67, '2023-03-01', null, null, null);

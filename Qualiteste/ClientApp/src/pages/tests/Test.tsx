@@ -44,9 +44,16 @@ export default function Test(): React.ReactElement {
   }
 
   return (
+    //TODO : Change display of test id, session id and number of consumers
     <Box>
-      <Box as="h1">
-        {test.id} - {session!.id} - {test.consumersNumber.toString()} Consumers
+      <Box as="h1" fontSize="2xl" fontWeight="bold" mb={4}>
+        TestID = {test.id} 
+      </Box>
+      <Box as="h1" fontSize="2xl" fontWeight="bold" mb={4}>
+        {session?.id}
+      </Box>
+      <Box as="h1" fontSize="2xl" fontWeight="bold" mb={4}>
+        Number of Consumers: {test.consumersNumber.toString()}
       </Box>
       <Table variant="simple">
         <Thead>

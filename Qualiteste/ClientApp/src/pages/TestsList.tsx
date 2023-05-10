@@ -32,6 +32,10 @@ export default function Tests(): React.ReactElement{
     // TODO: Implement CreateTest function
   };
 
+  const redirectToTestPage = (id: String) => {
+    navigate(`${id}`)
+  }
+
   async function populateData() {
     const filters = Object.assign(
       {},
@@ -42,7 +46,6 @@ export default function Tests(): React.ReactElement{
     setTests(response)
     setIsLoading(false)
   }
-
   return (
     <div className="flex flex-col h-full" style={{ height: "calc(100vh - 115px)" }}>
       <div className="p-6 flex-grow overflow-y-hidden">
@@ -66,7 +69,7 @@ export default function Tests(): React.ReactElement{
                 </Thead>
                 <Tbody>
                   {tests.map((test) => (
-                    <Tr className="hover:bg-slate-200 cursor-pointer" key={test.id}>
+                    <Tr className="hover:bg-slate-200 cursor-pointer" key={test.id} onClick ={() => redirectToTestPage(test.id)} >
                       <Td>{test.id}</Td>
                       <Td>{test.type}</Td>
                       <Td>{test.consumersNumber.toString()}</Td>
