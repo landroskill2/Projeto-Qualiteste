@@ -5,7 +5,7 @@ namespace Qualiteste.ServerApp.Models;
 
 public partial class ConsumerHt
 {
-    public string Internalid { get; set; } = null!;
+    public string Testid { get; set; } = null!;
 
     public int Consumerid { get; set; }
 
@@ -19,5 +19,5 @@ public partial class ConsumerHt
 
     public virtual Consumer Consumer { get; set; } = null!;
 
-    public virtual Test Internal { get; set; } = null!;
+    public virtual Test Test { get; set; } = null!;
 }

@@ -98,14 +98,14 @@ public partial class PostgresContext : DbContext
 
         modelBuilder.Entity<ConsumerHt>(entity =>
         {
-            entity.HasKey(e => new { e.Consumerid, e.Internalid }).HasName("consumer_ht_pkey");
+            entity.HasKey(e => new { e.Consumerid, e.Testid }).HasName("consumer_ht_pkey");
 
             entity.ToTable("consumer_ht");
 
             entity.Property(e => e.Consumerid).HasColumnName("consumerid");
-            entity.Property(e => e.Internalid)
+            entity.Property(e => e.Testid)
                 .HasMaxLength(20)
-                .HasColumnName("internalid");
+                .HasColumnName("testid");
             entity.Property(e => e.Deliverydate).HasColumnName("deliverydate");
             entity.Property(e => e.Duedate).HasColumnName("duedate");
             entity.Property(e => e.Responsedate).HasColumnName("responsedate");
@@ -116,10 +116,10 @@ public partial class PostgresContext : DbContext
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("consumer_ht_consumerid_fkey");
 
-            entity.HasOne(d => d.Internal).WithMany(p => p.ConsumerHts)
-                .HasForeignKey(d => d.Internalid)
+            entity.HasOne(d => d.Test).WithMany(p => p.ConsumerHts)
+                .HasForeignKey(d => d.Testid)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("consumer_ht_internalid_fkey");
+                .HasConstraintName("consumer_ht_testid_fkey");
         });
 
         modelBuilder.Entity<ConsumerSession>(entity =>
@@ -156,17 +156,17 @@ public partial class PostgresContext : DbContext
                 .ToTable("consumer_sp");
 
             entity.Property(e => e.Consumerid).HasColumnName("consumerid");
-            entity.Property(e => e.Internalid)
+            entity.Property(e => e.Testid)
                 .HasMaxLength(20)
-                .HasColumnName("internalid");
+                .HasColumnName("testid");
 
             entity.HasOne(d => d.Consumer).WithMany()
                 .HasForeignKey(d => d.Consumerid)
                 .HasConstraintName("consumer_sp_consumerid_fkey");
 
-            entity.HasOne(d => d.Internal).WithMany()
-                .HasForeignKey(d => d.Internalid)
-                .HasConstraintName("consumer_sp_internalid_fkey");
+            entity.HasOne(d => d.Test).WithMany()
+                .HasForeignKey(d => d.Testid)
+                .HasConstraintName("consumer_sp_testid_fkey");
         });
 
         modelBuilder.Entity<Product>(entity =>

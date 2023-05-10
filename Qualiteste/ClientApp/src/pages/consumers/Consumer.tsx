@@ -70,7 +70,7 @@ export default function Consumer(): React.ReactElement {
               <Tr className="hover:bg-slate-200 cursor-pointer" key={session.id}>
                 <Td>{session.id}</Td>
                 <Td>{session.date}</Td>
-                <Td>{session.consumersNumber.toString()}</Td>
+                <Td>{session.consumersnumber.toString()}</Td>
               </Tr>
             ))}
           </Tbody>

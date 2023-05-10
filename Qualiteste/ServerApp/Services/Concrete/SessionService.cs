@@ -24,15 +24,18 @@ namespace Qualiteste.ServerApp.Services.Concrete
            
         }
 
-        public Either<CustomError, SessionOutputModel> GetSessionById(string id)
+        public Either<CustomError, SessionPageModel> GetSessionById(string id)
         {
-
+            SessionPageModel pageModel = new SessionPageModel();
             Session? session = _unitOfWork.Sessions.GetSessionById(id);
-            if(session != null)
+            if(session == null)
             {
-                return session.toOutputModel();
+                return new NoSessionFoundWithId();
             }
-            return new NoSessionFoundWithId();
+            pageModel.Session = session.toOutputModel();
+            pageModel.Consumers = session.ConsumerSessions.Select(cs => cs.toOutputModel()).ToList();
+            pageModel.Tests = session.Tests.Select(t => t.toOutputModel()).ToList();
+            return pageModel;
         }
 
         public Either<CustomError, string> CreateNewSession(SessionInputModel sessionInput)
