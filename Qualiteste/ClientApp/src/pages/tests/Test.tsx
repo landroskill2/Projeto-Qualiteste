@@ -67,7 +67,7 @@ export default function Test(): React.ReactElement {
         </Thead>
         <Tbody>
           {consumers.map(consumer => (
-            <Tr key={consumer.id}>
+            <Tr className="hover:bg-slate-200 cursor-pointer" key={consumer.id}>
               <Td>{consumer.fullname}</Td>
               <Td>{consumer.age}</Td>
               <Td>{consumer.sex}</Td>

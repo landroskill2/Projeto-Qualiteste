@@ -12,10 +12,10 @@ import {
   Spinner,
   Box
 } from "@chakra-ui/react";
-import { ITestOutputModel } from "../common/Interfaces/Tests";
+import { ITestOutputModel } from "../../common/Interfaces/Tests";
 import { useNavigate } from "react-router-dom";
-import { fetchTests } from "../common/APICalls";
-import TestTypeFilter from "../components/TestTypeFilter";
+import { fetchTests } from "../../common/APICalls";
+import TestTypeFilter from "../../components/TestTypeFilter";
 
 
 export default function Tests(): React.ReactElement{
