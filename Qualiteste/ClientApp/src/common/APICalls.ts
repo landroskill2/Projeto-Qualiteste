@@ -37,6 +37,13 @@ export async function fetchTests(
     return fetch(path)
 }
 
+export async function fetchTestById(
+    id : String
+) : Promise<Response>{
+    let path = `/api/tests/${id}`
+    return fetch(path)
+}
+
 //Sessions
 export async function fetchSessions() : Promise<Response>{
     let path = "/api/sessions"

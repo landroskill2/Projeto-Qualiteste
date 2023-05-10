@@ -58,7 +58,7 @@ namespace Qualiteste.ServerApp.Controllers
         {
             try
             {
-                Either<CustomError, TestOutputModel> result = _testService.GetTestById(id);
+                Either<CustomError, TestPageModel> result = _testService.GetTestById(id);
                 return result.Match(
                     error => Problem(statusCode: error.StatusCode, title: error.Message),
                     success => Ok(success)

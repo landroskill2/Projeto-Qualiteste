@@ -32,10 +32,17 @@ namespace Qualiteste.ServerApp.Services.Concrete
             }
         }
 
-        public Either<CustomError, TestOutputModel> GetTestById(string id)
+        public Either<CustomError, TestPageModel> GetTestById(string id)
         {
             Test? test = _unitOfWork.Tests.GetTestById(id);
-            return test != null ? test.toOutputModel() : new NoTestFoundWithGivenID();
+            if (test == null) return new NoTestFoundWithGivenID();
+            TestPageModel pageModel = new TestPageModel();
+            
+            pageModel.Test = test.toOutputModel();
+            if (test.Testtype.Equals("SP")) pageModel.Session = test.Sessions.First().toOutputModel();
+            pageModel.Consumers = _unitOfWork.Tests.GetConsumersInTest(id).Select(c => c.ToOutputModel()).ToList();
+
+            return pageModel;
         }
 
         public Either<CustomError, string> CreateNewTest(TestInputModel testInput)

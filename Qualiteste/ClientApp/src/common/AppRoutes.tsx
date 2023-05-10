@@ -5,6 +5,7 @@ import Consumer from "../pages/consumers/Consumer";
 import Tests from "../pages/TestsList";
 import Sessions from "../pages/sessions/SessionsList";
 import Session from "../pages/sessions/Session";
+import Test from "../pages/tests/Test";
 
 const AppRoutes = createBrowserRouter([
   {
@@ -22,6 +23,10 @@ const AppRoutes = createBrowserRouter([
   {
     path: "/tests",
     element: <Tests/>
+  },
+  {
+    path: "/tests/:id",
+    element: <Test/>
   },
   {
     path: "/sessions",
