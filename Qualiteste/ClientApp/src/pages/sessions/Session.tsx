@@ -12,7 +12,7 @@ import { ISessionOutputModel } from '../../common/Interfaces/Sessions'
 import { IConsumerSessionOutputModel } from '../../common/Interfaces/Sessions'
 import { ITestOutputModel } from "../../common/Interfaces/Tests";
 import { fetchSessionById } from '../../common/APICalls';
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { IConsumerOutputModel } from "../../common/Interfaces/Consumers";
 
 export default function Session() : React.ReactElement{
@@ -21,6 +21,15 @@ export default function Session() : React.ReactElement{
   const [consumerSessions, setConsumerSessions] = useState<IConsumerSessionOutputModel[]>([]);
   const [tests, setTests] = useState<ITestOutputModel[]>([]);
   const {id} = useParams()
+  const navigate = useNavigate()
+
+  const redirectToConsumerPage = (id: number) => {
+    navigate(`/consumers/${id}`)
+  }
+
+  const redirectToTestPage = (id: string) => {
+    navigate(`/tests/${id}`)
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -91,7 +100,7 @@ export default function Session() : React.ReactElement{
                 {groupConsumerSessionsByTime().map(({ consumers }) => (
                   <Td key={consumers[0].id}>
                     {consumers.map((consumer) => (
-                      <Tr key={consumer.id}>
+                      <Tr key={consumer.id} onClick={() => redirectToConsumerPage(consumer.id)}>
                         <Td className="hover:bg-slate-200 cursor-pointer">{consumer.fullname}</Td>
                       </Tr>
                     ))}
@@ -112,7 +121,7 @@ export default function Session() : React.ReactElement{
               </Thead>
             <Tbody>
               {tests.map((test) => (
-                <Tr className="hover:bg-slate-200 cursor-pointer" key={test.id}>
+                <Tr className="hover:bg-slate-200 cursor-pointer" key={test.id} onClick={() => redirectToTestPage(test.id)}>
                   <Td>{test.id}</Td>
                   <Td>{test.type}</Td>
                   <Td>{test.consumersNumber.toString()}</Td>

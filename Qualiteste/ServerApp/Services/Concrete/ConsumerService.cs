@@ -19,14 +19,19 @@ namespace Qualiteste.ServerApp.Services.Concrete
         public Either<CustomError, int> CreateNewConsumer(ConsumerInputModel consumer)
         {
             try {
+                Consumer dbConsumer;
                 if(consumer.Id == null)
                 {
-                    consumer.Id = _unitOfWork.Consumers.GetLastID() + 1;
+                    int id = (_unitOfWork.Consumers.GetLastID() + 1);
+                    dbConsumer = consumer.ToDbConsumer(id);
                 }
-                Consumer dbConsumer = consumer.ToDbConsumer();
+                else
+                {
+                    dbConsumer = consumer.ToDbConsumer();
+                }
                 _unitOfWork.Consumers.Add(dbConsumer);
                 _unitOfWork.Complete();
-                return (int)dbConsumer.Id;
+                return dbConsumer.Id;
             }
             catch (Microsoft.EntityFrameworkCore.DbUpdateException ex)
             {
@@ -60,16 +65,19 @@ namespace Qualiteste.ServerApp.Services.Concrete
 
         public Either<CustomError, ConsumerPageModel> GetConsumerById(int id)
         {
-            ConsumerPageModel consumerPageModel = new ConsumerPageModel();
             Consumer consumer = _unitOfWork.Consumers.GetConsumerById(id);
 
             if (consumer == null) return new NoConsumerFoundWithId();
 
-            consumerPageModel.Consumer = consumer.ToOutputModel();
-            consumerPageModel.Sessions = consumer.ConsumerSessions.Select(cs => cs.Session.toOutputModel()).ToList();
-            consumerPageModel.Tests = _unitOfWork.Consumers.GetConsumerTests(id).Select(t => t.toOutputModel()).ToList();
+            IEnumerable<SessionOutputModel> sessions = consumer.ConsumerSessions.Select(cs => cs.Session.toOutputModel());
+            IEnumerable<TestOutputModel> tests = _unitOfWork.Consumers.GetConsumerTests(id).Select(t => t.toOutputModel());
 
-            return consumerPageModel;
+            return new ConsumerPageModel
+            {
+                Consumer = consumer.ToOutputModel(),
+                Sessions = sessions,
+                Tests = tests
+            };
         }
 
         public Either<CustomError, IEnumerable<ConsumerOutputModel>> GetConsumersAlphabetically()

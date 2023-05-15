@@ -3,26 +3,26 @@ using Qualiteste.ServerApp.Models;
 
 namespace Qualiteste.ServerApp.Dtos
 {
-    public class ConsumerOutputModel
+    public record ConsumerOutputModel
     {
-        public int Id { get; set; }
-        public string Fullname { get; set; }
-        public string Age { get; set; }
-        public string Sex { get; set; }
-        public int Contact { get; set; }
+        public int Id { get; init; }
+        public string Fullname { get; init; }
+        public string Age { get; init; }
+        public string Sex { get; init; }
+        public int Contact { get; init; }
 
-        public string? Email { get; set; }
+        public string? Email { get; init; }
     }
 
-    public class ConsumerInputModel
+    public record ConsumerInputModel
     {
-        public int? Id { get; set; } = null;
-        public string Fullname { get; set;}
-        public string Nif { get; set; }
-        public string Sex { get; set; }
-        public DateOnly DateOfBirth { get; set; }
-        public int Contact { get; set; }
-        public string? Email { get; set; } = null;
+        public int? Id { get;} = null;
+        public string Fullname { get;}
+        public string Nif { get; }
+        public string Sex { get; }
+        public DateOnly DateOfBirth { get; }
+        public int Contact { get; }
+        public string? Email { get; } = null;
 
         public Consumer ToDbConsumer()
         {
@@ -37,12 +37,26 @@ namespace Qualiteste.ServerApp.Dtos
                 Email = Email
             };
         }
+
+        public Consumer ToDbConsumer(int id)
+        {
+            return new Consumer
+            {
+                Id = id,
+                Fullname = Fullname,
+                Nif = Nif,
+                Sex = Sex,
+                Dateofbirth = DateOfBirth,
+                Contact = Contact,
+                Email = Email
+            };
+        }
     }
 
-    public class ConsumerPageModel
+    public record ConsumerPageModel
     {
-        public ConsumerOutputModel Consumer { get; set; }
-        public List<SessionOutputModel> Sessions { get; set; }
-        public List<TestOutputModel> Tests { get; set; }
+        public ConsumerOutputModel Consumer { get; init; }
+        public IEnumerable<SessionOutputModel> Sessions { get; init; }
+        public IEnumerable<TestOutputModel> Tests { get; init; }
     }
 }

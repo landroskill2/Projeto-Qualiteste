@@ -4,13 +4,23 @@ import {IConsumerOutputModel} from '../../common/Interfaces/Consumers';
 import { ISessionOutputModel } from '../../common/Interfaces/Sessions';
 import { ITestOutputModel } from '../../common/Interfaces/Tests';
 import { fetchConsumerById } from '../../common/APICalls';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 export default function Consumer(): React.ReactElement {
   const [consumerData, setConsumerData] = useState<IConsumerOutputModel | null>(null);
   const [sessionData, setSessionData] = useState<ISessionOutputModel[]>([]);
   const [testData, setTestData] = useState<ITestOutputModel[]>([]);
-  const {id} = useParams()
+  const { id } = useParams()
+  const navigate = useNavigate()
+
+
+  const redirectToSessionPage = (id: string) => {
+        navigate(`/sessions/${id}`)
+  }
+
+  const redirectToTestPage = (id: string) => {
+    navigate(`/tests/${id}`)
+}
 
   useEffect(() => {
     const fetchData = async () => {
@@ -67,7 +77,7 @@ export default function Consumer(): React.ReactElement {
           </Thead>
           <Tbody>
             {sessionData.map((session) => (
-              <Tr className="hover:bg-slate-200 cursor-pointer" key={session.id}>
+              <Tr className="hover:bg-slate-200 cursor-pointer" key={session.id} onClick={ () => redirectToSessionPage(session.id)}>
                 <Td>{session.id}</Td>
                 <Td>{session.date}</Td>
                 <Td>{session.consumersNumber.toString()}</Td>
@@ -96,7 +106,7 @@ export default function Consumer(): React.ReactElement {
           </Thead>
           <Tbody>
             {testData.map((test) => (
-              <Tr className="hover:bg-slate-200 cursor-pointer" key={test.id}>
+              <Tr className="hover:bg-slate-200 cursor-pointer" key={test.id} onClick={ () => redirectToTestPage(test.id)}>
                 <Td>{test.id}</Td>
                 <Td>{test.type}</Td>
                 <Td>{test.consumersNumber.toString()}</Td>

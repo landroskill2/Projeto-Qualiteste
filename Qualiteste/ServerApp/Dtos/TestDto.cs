@@ -2,27 +2,27 @@
 
 namespace Qualiteste.ServerApp.Dtos
 {
-    public class TestOutputModel
+    public record TestOutputModel
     {
-        public string ID { get; set; }
-        public string Type { get; set; }
-        public int ConsumersNumber { get; set; }
-        public DateOnly RequestDate { get; set; }
-        public DateOnly? ValidationDate { get; set; }
-        public DateOnly? DueDate { get; set; }
-        public DateOnly? ReportDeliveryDate { get; set; }
+        public string ID { get; init; }
+        public string Type { get; init; }
+        public int ConsumersNumber { get; init; }
+        public DateOnly RequestDate { get; init; }
+        public DateOnly? ValidationDate { get; init; }
+        public DateOnly? DueDate { get; init; }
+        public DateOnly? ReportDeliveryDate { get; init; }
     }
 
-    public class TestInputModel
+    public record TestInputModel
     {
-        public string ID { get; set; }
-        public int Product { get; set; }
-        public string TestType { get; set; }
-        public int ConsumersNumber { get; set; }
-        public DateOnly RequestDate { get; set; }
-        public DateOnly? ValidationDate { get; set; }
-        public DateOnly? DueDate { get; set; }
-        public DateOnly? ReportDeliveryDate { get; set; }
+        public string ID { get; }
+        public int Product { get; }
+        public string TestType { get; }
+        public int ConsumersNumber { get; }
+        public DateOnly RequestDate { get; }
+        public DateOnly? ValidationDate { get; }
+        public DateOnly? DueDate { get; }
+        public DateOnly? ReportDeliveryDate { get; }
 
         public Test toDbTest()
         {
@@ -39,9 +39,9 @@ namespace Qualiteste.ServerApp.Dtos
             };
         }
     }
-    public class TestPageModel{
-        public List<ConsumerOutputModel> Consumers { get; set; }
-        public SessionOutputModel? Session { get; set; }
-        public TestOutputModel Test { get; set; }
+    public record TestPageModel{
+        public IEnumerable<ConsumerOutputModel> Consumers { get; init; }
+        public SessionOutputModel? Session { get; init; }
+        public TestOutputModel Test { get; init; }
     }
 }

@@ -2,18 +2,18 @@
 
 namespace Qualiteste.ServerApp.Dtos
 {
-    public class SessionOutputModel
+    public record SessionOutputModel
     {
-        public string Id { get; set; }
-        public DateOnly Date { get; set; }
-        public int ConsumersNumber { get; set; }
+        public string Id { get; init; }
+        public DateOnly Date { get; init; }
+        public int ConsumersNumber { get; init; }
     }
 
-    public class SessionInputModel
+    public record SessionInputModel
     {
-        public string Id { get; set; }
-        public DateOnly Date { get; set; }
-        public int ConsumersNumber { get; set; }
+        public string Id { get; }
+        public DateOnly Date { get; }
+        public int ConsumersNumber { get; }
 
         public Session toDbSession()
         {
@@ -27,21 +27,21 @@ namespace Qualiteste.ServerApp.Dtos
         }
     }
 
-    public class ConsumerSessionOutputModel
+    public record ConsumerSessionOutputModel
     {
-        public ConsumerOutputModel Consumer { get; set;}
-        public DateOnly? Contacteddate { get; set; }
-        public DateOnly? Confirmationdate { get; set; }
-        public TimeOnly? Sessiontime { get; set; }
-        public bool? Attendance { get; set; }
-        public DateOnly? Stampdate { get; set; }
+        public ConsumerOutputModel Consumer { get; init;}
+        public DateOnly? Contacteddate { get; init; }
+        public DateOnly? Confirmationdate { get; init; }
+        public TimeOnly? Sessiontime { get; init; }
+        public bool? Attendance { get; init; }
+        public DateOnly? Stampdate { get; init; }
 
     }
 
-    public class SessionPageModel
+    public record SessionPageModel
     {
-        public SessionOutputModel Session { get; set; }
-        public List<ConsumerSessionOutputModel> Consumers { get; set; }
-        public List<TestOutputModel> Tests { get; set; }
+        public SessionOutputModel Session { get; init; }
+        public IEnumerable<ConsumerSessionOutputModel> Consumers { get; init; }
+        public IEnumerable<TestOutputModel> Tests { get; init; }
     }
 }

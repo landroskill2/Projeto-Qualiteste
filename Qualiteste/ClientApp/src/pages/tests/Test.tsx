@@ -3,7 +3,7 @@ import { IConsumerOutputModel } from '../../common/Interfaces/Consumers';
 import { ISessionOutputModel } from '../../common/Interfaces/Sessions';
 import { ITestOutputModel } from '../../common/Interfaces/Tests';
 import { fetchTestById } from '../../common/APICalls';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from "react";
 
 
@@ -12,6 +12,12 @@ export default function Test(): React.ReactElement {
   const [consumers, setConsumers] = useState<IConsumerOutputModel[]>([]);
   const [test, setTest] = useState<ITestOutputModel | null>(null);
   const { id } = useParams();
+  const navigate = useNavigate()
+
+
+  const redirectToConsumerPage = (id: number) => {
+    navigate(`/consumers/${id}`)
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -58,6 +64,7 @@ export default function Test(): React.ReactElement {
       <Table variant="simple">
         <Thead>
           <Tr>
+            <Th>ID</Th>
             <Th>Full Name</Th>
             <Th>Age</Th>
             <Th>Sex</Th>
@@ -67,7 +74,8 @@ export default function Test(): React.ReactElement {
         </Thead>
         <Tbody>
           {consumers.map(consumer => (
-            <Tr className="hover:bg-slate-200 cursor-pointer" key={consumer.id}>
+            <Tr className="hover:bg-slate-200 cursor-pointer" key={consumer.id} onClick={() => redirectToConsumerPage(consumer.id)}>
+              <Td>{consumer.id}</Td>
               <Td>{consumer.fullname}</Td>
               <Td>{consumer.age}</Td>
               <Td>{consumer.sex}</Td>

@@ -36,7 +36,7 @@ namespace Qualiteste.ServerApp.DataAccess.Repository.Concrete
             return PostgresContext.Consumers.Where(p);
         }
 
-        public int? GetLastID()
+        public int GetLastID()
         {
             return PostgresContext.Consumers.Max(c => c.Id);
         }
