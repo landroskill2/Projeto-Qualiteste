@@ -26,6 +26,8 @@ public partial class PostgresContext : DbContext
 
     public virtual DbSet<ConsumerSp> ConsumerSps { get; set; }
 
+    public virtual DbSet<FizzValue> FizzValues { get; set; }
+
     public virtual DbSet<Product> Products { get; set; }
 
     public virtual DbSet<Sample> Samples { get; set; }
@@ -151,22 +153,46 @@ public partial class PostgresContext : DbContext
 
         modelBuilder.Entity<ConsumerSp>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("consumer_sp");
+            entity.HasKey(e => new { e.Consumerid, e.Testid }).HasName("consumer_sp_pkey");
+
+            entity.ToTable("consumer_sp");
 
             entity.Property(e => e.Consumerid).HasColumnName("consumerid");
             entity.Property(e => e.Testid)
                 .HasMaxLength(20)
                 .HasColumnName("testid");
+            entity.Property(e => e.Fizzid).HasColumnName("fizzid");
 
-            entity.HasOne(d => d.Consumer).WithMany()
+            entity.HasOne(d => d.Consumer).WithMany(p => p.ConsumerSps)
                 .HasForeignKey(d => d.Consumerid)
+                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("consumer_sp_consumerid_fkey");
 
-            entity.HasOne(d => d.Test).WithMany()
+            entity.HasOne(d => d.Fizz).WithMany(p => p.ConsumerSps)
+                .HasForeignKey(d => d.Fizzid)
+                .HasConstraintName("consumer_sp_fizzid_fkey");
+
+            entity.HasOne(d => d.Test).WithMany(p => p.ConsumerSps)
                 .HasForeignKey(d => d.Testid)
+                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("consumer_sp_testid_fkey");
+        });
+
+        modelBuilder.Entity<FizzValue>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("fizz_values_pkey");
+
+            entity.ToTable("fizz_values");
+
+            entity.Property(e => e.Id)
+                .UseIdentityAlwaysColumn()
+                .HasColumnName("id");
+            entity.Property(e => e.Columns)
+                .HasColumnType("character varying")
+                .HasColumnName("columns");
+            entity.Property(e => e.Consumervalues)
+                .HasColumnType("character varying")
+                .HasColumnName("consumervalues");
         });
 
         modelBuilder.Entity<Product>(entity =>

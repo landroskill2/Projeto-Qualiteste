@@ -37,13 +37,17 @@ CREATE TABLE CLIENT(
     CompanyName varchar(50) NOT NULL
 );
 
-
-
 CREATE TABLE SAMPLE(
     TestID varchar(20) REFERENCES TEST(InternalID),
     ProductID int REFERENCES PRODUCT(ProductID),
     ReceptionDate date,
     primary key(TestID, ProductID)
+);
+
+CREATE TABLE FIZZ_VALUES(
+    ID int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    Columns varchar NOT NULL,
+    ConsumerValues varchar NOT NULL
 );
 
 CREATE TABLE CONSUMER_HT(
@@ -58,9 +62,9 @@ CREATE TABLE CONSUMER_HT(
 
 CREATE TABLE CONSUMER_SP(
     TestID varchar(20) REFERENCES TEST(InternalID),
-    ConsumerID INT REFERENCES CONSUMER(Id)
-    /* REFERENCIA PARA A TABELA FIZZ */
-    /* Primary Key */
+    ConsumerID INT REFERENCES CONSUMER(Id),
+    FizzID int REFERENCES FIZZ_VALUES(ID),
+    primary key(ConsumerID, TestID)
 );
 
 CREATE TABLE SESSION_TESTS(

@@ -22,4 +22,6 @@ public partial class Consumer
     public virtual ICollection<ConsumerHt> ConsumerHts { get; } = new List<ConsumerHt>();
 
     public virtual ICollection<ConsumerSession> ConsumerSessions { get; } = new List<ConsumerSession>();
+
+    public virtual ICollection<ConsumerSp> ConsumerSps { get; } = new List<ConsumerSp>();
 }

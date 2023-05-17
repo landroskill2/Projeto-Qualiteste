@@ -89,14 +89,13 @@ export default function Consumer(): React.ReactElement {
 
       <Box mb={8}>
         <Box as="h2" fontSize="xl" fontWeight="bold" mb={4}>
-          Tests
+          Home Tests
         </Box>
 
         <Table variant="simple">
           <Thead>
             <Tr>
               <Th>ID</Th>
-              <Th>Type</Th>
               <Th>Consumers Number</Th>
               <Th>Request Date</Th>
               <Th>Validation Date</Th>
@@ -108,7 +107,6 @@ export default function Consumer(): React.ReactElement {
             {testData.map((test) => (
               <Tr className="hover:bg-slate-200 cursor-pointer" key={test.id} onClick={ () => redirectToTestPage(test.id)}>
                 <Td>{test.id}</Td>
-                <Td>{test.type}</Td>
                 <Td>{test.consumersNumber.toString()}</Td>
                 <Td>{test.requestDate || '-'}</Td>
                 <Td>{test.validationDate || '-'}</Td>

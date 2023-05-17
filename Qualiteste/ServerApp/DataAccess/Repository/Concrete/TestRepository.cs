@@ -40,8 +40,7 @@ namespace Qualiteste.ServerApp.DataAccess.Repository.Concrete
             if (targetTest == null)
                 return null;
             if (targetTest.Testtype.Equals("HT")) return targetTest.ConsumerHts.Select(c => c.Consumer);
-            //If it's not HT it's SP
-            else throw new NotImplementedException();
+            else return targetTest.ConsumerSps.Select(c => c.Consumer);
 
         }
 

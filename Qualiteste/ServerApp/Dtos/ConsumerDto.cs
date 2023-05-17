@@ -16,13 +16,13 @@ namespace Qualiteste.ServerApp.Dtos
 
     public record ConsumerInputModel
     {
-        public int? Id { get;} = null;
-        public string Fullname { get;}
-        public string Nif { get; }
-        public string Sex { get; }
-        public DateOnly DateOfBirth { get; }
-        public int Contact { get; }
-        public string? Email { get; } = null;
+        public int? Id { get; init; } = null;
+        public string Fullname { get; init; }
+        public string Nif { get; init; }
+        public string Sex { get; init; }
+        public DateOnly DateOfBirth { get; init; }
+        public int Contact { get; init; }
+        public string? Email { get; init; } = null;
 
         public Consumer ToDbConsumer()
         {
