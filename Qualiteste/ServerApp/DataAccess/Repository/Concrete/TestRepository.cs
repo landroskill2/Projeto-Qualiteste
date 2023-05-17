@@ -41,6 +41,7 @@ namespace Qualiteste.ServerApp.DataAccess.Repository.Concrete
                 return null;
             if (targetTest.Testtype.Equals("HT")) return targetTest.ConsumerHts.Select(c => c.Consumer);
             //If it's not HT it's SP
+            //TODO: Connection in db to ConsumersSP from a test.
             else throw new NotImplementedException();
 
         }
