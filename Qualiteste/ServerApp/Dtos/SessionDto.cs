@@ -11,9 +11,9 @@ namespace Qualiteste.ServerApp.Dtos
 
     public record SessionInputModel
     {
-        public string Id { get; }
-        public DateOnly Date { get; }
-        public int ConsumersNumber { get; }
+        public string Id { get; init; }
+        public DateOnly Date { get; init; }
+        public int ConsumersNumber { get; init; }
 
         public Session toDbSession()
         {

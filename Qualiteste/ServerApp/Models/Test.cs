@@ -23,6 +23,8 @@ public partial class Test
 
     public virtual ICollection<ConsumerHt> ConsumerHts { get; } = new List<ConsumerHt>();
 
+    public virtual ICollection<ConsumerSp> ConsumerSps { get; } = new List<ConsumerSp>();
+
     public virtual Product ProductNavigation { get; set; } = null!;
 
     public virtual ICollection<Sample> Samples { get; } = new List<Sample>();
