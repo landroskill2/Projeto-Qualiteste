@@ -14,6 +14,9 @@ export default function Test(): React.ReactElement {
   const { id } = useParams();
   const navigate = useNavigate()
 
+  const redirectToSessionPage = (id: string) => {
+    navigate(`/sessions/${id}`)
+}
 
   const redirectToConsumerPage = (id: number) => {
     navigate(`/consumers/${id}`)
@@ -55,7 +58,7 @@ export default function Test(): React.ReactElement {
       <Box as="h1" fontSize="2xl" fontWeight="bold" mb={4}>
         TestID = {test.id} 
       </Box>
-      <Box as="h1" fontSize="2xl" fontWeight="bold" mb={4}>
+      <Box className="hover:cursor-pointer" as="h1" fontSize="2xl" fontWeight="bold" mb={4} onClick={() => redirectToSessionPage(session.id)}>
         {session?.id}
       </Box>
       <Box as="h1" fontSize="2xl" fontWeight="bold" mb={4}>

@@ -50,6 +50,21 @@ CREATE TABLE FIZZ_VALUES(
     ConsumerValues varchar NOT NULL
 );
 
+CREATE TABLE FIZZ_ATTRIBUTES(
+    TestID varchar(20),
+    ConsumerID INT,
+    Attribute varchar NOT NULL,
+    AttValue varchar NOT NULL,
+    PRIMARY KEY(TestID, ConsumerID, Attribute),
+    FOREIGN KEY(TestID, ConsumerID) REFERENCES CONSUMER_SP(TestID, ConsumerID) /*isto funciona?????*/
+    /*ADICIONAR PRODUTO*/
+);
+
+CREATE TABLE ATTRIBUTE_NAME(
+    /**/
+    Alias varchar,
+)
+
 CREATE TABLE CONSUMER_HT(
     TestID varchar(20) REFERENCES TEST(InternalID),
     ConsumerID INT REFERENCES CONSUMER(Id),
@@ -61,9 +76,9 @@ CREATE TABLE CONSUMER_HT(
 );
 
 CREATE TABLE CONSUMER_SP(
+    /*ID int generated always as identity unique,*/
     TestID varchar(20) REFERENCES TEST(InternalID),
     ConsumerID INT REFERENCES CONSUMER(Id),
-    FizzID int REFERENCES FIZZ_VALUES(ID),
     primary key(ConsumerID, TestID)
 );
 
