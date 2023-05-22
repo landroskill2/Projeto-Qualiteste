@@ -44,6 +44,20 @@ export async function fetchTestById(
     return fetch(path)
 }
 
+export async function uploadFile(
+    id : String,
+    file : any
+) : Promise<Response>{
+    let path = `/api/tests/${id}/upload`
+    return fetch(path, {
+        method: "POST",
+        headers: {
+            "Content-Type": "text/csv",
+        },
+        body: file
+    })
+}
+
 //Sessions
 export async function fetchSessions() : Promise<Response>{
     let path = "/api/sessions"

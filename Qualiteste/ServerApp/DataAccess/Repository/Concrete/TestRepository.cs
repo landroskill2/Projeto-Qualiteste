@@ -40,7 +40,7 @@ namespace Qualiteste.ServerApp.DataAccess.Repository.Concrete
             if (targetTest == null)
                 return null;
             if (targetTest.Testtype.Equals("HT")) return targetTest.ConsumerHts.Select(c => c.Consumer);
-            else return null;//targetTest.ConsumerSps.Select(c => c.Consumer);
+            else return targetTest.Consumers;
 
         }
 

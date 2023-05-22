@@ -28,8 +28,6 @@ public partial class PostgresContext : DbContext
 
     public virtual DbSet<FizzAttribute> FizzAttributes { get; set; }
 
-    public virtual DbSet<FizzValue> FizzValues { get; set; }
-
     public virtual DbSet<Product> Products { get; set; }
 
     public virtual DbSet<Sample> Samples { get; set; }
@@ -222,23 +220,6 @@ public partial class PostgresContext : DbContext
                 .HasForeignKey(d => d.Testid)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fizz_attributes_testid_fkey");
-        });
-
-        modelBuilder.Entity<FizzValue>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("fizz_values_pkey");
-
-            entity.ToTable("fizz_values");
-
-            entity.Property(e => e.Id)
-                .UseIdentityAlwaysColumn()
-                .HasColumnName("id");
-            entity.Property(e => e.Columns)
-                .HasColumnType("character varying")
-                .HasColumnName("columns");
-            entity.Property(e => e.Consumervalues)
-                .HasColumnType("character varying")
-                .HasColumnName("consumervalues");
         });
 
         modelBuilder.Entity<Product>(entity =>
