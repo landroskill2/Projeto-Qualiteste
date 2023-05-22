@@ -16,6 +16,8 @@ public partial class PostgresContext : DbContext
         _useTestDB = useTestDB;
     }
 
+    public virtual DbSet<AttributeValue> AttributeValues { get; set; }
+
     public virtual DbSet<Client> Clients { get; set; }
 
     public virtual DbSet<Consumer> Consumers { get; set; }
@@ -24,7 +26,7 @@ public partial class PostgresContext : DbContext
 
     public virtual DbSet<ConsumerSession> ConsumerSessions { get; set; }
 
-    public virtual DbSet<ConsumerSp> ConsumerSps { get; set; }
+    public virtual DbSet<FizzAttribute> FizzAttributes { get; set; }
 
     public virtual DbSet<FizzValue> FizzValues { get; set; }
 
@@ -54,6 +56,34 @@ public partial class PostgresContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.HasPostgresExtension("pg_catalog", "adminpack");
+
+        modelBuilder.Entity<AttributeValue>(entity =>
+        {
+            entity.HasKey(e => new { e.Testid, e.Attribute, e.Consumerid }).HasName("attribute_values_pkey");
+
+            entity.ToTable("attribute_values");
+
+            entity.Property(e => e.Testid)
+                .HasMaxLength(20)
+                .HasColumnName("testid");
+            entity.Property(e => e.Attribute)
+                .HasColumnType("character varying")
+                .HasColumnName("attribute");
+            entity.Property(e => e.Consumerid).HasColumnName("consumerid");
+            entity.Property(e => e.Attrvalue)
+                .HasColumnType("character varying")
+                .HasColumnName("attrvalue");
+
+            entity.HasOne(d => d.Consumer).WithMany(p => p.AttributeValues)
+                .HasForeignKey(d => d.Consumerid)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("attribute_values_consumerid_fkey");
+
+            entity.HasOne(d => d.FizzAttribute).WithMany(p => p.AttributeValues)
+                .HasForeignKey(d => new { d.Testid, d.Attribute })
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("attribute_values_testid_attribute_fkey");
+        });
 
         modelBuilder.Entity<Client>(entity =>
         {
@@ -96,6 +126,27 @@ public partial class PostgresContext : DbContext
             entity.Property(e => e.Sex)
                 .HasMaxLength(1)
                 .HasColumnName("sex");
+
+            entity.HasMany(d => d.Tests).WithMany(p => p.Consumers)
+                .UsingEntity<Dictionary<string, object>>(
+                    "ConsumerSp",
+                    r => r.HasOne<Test>().WithMany()
+                        .HasForeignKey("Testid")
+                        .OnDelete(DeleteBehavior.ClientSetNull)
+                        .HasConstraintName("consumer_sp_testid_fkey"),
+                    l => l.HasOne<Consumer>().WithMany()
+                        .HasForeignKey("Consumerid")
+                        .OnDelete(DeleteBehavior.ClientSetNull)
+                        .HasConstraintName("consumer_sp_consumerid_fkey"),
+                    j =>
+                    {
+                        j.HasKey("Consumerid", "Testid").HasName("consumer_sp_pkey");
+                        j.ToTable("consumer_sp");
+                        j.IndexerProperty<int>("Consumerid").HasColumnName("consumerid");
+                        j.IndexerProperty<string>("Testid")
+                            .HasMaxLength(20)
+                            .HasColumnName("testid");
+                    });
         });
 
         modelBuilder.Entity<ConsumerHt>(entity =>
@@ -151,31 +202,26 @@ public partial class PostgresContext : DbContext
                 .HasConstraintName("consumer_session_sessionid_fkey");
         });
 
-        modelBuilder.Entity<ConsumerSp>(entity =>
+        modelBuilder.Entity<FizzAttribute>(entity =>
         {
-            entity.HasKey(e => new { e.Consumerid, e.Testid }).HasName("consumer_sp_pkey");
+            entity.HasKey(e => new { e.Testid, e.Attribute }).HasName("fizz_attributes_pkey");
 
-            entity.ToTable("consumer_sp");
+            entity.ToTable("fizz_attributes");
 
-            entity.Property(e => e.Consumerid).HasColumnName("consumerid");
             entity.Property(e => e.Testid)
                 .HasMaxLength(20)
                 .HasColumnName("testid");
-            entity.Property(e => e.Fizzid).HasColumnName("fizzid");
+            entity.Property(e => e.Attribute)
+                .HasColumnType("character varying")
+                .HasColumnName("attribute");
+            entity.Property(e => e.Alias)
+                .HasColumnType("character varying")
+                .HasColumnName("alias");
 
-            entity.HasOne(d => d.Consumer).WithMany(p => p.ConsumerSps)
-                .HasForeignKey(d => d.Consumerid)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("consumer_sp_consumerid_fkey");
-
-            entity.HasOne(d => d.Fizz).WithMany(p => p.ConsumerSps)
-                .HasForeignKey(d => d.Fizzid)
-                .HasConstraintName("consumer_sp_fizzid_fkey");
-
-            entity.HasOne(d => d.Test).WithMany(p => p.ConsumerSps)
+            entity.HasOne(d => d.Test).WithMany(p => p.FizzAttributes)
                 .HasForeignKey(d => d.Testid)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("consumer_sp_testid_fkey");
+                .HasConstraintName("fizz_attributes_testid_fkey");
         });
 
         modelBuilder.Entity<FizzValue>(entity =>

@@ -44,27 +44,6 @@ CREATE TABLE SAMPLE(
     primary key(TestID, ProductID)
 );
 
-CREATE TABLE FIZZ_VALUES(
-    ID int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    Columns varchar NOT NULL,
-    ConsumerValues varchar NOT NULL
-);
-
-CREATE TABLE FIZZ_ATTRIBUTES(
-    TestID varchar(20),
-    ConsumerID INT,
-    Attribute varchar NOT NULL,
-    AttValue varchar NOT NULL,
-    PRIMARY KEY(TestID, ConsumerID, Attribute),
-    FOREIGN KEY(TestID, ConsumerID) REFERENCES CONSUMER_SP(TestID, ConsumerID) /*isto funciona?????*/
-    /*ADICIONAR PRODUTO*/
-);
-
-CREATE TABLE ATTRIBUTE_NAME(
-    /**/
-    Alias varchar,
-)
-
 CREATE TABLE CONSUMER_HT(
     TestID varchar(20) REFERENCES TEST(InternalID),
     ConsumerID INT REFERENCES CONSUMER(Id),
@@ -80,6 +59,22 @@ CREATE TABLE CONSUMER_SP(
     TestID varchar(20) REFERENCES TEST(InternalID),
     ConsumerID INT REFERENCES CONSUMER(Id),
     primary key(ConsumerID, TestID)
+);
+
+CREATE TABLE FIZZ_ATTRIBUTES(
+    TestID varchar(20) REFERENCES Test(InternalID),
+    Attribute varchar NOT NULL,
+    Alias varchar,
+    PRIMARY KEY(TestID, Attribute)
+);
+
+CREATE TABLE ATTRIBUTE_VALUES(
+    ConsumerID int REFERENCES Consumer(Id),
+    AttrValue varchar,
+    TestID varchar(20),
+    Attribute varchar,
+    FOREIGN KEY(TestID, Attribute) REFERENCES FIZZ_ATTRIBUTES(TestID, Attribute),
+    PRIMARY KEY(TestID, Attribute, ConsumerID)
 );
 
 CREATE TABLE SESSION_TESTS(

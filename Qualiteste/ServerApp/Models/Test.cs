@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Qualiteste.ServerApp.Models;
+namespace Qualiteste.Models;
 
 public partial class Test
 {
@@ -23,11 +23,13 @@ public partial class Test
 
     public virtual ICollection<ConsumerHt> ConsumerHts { get; } = new List<ConsumerHt>();
 
-    public virtual ICollection<ConsumerSp> ConsumerSps { get; } = new List<ConsumerSp>();
+    public virtual ICollection<FizzAttribute> FizzAttributes { get; } = new List<FizzAttribute>();
 
     public virtual Product ProductNavigation { get; set; } = null!;
 
     public virtual ICollection<Sample> Samples { get; } = new List<Sample>();
+
+    public virtual ICollection<Consumer> Consumers { get; } = new List<Consumer>();
 
     public virtual ICollection<Session> Sessions { get; } = new List<Session>();
 }

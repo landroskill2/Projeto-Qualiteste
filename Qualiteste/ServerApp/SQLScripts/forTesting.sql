@@ -8,7 +8,8 @@ DROP TABLE IF EXISTS CONSUMER_HT CASCADE;
 DROP TABLE IF EXISTS CONSUMER_SP CASCADE;
 DROP TABLE IF EXISTS SESSION_TESTS CASCADE;
 DROP TABLE IF EXISTS CONSUMER_SESSION CASCADE;
-DROP TABLE IF EXISTS FIZZ_VALUES CASCADE;
+DROP TABLE IF EXISTS FIZZ_ATTRIBUTES CASCADE;
+DROP TABLE IF EXISTS ATTRIBUTE_VALUES CASCADE;
 
 CREATE TABLE CONSUMER(
     Id int PRIMARY KEY,
@@ -56,12 +57,6 @@ CREATE TABLE SAMPLE(
     primary key(TestID, ProductID)
 );
 
-CREATE TABLE FIZZ_VALUES(
-    ID int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    Columns varchar NOT NULL,
-    ConsumerValues varchar NOT NULL
-);
-
 CREATE TABLE CONSUMER_HT(
     TestID varchar(20) REFERENCES TEST(InternalID),
     ConsumerID INT REFERENCES CONSUMER(Id),
@@ -73,10 +68,26 @@ CREATE TABLE CONSUMER_HT(
 );
 
 CREATE TABLE CONSUMER_SP(
+    /*ID int generated always as identity unique,*/
     TestID varchar(20) REFERENCES TEST(InternalID),
     ConsumerID INT REFERENCES CONSUMER(Id),
-    FizzID int REFERENCES FIZZ_VALUES(ID),
     primary key(ConsumerID, TestID)
+);
+
+CREATE TABLE FIZZ_ATTRIBUTES(
+    TestID varchar(20) REFERENCES Test(InternalID),
+    Attribute varchar NOT NULL,
+    Alias varchar,
+    PRIMARY KEY(TestID, Attribute)
+);
+
+CREATE TABLE ATTRIBUTE_VALUES(
+    ConsumerID int REFERENCES Consumer(Id),
+    AttrValue varchar,
+    TestID varchar(20),
+    Attribute varchar,
+    FOREIGN KEY(TestID, Attribute) REFERENCES FIZZ_ATTRIBUTES(TestID, Attribute),
+    PRIMARY KEY(TestID, Attribute, ConsumerID)
 );
 
 CREATE TABLE SESSION_TESTS(
@@ -95,6 +106,7 @@ CREATE TABLE CONSUMER_SESSION(
     StampDate date,
     primary key(ConsumerID, SessionID)
 );
+
 
 INSERT INTO CONSUMER(Id, FullName, NIF, Sex, DateOfBirth, Contact, Email) VALUES 
 (3, 'MARIA IRENE ALVES', 111111111111131, 'F', '1951-04-11', 2130, null),

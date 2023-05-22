@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Qualiteste.ServerApp.Models;
+namespace Qualiteste.Models;
 
 public partial class Session
 {
