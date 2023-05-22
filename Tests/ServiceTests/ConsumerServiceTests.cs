@@ -82,7 +82,7 @@ namespace Tests.ServiceTests
 
 
             IEnumerable<ConsumerOutputModel> consumers;
-            Either<CustomError, IEnumerable<ConsumerOutputModel>> res = consumerService.GetConsumersFiltered("*", "0", nameFilter);
+            Either<CustomError, IEnumerable<ConsumerOutputModel>> res = consumerService.GetConsumersFiltered(null, null, nameFilter);
             consumers = res.Match(error => throw new Exception("Not supposed to fail"),
                                   success => success);
 
@@ -99,7 +99,7 @@ namespace Tests.ServiceTests
             var ageFilter = "60";
 
             IEnumerable<ConsumerOutputModel> consumers;
-            Either<CustomError, IEnumerable<ConsumerOutputModel>> res = consumerService.GetConsumersFiltered("*", ageFilter, "*");
+            Either<CustomError, IEnumerable<ConsumerOutputModel>> res = consumerService.GetConsumersFiltered(null, ageFilter, null);
             consumers = res.Match(error => throw new Exception("Not supposed to fail"),
                                   success => success);
 
@@ -116,7 +116,7 @@ namespace Tests.ServiceTests
             var sexFilter = "f";
 
             IEnumerable<ConsumerOutputModel> consumers;
-            Either<CustomError, IEnumerable<ConsumerOutputModel>> res = consumerService.GetConsumersFiltered(sexFilter, "0", "*");
+            Either<CustomError, IEnumerable<ConsumerOutputModel>> res = consumerService.GetConsumersFiltered(sexFilter, null, null);
             consumers = res.Match(error => throw new Exception("Not supposed to fail"),
                                   success => success);
 
@@ -289,6 +289,54 @@ namespace Tests.ServiceTests
                 );
 
             Assert.That(e, Is.TypeOf(typeof(ConsumerWithNifAlreadyPresent)));
+        }
+
+        [Test]
+        public void UpdateConsumerNifToConflictingValue()
+        {
+            string conflictingID = "111111111111111";
+            ConsumerInputModel consumerIn = new ConsumerInputModel()
+            {
+                Id = insertedID,
+                Fullname = "It's a TEST",
+                Nif = conflictingID,
+                Sex = "F",
+                DateOfBirth = DateOnly.Parse("1969-03-29"),
+                Contact = 974585214,
+                Email = "thisisaemail@email.com"
+            };
+
+            Either<CustomError, ConsumerOutputModel> result = consumerService.UpdateConsumer(insertedID, consumerIn);
+
+            CustomError e = result.Match(
+                error => error,
+                success => throw new Exception("This is supposed to fail")
+            );
+            Assert.That(e, Is.TypeOf(typeof(ConsumerWithNifAlreadyPresent)));
+        }
+
+        [Test]
+        public void UpdateConsumerContactToConflictingValue()
+        {
+            int conflictingContact = 31153;
+            ConsumerInputModel consumerIn = new ConsumerInputModel()
+            {
+                Id = insertedID,
+                Fullname = "It's a TEST",
+                Nif = insertedConsumer.Nif,
+                Sex = "F",
+                DateOfBirth = DateOnly.Parse("1969-03-29"),
+                Contact = conflictingContact,
+                Email = "thisisaemail@email.com"
+            };
+
+            Either<CustomError, ConsumerOutputModel> result = consumerService.UpdateConsumer(insertedID, consumerIn);
+
+            CustomError e = result.Match(
+                error => error,
+                success => throw new Exception("This is supposed to fail")
+            );
+            Assert.That(e, Is.TypeOf(typeof(ConsumerWithContactAlreadyPresent)));
         }
     }
 }

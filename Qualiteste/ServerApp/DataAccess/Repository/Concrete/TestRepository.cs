@@ -35,12 +35,11 @@ namespace Qualiteste.ServerApp.DataAccess.Repository.Concrete
 
         public IEnumerable<Consumer> GetConsumersInTest(string id)
         {
-            IEnumerable<Consumer> res;
             Test targetTest = GetTestById(id);
             if (targetTest == null)
                 return null;
             if (targetTest.Testtype.Equals("HT")) return targetTest.ConsumerHts.Select(c => c.Consumer);
-            else return null;//targetTest.ConsumerSps.Select(c => c.Consumer);
+            else return targetTest.Consumers;
 
         }
 
