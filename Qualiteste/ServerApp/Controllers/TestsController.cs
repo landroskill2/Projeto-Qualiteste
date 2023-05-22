@@ -109,5 +109,11 @@ namespace Qualiteste.ServerApp.Controllers
                 return Problem(statusCode: 500, title: "Ocorreu um erro inesperado");
             }
         }
+        [HttpPost("{id}/upload")]
+        [Consumes("text/csv")]
+        public IActionResult UploadCSV(int id)
+        {
+            return Ok(Request.Body);
+        }
     }
 }
