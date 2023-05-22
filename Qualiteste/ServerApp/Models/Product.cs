@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Qualiteste.Models;
+namespace Qualiteste.ServerApp.Models;
 
 public partial class Product
 {
