@@ -35,7 +35,7 @@ namespace Tests.RepositoryTests
         public void GetConsumersWithSexFilteredTest()
         {
             var sexFilter = "F";
-            var consumers = consumerRepository.GetConsumersFiltered(sexFilter, 0, "*");
+            var consumers = consumerRepository.GetConsumersFiltered(sexFilter, 0, null);
             foreach(Consumer c in consumers){
                 Assert.That(sexFilter, Is.EqualTo(c.Sex));
             }
@@ -46,8 +46,9 @@ namespace Tests.RepositoryTests
         public void GetConsumersWithAgeFilteredTest()
         {
             var ageFilter = 70;
-            var consumers = consumerRepository.GetConsumersFiltered("*", ageFilter, "*");
+            var consumers = consumerRepository.GetConsumersFiltered(null, ageFilter, null);
             var yearOfBirth = DateTime.Today.Year - ageFilter;
+            Console.WriteLine(consumers.Count());
             foreach (Consumer c in consumers)
             {
                 Assert.That(c.Dateofbirth?.Year, Is.AtMost(yearOfBirth));
@@ -58,7 +59,7 @@ namespace Tests.RepositoryTests
         public void GetConsumersWithNameFilteredTest()
         {
             var nameFilter = "Maria";
-            var consumers = consumerRepository.GetConsumersFiltered("*", 0, nameFilter);
+            var consumers = consumerRepository.GetConsumersFiltered(null, 0, nameFilter);
             foreach (Consumer c in consumers)
             {
                 Assert.True(c.Fullname.Contains(nameFilter.ToUpper()));
@@ -125,6 +126,9 @@ namespace Tests.RepositoryTests
             Assert.True(updatedConsumer.Contact == 2);
             Assert.True(updatedConsumer.Nif == "2");
         }
+
+
+
         
         [Test]
         public void GetLastIDTest()

@@ -97,13 +97,10 @@ namespace Qualiteste.ServerApp.Services.Concrete
         {
             try
             {
-                //Prepare and Check for invalid filters
-                sex = sex != null ? sex.ToUpper() : "*";
-                age ??= "0";
-                name = name != null ? name.ToUpper() : "*";
-                int iage = int.Parse(age);
+                int iage;
+                int.TryParse(age, out iage);
                 if (iage < 0) return new ConsumerFilterNotValid();
-                if (!(sex.Equals("*") || sex.Equals("M") || sex.Equals("F"))) return new ConsumerFilterNotValid();
+                if (!(sex == null|| sex.ToUpper().Equals("M") || sex.ToUpper().Equals("F"))) return new ConsumerFilterNotValid();
 
                 //Might be a problem, there are consumers with no specified dateOfBirth
                 IEnumerable<ConsumerOutputModel> consumers = _unitOfWork.Consumers.GetConsumersFiltered(sex, iage, name)
@@ -121,9 +118,6 @@ namespace Qualiteste.ServerApp.Services.Concrete
         }
 
 
-        /**
-         * TODO: Falar com a qualiteste para ver que campos eles entendem que podem ser alterados depois da criação
-         */
         public Either<CustomError, ConsumerOutputModel> UpdateConsumer(int id, ConsumerInputModel consumer)
         {
 
@@ -139,11 +133,20 @@ namespace Qualiteste.ServerApp.Services.Concrete
                 _unitOfWork.Complete();
                 return c.ToOutputModel();
             }
-            catch(Exception e)
+            catch (Microsoft.EntityFrameworkCore.DbUpdateException ex)
             {
-
-            // TODO: HANDLE EXCEPTIONS
-                throw e;
+                _unitOfWork.UntrackChanges();
+                var dbException = ex.InnerException as Npgsql.NpgsqlException;
+                if (dbException != null)
+                {
+                    var state = dbException.Data["SqlState"];
+                    var constraint = dbException.Data["ConstraintName"];
+                    if (state.Equals("23505") && constraint.Equals("consumer_contact_key"))
+                        return new ConsumerWithContactAlreadyPresent();
+                    else if (state.Equals("23505") && constraint.Equals("consumer_nif_key"))
+                        return new ConsumerWithNifAlreadyPresent();
+                }
+                throw ex;
             }
         }
     }

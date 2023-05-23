@@ -35,7 +35,6 @@ namespace Qualiteste.ServerApp.DataAccess.Repository.Concrete
 
         public IEnumerable<Consumer> GetConsumersInTest(string id)
         {
-            IEnumerable<Consumer> res;
             Test targetTest = GetTestById(id);
             if (targetTest == null)
                 return null;

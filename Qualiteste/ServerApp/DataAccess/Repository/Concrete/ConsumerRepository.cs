@@ -26,14 +26,14 @@ namespace Qualiteste.ServerApp.DataAccess.Repository.Concrete
             return PostgresContext.Consumers.SingleOrDefault(c => c.Id == id);
         }
 
-        public IEnumerable<Consumer> GetConsumersFiltered(string sex, int iage, string name) {
-            Expression<Func<Consumer, bool>> p = c => sex.Equals("*") ? true : c.Sex == sex.ToUpper()
-                                                && name.Equals("*") ? true : c.Fullname.Contains(name.ToUpper())
-                                                && (DateTime.Today.Year - c.Dateofbirth.Value.Year) >= iage;
+        public IEnumerable<Consumer> GetConsumersFiltered(string? sex, int? iage, string? name) {
+            Expression<Func<Consumer, bool>> p = c => (iage == null || ((DateTime.Today.Year - c.Dateofbirth.Value.Year) >= iage)
+                                                 && (name == null || c.Fullname.Contains(name.ToUpper()))
+                                                 && (sex == null || c.Sex == sex.ToUpper()));
 
             
-
-            return PostgresContext.Consumers.Where(p);
+            var consumers = PostgresContext.Consumers.Where(p);
+            return consumers;
         }
 
         public int GetLastID()
