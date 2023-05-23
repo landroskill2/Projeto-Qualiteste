@@ -13,10 +13,12 @@ namespace Qualiteste.ServerApp.Controllers
     public class TestsController : ControllerBase
     {
         private readonly ITestService _testService;
+        private readonly ICsvService _csvService;
 
-        public TestsController(ITestService testService)
+        public TestsController(ITestService testService, ICsvService csvService)
         {
             _testService = testService;
+            _csvService = csvService;
         }
 
         [HttpGet]
@@ -110,10 +112,10 @@ namespace Qualiteste.ServerApp.Controllers
             }
         }
         [HttpPost("{id}/upload")]
-        [Consumes("text/csv")]
-        public IActionResult UploadCSV(int id)
+        public IActionResult UploadCSV(int id, IFormFile csvFile)
         {
-            return Ok(Request.Body);
+            _csvService.ParseCsv(csvFile, id);
+            return Ok(csvFile);
         }
     }
 }

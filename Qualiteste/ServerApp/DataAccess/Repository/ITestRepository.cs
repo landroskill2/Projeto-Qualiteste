@@ -8,6 +8,7 @@ namespace Qualiteste.ServerApp.DataAccess.Repository
         Test? GetTestById(string id);
         IEnumerable<Test> ListTestsByDate();
         IEnumerable<Test> ListTestsWithFilters(string type);
-
+        void AddFizzAttribute(FizzAttribute fizzAttribute);
+        void AddAttributeValue(AttributeValue attributeValue);
     }
 }

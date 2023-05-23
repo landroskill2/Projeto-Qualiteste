@@ -39,9 +39,8 @@ export default function Test(): React.ReactElement {
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    // Handle the file upload logic here
-
-    uploadFile(id!, file)
+    if(file) uploadFile(id!, file)
+    
   };
 
   if (!test) {

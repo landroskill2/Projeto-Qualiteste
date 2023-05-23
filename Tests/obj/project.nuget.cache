@@ -1,11 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "EEgq+0//pwfxtQ/EKQ9iusYAGXh/16aWyi/Thhwy0lWtdJe8fvqTeh0sHwi9RDZKltHrz5Z5T0vRCjRi7Aujig==",
+  "dgSpecHash": "SO72a5+9gOBEkvIAN9/G1SM2Y3FD/VJWTjWo/DLlgWMv7UcCMiXIR9EQQh+XwMXMuX4y+F6gM66jq7afBy0Yvw==",
   "success": true,
   "projectFilePath": "C:\\Users\\landr\\Desktop\\Qualiteste\\Tests\\Tests.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\landr\\.nuget\\packages\\castle.core\\5.1.0\\castle.core.5.1.0.nupkg.sha512",
     "C:\\Users\\landr\\.nuget\\packages\\coverlet.collector\\3.1.2\\coverlet.collector.3.1.2.nupkg.sha512",
+    "C:\\Users\\landr\\.nuget\\packages\\csvhelper\\30.0.1\\csvhelper.30.0.1.nupkg.sha512",
     "C:\\Users\\landr\\.nuget\\packages\\microsoft.aspnetcore.spaproxy\\7.0.3\\microsoft.aspnetcore.spaproxy.7.0.3.nupkg.sha512",
     "C:\\Users\\landr\\.nuget\\packages\\microsoft.codecoverage\\17.3.2\\microsoft.codecoverage.17.3.2.nupkg.sha512",
     "C:\\Users\\landr\\.nuget\\packages\\microsoft.csharp\\4.0.1\\microsoft.csharp.4.0.1.nupkg.sha512",

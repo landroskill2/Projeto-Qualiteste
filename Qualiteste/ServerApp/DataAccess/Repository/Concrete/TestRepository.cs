@@ -44,6 +44,16 @@ namespace Qualiteste.ServerApp.DataAccess.Repository.Concrete
 
         }
 
+        public void AddFizzAttribute(FizzAttribute fizzAttribute)
+        {
+            PostgresContext.FizzAttributes.Add(fizzAttribute);
+        }
+
+        public void AddAttributeValue(AttributeValue attributeValue)
+        {
+            PostgresContext.AttributeValues.Add(attributeValue);
+        }
+
         public PostgresContext PostgresContext
         {
             get { return Context as PostgresContext; }

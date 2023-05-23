@@ -46,15 +46,16 @@ export async function fetchTestById(
 
 export async function uploadFile(
     id : String,
-    file : any
+    file : File
 ) : Promise<Response>{
     let path = `/api/tests/${id}/upload`
+    
+    const formData = new FormData();
+    formData.append("csvFile", file);
+
     return fetch(path, {
         method: "POST",
-        headers: {
-            "Content-Type": "text/csv",
-        },
-        body: file
+        body: formData
     })
 }
 
