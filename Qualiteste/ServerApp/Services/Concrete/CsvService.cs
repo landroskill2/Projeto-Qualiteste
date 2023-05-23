@@ -32,7 +32,7 @@ namespace Qualiteste.ServerApp.Services.Concrete
                     string[] row = csv.Parser.Record;
                     insertValuesInDb(headers, row, id, consumerIndex);
                 }
-                _unitOfWork.Complete();
+                _unitOfWork.Complete(); // nunca chega ao complete, dont know why
             }
         }
 

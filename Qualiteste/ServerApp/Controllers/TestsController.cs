@@ -114,7 +114,7 @@ namespace Qualiteste.ServerApp.Controllers
         [HttpPost("{id}/upload")]
         public IActionResult UploadCSV(int id, IFormFile csvFile)
         {
-            _csvService.ParseCsv(csvFile, id);
+            _csvService.ParseCsv(csvFile, id).Wait();
             return Ok(csvFile);
         }
     }
