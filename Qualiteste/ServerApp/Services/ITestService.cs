@@ -8,6 +8,7 @@ namespace Qualiteste.ServerApp.Services
     {
         Either<CustomError, string> CreateNewTest(TestInputModel testInput);
         Either<CustomError, IEnumerable<TestOutputModel>> GetFilteredTestsList(string type);
+        Either<CustomError, FizzTableModel> GetFizzTable(int id);
         Either<CustomError, TestPageModel> GetTestById(string id);
         Either<CustomError, IEnumerable<TestOutputModel>> GetTestsList();
         Either<CustomError, TestOutputModel> UpdateTest(int id, TestInputModel testInput);

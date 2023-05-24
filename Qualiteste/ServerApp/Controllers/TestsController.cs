@@ -111,6 +111,23 @@ namespace Qualiteste.ServerApp.Controllers
                 return Problem(statusCode: 500, title: "Ocorreu um erro inesperado");
             }
         }
+
+        [HttpGet("{id}/fizz")]
+        public IActionResult GetFizzTable(int id)
+        {
+            try
+            {
+                Either<CustomError, FizzTableModel> result = _testService.GetFizzTable(id);
+                return result.Match(
+                    error => Problem(statusCode: error.StatusCode, title: error.Message),
+                    success => Ok(success)
+                    );
+            }catch(Exception e)
+            {
+                return Problem(statusCode: 500, title: "Ocorreu um erro inesperado");
+            }
+        }
+
         [HttpPost("{id}/upload")]
         public IActionResult UploadCSV(int id, IFormFile csvFile)
         {

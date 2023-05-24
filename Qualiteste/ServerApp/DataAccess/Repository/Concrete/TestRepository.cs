@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Qualiteste.ServerApp.Models;
 using System;
+using System.Linq;
 using System.Linq.Expressions;
 
 namespace Qualiteste.ServerApp.DataAccess.Repository.Concrete
@@ -51,6 +52,21 @@ namespace Qualiteste.ServerApp.DataAccess.Repository.Concrete
         public void AddAttributeValue(AttributeValue attributeValue)
         {
             PostgresContext.AttributeValues.Add(attributeValue);
+        }
+
+        public Dictionary<string, string> GetFizzColumns(int id)
+        {
+            return PostgresContext.FizzAttributes.Where(c => c.Testid == id.ToString()).ToDictionary(c => c.Attribute, c=> ReturnAliasIfNotNull(c));
+        }
+       
+        public IEnumerable<IGrouping<int, AttributeValue>> GetFizzValuesGroupedByConsumer(int id)
+        { 
+            return PostgresContext.AttributeValues.Where(attr => attr.Testid == id.ToString()).GroupBy(attr => attr.Consumerid);
+        }
+
+        private string ReturnAliasIfNotNull(FizzAttribute attr)
+        {
+            return attr.Alias != null ? attr.Alias : attr.Attribute;
         }
 
         public PostgresContext PostgresContext

@@ -32,15 +32,17 @@ namespace Qualiteste.ServerApp.Services.Concrete
                     string[] row = csv.Parser.Record;
                     insertValuesInDb(headers, row, id, consumerIndex);
                 }
-                _unitOfWork.Complete(); // nunca chega ao complete, dont know why
+                _unitOfWork.Complete();
             }
         }
 
         private void insertValuesInDb(string[] headers, string[] row, int id, int consumerIndex)
         {
+            if (row.All(value => value == "")) return;
+
             string strID = id.ToString();
             int consumerID;
-            int.TryParse(row[consumerIndex], out consumerID);
+            if(!int.TryParse(row[consumerIndex], out consumerID)) return;
 
             for(int i = 0; i < headers.Length; i++)
             {

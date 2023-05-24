@@ -10,5 +10,7 @@ namespace Qualiteste.ServerApp.DataAccess.Repository
         IEnumerable<Test> ListTestsWithFilters(string type);
         void AddFizzAttribute(FizzAttribute fizzAttribute);
         void AddAttributeValue(AttributeValue attributeValue);
+        Dictionary<string, string> GetFizzColumns(int id);
+        IEnumerable<IGrouping<int, AttributeValue>> GetFizzValuesGroupedByConsumer(int id);
     }
 }

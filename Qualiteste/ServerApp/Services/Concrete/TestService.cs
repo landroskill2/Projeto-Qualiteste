@@ -98,7 +98,32 @@ namespace Qualiteste.ServerApp.Services.Concrete
             }catch(Exception ex)
             {
                 _unitOfWork.UntrackChanges();
-                return null;
+                throw ex;
+            }
+        }
+
+        public Either<CustomError, FizzTableModel> GetFizzTable(int id)
+        {
+            try
+            {
+                Dictionary<string, string> columns = _unitOfWork.Tests.GetFizzColumns(id);
+
+                var values = _unitOfWork.Tests.GetFizzValuesGroupedByConsumer(id);
+
+                IEnumerable<Dictionary<string, string>> rows = values.Select(v => v.ToDictionary(attr => attr.Attribute, attr => attr.Attrvalue));
+
+                FizzTableModel fizzTable = new FizzTableModel
+                {
+                    Columns = columns,
+                    Rows = rows
+                };
+
+                return fizzTable;
+
+            }catch(Exception ex)
+            {
+                _unitOfWork.UntrackChanges();
+                throw ex;
             }
         }
     }
