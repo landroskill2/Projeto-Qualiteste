@@ -129,10 +129,16 @@ namespace Qualiteste.ServerApp.Controllers
         }
 
         [HttpPost("{id}/upload")]
-        public IActionResult UploadCSV(int id, IFormFile csvFile)
+        public async Task<IActionResult> UploadCSV(int id, IFormFile csvFile)
         {
-            _csvService.ParseCsv(csvFile, id).Wait();
-            return Ok(csvFile);
+            try
+            {
+                await _csvService.ParseCsv(csvFile, id);
+                return Ok("");
+            }catch(Exception ex)
+            {
+                return Problem(statusCode: 500, title: "Ocorreu um erro inesperado");
+            }
         }
     }
 }

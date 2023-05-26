@@ -21,6 +21,8 @@ public partial class Test
 
     public DateOnly? Reportdeliverydate { get; set; }
 
+    public string? Sessionid { get; set; }
+
     public virtual ICollection<ConsumerHt> ConsumerHts { get; } = new List<ConsumerHt>();
 
     public virtual ICollection<FizzAttribute> FizzAttributes { get; } = new List<FizzAttribute>();
@@ -29,7 +31,5 @@ public partial class Test
 
     public virtual ICollection<Sample> Samples { get; } = new List<Sample>();
 
-    public virtual ICollection<Consumer> Consumers { get; } = new List<Consumer>();
-
-    public virtual ICollection<Session> Sessions { get; } = new List<Session>();
+    public virtual Session? Session { get; set; }
 }

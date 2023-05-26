@@ -37,9 +37,9 @@ namespace Qualiteste.ServerApp.Services.Concrete
             SessionOutputModel? session = null;
             Test? test = _unitOfWork.Tests.GetTestById(id);
             if (test == null) return new NoTestFoundWithGivenID();
-            
-            if (test.Testtype.Equals("SP")) session = test.Sessions.First().toOutputModel();
-            IEnumerable<ConsumerOutputModel> consumers = _unitOfWork.Tests.GetConsumersInTest(id).Select(c => c.ToOutputModel());
+
+            if (test.Testtype.Equals("SP")) session = test.Session?.toOutputModel();
+            IEnumerable<ConsumerOutputModel>? consumers = _unitOfWork.Tests.GetConsumersInTest(id)?.Select(c => c.ToOutputModel());
 
             return new TestPageModel
             {

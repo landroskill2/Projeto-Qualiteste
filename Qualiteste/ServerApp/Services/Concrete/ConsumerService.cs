@@ -70,7 +70,7 @@ namespace Qualiteste.ServerApp.Services.Concrete
             if (consumer == null) return new NoConsumerFoundWithId();
 
             IEnumerable<SessionOutputModel> sessions = consumer.ConsumerSessions.Select(cs => cs.Session.toOutputModel());
-            IEnumerable<TestOutputModel> tests = _unitOfWork.Consumers.GetConsumerTests(id).Select(t => t.toOutputModel());
+            IEnumerable<TestOutputModel> tests = consumer.ConsumerHts.Select(cht => cht.Test.toOutputModel());
 
             return new ConsumerPageModel
             {

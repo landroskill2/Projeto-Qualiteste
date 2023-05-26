@@ -5,11 +5,10 @@ DROP TABLE IF EXISTS PRODUCT CASCADE;
 DROP TABLE IF EXISTS CLIENT CASCADE;
 DROP TABLE IF EXISTS SAMPLE CASCADE;
 DROP TABLE IF EXISTS CONSUMER_HT CASCADE;
-DROP TABLE IF EXISTS CONSUMER_SP CASCADE;
-DROP TABLE IF EXISTS SESSION_TESTS CASCADE;
 DROP TABLE IF EXISTS CONSUMER_SESSION CASCADE;
 DROP TABLE IF EXISTS FIZZ_ATTRIBUTES CASCADE;
 DROP TABLE IF EXISTS ATTRIBUTE_VALUES CASCADE;
+
 
 CREATE TABLE CONSUMER(
     Id int PRIMARY KEY,
@@ -41,9 +40,9 @@ CREATE TABLE TEST(
     RequestDate date NOT NULL,
     ValidationDate date,
     DueDate date,
-    ReportDeliveryDate date
+    ReportDeliveryDate date,
+    SessionID varchar(8) REFERENCES SESSION(SessionID)
 );
-
 
 CREATE TABLE CLIENT(
     Acronym varchar(10) PRIMARY KEY,
@@ -67,13 +66,6 @@ CREATE TABLE CONSUMER_HT(
     primary key(ConsumerID, TestID)
 );
 
-CREATE TABLE CONSUMER_SP(
-    /*ID int generated always as identity unique,*/
-    TestID varchar(20) REFERENCES TEST(InternalID),
-    ConsumerID INT REFERENCES CONSUMER(Id),
-    primary key(ConsumerID, TestID)
-);
-
 CREATE TABLE FIZZ_ATTRIBUTES(
     TestID varchar(20) REFERENCES Test(InternalID),
     Attribute varchar NOT NULL,
@@ -90,12 +82,6 @@ CREATE TABLE ATTRIBUTE_VALUES(
     PRIMARY KEY(TestID, Attribute, ConsumerID)
 );
 
-CREATE TABLE SESSION_TESTS(
-    SessionID varchar(8) REFERENCES SESSION(SessionID),
-    TestID varchar(20) REFERENCES Test(InternalID),
-    primary key(TestID, SessionID)
-);
-
 CREATE TABLE CONSUMER_SESSION(
     SessionID varchar(8) REFERENCES SESSION(SessionID),
     ConsumerID INT REFERENCES CONSUMER(Id),
@@ -106,7 +92,6 @@ CREATE TABLE CONSUMER_SESSION(
     StampDate date,
     primary key(ConsumerID, SessionID)
 );
-
 
 INSERT INTO CONSUMER(Id, FullName, NIF, Sex, DateOfBirth, Contact, Email) VALUES 
 (3, 'MARIA IRENE ALVES', 111111111111131, 'F', '1951-04-11', 2130, null),
@@ -165,13 +150,15 @@ INSERT INTO PRODUCT(ProductID, Designation, Brand) VALUES
 (573626, 'Pastel de Nata', 'Auchan'),
 (123123, 'Mala Eastpack', 'Continente');
 
+INSERT INTO SESSION(SessionID, SessionDate, ConsumersNumber) VALUES
+('040423', '2023-04-04', 10),
+('250523', '2023-05-25', 36);
 
-INSERT INTO TEST(InternalID, Product, TestType, ConsumersNumber, RequestDate, ValidationDate, DueDate, ReportDeliveryDate) VALUES
-('443244', 122332, 'SP', 10, '2023-03-21', null, null, null),
-('343123', 324231, 'SP', 10, '2023-03-29', null, null, null),
-('583828', 573626, 'SP', 36, '2023-05-20', null, null, null),
-('041234', 123123, 'HT', 10, '2023-03-29', null, null, null);
-
+INSERT INTO TEST(InternalID, Product, TestType, ConsumersNumber, RequestDate, ValidationDate, DueDate, ReportDeliveryDate, SessionID) VALUES
+('443244', 122332, 'SP', 10, '2023-03-21', null, null, null, '040423'),
+('343123', 324231, 'SP', 10, '2023-03-29', null, null, null, '040423'),
+('583828', 573626, 'SP', 36, '2023-05-20', null, null, null, '250523'),
+('041234', 123123, 'HT', 10, '2023-03-29', null, null, null, null);
 
 INSERT INTO SAMPLE(TestID, ProductID, ReceptionDate) VALUES
 ('443244', 132321, '2023-03-24'),
@@ -179,16 +166,6 @@ INSERT INTO SAMPLE(TestID, ProductID, ReceptionDate) VALUES
 ('343123', 321332, '2023-04-01'),
 ('583828', 573626, '2023-05-16'),
 ('041234', 123123, '2023-04-01');
-
-
-INSERT INTO SESSION(SessionID, SessionDate, ConsumersNumber) VALUES
-('040423', '2023-04-04', 10),
-('250523', '2023-05-25', 36);
-
-INSERT INTO SESSION_TESTS(SessionID, TestID) VALUES
-('040423', '443244'),
-('250523', '583828'),
-('040423', '343123');
 
 INSERT INTO CONSUMER_SESSION(SessionID, ConsumerID, ContactedDate, ConfirmationDate, SessionTime, Attendance, StampDate) VALUES
 ('040423', 6, '2023-03-01', '2023-03-02', '11:00', null, null),
@@ -235,62 +212,6 @@ INSERT INTO CONSUMER_SESSION(SessionID, ConsumerID, ContactedDate, ConfirmationD
 ('250523', 168, '2023-05-20', '2023-05-21', '17:00', null, null),
 ('250523', 352, '2023-05-20', '2023-05-21', '17:00', null, null),
 ('250523', 86, '2023-05-20', '2023-05-21', '17:00', null, null);
-
-INSERT INTO CONSUMER_SP(TestID, ConsumerID) VALUES
-('443244', 6),
-('343123', 6),
-('443244', 263),
-('343123', 263),
-('443244', 48),
-('343123', 48),
-('443244', 86),
-('343123', 86),
-('443244', 87),
-('343123', 87),
-('443244', 23),
-('343123', 23),
-('443244', 168),
-('343123', 168),
-('443244', 143),
-('343123', 143),
-('443244', 373),
-('343123', 373),
-('443244', 67),
-('343123', 67),
-('583828', 38),
-('583828', 51),
-('583828', 322),
-('583828', 14),
-('583828', 20),
-('583828', 426),
-('583828', 399),
-('583828', 94),
-('583828', 341),
-('583828', 167),
-('583828', 412),
-('583828', 154),
-('583828', 90),
-('583828', 264),
-('583828', 216),
-('583828', 348),
-('583828', 5),
-('583828', 19),
-('583828', 228),
-('583828', 152),
-('583828', 411),
-('583828', 37),
-('583828', 359),
-('583828', 184),
-('583828', 110),
-('583828', 205),
-('583828', 141),
-('583828', 227),
-('583828', 36),
-('583828', 67),
-('583828', 82),
-('583828', 168),
-('583828', 352),
-('583828', 86);
 
 INSERT INTO CONSUMER_HT(TestID, ConsumerID, DeliveryDate, DueDate, ResponseDate, StampDate) VALUES
 ('041234', 6, '2023-03-01', null, null, null),

@@ -6,6 +6,7 @@ import Tests from "../pages/tests/TestsList";
 import Sessions from "../pages/sessions/SessionsList";
 import Session from "../pages/sessions/Session";
 import Test from "../pages/tests/Test";
+import FizzResults from "../pages/tests/FizzTable";
 
 const AppRoutes = createBrowserRouter([
   {
@@ -22,19 +23,23 @@ const AppRoutes = createBrowserRouter([
   },
   {
     path: "/tests",
-    element: <Tests/>
+    element: <Tests />
   },
   {
     path: "/tests/:id",
-    element: <Test/>
+    element: <Test />
+  },
+  {
+    path: "/tests/:id/fizz",
+    element: <FizzResults />
   },
   {
     path: "/sessions",
-    element: <Sessions/>
+    element: <Sessions />
   },
   {
     path: "/sessions/:id",
-    element: <Session/>
+    element: <Session />
   }
 ]);
 export default AppRoutes;

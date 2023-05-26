@@ -59,6 +59,13 @@ export async function uploadFile(
     })
 }
 
+export async function getFizzTableValues(
+    id : String
+) : Promise<Response>{
+    let path = `/api/tests/${id}/fizz`
+    return fetch(path)
+}
+
 //Sessions
 export async function fetchSessions() : Promise<Response>{
     let path = "/api/sessions"

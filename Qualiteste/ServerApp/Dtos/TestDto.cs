@@ -40,7 +40,7 @@ namespace Qualiteste.ServerApp.Dtos
         }
     }
     public record TestPageModel{
-        public IEnumerable<ConsumerOutputModel> Consumers { get; init; }
+        public IEnumerable<ConsumerOutputModel>? Consumers { get; init; }
         public SessionOutputModel? Session { get; init; }
         public TestOutputModel Test { get; init; }
     }

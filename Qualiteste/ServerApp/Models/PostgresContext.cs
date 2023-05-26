@@ -124,27 +124,6 @@ public partial class PostgresContext : DbContext
             entity.Property(e => e.Sex)
                 .HasMaxLength(1)
                 .HasColumnName("sex");
-
-            entity.HasMany(d => d.Tests).WithMany(p => p.Consumers)
-                .UsingEntity<Dictionary<string, object>>(
-                    "ConsumerSp",
-                    r => r.HasOne<Test>().WithMany()
-                        .HasForeignKey("Testid")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("consumer_sp_testid_fkey"),
-                    l => l.HasOne<Consumer>().WithMany()
-                        .HasForeignKey("Consumerid")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("consumer_sp_consumerid_fkey"),
-                    j =>
-                    {
-                        j.HasKey("Consumerid", "Testid").HasName("consumer_sp_pkey");
-                        j.ToTable("consumer_sp");
-                        j.IndexerProperty<int>("Consumerid").HasColumnName("consumerid");
-                        j.IndexerProperty<string>("Testid")
-                            .HasMaxLength(20)
-                            .HasColumnName("testid");
-                    });
         });
 
         modelBuilder.Entity<ConsumerHt>(entity =>
@@ -289,6 +268,9 @@ public partial class PostgresContext : DbContext
             entity.Property(e => e.Product).HasColumnName("product");
             entity.Property(e => e.Reportdeliverydate).HasColumnName("reportdeliverydate");
             entity.Property(e => e.Requestdate).HasColumnName("requestdate");
+            entity.Property(e => e.Sessionid)
+                .HasMaxLength(8)
+                .HasColumnName("sessionid");
             entity.Property(e => e.Testtype)
                 .HasMaxLength(2)
                 .HasColumnName("testtype");
@@ -299,28 +281,9 @@ public partial class PostgresContext : DbContext
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("test_product_fkey");
 
-            entity.HasMany(d => d.Sessions).WithMany(p => p.Tests)
-                .UsingEntity<Dictionary<string, object>>(
-                    "SessionTest",
-                    r => r.HasOne<Session>().WithMany()
-                        .HasForeignKey("Sessionid")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("session_tests_sessionid_fkey"),
-                    l => l.HasOne<Test>().WithMany()
-                        .HasForeignKey("Testid")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("session_tests_testid_fkey"),
-                    j =>
-                    {
-                        j.HasKey("Testid", "Sessionid").HasName("session_tests_pkey");
-                        j.ToTable("session_tests");
-                        j.IndexerProperty<string>("Testid")
-                            .HasMaxLength(20)
-                            .HasColumnName("testid");
-                        j.IndexerProperty<string>("Sessionid")
-                            .HasMaxLength(8)
-                            .HasColumnName("sessionid");
-                    });
+            entity.HasOne(d => d.Session).WithMany(p => p.Tests)
+                .HasForeignKey(d => d.Sessionid)
+                .HasConstraintName("test_sessionid_fkey");
         });
 
         OnModelCreatingPartial(modelBuilder);

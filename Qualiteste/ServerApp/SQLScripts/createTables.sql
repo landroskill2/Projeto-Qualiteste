@@ -28,9 +28,9 @@ CREATE TABLE TEST(
     RequestDate date NOT NULL,
     ValidationDate date,
     DueDate date,
-    ReportDeliveryDate date
+    ReportDeliveryDate date,
+    SessionID varchar(8) REFERENCES SESSION(SessionID)
 );
-
 
 CREATE TABLE CLIENT(
     Acronym varchar(10) PRIMARY KEY,
@@ -54,13 +54,6 @@ CREATE TABLE CONSUMER_HT(
     primary key(ConsumerID, TestID)
 );
 
-CREATE TABLE CONSUMER_SP(
-    /*ID int generated always as identity unique,*/
-    TestID varchar(20) REFERENCES TEST(InternalID),
-    ConsumerID INT REFERENCES CONSUMER(Id),
-    primary key(ConsumerID, TestID)
-);
-
 CREATE TABLE FIZZ_ATTRIBUTES(
     TestID varchar(20) REFERENCES Test(InternalID),
     Attribute varchar NOT NULL,
@@ -75,12 +68,6 @@ CREATE TABLE ATTRIBUTE_VALUES(
     Attribute varchar,
     FOREIGN KEY(TestID, Attribute) REFERENCES FIZZ_ATTRIBUTES(TestID, Attribute),
     PRIMARY KEY(TestID, Attribute, ConsumerID)
-);
-
-CREATE TABLE SESSION_TESTS(
-    SessionID varchar(8) REFERENCES SESSION(SessionID),
-    TestID varchar(20) REFERENCES Test(InternalID),
-    primary key(TestID, SessionID)
 );
 
 CREATE TABLE CONSUMER_SESSION(

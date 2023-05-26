@@ -7,3 +7,8 @@ export interface ITestOutputModel {
     dueDate?: string | undefined,
     reportDeliveryDate?: string | undefined
 }
+
+export interface IFizzValues {
+    columns: Record<string, string>,
+    rows: Record<string, string>[]
+}

@@ -34,13 +34,13 @@ namespace Qualiteste.ServerApp.DataAccess.Repository.Concrete
             return PostgresContext.Tests.SingleOrDefault(t => t.Internalid == id);
         }
 
-        public IEnumerable<Consumer> GetConsumersInTest(string id)
+        public IEnumerable<Consumer>? GetConsumersInTest(string id)
         {
-            Test targetTest = GetTestById(id);
+            Test? targetTest = GetTestById(id);
             if (targetTest == null)
                 return null;
             if (targetTest.Testtype.Equals("HT")) return targetTest.ConsumerHts.Select(c => c.Consumer);
-            else return targetTest.Consumers;
+            else return targetTest.Session?.ConsumerSessions.Select(cs => cs.Consumer);
 
         }
 
