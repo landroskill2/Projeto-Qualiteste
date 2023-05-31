@@ -8,10 +8,11 @@ export interface IConsumerOutputModel {
   }
 
 export interface IConsumerInputModel {
+    id? : number;
     fullname: string;
     nif: string;
-    sex: string,
-    dateofbirth: Date | undefined;
+    sex: "M" | "F";
+    dateofbirth: string;
     contact: number;
     email?: string
 }

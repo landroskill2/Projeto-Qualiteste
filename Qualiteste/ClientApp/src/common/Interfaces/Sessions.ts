@@ -1,9 +1,9 @@
 import { IConsumerOutputModel } from "./Consumers"
 
-export interface ISessionOutputModel{
+export interface ISessionModel{
     id: string,
     date: string,
-    consumersNumber: Number
+    consumersNumber: number
 }
 
 export interface IConsumerSessionOutputModel {

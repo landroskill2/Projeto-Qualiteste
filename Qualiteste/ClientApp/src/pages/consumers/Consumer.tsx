@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Table, Thead, Tbody, Tr, Th, Td } from '@chakra-ui/react';
 import {IConsumerOutputModel} from '../../common/Interfaces/Consumers';
-import { ISessionOutputModel } from '../../common/Interfaces/Sessions';
+import { ISessionModel } from '../../common/Interfaces/Sessions';
 import { ITestOutputModel } from '../../common/Interfaces/Tests';
 import { fetchConsumerById } from '../../common/APICalls';
 import { useNavigate, useParams } from 'react-router-dom';
 
 export default function Consumer(): React.ReactElement {
   const [consumerData, setConsumerData] = useState<IConsumerOutputModel | null>(null);
-  const [sessionData, setSessionData] = useState<ISessionOutputModel[]>([]);
+  const [sessionData, setSessionData] = useState<ISessionModel[]>([]);
   const [testData, setTestData] = useState<ITestOutputModel[]>([]);
   const { id } = useParams()
   const navigate = useNavigate()

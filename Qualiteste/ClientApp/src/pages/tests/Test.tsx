@@ -1,14 +1,14 @@
 import { Box, Table, Thead, Tbody, Tr, Th, Td, Spinner, Button, Input } from "@chakra-ui/react";
 import { IConsumerOutputModel } from '../../common/Interfaces/Consumers';
-import { ISessionOutputModel } from '../../common/Interfaces/Sessions';
+import { ISessionModel } from '../../common/Interfaces/Sessions';
 import { ITestOutputModel } from '../../common/Interfaces/Tests';
 import { fetchTestById, uploadFile } from '../../common/APICalls';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from "react";
 
 export default function Test(): React.ReactElement {
-  const [session, setSession] = useState<ISessionOutputModel | null>(null);
-  const [consumers, setConsumers] = useState<IConsumerOutputModel[]>([]);
+  const [session, setSession] = useState<ISessionModel | null>(null);
+  const [consumers, setConsumers] = useState<IConsumerOutputModel[] | null>(null);
   const [test, setTest] = useState<ITestOutputModel | null>(null);
   const { id } = useParams();
   const navigate = useNavigate();
@@ -95,16 +95,26 @@ export default function Test(): React.ReactElement {
           </Tr>
         </Thead>
         <Tbody>
-          {consumers.map(consumer => (
-            <Tr className="hover:bg-slate-200 cursor-pointer" key={consumer.id} onClick={() => redirectToConsumerPage(consumer.id)}>
-              <Td>{consumer.id}</Td>
-              <Td>{consumer.fullname}</Td>
-              <Td>{consumer.age}</Td>
-              <Td>{consumer.sex}</Td>
-              <Td>{consumer.contact}</Td>
-              <Td>{consumer.email || "-"}</Td>
-            </Tr>
-          ))}
+          
+          {consumers && (
+            <>
+              {consumers.map(consumer => (
+                <Tr className="hover:bg-slate-200 cursor-pointer" key={consumer.id} onClick={() => redirectToConsumerPage(consumer.id)}>
+                  <Td>{consumer.id}</Td>
+                  <Td>{consumer.fullname}</Td>
+                  <Td>{consumer.age}</Td>
+                  <Td>{consumer.sex}</Td>
+                  <Td>{consumer.contact}</Td>
+                  <Td>{consumer.email || "-"}</Td>
+                </Tr>
+              ))}
+            </>
+          )}
+          {!consumers && (
+            <>
+              <p>Sem dados.</p>
+            </>
+          )}
         </Tbody>
       </Table>
     </Box>

@@ -16,6 +16,7 @@ import { IConsumerOutputModel } from "../../common/Interfaces/Consumers";
 import { useNavigate } from "react-router-dom";
 import FilterBar from "../../components/FilterBar";
 import { fetchConsumers } from "../../common/APICalls";
+import ConsumersTable from "../../components/tables/ConsumersTable";
 
 
 export default function Consumers(): React.ReactElement{
@@ -31,7 +32,7 @@ export default function Consumers(): React.ReactElement{
   }, [sex, age, searchString]);
 
   const redirectToConsumerCreation = () => {
-    // TODO: Implement createConsumer function
+    navigate("create")
   };
 
   const redirectToConsumerPage = (id: number) => {
@@ -71,28 +72,7 @@ export default function Consumers(): React.ReactElement{
             </div>
               
               <div className="mt-10" style={{ maxHeight: 'calc(100vh - 220px)', overflowY: 'auto' }}>
-              <Table variant="simple" overflow="auto">
-                <Thead>
-                  <Tr>
-                    <Th>Id</Th>
-                    <Th>Fullname</Th>
-                    <Th>Age</Th>
-                    <Th>Sex</Th>
-                    <Th>Contact</Th>
-                  </Tr>
-                </Thead>
-                <Tbody>
-                  {consumers.map((consumer) => (
-                    <Tr className="hover:bg-slate-200 cursor-pointer" key={consumer.id} onClick={() => redirectToConsumerPage(consumer.id)}>
-                      <Td>{consumer.id}</Td>
-                      <Td>{consumer.fullname}</Td>
-                      <Td>{consumer.age}</Td>
-                      <Td>{consumer.sex}</Td>
-                      <Td>{consumer.contact}</Td>
-                    </Tr>
-                  ))}
-                </Tbody>
-              </Table>
+                <ConsumersTable consumers={consumers} onClickConsumer={redirectToConsumerPage}/>
               </div>
             </>
           )}

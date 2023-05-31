@@ -8,6 +8,16 @@ export interface ITestOutputModel {
     reportDeliveryDate?: string | undefined
 }
 
+export interface ITestInputModel{
+    id: string;
+    testType: "SP" | "HT";
+    consumersNumber: number;
+    requestDate: string;
+    validationDate?: string;
+    dueDate?: string;
+    reportDeliveryDate?: string;
+}
+
 export interface IFizzValues {
     columns: Record<string, string>,
     rows: Record<string, string>[]

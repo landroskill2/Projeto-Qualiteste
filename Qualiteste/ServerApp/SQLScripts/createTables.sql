@@ -22,7 +22,7 @@ CREATE TABLE PRODUCT(
 
 CREATE TABLE TEST(
     InternalID varchar(20) PRIMARY KEY,
-    Product int REFERENCES PRODUCT(ProductID) NOT NULL,
+    Product int REFERENCES PRODUCT(ProductID),
     TestType varchar(2) NOT NULL check (TestType in ('HT', 'SP')),
     ConsumersNumber int NOT NULL,
     RequestDate date NOT NULL,

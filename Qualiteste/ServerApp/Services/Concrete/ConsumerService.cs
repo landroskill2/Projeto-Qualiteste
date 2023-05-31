@@ -65,7 +65,7 @@ namespace Qualiteste.ServerApp.Services.Concrete
 
         public Either<CustomError, ConsumerPageModel> GetConsumerById(int id)
         {
-            Consumer consumer = _unitOfWork.Consumers.GetConsumerById(id);
+            Consumer? consumer = _unitOfWork.Consumers.GetConsumerById(id);
 
             if (consumer == null) return new NoConsumerFoundWithId();
 

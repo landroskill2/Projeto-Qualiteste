@@ -12,13 +12,13 @@ import {
   Spinner,
   Box
 } from "@chakra-ui/react";
-import { ISessionOutputModel } from "../../common/Interfaces/Sessions";
+import { ISessionModel } from "../../common/Interfaces/Sessions";
 import { useNavigate } from "react-router-dom";
 import { fetchSessions } from "../../common/APICalls";
 
 
 export default function Sessions(): React.ReactElement{
-    const [sessions, setSessions] = useState<ISessionOutputModel[] | null>(null);
+    const [sessions, setSessions] = useState<ISessionModel[] | null>(null);
     const [type, setType] = useState<string | null>(null)
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const navigate = useNavigate()
@@ -33,7 +33,7 @@ export default function Sessions(): React.ReactElement{
   }
 
   const redirectToSessionCreation = () => {
-    // TODO: Implement CreateSession function
+    navigate("create")
   };
 
   async function populateData() {

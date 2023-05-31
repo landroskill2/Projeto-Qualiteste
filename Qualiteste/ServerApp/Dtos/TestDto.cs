@@ -16,7 +16,6 @@ namespace Qualiteste.ServerApp.Dtos
     public record TestInputModel
     {
         public string ID { get; init; }
-        public int Product { get; init; }
         public string TestType { get; init; }
         public int ConsumersNumber { get; init; }
         public DateOnly RequestDate { get; init; }
@@ -29,7 +28,7 @@ namespace Qualiteste.ServerApp.Dtos
             return new Test
             {
                 Internalid = ID,
-                Product = Product,
+                Product = null,
                 Testtype = TestType,
                 Consumersnumber = ConsumersNumber,
                 Requestdate = RequestDate,

@@ -7,7 +7,7 @@ public partial class Test
 {
     public string Internalid { get; set; } = null!;
 
-    public int Product { get; set; }
+    public int? Product { get; set; }
 
     public string Testtype { get; set; } = null!;
 
@@ -27,7 +27,7 @@ public partial class Test
 
     public virtual ICollection<FizzAttribute> FizzAttributes { get; } = new List<FizzAttribute>();
 
-    public virtual Product ProductNavigation { get; set; } = null!;
+    public virtual Product? ProductNavigation { get; set; }
 
     public virtual ICollection<Sample> Samples { get; } = new List<Sample>();
 

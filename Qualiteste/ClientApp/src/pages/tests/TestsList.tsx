@@ -29,7 +29,7 @@ export default function Tests(): React.ReactElement{
   }, [type]);
 
   const redirectToTestCreation = () => {
-    // TODO: Implement CreateTest function
+    navigate(`create`)
   };
 
   const redirectToTestPage = (id: String) => {

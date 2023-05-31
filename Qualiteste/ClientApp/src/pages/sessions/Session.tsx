@@ -8,7 +8,7 @@ import {
   Td,
   Heading,
 } from "@chakra-ui/react";
-import { ISessionOutputModel } from '../../common/Interfaces/Sessions'
+import { ISessionModel } from '../../common/Interfaces/Sessions'
 import { IConsumerSessionOutputModel } from '../../common/Interfaces/Sessions'
 import { ITestOutputModel } from "../../common/Interfaces/Tests";
 import { fetchSessionById } from '../../common/APICalls';
@@ -17,7 +17,7 @@ import { IConsumerOutputModel } from "../../common/Interfaces/Consumers";
 
 export default function Session() : React.ReactElement{
   // State variables to hold the session, consumerSessions, and tests data
-  const [session, setSession] = useState<ISessionOutputModel | null>(null);
+  const [session, setSession] = useState<ISessionModel | null>(null);
   const [consumerSessions, setConsumerSessions] = useState<IConsumerSessionOutputModel[]>([]);
   const [tests, setTests] = useState<ITestOutputModel[]>([]);
   const {id} = useParams()

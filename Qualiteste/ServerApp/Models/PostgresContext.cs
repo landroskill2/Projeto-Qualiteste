@@ -278,7 +278,6 @@ public partial class PostgresContext : DbContext
 
             entity.HasOne(d => d.ProductNavigation).WithMany(p => p.Tests)
                 .HasForeignKey(d => d.Product)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("test_product_fkey");
 
             entity.HasOne(d => d.Session).WithMany(p => p.Tests)

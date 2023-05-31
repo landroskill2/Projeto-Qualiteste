@@ -1,4 +1,6 @@
 import { IConsumerInputModel } from "./Interfaces/Consumers"
+import { ISessionModel } from "./Interfaces/Sessions"
+import { ITestInputModel } from "./Interfaces/Tests"
 
 
 //Consumers
@@ -44,6 +46,19 @@ export async function fetchTestById(
     return fetch(path)
 }
 
+export async function createTest(
+    test : ITestInputModel
+) : Promise<Response>{
+    let path = `/api/tests`
+    return fetch(path, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(test)
+    })
+}
+
 export async function uploadFile(
     id : String,
     file : File
@@ -70,6 +85,19 @@ export async function getFizzTableValues(
 export async function fetchSessions() : Promise<Response>{
     let path = "/api/sessions"
     return fetch(path)
+}
+
+export async function createSession(
+    session: ISessionModel
+) : Promise<Response>{
+    let path = `/api/sessions`
+    return fetch(path, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(session)
+    })
 }
 
 export async function fetchSessionById(id: string) : Promise<Response>{
