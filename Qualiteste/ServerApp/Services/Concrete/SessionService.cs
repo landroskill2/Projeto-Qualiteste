@@ -81,5 +81,37 @@ namespace Qualiteste.ServerApp.Services.Concrete
                 return null;
             }
         }
+
+        public Either<CustomError, string> AddTestToSession(string id, string test)
+        {
+            try
+            {
+                Test testToAdd = _unitOfWork.Tests.GetTestById(test);
+                
+                if(testToAdd.Session != null) return new TestAlreadyBelongsToASession();
+
+                _unitOfWork.Sessions.AddTestToSession(id, testToAdd);
+                _unitOfWork.Complete();
+                return "Teste adicionado com sucesso";
+            }catch(Exception ex)
+            {
+                _unitOfWork.UntrackChanges();
+                throw ex;
+            }
+        }
+
+        public Either<CustomError, string> AddConsumerToSession(string id, int consumer)
+        {
+            try
+            {
+                _unitOfWork.Sessions.AddConsumerToSession(id, consumer);
+                _unitOfWork.Complete();
+                return "Provador adicionado com sucesso";
+            }catch(Exception ex)
+            {
+                _unitOfWork.UntrackChanges();
+                throw ex;
+            }
+        }
     }
 }

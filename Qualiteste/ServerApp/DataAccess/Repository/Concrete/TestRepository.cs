@@ -54,6 +54,12 @@ namespace Qualiteste.ServerApp.DataAccess.Repository.Concrete
             PostgresContext.AttributeValues.Add(attributeValue);
         }
 
+        public void AddConsumerToTest(string id, int consumer)
+        {
+            ConsumerHt cHT = new ConsumerHt {Testid = id, Consumerid = consumer};
+            GetTestById(id)?.ConsumerHts.Add(cHT);
+        }
+
         public Dictionary<string, string> GetFizzColumns(int id)
         {
             return PostgresContext.FizzAttributes.Where(c => c.Testid == id.ToString()).ToDictionary(c => c.Attribute, c=> ReturnAliasIfNotNull(c));

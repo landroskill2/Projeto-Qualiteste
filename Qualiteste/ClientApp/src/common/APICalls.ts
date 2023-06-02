@@ -59,6 +59,20 @@ export async function createTest(
     })
 }
 
+export async function addConsumerToTest(
+    testID : string,
+    consumer : number
+) : Promise<Response>{
+    let path = `/api/tests/${testID}/consumers`
+    return fetch(path, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(consumer)
+    })
+}
+
 export async function uploadFile(
     id : String,
     file : File
@@ -103,6 +117,34 @@ export async function createSession(
 export async function fetchSessionById(id: string) : Promise<Response>{
     const path = `/api/sessions/${id}`
     return fetch(path)
+}
+
+export async function addTestToSession(
+    sessionID: string,
+    test : string
+) : Promise<Response> {
+    let path = `/api/sessions/${sessionID}/tests`
+    return fetch(path, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(test)
+    })
+}
+
+export async function addConsumerToSession(
+    sessionID : string,
+    consumer : number
+) : Promise<Response>{
+    let path = `/api/sessions/${sessionID}/consumers`
+    return fetch(path, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(consumer)
+    })
 }
 
 function addFiltersToQuery(

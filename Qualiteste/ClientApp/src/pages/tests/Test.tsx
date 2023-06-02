@@ -2,9 +2,10 @@ import { Box, Table, Thead, Tbody, Tr, Th, Td, Spinner, Button, Input } from "@c
 import { IConsumerOutputModel } from '../../common/Interfaces/Consumers';
 import { ISessionModel } from '../../common/Interfaces/Sessions';
 import { ITestOutputModel } from '../../common/Interfaces/Tests';
-import { fetchTestById, uploadFile } from '../../common/APICalls';
+import { addConsumerToTest, fetchTestById, uploadFile } from '../../common/APICalls';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from "react";
+import AddConsumersModal from "../../components/modals/AddConsumersModal";
 
 export default function Test(): React.ReactElement {
   const [session, setSession] = useState<ISessionModel | null>(null);
@@ -20,6 +21,11 @@ export default function Test(): React.ReactElement {
   const redirectToConsumerPage = (id: number) => {
     navigate(`/consumers/${id}`);
   };
+
+  const addConsumer = (consumerID : number) => {
+    addConsumerToTest(id!, consumerID) // TODO: add action on response
+    window.location.reload()
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -42,6 +48,8 @@ export default function Test(): React.ReactElement {
     if(file) uploadFile(id!, file)
     
   };
+
+  const isHomeTest = test?.type === "HT";
 
   if (!test) {
     // Render a loading spinner while waiting for the API response
@@ -68,6 +76,13 @@ export default function Test(): React.ReactElement {
         <Box as="h1" fontSize="2xl" fontWeight="bold">
           TestID = {test.id} 
         </Box>
+
+        {isHomeTest && 
+          <Box>
+            <AddConsumersModal onClickConsumer={addConsumer}/>
+          </Box>
+        }
+        
         <Box>
           <Input type="file" accept=".txt,.csv" onChange={handleFileUpload} display="none" id="file-upload" />
           <label htmlFor="file-upload">

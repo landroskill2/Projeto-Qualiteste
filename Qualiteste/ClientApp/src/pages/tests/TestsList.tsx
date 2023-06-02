@@ -16,6 +16,7 @@ import { ITestOutputModel } from "../../common/Interfaces/Tests";
 import { useNavigate } from "react-router-dom";
 import { fetchTests } from "../../common/APICalls";
 import TestTypeFilter from "../../components/TestTypeFilter";
+import TestsTable from "../../components/tables/TestsTable";
 
 
 export default function Tests(): React.ReactElement{
@@ -58,26 +59,7 @@ export default function Tests(): React.ReactElement{
             <>
               <TestTypeFilter type={type} setType={setType} />
               <div className="mt-10" style={{ maxHeight: 'calc(100vh - 220px)', overflowY: 'auto' }}>
-              <Table variant="simple" overflow="auto">
-                <Thead>
-                  <Tr>
-                    <Th>Id</Th>
-                    <Th>Tipo</Th>
-                    <Th>Nº de provadores</Th>
-                    <Th>Data de pedido</Th>
-                  </Tr>
-                </Thead>
-                <Tbody>
-                  {tests.map((test) => (
-                    <Tr className="hover:bg-slate-200 cursor-pointer" key={test.id} onClick ={() => redirectToTestPage(test.id)} >
-                      <Td>{test.id}</Td>
-                      <Td>{test.type}</Td>
-                      <Td>{test.consumersNumber.toString()}</Td>
-                      <Td>{test.requestDate}</Td>
-                    </Tr>
-                  ))}
-                </Tbody>
-              </Table>
+                <TestsTable tests={tests} onClickTest={redirectToTestPage} />
               </div>
             </>
           )}

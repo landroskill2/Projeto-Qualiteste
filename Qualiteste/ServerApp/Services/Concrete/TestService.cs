@@ -102,6 +102,20 @@ namespace Qualiteste.ServerApp.Services.Concrete
             }
         }
 
+        public Either<CustomError, string> AddConsumerToTest(string id, int consumer)
+        {
+            try
+            {
+                _unitOfWork.Tests.AddConsumerToTest(id, consumer);
+                _unitOfWork.Complete();
+                return "Provador adicionado com sucesso";
+            }catch(Exception ex)
+            {
+                _unitOfWork.UntrackChanges();
+                throw ex;
+            }
+        }
+
         public Either<CustomError, FizzTableModel> GetFizzTable(int id)
         {
             try

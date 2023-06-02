@@ -97,5 +97,39 @@ namespace Qualiteste.ServerApp.Controllers
                 return Problem(statusCode: 500, title: "Ocorreu um erro inesperado");
             }
         }
+
+        [HttpPost("{id}/tests")]
+        public IActionResult AddTestToSession(string id, [FromBody] string test)
+        {
+            try
+            {
+                Either<CustomError, string> c = _sessionService.AddTestToSession(id, test);
+                return c.Match(
+                    error => Problem(statusCode: error.StatusCode, title: error.Message),
+                    success => Ok(success)
+                    );
+            }
+            catch (Exception e)
+            {
+                return Problem(statusCode: 500, title: "Ocorreu um erro inesperado");
+            }
+        }
+
+        [HttpPost("{id}/consumers")]
+        public IActionResult AddConsumerToSession(string id, [FromBody] int consumer)
+        {
+            try
+            {
+                Either<CustomError, string> c = _sessionService.AddConsumerToSession(id, consumer);
+                return c.Match(
+                    error => Problem(statusCode: error.StatusCode, title: error.Message),
+                    success => Ok(success)
+                    );
+            }
+            catch (Exception e)
+            {
+                return Problem(statusCode: 500, title: "Ocorreu um erro inesperado");
+            }
+        }
     }
 }

@@ -7,13 +7,16 @@ import {
   Th,
   Td,
   Heading,
+  Box,
 } from "@chakra-ui/react";
 import { ISessionModel } from '../../common/Interfaces/Sessions'
 import { IConsumerSessionOutputModel } from '../../common/Interfaces/Sessions'
 import { ITestOutputModel } from "../../common/Interfaces/Tests";
-import { fetchSessionById } from '../../common/APICalls';
+import { addConsumerToSession, addTestToSession, fetchSessionById } from '../../common/APICalls';
 import { useNavigate, useParams } from "react-router-dom";
 import { IConsumerOutputModel } from "../../common/Interfaces/Consumers";
+import AddConsumersModal from "../../components/modals/AddConsumersModal";
+import AddTestsModal from "../../components/modals/AddTestsModal";
 
 export default function Session() : React.ReactElement{
   // State variables to hold the session, consumerSessions, and tests data
@@ -29,6 +32,16 @@ export default function Session() : React.ReactElement{
 
   const redirectToTestPage = (id: string) => {
     navigate(`/tests/${id}`)
+  }
+
+  const addTest = (testID : string) => {
+    addTestToSession(id!, testID) // TODO: add action on response
+    window.location.reload()
+  }
+
+  const addConsumer = (consumerID : number) => {
+    addConsumerToSession(id!, consumerID) // TODO: add action on response
+    window.location.reload()
   }
 
   useEffect(() => {
@@ -71,7 +84,25 @@ export default function Session() : React.ReactElement{
     <>
       {session && (
         <>
-          <Heading>{session.id}</Heading>
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+            mb={4}
+          >
+            <Box as="h1" fontSize="2xl" fontWeight="bold">
+              <Heading>{session.id}</Heading>
+            </Box>
+
+            <Box>
+              <AddTestsModal onClickTest={addTest}/>
+            </Box>
+
+            <Box>
+              <AddConsumersModal onClickConsumer={addConsumer}/>
+            </Box>
+          </Box>
+          
           <Table>
             <Thead>
               <Tr>

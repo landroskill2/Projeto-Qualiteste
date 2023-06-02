@@ -112,6 +112,24 @@ namespace Qualiteste.ServerApp.Controllers
             }
         }
 
+        [HttpPost("{id}/consumers")]
+        [ProducesResponseType(200, Type = typeof(string))]
+        public IActionResult AddConsumerToTest(string id, [FromBody] int consumer)
+        {
+            try
+            {
+                Either<CustomError, string> c = _testService.AddConsumerToTest(id, consumer);
+                return c.Match(
+                    error => Problem(statusCode: error.StatusCode, title: error.Message),
+                    success => Ok(success)
+                    );
+            }
+            catch (Exception e)
+            {
+                return Problem(statusCode: 500, title: "Ocorreu um erro inesperado");
+            }
+        }
+
         [HttpGet("{id}/fizz")]
         public IActionResult GetFizzTable(int id)
         {
