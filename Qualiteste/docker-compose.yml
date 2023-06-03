@@ -23,7 +23,6 @@ services:
       dockerfile: Dockerfile
     environment:
       "ConnectionStrings:postgresDB" : "Host=db-tests;Database=postgres;Username=postgres;Password=postgres"
-      PORT: 5432
     ports:
       - 8081:8081
   

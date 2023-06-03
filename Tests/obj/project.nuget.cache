@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "SO72a5+9gOBEkvIAN9/G1SM2Y3FD/VJWTjWo/DLlgWMv7UcCMiXIR9EQQh+XwMXMuX4y+F6gM66jq7afBy0Yvw==",
+  "dgSpecHash": "h/rCIIkq23mEiwz3yhZrkvtff+0LoCIYersOEaj4WbmgCD/T5nJNyyfFSLfFkzpu1z3zLf+5P3hRhEKmTTyPVw==",
   "success": true,
   "projectFilePath": "C:\\Users\\landr\\Desktop\\Qualiteste\\Tests\\Tests.csproj",
   "expectedPackageFiles": [
@@ -29,6 +29,7 @@
     "C:\\Users\\landr\\.nuget\\packages\\microsoft.netcore.targets\\1.0.1\\microsoft.netcore.targets.1.0.1.nupkg.sha512",
     "C:\\Users\\landr\\.nuget\\packages\\microsoft.testplatform.objectmodel\\17.3.2\\microsoft.testplatform.objectmodel.17.3.2.nupkg.sha512",
     "C:\\Users\\landr\\.nuget\\packages\\microsoft.testplatform.testhost\\17.3.2\\microsoft.testplatform.testhost.17.3.2.nupkg.sha512",
+    "C:\\Users\\landr\\.nuget\\packages\\microsoft.visualstudio.azure.containers.tools.targets\\1.17.2\\microsoft.visualstudio.azure.containers.tools.targets.1.17.2.nupkg.sha512",
     "C:\\Users\\landr\\.nuget\\packages\\netstandard.library\\2.0.0\\netstandard.library.2.0.0.nupkg.sha512",
     "C:\\Users\\landr\\.nuget\\packages\\newtonsoft.json\\9.0.1\\newtonsoft.json.9.0.1.nupkg.sha512",
     "C:\\Users\\landr\\.nuget\\packages\\npgsql\\7.0.2\\npgsql.7.0.2.nupkg.sha512",
