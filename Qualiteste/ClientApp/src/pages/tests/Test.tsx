@@ -82,6 +82,10 @@ export default function Test(): React.ReactElement {
             <AddConsumersModal onClickConsumer={addConsumer}/>
           </Box>
         }
+
+        <Box>
+          <Button onClick={() => navigate("fizz")}>Fizz Results</Button>
+        </Box>
         
         <Box>
           <Input type="file" accept=".txt,.csv" onChange={handleFileUpload} display="none" id="file-upload" />
