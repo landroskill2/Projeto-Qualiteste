@@ -21,24 +21,16 @@
       "commandName": "Docker",
       "launchBrowser": true,
       "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}",
-      "environmentVariables": {
-        "ASPNETCORE_URLS": "https://+:443;http://+:80",
-        "ASPNETCORE_HTTPS_PORT": "7160",
-        "ASPNETCORE_ENVIRONMENT": "Development",
-        "ASPNETCORE_HOSTINGSTARTUPASSEMBLIES": "Microsoft.AspNetCore.SpaProxy"
-      },
       "publishAllPorts": true,
-      "httpPort": 5017,
-      "useSSL": true,
-      "sslPort": 7160
+      "useSSL": true
     }
   },
   "iisSettings": {
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:30986",
-      "sslPort": 44382
+      "applicationUrl": "http://localhost:5017",
+      "sslPort": 7160
     }
   }
 }
