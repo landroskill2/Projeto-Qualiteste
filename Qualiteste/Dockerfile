@@ -7,7 +7,6 @@ RUN curl -sL https://deb.nodesource.com/setup_16.x | bash - && apt-get install -
 
 WORKDIR /app
 EXPOSE 80
-EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 

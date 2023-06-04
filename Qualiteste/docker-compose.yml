@@ -25,7 +25,7 @@ services:
       "ConnectionStrings:postgresDB" : "Host=db-tests;Database=postgres;Username=postgres;Password=postgres"
     ports:
       - 44410:80
-
+      
   #nginx:
   #  container_name: nginx
   #  image: nginx
