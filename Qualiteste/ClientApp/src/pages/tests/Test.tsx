@@ -83,19 +83,22 @@ export default function Test(): React.ReactElement {
           </Box>
         }
         {!isHomeTest &&
+        <>
           <Box>
             <Button onClick={() => navigate("fizz")}>Fizz Results</Button>
           </Box>
+          <Box>
+            <Input type="file" accept=".txt,.csv" onChange={handleFileUpload} display="none" id="file-upload" />
+              <label htmlFor="file-upload">
+              <Button as="span" colorScheme="blue" mr={2}>
+                Upload File
+              </Button>
+            </label>
+          </Box>
+        </>
         }
         
-        <Box>
-          <Input type="file" accept=".txt,.csv" onChange={handleFileUpload} display="none" id="file-upload" />
-          <label htmlFor="file-upload">
-            <Button as="span" colorScheme="blue" mr={2}>
-              Upload File
-            </Button>
-          </label>
-        </Box>
+        
       </Box>
       <Box className="hover:cursor-pointer" as="h1" fontSize="2xl" fontWeight="bold" mb={4} onClick={() => redirectToSessionPage(session!.id)}>
         {session?.id}
