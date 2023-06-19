@@ -60,6 +60,11 @@ export default function NavMenu() {
                   Sessões
                 </CustomNavLink>
               </li>
+              <li className="text-white">
+                <CustomNavLink href="/login" toggleNavBar={changeToggle}>
+                  Login
+                </CustomNavLink>
+              </li>
             </ul>
           </div>
         </div>

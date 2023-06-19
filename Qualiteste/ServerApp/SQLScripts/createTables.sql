@@ -80,3 +80,14 @@ CREATE TABLE CONSUMER_SESSION(
     StampDate date,
     primary key(ConsumerID, SessionID)
 );
+
+CREATE TABLE USER(
+    Username varchar(20) PRIMARY KEY,
+    Pwd varchar(256),
+    Role int REFERENCES ROLES(RoleID)
+);
+
+CREATE TABLE ROLES(
+    RoleID int GENERATED ALWAYS AS IDENTITY,
+    RoleDesignation varchar(20)
+)

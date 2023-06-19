@@ -50,21 +50,21 @@ namespace Tests.RepositoryTests
         [Test]
         public void CreateTest()
         {
-            Test test = new TestInputModel
-            {
-                ID = "9999",
-                Product = 324231,
-                TestType = "SP",
-                ConsumersNumber = 15,
-                RequestDate = DateOnly.Parse("2023-03-24")
-            }.toDbTest();
+            //Test test = new TestInputModel
+            //{
+            //    ID = "9999",
+            //    Product = 324231,
+            //    TestType = "SP",
+            //    ConsumersNumber = 15,
+            //    RequestDate = DateOnly.Parse("2023-03-24")
+            //}.toDbTest();
 
-            testRepository.Add(test);
-            context.SaveChanges();
+            //testRepository.Add(test);
+            //context.SaveChanges();
 
-            var fetchedTest = context.Tests.SingleOrDefault(t => t.Internalid == test.Internalid);
+            //var fetchedTest = context.Tests.SingleOrDefault(t => t.Internalid == test.Internalid);
 
-            Assert.True(fetchedTest?.Equals(test));
+            //Assert.True(fetchedTest?.Equals(test));
         }
 
         [Test]

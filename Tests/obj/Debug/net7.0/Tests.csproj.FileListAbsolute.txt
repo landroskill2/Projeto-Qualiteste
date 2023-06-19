@@ -114,6 +114,11 @@ C:\Users\jamendes\Desktop\Projeto-Qualiteste\Tests\obj\Debug\net7.0\Tests.pdb
 C:\Users\jamendes\Desktop\Projeto-Qualiteste\Tests\obj\Debug\net7.0\Tests.genruntimeconfig.cache
 C:\Users\jamendes\Desktop\Projeto-Qualiteste\Tests\obj\Debug\net7.0\ref\Tests.dll
 C:\Users\landr\Desktop\Qualiteste\Tests\bin\Debug\net7.0\CoverletSourceRootsMapping
+C:\Users\landr\Desktop\Qualiteste\Tests\obj\Debug\net7.0\Tests.csproj.AssemblyReference.cache
+C:\Users\landr\Desktop\Qualiteste\Tests\obj\Debug\net7.0\Tests.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\landr\Desktop\Qualiteste\Tests\obj\Debug\net7.0\Tests.AssemblyInfoInputs.cache
+C:\Users\landr\Desktop\Qualiteste\Tests\obj\Debug\net7.0\Tests.AssemblyInfo.cs
+C:\Users\landr\Desktop\Qualiteste\Tests\obj\Debug\net7.0\Tests.csproj.CoreCompileInputs.cache
 C:\Users\landr\Desktop\Qualiteste\Tests\bin\Debug\net7.0\testhost.dll
 C:\Users\landr\Desktop\Qualiteste\Tests\bin\Debug\net7.0\Qualiteste.deps.json
 C:\Users\landr\Desktop\Qualiteste\Tests\bin\Debug\net7.0\Qualiteste.runtimeconfig.json
@@ -132,6 +137,7 @@ C:\Users\landr\Desktop\Qualiteste\Tests\bin\Debug\net7.0\Tests.runtimeconfig.jso
 C:\Users\landr\Desktop\Qualiteste\Tests\bin\Debug\net7.0\Tests.dll
 C:\Users\landr\Desktop\Qualiteste\Tests\bin\Debug\net7.0\Tests.pdb
 C:\Users\landr\Desktop\Qualiteste\Tests\bin\Debug\net7.0\Castle.Core.dll
+C:\Users\landr\Desktop\Qualiteste\Tests\bin\Debug\net7.0\CsvHelper.dll
 C:\Users\landr\Desktop\Qualiteste\Tests\bin\Debug\net7.0\Microsoft.AspNetCore.SpaProxy.dll
 C:\Users\landr\Desktop\Qualiteste\Tests\bin\Debug\net7.0\Microsoft.VisualStudio.CodeCoverage.Shim.dll
 C:\Users\landr\Desktop\Qualiteste\Tests\bin\Debug\net7.0\Microsoft.EntityFrameworkCore.dll
@@ -217,15 +223,9 @@ C:\Users\landr\Desktop\Qualiteste\Tests\bin\Debug\net7.0\zh-Hant\Microsoft.TestP
 C:\Users\landr\Desktop\Qualiteste\Tests\bin\Debug\net7.0\zh-Hant\Microsoft.VisualStudio.TestPlatform.Common.resources.dll
 C:\Users\landr\Desktop\Qualiteste\Tests\bin\Debug\net7.0\Qualiteste.dll
 C:\Users\landr\Desktop\Qualiteste\Tests\bin\Debug\net7.0\Qualiteste.pdb
-C:\Users\landr\Desktop\Qualiteste\Tests\obj\Debug\net7.0\Tests.csproj.AssemblyReference.cache
-C:\Users\landr\Desktop\Qualiteste\Tests\obj\Debug\net7.0\Tests.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\landr\Desktop\Qualiteste\Tests\obj\Debug\net7.0\Tests.AssemblyInfoInputs.cache
-C:\Users\landr\Desktop\Qualiteste\Tests\obj\Debug\net7.0\Tests.AssemblyInfo.cs
-C:\Users\landr\Desktop\Qualiteste\Tests\obj\Debug\net7.0\Tests.csproj.CoreCompileInputs.cache
 C:\Users\landr\Desktop\Qualiteste\Tests\obj\Debug\net7.0\Tests.csproj.CopyComplete
 C:\Users\landr\Desktop\Qualiteste\Tests\obj\Debug\net7.0\Tests.dll
 C:\Users\landr\Desktop\Qualiteste\Tests\obj\Debug\net7.0\refint\Tests.dll
 C:\Users\landr\Desktop\Qualiteste\Tests\obj\Debug\net7.0\Tests.pdb
 C:\Users\landr\Desktop\Qualiteste\Tests\obj\Debug\net7.0\Tests.genruntimeconfig.cache
 C:\Users\landr\Desktop\Qualiteste\Tests\obj\Debug\net7.0\ref\Tests.dll
-C:\Users\landr\Desktop\Qualiteste\Tests\bin\Debug\net7.0\CsvHelper.dll

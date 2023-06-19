@@ -10,6 +10,7 @@ import FizzResults from "../pages/tests/FizzTable";
 import TestCreation from "../pages/tests/TestCreation";
 import ConsumerCreation from "../pages/consumers/ConsumerCreation";
 import SessionCreation from "../pages/sessions/SessionCreation";
+import Login from "../pages/authentication/Login";
 
 const AppRoutes = createBrowserRouter([
   {
@@ -55,6 +56,10 @@ const AppRoutes = createBrowserRouter([
   {
     path: "/sessions/:id",
     element: <Session />
+  },
+  {
+    path: "/login",
+    element: <Login />
   }
 ]);
 export default AppRoutes;

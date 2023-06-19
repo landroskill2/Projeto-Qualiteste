@@ -7,6 +7,7 @@ namespace Qualiteste.ServerApp.DataAccess
         IConsumerRepository Consumers { get; }
         ITestRepository Tests { get; }
         ISessionRepository Sessions { get; }
+        IUserRepository Users { get; }
         int Complete();
         void UntrackChanges();
     }

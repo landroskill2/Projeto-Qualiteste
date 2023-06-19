@@ -135,3 +135,9 @@ INSERT INTO CONSUMER_HT(TestID, ConsumerID, DeliveryDate, DueDate, ResponseDate,
 ('041234', 143, '2023-03-01', null, null, null),
 ('041234', 373, '2023-03-01', null, null, null),
 ('041234', 67, '2023-03-01', null, null, null);
+
+INSERT INTO ROLES(RoleDesignation) VALUES
+('ADMIN')
+
+INSERT INTO USER(Username, Pwd) VALUES
+("admin", "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918")

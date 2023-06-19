@@ -147,6 +147,22 @@ export async function addConsumerToSession(
     })
 }
 
+// Authentication
+
+export async function loginUser(
+    username: string,
+    password: string
+) : Promise<Response>{
+    let path = `/api/accounts/login`
+    return fetch(path, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, password })
+    })
+}
+
 function addFiltersToQuery(
     path: string,
     filters: Record<string, string>

@@ -30,11 +30,15 @@ public partial class PostgresContext : DbContext
 
     public virtual DbSet<Product> Products { get; set; }
 
+    public virtual DbSet<Role> Roles { get; set; }
+
     public virtual DbSet<Sample> Samples { get; set; }
 
     public virtual DbSet<Session> Sessions { get; set; }
 
     public virtual DbSet<Test> Tests { get; set; }
+
+    public virtual DbSet<User> Users { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -218,6 +222,20 @@ public partial class PostgresContext : DbContext
                 .HasColumnName("designation");
         });
 
+        modelBuilder.Entity<Role>(entity =>
+        {
+            entity.HasKey(e => e.Roleid).HasName("roles_pkey");
+
+            entity.ToTable("roles");
+
+            entity.Property(e => e.Roleid)
+                .UseIdentityAlwaysColumn()
+                .HasColumnName("roleid");
+            entity.Property(e => e.Roledesignation)
+                .HasMaxLength(20)
+                .HasColumnName("roledesignation");
+        });
+
         modelBuilder.Entity<Sample>(entity =>
         {
             entity.HasKey(e => new { e.Testid, e.Productid }).HasName("sample_pkey");
@@ -283,6 +301,25 @@ public partial class PostgresContext : DbContext
             entity.HasOne(d => d.Session).WithMany(p => p.Tests)
                 .HasForeignKey(d => d.Sessionid)
                 .HasConstraintName("test_sessionid_fkey");
+        });
+
+        modelBuilder.Entity<User>(entity =>
+        {
+            entity.HasKey(e => e.Username).HasName("users_pkey");
+
+            entity.ToTable("users");
+
+            entity.Property(e => e.Username)
+                .HasMaxLength(20)
+                .HasColumnName("username");
+            entity.Property(e => e.Pwd)
+                .HasMaxLength(256)
+                .HasColumnName("pwd");
+            entity.Property(e => e.Role).HasColumnName("role");
+
+            entity.HasOne(d => d.RoleNavigation).WithMany(p => p.Users)
+                .HasForeignKey(d => d.Role)
+                .HasConstraintName("users_role_fkey");
         });
 
         OnModelCreatingPartial(modelBuilder);

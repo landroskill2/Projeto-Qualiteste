@@ -8,6 +8,8 @@ DROP TABLE IF EXISTS CONSUMER_HT CASCADE;
 DROP TABLE IF EXISTS CONSUMER_SESSION CASCADE;
 DROP TABLE IF EXISTS FIZZ_ATTRIBUTES CASCADE;
 DROP TABLE IF EXISTS ATTRIBUTE_VALUES CASCADE;
+DROP TABLE IF EXISTS ROLES;
+DROP TABLE IF EXISTS USERS;
 
 
 CREATE TABLE CONSUMER(
@@ -91,6 +93,17 @@ CREATE TABLE CONSUMER_SESSION(
     Attendance boolean,
     StampDate date,
     primary key(ConsumerID, SessionID)
+);
+
+CREATE TABLE ROLES(
+    RoleID int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    RoleDesignation varchar(20)
+);
+
+CREATE TABLE USERS(
+    Username varchar(20) PRIMARY KEY,
+    Pwd varchar(256),
+    Role int REFERENCES ROLES(RoleID)
 );
 
 INSERT INTO CONSUMER(Id, FullName, NIF, Sex, DateOfBirth, Contact, Email) VALUES 
@@ -224,3 +237,9 @@ INSERT INTO CONSUMER_HT(TestID, ConsumerID, DeliveryDate, DueDate, ResponseDate,
 ('041234', 143, '2023-03-01', null, null, null),
 ('041234', 373, '2023-03-01', null, null, null),
 ('041234', 67, '2023-03-01', null, null, null);
+
+INSERT INTO ROLES(RoleDesignation) VALUES
+('ADMIN');
+
+INSERT INTO USERS(Username, Pwd) VALUES
+('admin', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918');
