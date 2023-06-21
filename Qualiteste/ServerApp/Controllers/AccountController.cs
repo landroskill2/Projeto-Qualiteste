@@ -17,6 +17,7 @@ namespace Qualiteste.ServerApp.Controllers
         {
             _accountService = accountService;
         }
+
         [HttpPost("login")]
         public IActionResult Login(UserDto user)
         {

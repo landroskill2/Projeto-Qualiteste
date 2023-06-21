@@ -1,4 +1,5 @@
-﻿using Qualiteste.ServerApp.DataAccess;
+﻿using Microsoft.AspNetCore.Authorization;
+using Qualiteste.ServerApp.DataAccess;
 using Qualiteste.ServerApp.Dtos;
 using Qualiteste.ServerApp.Models;
 using Qualiteste.ServerApp.Services.Errors;
@@ -6,7 +7,7 @@ using Qualiteste.ServerApp.Utils;
 
 namespace Qualiteste.ServerApp.Services.Concrete
 {
-    
+    [Authorize(Roles ="ADMIN")]
     public class ConsumerService : IConsumerService
     {
         private readonly IUnitOfWork _unitOfWork;

@@ -1,4 +1,7 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Exchange.WebServices.Data;
+using Microsoft.IdentityModel.Tokens;
 using Qualiteste.ServerApp.DataAccess;
 using Qualiteste.ServerApp.DataAccess.Concrete;
 using Qualiteste.ServerApp.DataAccess.Repository;
@@ -18,6 +21,16 @@ builder.Services.AddScoped<ISessionService, SessionService>();
 builder.Services.AddScoped<ITestService, TestService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<ICsvService, CsvService>();
+
+builder.Services.AddAuthentication(x =>
+{
+    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(x =>
+{
+    x.TokenValidationParameters = new TokenValidationParameters();
+});
 
 builder.Services.AddControllersWithViews();
 
