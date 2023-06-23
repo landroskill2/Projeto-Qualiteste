@@ -46,8 +46,8 @@ export default function Session() : React.ReactElement{
 
   useEffect(() => {
     const fetchData = async () => {
-        const response = await fetchSessionById(id!!).then(res => res.json())
-        const { session, consumers, tests } = response;
+        const response = await fetchSessionById(id!!)
+        const { session, consumers, tests } = response.data;
   
         setSession(session);
         setConsumerSessions(consumers);

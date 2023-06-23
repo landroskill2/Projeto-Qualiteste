@@ -8,8 +8,31 @@ using Qualiteste.ServerApp.DataAccess.Repository;
 using Qualiteste.ServerApp.Models;
 using Qualiteste.ServerApp.Services;
 using Qualiteste.ServerApp.Services.Concrete;
+using Qualiteste.ServerApp.Utils;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddAuthentication(x =>
+{
+    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(x =>
+{
+    x.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidIssuer = TokenSettings.Issuer,
+        ValidAudience = TokenSettings.Audience,
+        IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(TokenSettings.Key)),
+        RequireExpirationTime = true,
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true
+    };
+});
+builder.Services.AddAuthorization();
 
 // Add services to the container.
 builder.Services.AddDbContext<PostgresContext>();
@@ -22,16 +45,6 @@ builder.Services.AddScoped<ITestService, TestService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<ICsvService, CsvService>();
 
-builder.Services.AddAuthentication(x =>
-{
-    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-})
-.AddJwtBearer(x =>
-{
-    x.TokenValidationParameters = new TokenValidationParameters();
-});
-
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
@@ -43,12 +56,13 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-
 app.UseStaticFiles();
 app.UseRouting();
 
-
 app.MapControllers();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapFallbackToFile("index.html");
 

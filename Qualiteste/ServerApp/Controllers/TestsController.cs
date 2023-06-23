@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Qualiteste.ServerApp.Dtos;
 using Qualiteste.ServerApp.Models;
 using Qualiteste.ServerApp.Services;
@@ -8,6 +9,7 @@ using Qualiteste.ServerApp.Utils;
 
 namespace Qualiteste.ServerApp.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class TestsController : ControllerBase
@@ -74,6 +76,7 @@ namespace Qualiteste.ServerApp.Controllers
 
         }
 
+        [Authorize("ADMIN")]
         [HttpPost]
         [ProducesResponseType(201)]
         public IActionResult CreateNewTest([FromBody] TestInputModel testInput)
@@ -94,6 +97,7 @@ namespace Qualiteste.ServerApp.Controllers
             }
         }
 
+        [Authorize("ADMIN")]
         [HttpPut("{id}")]
         [ProducesResponseType(200, Type = typeof(TestOutputModel))]
         public IActionResult UpdateTest(int id, [FromBody] TestInputModel testInput)
@@ -112,6 +116,7 @@ namespace Qualiteste.ServerApp.Controllers
             }
         }
 
+        [Authorize("ADMIN")]
         [HttpPost("{id}/consumers")]
         [ProducesResponseType(200, Type = typeof(string))]
         public IActionResult AddConsumerToTest(string id, [FromBody] int consumer)
@@ -146,6 +151,7 @@ namespace Qualiteste.ServerApp.Controllers
             }
         }
 
+        [Authorize("ADMIN")]
         [HttpPost("{id}/upload")]
         public async Task<IActionResult> UploadCSV(int id, IFormFile csvFile)
         {

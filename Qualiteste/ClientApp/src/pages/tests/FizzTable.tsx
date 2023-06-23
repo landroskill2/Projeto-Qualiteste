@@ -19,7 +19,7 @@ export default function FizzResults(): React.ReactElement {
 
   async function populateValues() {
     const res = await getFizzTableValues(id!);
-    const jsonData = await res.json();
+    const jsonData = res.data
     setData(jsonData as IFizzValues);
     separateValues(jsonData as IFizzValues);
   }

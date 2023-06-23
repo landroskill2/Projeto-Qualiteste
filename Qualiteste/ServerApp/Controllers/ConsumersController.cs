@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Qualiteste.ServerApp.Dtos;
 using Qualiteste.ServerApp.Models;
 using Qualiteste.ServerApp.Services;
@@ -10,6 +11,7 @@ namespace Qualiteste.ServerApp.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ConsumersController : ControllerBase
     {
         private readonly IConsumerService _consumerService;
@@ -70,6 +72,8 @@ namespace Qualiteste.ServerApp.Controllers
                 return Problem(statusCode: 500, title:"Ocorreu um erro inesperado");
             }
         }
+
+        [Authorize("ADMIN")]
         [HttpPost]
         [ProducesResponseType(201)]
         public IActionResult CreateNewConsumer([FromBody] ConsumerInputModel consumer)
@@ -90,6 +94,7 @@ namespace Qualiteste.ServerApp.Controllers
             }
         }
 
+        [Authorize("ADMIN")]
         [HttpPut("{id}")]
         [ProducesResponseType(200, Type = typeof(ConsumerOutputModel))]
 
@@ -109,6 +114,8 @@ namespace Qualiteste.ServerApp.Controllers
             }
         }
 
+
+        [Authorize("ADMIN")]
         [HttpDelete("{id}")]
         [ProducesResponseType(200, Type = typeof(ConsumerOutputModel))]
 

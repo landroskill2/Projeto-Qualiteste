@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Qualiteste.ServerApp.Dtos;
 using Qualiteste.ServerApp.Services;
 using Qualiteste.ServerApp.Services.Concrete;
@@ -7,6 +8,7 @@ using Qualiteste.ServerApp.Utils;
 
 namespace Qualiteste.ServerApp.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class SessionsController : ControllerBase
@@ -60,6 +62,7 @@ namespace Qualiteste.ServerApp.Controllers
 
         }
 
+        [Authorize("ADMIN")]
         [HttpPost]
         [ProducesResponseType(201)]
         public IActionResult CreateNewSession([FromBody] SessionInputModel sessionInput)
@@ -80,6 +83,7 @@ namespace Qualiteste.ServerApp.Controllers
             }
         }
 
+        [Authorize("ADMIN")]
         [HttpPut("{id}")]
         [ProducesResponseType(200, Type = typeof(SessionOutputModel))]
         public IActionResult UpdateSession(int id, [FromBody] SessionInputModel sessionInput)
@@ -98,6 +102,8 @@ namespace Qualiteste.ServerApp.Controllers
             }
         }
 
+
+        [Authorize("ADMIN")]
         [HttpPost("{id}/tests")]
         public IActionResult AddTestToSession(string id, [FromBody] string test)
         {
@@ -115,6 +121,8 @@ namespace Qualiteste.ServerApp.Controllers
             }
         }
 
+
+        [Authorize("ADMIN")]
         [HttpPost("{id}/consumers")]
         public IActionResult AddConsumerToSession(string id, [FromBody] int consumer)
         {

@@ -43,8 +43,8 @@ export default function Tests(): React.ReactElement{
       type === null ? null : {type: type},
     )
 
-    const response = await fetchTests(filters).then(res => res.json())
-    setTests(response)
+    const response = await fetchTests(filters)
+    setTests(response.data)
     setIsLoading(false)
   }
   return (

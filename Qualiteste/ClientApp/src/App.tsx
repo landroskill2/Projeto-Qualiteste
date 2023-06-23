@@ -1,4 +1,5 @@
 import {
+  BrowserRouter,
   RouterProvider,
   useLocation,
 } from "react-router-dom";
@@ -9,11 +10,11 @@ import { ChakraProvider } from "@chakra-ui/react";
 
 function App() {
   return (
+    <BrowserRouter>
       <ChakraProvider>
-          <Layout>
-            <RouterProvider router={AppRoutes} />
-          </Layout>
+          <AppRoutes />
       </ChakraProvider>
+    </BrowserRouter>
   );
 }
 export default App;

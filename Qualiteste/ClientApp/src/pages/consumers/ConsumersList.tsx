@@ -17,6 +17,7 @@ import { useNavigate } from "react-router-dom";
 import FilterBar from "../../components/FilterBar";
 import { fetchConsumers } from "../../common/APICalls";
 import ConsumersTable from "../../components/tables/ConsumersTable";
+import WithPermission from "../../auth/WithPermission";
 
 
 export default function Consumers(): React.ReactElement{
@@ -47,8 +48,8 @@ export default function Consumers(): React.ReactElement{
       searchString === null ? null : {name: searchString}
     )
 
-    const response = await fetchConsumers(filters).then(res => res.json())
-    setConsumers(response)
+    const response = await fetchConsumers(filters)
+    setConsumers(response.data)
     setIsLoading(false)
   }
 
@@ -77,11 +78,13 @@ export default function Consumers(): React.ReactElement{
             </>
           )}
       </div>
-      <div className="p-6 bg-white" style={{ flexShrink: 0 }}>
-        <Button colorScheme="blue" onClick={redirectToConsumerCreation}>
-          Criar Provador
-        </Button>
-      </div>
+      <WithPermission roleRequired="ADMIN">
+        <div className="p-6 bg-white" style={{ flexShrink: 0 }}>
+          <Button colorScheme="blue" onClick={redirectToConsumerCreation}>
+            Criar Provador
+          </Button>
+        </div>
+      </WithPermission>
     </div>
   );
 }

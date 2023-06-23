@@ -38,8 +38,8 @@ export default function Sessions(): React.ReactElement{
 
   async function populateData() {
 
-    const response = await fetchSessions().then(res => res.json())
-    setSessions(response)
+    const response = await fetchSessions()
+    setSessions(response.data)
     setIsLoading(false)
   }
 

@@ -39,8 +39,8 @@ export default function AddConsumersModal({onClickConsumer} : ModalProps) : Reac
           searchString === null ? null : {name: searchString}
         )
     
-        const response = await fetchConsumers(filters).then(res => res.json())
-        setConsumers(response)
+        const response = await fetchConsumers(filters)
+        setConsumers(response.data)
       }
 
     return(

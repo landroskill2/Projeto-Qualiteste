@@ -30,11 +30,12 @@ export default function Test(): React.ReactElement {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetchTestById(id!!).then(res => res.json());
+        const response = await fetchTestById(id!!)
+        const data = response.data
 
-        setSession(response.session);
-        setConsumers(response.consumers);
-        setTest(response.test);
+        setSession(data.session);
+        setConsumers(data.consumers);
+        setTest(data.test);
       } catch (error) {
         console.error("Error fetching data:", error);
       }

@@ -1,15 +1,24 @@
 import React, { useState } from 'react';
 import { Box, Button, ChakraProvider, Container, FormControl, FormLabel, Image, Input, Stack } from '@chakra-ui/react';
-import { loginUser } from '../../common/APICalls';
+import { changeInstanceToken, loginUser } from '../../common/APICalls';
+import { useNavigate } from 'react-router-dom';
 
 export default function Login() : React.ReactElement  {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate()
   
   const handleLogin = async (event: React.FormEvent) => {
     event.preventDefault()
 
-    loginUser(username, password)
+    const resp = await loginUser(username, password)
+    console.log(resp)
+    if(resp.status == 200){
+      const token = resp.data
+      localStorage.setItem("QualitesteToken", token)
+      changeInstanceToken()
+      navigate("/")
+    }
   }
 
   return (

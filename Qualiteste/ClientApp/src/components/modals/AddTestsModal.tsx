@@ -30,8 +30,8 @@ export default function AddTestsModal({onClickTest} : ModalProps) : React.ReactE
       async function populateData() {
         const filters = { type : "SP" }
       
-          const response = await fetchTests(filters).then(res => res.json())
-          setTests(response)
+          const response = await fetchTests(filters)
+          setTests(response.data)
       }
 
     return(

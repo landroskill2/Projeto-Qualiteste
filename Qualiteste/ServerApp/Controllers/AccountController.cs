@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Qualiteste.ServerApp.Dtos;
 using Qualiteste.ServerApp.Services;
 using Qualiteste.ServerApp.Services.Errors;
@@ -37,6 +38,7 @@ namespace Qualiteste.ServerApp.Controllers
             }
         }
 
+        [Authorize("ADMIN")]
         [HttpPost("register")]
         public IActionResult Register(UserDto user)
         {

@@ -44,11 +44,11 @@ namespace Qualiteste.ServerApp.Services.Concrete
         private string GenerateToken(User dbUser)
         {
             {
-                var mySecret = "randomsecret87654321213456789012";
+                var mySecret = TokenSettings.Key;
                 var mySecurityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(mySecret));
 
-                var myIssuer = "Qualiteste";
-                var myAudience = "Qualiteste";
+                var myIssuer = TokenSettings.Issuer;
+                var myAudience = TokenSettings.Audience;
 
                 var tokenHandler = new JwtSecurityTokenHandler();
                 var tokenDescriptor = new SecurityTokenDescriptor
@@ -58,7 +58,7 @@ namespace Qualiteste.ServerApp.Services.Concrete
                         new Claim(ClaimTypes.NameIdentifier, dbUser.Username),
                         new Claim(ClaimTypes.Role, dbUser.RoleNavigation.Roledesignation)
                     }),
-                        Expires = DateTime.UtcNow.AddDays(7),
+                        Expires = TokenSettings.Expiration,
                         Issuer = myIssuer,
                         Audience = myAudience,
                         SigningCredentials = new SigningCredentials(mySecurityKey, SecurityAlgorithms.HmacSha256Signature)

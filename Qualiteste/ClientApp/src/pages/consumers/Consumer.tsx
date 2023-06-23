@@ -24,8 +24,8 @@ export default function Consumer(): React.ReactElement {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetchConsumerById(Number(id)).then(res => res.json())
-      const { consumer, sessions, tests } = response;
+      const response = await fetchConsumerById(Number(id))
+      const { consumer, sessions, tests } = response.data;
 
       setConsumerData(consumer);
       setSessionData(sessions);

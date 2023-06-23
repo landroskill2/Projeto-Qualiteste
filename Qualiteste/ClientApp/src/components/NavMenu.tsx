@@ -1,14 +1,19 @@
 import React, { Component, useCallback, useEffect, useState } from 'react';
 import CustomNavLink from './CustomNavLink';
 import AppRoutes from '../common/AppRoutes';
+import { useAuth } from '../auth/useAuth';
+import { useNavigate } from 'react-router-dom';
 
 
 export default function NavMenu() {
+  const account = useAuth()
+  const navigate = useNavigate()
   const [toggleNav, setToggleNav] = useState<boolean>(false);
   const changeToggle = useCallback(() => {
     setToggleNav(!toggleNav);
   }, [toggleNav]);
-  
+  const role = account?.role
+
   useEffect(() => {
     document.addEventListener("click", (e) => {
       if (toggleNav) {
@@ -31,7 +36,7 @@ export default function NavMenu() {
           <span
             className="text-white"
             id="nav-title"
-            onClick={() => AppRoutes.navigate("/")}
+            onClick={() => navigate("/")}
           >
             Qualiteste
           </span>
@@ -45,26 +50,36 @@ export default function NavMenu() {
                   Home
                 </CustomNavLink>
               </li>
-              <li className="text-white">
-                <CustomNavLink href="/consumers" toggleNavBar={changeToggle}>
-                  Provadores
-                </CustomNavLink>
-              </li>
-              <li className="text-white">
-                <CustomNavLink href="/tests" toggleNavBar={changeToggle}>
-                  Testes
-                </CustomNavLink>
-              </li>
-              <li className="text-white">
-                <CustomNavLink href="/sessions" toggleNavBar={changeToggle}>
-                  Sessões
-                </CustomNavLink>
-              </li>
-              <li className="text-white">
-                <CustomNavLink href="/login" toggleNavBar={changeToggle}>
-                  Login
-                </CustomNavLink>
-              </li>
+              {account ? (
+                <>
+                  <li className="text-white">
+                    <CustomNavLink href="/consumers" toggleNavBar={changeToggle}>
+                      Provadores
+                    </CustomNavLink>
+                  </li>
+                  <li className="text-white">
+                    <CustomNavLink href="/tests" toggleNavBar={changeToggle}>
+                      Testes
+                    </CustomNavLink>
+                  </li>
+                  <li className="text-white">
+                    <CustomNavLink href="/sessions" toggleNavBar={changeToggle}>
+                      Sessões
+                    </CustomNavLink>
+                  </li>
+                  <li className="text-white">
+                    <CustomNavLink href="/" toggleNavBar={changeToggle} onClick={() => {localStorage.clear(); navigate("/")}}>
+                      Logout
+                    </CustomNavLink>
+                  </li>
+                </>
+              ) : (
+                <li className="text-white">
+                  <CustomNavLink href="/login" toggleNavBar={changeToggle}>
+                    Login
+                  </CustomNavLink>
+                </li>
+              )}
             </ul>
           </div>
         </div>

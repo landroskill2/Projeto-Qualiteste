@@ -7,7 +7,6 @@ using Qualiteste.ServerApp.Utils;
 
 namespace Qualiteste.ServerApp.Services.Concrete
 {
-    [Authorize(Roles ="ADMIN")]
     public class ConsumerService : IConsumerService
     {
         private readonly IUnitOfWork _unitOfWork;
