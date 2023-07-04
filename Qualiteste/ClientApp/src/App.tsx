@@ -4,14 +4,15 @@ import {
   useLocation,
 } from "react-router-dom";
 
-import Layout from "./components/Layout";
 import AppRoutes from "./common/AppRoutes"
 import { ChakraProvider } from "@chakra-ui/react";
+
+
 
 function App() {
   return (
     <BrowserRouter>
-      <ChakraProvider>
+      <ChakraProvider toastOptions={{ defaultOptions: {position: 'bottom'} }}>
           <AppRoutes />
       </ChakraProvider>
     </BrowserRouter>

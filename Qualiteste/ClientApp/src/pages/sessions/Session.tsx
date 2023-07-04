@@ -8,6 +8,7 @@ import {
   Td,
   Heading,
   Box,
+  useToast,
 } from "@chakra-ui/react";
 import { ISessionModel } from '../../common/Interfaces/Sessions'
 import { IConsumerSessionOutputModel } from '../../common/Interfaces/Sessions'
@@ -24,6 +25,7 @@ export default function Session() : React.ReactElement{
   const [consumerSessions, setConsumerSessions] = useState<IConsumerSessionOutputModel[]>([]);
   const [tests, setTests] = useState<ITestOutputModel[]>([]);
   const {id} = useParams()
+  const toast = useToast()
   const navigate = useNavigate()
 
   const redirectToConsumerPage = (id: number) => {
@@ -41,6 +43,9 @@ export default function Session() : React.ReactElement{
 
   const addConsumer = (consumerID : number) => {
     addConsumerToSession(id!, consumerID) // TODO: add action on response
+    toast({
+      title: "toasty"
+    })
     window.location.reload()
   }
 

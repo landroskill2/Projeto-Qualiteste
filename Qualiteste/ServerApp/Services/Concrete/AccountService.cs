@@ -31,11 +31,11 @@ namespace Qualiteste.ServerApp.Services.Concrete
         {
 
             User? DbUser = _unitOfWork.Users.GetById(user.Username);
-            if(DbUser == null) { return null; } //retornar erro a dizer que o username está errado
+            if(DbUser == null) return new UsernameNotFound(); 
 
             string encryptedPassword = SHA256Encryption.EncryptString(user.Password);
 
-            if (encryptedPassword != DbUser.Pwd) return null; //retornar erro a dizer que a password está errada
+            if (encryptedPassword != DbUser.Pwd) return new IncorrectPassword();
 
             return GenerateToken(DbUser);
 
