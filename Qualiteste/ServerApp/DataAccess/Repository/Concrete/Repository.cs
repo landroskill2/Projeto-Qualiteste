@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Qualiteste.ServerApp.Models;
 using System.Linq.Expressions;
 
 namespace Qualiteste.ServerApp.DataAccess.Repository.Concrete
@@ -42,7 +43,11 @@ namespace Qualiteste.ServerApp.DataAccess.Repository.Concrete
 
         public void Update(TEntity entity)
         {
-            Context.Set<TEntity>().Update(entity);
+            using (var tran = Context.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+            {
+                Context.Set<TEntity>().Update(entity);
+                //tran.Commit();
+            }
         }
     }
 }
