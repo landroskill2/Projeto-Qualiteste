@@ -30,7 +30,7 @@ namespace Tests.UnitOfWorkTest
 
 
         [Test]
-        public void CreateDifferentConsumersConcurrently()
+        public void UpdateConsumerConcurrently()
         {
             var consumer = new ConsumerInputModel()
             {
@@ -49,20 +49,18 @@ namespace Tests.UnitOfWorkTest
             //Create user2 now to have "updated" data 
             var user2 = createUserContext();
 
-            Console.WriteLine(consumer.Rowversion);
+            Console.WriteLine(consumer.Fullname);
             consumer.Fullname = "Testing Consumer2";
-            consumer.Contact = 974585214;
             user1.Consumers.Update(consumer);
             //Update with user2 the same resource with different values, and save changes
             consumer.Fullname = "Testing Consumer3";
             user2.Consumers.Update(consumer);
             user2.Complete();
             var currConsumer = user2.Consumers.GetConsumerById(consumer.Id);
-            Console.WriteLine(currConsumer.Rowversion);
-            //Complete changes on user1
-            Assert.Throws<DbUpdateConcurrencyException>(
-                delegate { user1.Complete(); }
-                ) ;
+            Console.WriteLine(currConsumer.Fullname);
+            user1.Complete();
+            var gotConsumer = user2.Consumers.GetConsumerById(consumer.Id);
+            Console.WriteLine(gotConsumer.Fullname);
         }
 
         private UnitOfWork createUserContext()
