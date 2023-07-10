@@ -229,3 +229,13 @@ C:\Users\landr\Desktop\Qualiteste\Tests\obj\Debug\net7.0\refint\Tests.dll
 C:\Users\landr\Desktop\Qualiteste\Tests\obj\Debug\net7.0\Tests.pdb
 C:\Users\landr\Desktop\Qualiteste\Tests\obj\Debug\net7.0\Tests.genruntimeconfig.cache
 C:\Users\landr\Desktop\Qualiteste\Tests\obj\Debug\net7.0\ref\Tests.dll
+C:\Users\landr\Desktop\Qualiteste\Tests\bin\Debug\net7.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\landr\Desktop\Qualiteste\Tests\bin\Debug\net7.0\Microsoft.Exchange.WebServices.Auth.dll
+C:\Users\landr\Desktop\Qualiteste\Tests\bin\Debug\net7.0\Microsoft.Exchange.WebServices.dll
+C:\Users\landr\Desktop\Qualiteste\Tests\bin\Debug\net7.0\Microsoft.IdentityModel.Abstractions.dll
+C:\Users\landr\Desktop\Qualiteste\Tests\bin\Debug\net7.0\Microsoft.IdentityModel.JsonWebTokens.dll
+C:\Users\landr\Desktop\Qualiteste\Tests\bin\Debug\net7.0\Microsoft.IdentityModel.Logging.dll
+C:\Users\landr\Desktop\Qualiteste\Tests\bin\Debug\net7.0\Microsoft.IdentityModel.Protocols.dll
+C:\Users\landr\Desktop\Qualiteste\Tests\bin\Debug\net7.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+C:\Users\landr\Desktop\Qualiteste\Tests\bin\Debug\net7.0\Microsoft.IdentityModel.Tokens.dll
+C:\Users\landr\Desktop\Qualiteste\Tests\bin\Debug\net7.0\System.IdentityModel.Tokens.Jwt.dll

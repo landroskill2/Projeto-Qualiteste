@@ -55,11 +55,15 @@ INSERT INTO PRODUCT(ProductID, Designation, Brand) VALUES
 (573626, 'Pastel de Nata', 'Auchan'),
 (123123, 'Mala Eastpack', 'Continente');
 
-INSERT INTO TEST(InternalID, Product, TestType, ConsumersNumber, RequestDate, ValidationDate, DueDate, ReportDeliveryDate) VALUES
-('443244', 122332, 'SP', 10, '2023-03-21', null, null, null),
-('343123', 324231, 'SP', 10, '2023-03-29', null, null, null),
-('583828', 573626, 'SP', 36, '2023-05-20', null, null, null),
-('041234', 123123, 'HT', 10, '2023-03-29', null, null, null);
+INSERT INTO SESSION(SessionID, SessionDate, ConsumersNumber) VALUES
+('040423', '2023-04-04', 10),
+('250523', '2023-05-25', 36);
+
+INSERT INTO TEST(InternalID, Product, TestType, ConsumersNumber, RequestDate, ValidationDate, DueDate, ReportDeliveryDate, SessionID) VALUES
+('443244', 122332, 'SP', 10, '2023-03-21', null, null, null, '040423'),
+('343123', 324231, 'SP', 10, '2023-03-29', null, null, null, '040423'),
+('583828', 573626, 'SP', 36, '2023-05-20', null, null, null, '250523'),
+('041234', 123123, 'HT', 10, '2023-03-29', null, null, null, null);
 
 INSERT INTO SAMPLE(TestID, ProductID, ReceptionDate) VALUES
 ('443244', 132321, '2023-03-24'),
@@ -67,16 +71,6 @@ INSERT INTO SAMPLE(TestID, ProductID, ReceptionDate) VALUES
 ('343123', 321332, '2023-04-01'),
 ('583828', 573626, '2023-05-16'),
 ('041234', 123123, '2023-04-01');
-
-
-INSERT INTO SESSION(SessionID, SessionDate, ConsumersNumber) VALUES
-('040423', '2023-04-04', 10),
-('250523', '2023-05-25', 36);
-
-INSERT INTO SESSION_TESTS(SessionID, TestID) VALUES
-('040423', '443244'),
-('250523', '583828'),
-('040423', '343123');
 
 INSERT INTO CONSUMER_SESSION(SessionID, ConsumerID, ContactedDate, ConfirmationDate, SessionTime, Attendance, StampDate) VALUES
 ('040423', 6, '2023-03-01', '2023-03-02', '11:00', null, null),
@@ -137,7 +131,7 @@ INSERT INTO CONSUMER_HT(TestID, ConsumerID, DeliveryDate, DueDate, ResponseDate,
 ('041234', 67, '2023-03-01', null, null, null);
 
 INSERT INTO ROLES(RoleDesignation) VALUES
-('ADMIN')
+('ADMIN');
 
-INSERT INTO USER(Username, Pwd) VALUES
-("admin", "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918")
+INSERT INTO USERS(Username, Pwd, Role) VALUES
+('admin', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', 1);

@@ -21,6 +21,8 @@ public partial class Test
 
     public DateOnly? Reportdeliverydate { get; set; }
 
+    public uint Version { get; set; }
+
     public string? Sessionid { get; set; }
 
     public virtual ICollection<ConsumerHt> ConsumerHts { get; } = new List<ConsumerHt>();

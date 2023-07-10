@@ -43,7 +43,7 @@ namespace Qualiteste.ServerApp.DataAccess.Repository.Concrete
 
         public void Update(TEntity entity)
         {
-            using (var tran = Context.Database.BeginTransaction(System.Data.IsolationLevel.Serializable))
+            using (var tran = Context.Database.BeginTransaction(System.Data.IsolationLevel.RepeatableRead))
             {
                 Context.Set<TEntity>().Update(entity);
                 //tran.Commit();

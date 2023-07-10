@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Qualiteste.ServerApp.Models;
 
@@ -18,6 +19,8 @@ public partial class Consumer
     public int Contact { get; set; }
 
     public string? Email { get; set; }
+
+    public uint Version { get; set; }
 
     public virtual ICollection<AttributeValue> AttributeValues { get; } = new List<AttributeValue>();
 
