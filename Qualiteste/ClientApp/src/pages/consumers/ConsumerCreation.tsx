@@ -10,6 +10,8 @@ import {
 } from "@chakra-ui/react";
 import { IConsumerInputModel } from "../../common/Interfaces/Consumers";
 import { createConsumer } from "../../common/APICalls";
+import { useGlobalToast } from "../../common/useGlobalToast";
+import { useNavigate } from "react-router-dom";
 
 const initialConsumer: IConsumerInputModel = {
     fullname: "",
@@ -21,6 +23,8 @@ const initialConsumer: IConsumerInputModel = {
   
   export default function ConsumerCreation(): React.ReactElement {
     const [consumer, setConsumer] = useState<IConsumerInputModel>(initialConsumer);
+    const { addToast, isToastActive } = useGlobalToast() 
+    const navigate = useNavigate()
   
     const handleInputChange = (
       e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -33,9 +37,24 @@ const initialConsumer: IConsumerInputModel = {
       }));
     };
   
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      createConsumer(consumer)
+      const resp = await createConsumer(consumer).catch(err => {
+        console.log(err)
+        if(!isToastActive("error")){
+          addToast({
+            id: "error",
+            title: "Erro",
+            description: err.response.data.title,
+            status: "error"
+          })
+        }
+      })
+      if(resp?.status === 201){
+        const toastObj = {id: "success", title: "Sucesso", description: "Provador criado com sucesso.", status: "success"}
+        const location = resp!.headers.location.split("/api")[1]
+        navigate(location, {state: toastObj})
+      }
     };
 
     return (

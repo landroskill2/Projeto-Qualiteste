@@ -59,6 +59,7 @@ namespace Tests.UnitOfWorkTest
             var currConsumer = ctx2.Consumers.GetConsumerById(consumer.Id);
             Console.WriteLine(currConsumer.Contact);
             Assert.Throws<DbUpdateConcurrencyException>(() => ctx1.Complete());
+
         }
 
         [Test]

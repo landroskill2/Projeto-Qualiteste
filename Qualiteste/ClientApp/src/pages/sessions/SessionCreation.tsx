@@ -9,6 +9,8 @@ import {
 } from "@chakra-ui/react";
 import { ISessionModel } from "../../common/Interfaces/Sessions";
 import { createSession } from "../../common/APICalls";
+import { useGlobalToast } from "../../common/useGlobalToast";
+import { useNavigate } from "react-router-dom";
 
 const initialSession: ISessionModel = {
   id: "",
@@ -18,6 +20,8 @@ const initialSession: ISessionModel = {
 
 export default function SessionCreation(): React.ReactElement {
   const [session, setSession] = useState<ISessionModel>(initialSession);
+  const { addToast, isToastActive } = useGlobalToast() 
+    const navigate = useNavigate()
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement>
@@ -40,9 +44,26 @@ export default function SessionCreation(): React.ReactElement {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    createSession(session)
+    
+
+    const resp = await createSession(session).catch(err => {
+      console.log(err)
+      if(!isToastActive("error")){
+        addToast({
+          id: "error",
+          title: "Erro",
+          description: err.response.data.title,
+          status: "error"
+        })
+      }
+    })
+    if(resp?.status === 201){
+      const toastObj = {id: "success", title: "Sucesso", description: "Sessão criada com sucesso.", status: "success"}
+      const location = resp!.headers.location.split("/api")[1]
+      navigate(location, {state: toastObj})
+    }
   };
 
   return (

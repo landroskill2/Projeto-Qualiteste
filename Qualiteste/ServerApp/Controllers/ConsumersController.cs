@@ -73,7 +73,7 @@ namespace Qualiteste.ServerApp.Controllers
             }
         }
 
-        [Authorize("ADMIN")]
+        [Authorize(Roles = "ADMIN")]
         [HttpPost]
         [ProducesResponseType(201)]
         public IActionResult CreateNewConsumer([FromBody] ConsumerInputModel consumer)
@@ -94,7 +94,7 @@ namespace Qualiteste.ServerApp.Controllers
             }
         }
 
-        [Authorize("ADMIN")]
+        [Authorize(Roles = "ADMIN")]
         [HttpPut("{id}")]
         [ProducesResponseType(200, Type = typeof(ConsumerOutputModel))]
 
@@ -115,7 +115,7 @@ namespace Qualiteste.ServerApp.Controllers
         }
 
 
-        [Authorize("ADMIN")]
+        [Authorize(Roles = "ADMIN")]
         [HttpDelete("{id}")]
         [ProducesResponseType(200, Type = typeof(ConsumerOutputModel))]
 

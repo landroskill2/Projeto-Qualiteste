@@ -76,7 +76,7 @@ namespace Qualiteste.ServerApp.Controllers
 
         }
 
-        [Authorize("ADMIN")]
+        [Authorize(Roles = "ADMIN")]
         [HttpPost]
         [ProducesResponseType(201)]
         public IActionResult CreateNewTest([FromBody] TestInputModel testInput)
@@ -97,7 +97,7 @@ namespace Qualiteste.ServerApp.Controllers
             }
         }
 
-        [Authorize("ADMIN")]
+        [Authorize(Roles = "ADMIN")]
         [HttpPut("{id}")]
         [ProducesResponseType(200, Type = typeof(TestOutputModel))]
         public IActionResult UpdateTest(int id, [FromBody] TestInputModel testInput)
@@ -116,7 +116,7 @@ namespace Qualiteste.ServerApp.Controllers
             }
         }
 
-        [Authorize("ADMIN")]
+        [Authorize(Roles = "ADMIN")]
         [HttpPost("{id}/consumers")]
         [ProducesResponseType(200, Type = typeof(string))]
         public IActionResult AddConsumerToTest(string id, [FromBody] int consumer)
@@ -151,7 +151,7 @@ namespace Qualiteste.ServerApp.Controllers
             }
         }
 
-        [Authorize("ADMIN")]
+        [Authorize(Roles = "ADMIN")]
         [HttpPost("{id}/upload")]
         public async Task<IActionResult> UploadCSV(int id, IFormFile csvFile)
         {

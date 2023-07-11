@@ -8,7 +8,7 @@ export function Home() : React.ReactElement {
   const {state} = useLocation()
 
   useEffect(() => {
-    console.log(state)
+    
     if(state !== null){
       if(!isToastActive("success")){
         addToast(state)

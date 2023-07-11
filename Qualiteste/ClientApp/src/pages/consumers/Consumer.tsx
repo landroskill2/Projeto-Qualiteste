@@ -4,7 +4,8 @@ import {IConsumerOutputModel} from '../../common/Interfaces/Consumers';
 import { ISessionModel } from '../../common/Interfaces/Sessions';
 import { ITestOutputModel } from '../../common/Interfaces/Tests';
 import { fetchConsumerById } from '../../common/APICalls';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useGlobalToast } from '../../common/useGlobalToast';
 
 export default function Consumer(): React.ReactElement {
   const [consumerData, setConsumerData] = useState<IConsumerOutputModel | null>(null);
@@ -12,6 +13,8 @@ export default function Consumer(): React.ReactElement {
   const [testData, setTestData] = useState<ITestOutputModel[]>([]);
   const { id } = useParams()
   const navigate = useNavigate()
+  const { addToast, isToastActive } = useGlobalToast() 
+  const {state} = useLocation()
 
 
   const redirectToSessionPage = (id: string) => {
@@ -23,6 +26,12 @@ export default function Consumer(): React.ReactElement {
 }
 
   useEffect(() => {
+    if(state !== null){
+      if(!isToastActive("success")){
+        addToast(state)
+      }
+    }
+
     const fetchData = async () => {
       const response = await fetchConsumerById(Number(id))
       const { consumer, sessions, tests } = response.data;

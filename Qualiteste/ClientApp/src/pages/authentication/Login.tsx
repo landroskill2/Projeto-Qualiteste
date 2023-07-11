@@ -8,7 +8,6 @@ export default function Login() : React.ReactElement  {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState(undefined)
-  const { addToast, isToastActive } = useGlobalToast() 
   const navigate = useNavigate()
   
   const handleLogin = async (event: React.FormEvent) => {
@@ -17,8 +16,8 @@ export default function Login() : React.ReactElement  {
     const resp = await loginUser(username, password).catch(err => {
       setErrorMessage(err.response.data.title)
     })
-    if(resp.status == 200){
-      const token = resp.data
+    if(resp?.status === 200){
+      const token = resp!.data
       localStorage.setItem("QualitesteToken", token)
       changeInstanceToken()
       const toastObj = {id: "success", title: "Sucesso", description: "Autenticação realizada com sucesso.", status: "success"}

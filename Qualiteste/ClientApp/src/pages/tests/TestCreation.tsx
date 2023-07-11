@@ -10,6 +10,8 @@ import {
 } from "@chakra-ui/react";
 import { ITestInputModel } from "../../common/Interfaces/Tests";
 import { createTest } from "../../common/APICalls";
+import { useGlobalToast } from "../../common/useGlobalToast";
+import { useNavigate } from "react-router-dom";
 
 const initialFormValues: ITestInputModel = {
   id: "",
@@ -20,7 +22,9 @@ const initialFormValues: ITestInputModel = {
 
 export default function TestCreation(): React.ReactElement {
   const [formValues, setFormValues] = useState<ITestInputModel>(initialFormValues);
-
+  const { addToast, isToastActive } = useGlobalToast() 
+  const navigate = useNavigate()
+  
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
@@ -42,9 +46,26 @@ export default function TestCreation(): React.ReactElement {
       }
   }
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    createTest(formValues)
+    
+
+    const resp = await createTest(formValues).catch(err => {
+      console.log(err)
+      if(!isToastActive("error")){
+        addToast({
+          id: "error",
+          title: "Erro",
+          description: err.response.data.title,
+          status: "error"
+        })
+      }
+    })
+    if(resp?.status === 201){
+      const toastObj = {id: "success", title: "Sucesso", description: "Teste criado com sucesso.", status: "success"}
+      const location = resp!.headers.location.split("/api")[1]
+      navigate(location, {state: toastObj})
+    }
   };
 
   const isHomeTest = formValues.testType === "HT";
