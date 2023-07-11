@@ -129,6 +129,21 @@ export async function getFizzTableValues(
     //return fetch(path)
 }
 
+//TODO
+//IS Boolean to test stuff
+export async function changeFizzAttributeAlias(
+    testId : string,
+    attrName : string,
+    newAlias : string
+    ) : Promise<boolean>{
+       let body = {
+        Name : attrName,
+        Alias : newAlias
+       }
+       const path = `/tests/${testId}/fizz`
+       return instance.post(path, JSON.stringify(body))
+}
+
 //Sessions
 export async function fetchSessions() : Promise<AxiosResponse>{
     let path = "/sessions"

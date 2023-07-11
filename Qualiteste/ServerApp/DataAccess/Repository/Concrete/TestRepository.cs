@@ -49,6 +49,13 @@ namespace Qualiteste.ServerApp.DataAccess.Repository.Concrete
             PostgresContext.FizzAttributes.Add(fizzAttribute);
         }
 
+        public void AddAliasToFizzAttribute(string testId, string attributeName, string updatedAlias)
+        {
+
+            FizzAttribute attr = PostgresContext.FizzAttributes.Single(a => a.Testid == testId && a.Attribute.Equals(attributeName));
+            attr.Alias = updatedAlias;
+            PostgresContext.FizzAttributes.Update(attr);
+        }
         public void AddAttributeValue(AttributeValue attributeValue)
         {
             PostgresContext.AttributeValues.Add(attributeValue);

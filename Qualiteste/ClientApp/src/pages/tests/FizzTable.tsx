@@ -4,6 +4,7 @@ import React from "react";
 import { useEffect, useState } from "react";
 import { IFizzValues } from '../../common/Interfaces/Tests';
 import { Box, Table, Thead, Tbody, Tr, Th, Td } from "@chakra-ui/react";
+import { AttributeAliasField } from '../../components/AttributeAliasField';
 
 export default function FizzResults(): React.ReactElement {
   const [data, setData] = useState<IFizzValues | null>(null);
@@ -11,6 +12,7 @@ export default function FizzResults(): React.ReactElement {
   const [productColumns, setProductColumns] = useState<Record<string, string>[]>([]);
   const [textHeight, setTextHeight] = useState<number>(0);
 
+  //test id
   const { id } = useParams();
 
   useEffect(() => {
@@ -66,7 +68,9 @@ export default function FizzResults(): React.ReactElement {
             <Thead>
               <Tr>
                 {Object.entries(commonColumns).map(([columnName, columnValue]) => (
-                  <Th key={columnName}>{columnValue}</Th>
+                  <Th key={columnName}>
+                     <AttributeAliasField name={columnName} value={columnValue} testId={id!}></AttributeAliasField>
+                  </Th>
                 ))}
               </Tr>
             </Thead>
@@ -92,7 +96,9 @@ export default function FizzResults(): React.ReactElement {
                 <Tr>
                   {Object.entries(product).map(([columnName, columnValue]) => {
                     if (columnName !== "productKey") {
-                      return <Th key={columnName}>{columnValue}</Th>;
+                      return <Th key={columnName}> 
+                               <AttributeAliasField name={columnName} value={columnValue} testId={id!}></AttributeAliasField>
+                             </Th>;
                     }
                     return null;
                   })}

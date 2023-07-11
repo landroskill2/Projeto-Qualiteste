@@ -33,13 +33,14 @@ export default function NavMenu() {
     >
       <nav className="bg-slate-900 border-gray-200 px-2 sm:px-4 py-2.5">
         <div className="container-fluid flex flex-wrap w-full items-center">
-          <span
-            className="text-white"
-            id="nav-title"
-            onClick={() => navigate("/")}
-          >
-            Qualiteste
-          </span>
+        <img
+          src="../../../public/QualitesteIcon.png"
+          alt="Logo"
+          className="text-white cursor-pointer"
+          id="nav-title"
+          onClick={() => navigate("/")}
+          style={{ width: "50px", height: "50px" }}
+          />
           <div
             className={"hidden w-full md:block md:w-auto"}
             id="navbar-default"

@@ -14,6 +14,8 @@ namespace Qualiteste.ServerApp.Services.Concrete
             _unitOfWork = unitOfWork;
         }
 
+       
+
         public Either<CustomError, IEnumerable<TestOutputModel>> GetTestsList()
         {
            
@@ -79,6 +81,21 @@ namespace Qualiteste.ServerApp.Services.Concrete
             }
         }
 
+        public Either<CustomError, string> UpdateAttributeAlias(string testId, FizzAliasDto alias)
+        {
+            try
+            {
+                _unitOfWork.Tests.AddAliasToFizzAttribute(testId, alias.Name, alias.Alias);
+                _unitOfWork.Complete();
+                return "Updated Succesfully";
+            }
+            catch (Exception e)
+            {
+                _unitOfWork.UntrackChanges();
+                throw e;
+            }
+            
+        }
 
         /*
          * TODO: Falar com a qualiteste para ver que campos eles entendem que podem ser alterados depois da criação

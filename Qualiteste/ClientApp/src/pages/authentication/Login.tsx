@@ -43,7 +43,7 @@ export default function Login() : React.ReactElement  {
                 <Input type="password" value={password} onChange={(e) => setPassword(e.target.value)}/>
               </FormControl>
               {errorMessage && <p className="text-red-500">{errorMessage}</p>}
-              <Button type="submit" colorScheme="blue" isFullWidth>Login</Button>
+              <Button type="submit" colorScheme="blue">Login</Button>
             </Stack>
           </form>
         </Container>

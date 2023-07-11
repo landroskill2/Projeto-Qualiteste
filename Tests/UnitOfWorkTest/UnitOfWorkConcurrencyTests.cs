@@ -42,17 +42,15 @@ namespace Tests.UnitOfWorkTest
                 Contact = 974585214,
                 Email = "thisisaemail@email.com"
             }.ToDbConsumer();
-
-            ctx1.Consumers.Add(consumer);
-            ctx1.Complete();
-            //Update consumer on user1 without completing
-            //Create user2 now to have "updated" data 
+            //Insert consumer with ctx2
             var ctx2 = createUserContext();
-
+            ctx2.Consumers.Add(consumer);
+            ctx2.Complete();
+            //ctx1 updates consumer without completing
             Console.WriteLine(consumer.Contact);
             consumer.Contact = consumer.Contact + 1;
             ctx1.Consumers.Update(consumer);
-            //Update with user2 the same resource with different values, and save changes
+            //Update with ctx2 the same resource with different values, and save changes
             consumer.Contact = consumer.Contact + 1;
             ctx2.Consumers.Update(consumer);
             ctx2.Complete();

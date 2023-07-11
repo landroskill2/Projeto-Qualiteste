@@ -26,7 +26,7 @@ namespace Tests.RepositoryTests
         [Test]
         public void ListByDescendingDate()
         {
-            var firstId = "343123";
+            var firstId = "583828";
             var lastId = "443244";
             IEnumerable<Test> tests = testRepository.ListTestsByDate();
 

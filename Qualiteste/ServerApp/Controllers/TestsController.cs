@@ -151,6 +151,24 @@ namespace Qualiteste.ServerApp.Controllers
             }
         }
 
+        [HttpPost("{id}/fizz")]
+        public IActionResult UpdateAttributeAlias(string id, [FromBody] FizzAliasDto alias)
+        {
+            try
+            {
+                //change string to object
+                Either<CustomError, string> result = _testService.UpdateAttributeAlias(id, alias);
+                return result.Match(
+                    error => Problem(statusCode: 500, title: "Something went wrong"),
+                    success => Ok(success)
+                    );
+            }
+            catch (Exception e)
+            {
+                return Problem(statusCode: 500, title: "Ocorreu um erro inesperado");
+            }
+        }
+
         [Authorize(Roles = "ADMIN")]
         [HttpPost("{id}/upload")]
         public async Task<IActionResult> UploadCSV(int id, IFormFile csvFile)

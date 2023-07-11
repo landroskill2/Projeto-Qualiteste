@@ -1,5 +1,5 @@
 import { Routes, Route, createBrowserRouter } from "react-router-dom";
-import { Home } from "../components/Home";
+import { Home } from "../pages/Home";
 import Consumers from "../pages/consumers/ConsumersList";
 import Consumer from "../pages/consumers/Consumer";
 import Tests from "../pages/tests/TestsList";
