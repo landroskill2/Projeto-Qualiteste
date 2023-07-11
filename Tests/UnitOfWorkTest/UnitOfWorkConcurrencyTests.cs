@@ -18,12 +18,12 @@ namespace Tests.UnitOfWorkTest
     {
 
         private PostgresContext context = TestsSetup.context;
-        private UnitOfWork user1;
+        private UnitOfWork ctx1;
 
         [OneTimeSetUp]
         public void SetUp()
         {
-            user1 = new UnitOfWork(context);
+            ctx1 = new UnitOfWork(context);
             //Create new context for user2
            
         }
@@ -43,24 +43,52 @@ namespace Tests.UnitOfWorkTest
                 Email = "thisisaemail@email.com"
             }.ToDbConsumer();
 
-            user1.Consumers.Add(consumer);
-            user1.Complete();
+            ctx1.Consumers.Add(consumer);
+            ctx1.Complete();
             //Update consumer on user1 without completing
             //Create user2 now to have "updated" data 
-            var user2 = createUserContext();
+            var ctx2 = createUserContext();
 
-            Console.WriteLine(consumer.Fullname);
-            consumer.Fullname = "Testing Consumer2";
-            user1.Consumers.Update(consumer);
+            Console.WriteLine(consumer.Contact);
+            consumer.Contact = consumer.Contact + 1;
+            ctx1.Consumers.Update(consumer);
             //Update with user2 the same resource with different values, and save changes
-            consumer.Fullname = "Testing Consumer3";
-            user2.Consumers.Update(consumer);
-            user2.Complete();
-            var currConsumer = user2.Consumers.GetConsumerById(consumer.Id);
-            Console.WriteLine(currConsumer.Fullname);
-            user1.Complete();
-            var gotConsumer = user2.Consumers.GetConsumerById(consumer.Id);
-            Console.WriteLine(gotConsumer.Fullname);
+            consumer.Contact = consumer.Contact + 1;
+            ctx2.Consumers.Update(consumer);
+            ctx2.Complete();
+            var currConsumer = ctx2.Consumers.GetConsumerById(consumer.Id);
+            Console.WriteLine(currConsumer.Contact);
+            Assert.Throws<DbUpdateConcurrencyException>(() => ctx1.Complete());
+
+        }
+
+        [Test]
+        public void AddTestToSession()
+        {
+            var test = new TestInputModel
+            {
+                ID = "test",
+                TestType = "SP",
+                ConsumersNumber = 10,
+                RequestDate = DateOnly.Parse("2023-03-29")
+            }.toDbTest();
+
+            ctx1.Tests.Add(test);
+            ctx1.Complete();
+
+            var ctx2 = createUserContext();
+
+            test.Sessionid = "040423";
+            ctx1.Tests.Update(test);
+
+            var test2 = test;
+
+            test2.Sessionid = "250523";
+            ctx2.Tests.Update(test2);
+
+            ctx2.Complete();
+
+            Assert.Throws<DbUpdateConcurrencyException>(() => ctx1.Complete());
         }
 
         private UnitOfWork createUserContext()

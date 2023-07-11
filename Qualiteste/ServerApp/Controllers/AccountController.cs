@@ -38,7 +38,7 @@ namespace Qualiteste.ServerApp.Controllers
             }
         }
 
-        [Authorize("ADMIN")]
+        [Authorize(Roles = "ADMIN")]
         [HttpPost("register")]
         public IActionResult Register(UserDto user)
         {

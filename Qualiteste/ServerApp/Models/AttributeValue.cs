@@ -13,6 +13,8 @@ public partial class AttributeValue
 
     public string Attribute { get; set; } = null!;
 
+    public uint Version { get; set; }
+
     public virtual Consumer Consumer { get; set; } = null!;
 
     public virtual FizzAttribute FizzAttribute { get; set; } = null!;

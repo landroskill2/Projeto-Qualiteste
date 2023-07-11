@@ -8,4 +8,5 @@ public partial class Client
     public string Acronym { get; set; } = null!;
 
     public string Companyname { get; set; } = null!;
+
 }

@@ -85,6 +85,9 @@ public partial class PostgresContext : DbContext
                 .HasForeignKey(d => new { d.Testid, d.Attribute })
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("attribute_values_testid_attribute_fkey");
+
+            entity.Property(e => e.Version)
+                .IsRowVersion();
         });
 
         modelBuilder.Entity<Client>(entity =>
@@ -128,6 +131,8 @@ public partial class PostgresContext : DbContext
             entity.Property(e => e.Sex)
                 .HasMaxLength(1)
                 .HasColumnName("sex");
+            entity.Property(e => e.Version)
+                .IsRowVersion();
         });
 
         modelBuilder.Entity<ConsumerHt>(entity =>
@@ -203,6 +208,8 @@ public partial class PostgresContext : DbContext
                 .HasForeignKey(d => d.Testid)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fizz_attributes_testid_fkey");
+            entity.Property(e => e.Version)
+                .IsRowVersion();
         });
 
         modelBuilder.Entity<Product>(entity =>
@@ -301,6 +308,8 @@ public partial class PostgresContext : DbContext
             entity.HasOne(d => d.Session).WithMany(p => p.Tests)
                 .HasForeignKey(d => d.Sessionid)
                 .HasConstraintName("test_sessionid_fkey");
+            entity.Property(e => e.Version)
+                .IsRowVersion();
         });
 
         modelBuilder.Entity<User>(entity =>

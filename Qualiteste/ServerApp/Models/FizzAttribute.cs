@@ -11,6 +11,8 @@ public partial class FizzAttribute
 
     public string? Alias { get; set; }
 
+    public uint Version { get; set; }
+
     public virtual ICollection<AttributeValue> AttributeValues { get; } = new List<AttributeValue>();
 
     public virtual Test Test { get; set; } = null!;

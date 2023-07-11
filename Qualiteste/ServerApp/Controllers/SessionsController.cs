@@ -62,7 +62,7 @@ namespace Qualiteste.ServerApp.Controllers
 
         }
 
-        [Authorize("ADMIN")]
+        [Authorize(Roles = "ADMIN")]
         [HttpPost]
         [ProducesResponseType(201)]
         public IActionResult CreateNewSession([FromBody] SessionInputModel sessionInput)
@@ -83,7 +83,7 @@ namespace Qualiteste.ServerApp.Controllers
             }
         }
 
-        [Authorize("ADMIN")]
+        [Authorize(Roles = "ADMIN")]
         [HttpPut("{id}")]
         [ProducesResponseType(200, Type = typeof(SessionOutputModel))]
         public IActionResult UpdateSession(int id, [FromBody] SessionInputModel sessionInput)
@@ -103,7 +103,7 @@ namespace Qualiteste.ServerApp.Controllers
         }
 
 
-        [Authorize("ADMIN")]
+        [Authorize(Roles = "ADMIN")]
         [HttpPost("{id}/tests")]
         public IActionResult AddTestToSession(string id, [FromBody] string test)
         {
@@ -122,7 +122,7 @@ namespace Qualiteste.ServerApp.Controllers
         }
 
 
-        [Authorize("ADMIN")]
+        [Authorize(Roles = "ADMIN")]
         [HttpPost("{id}/consumers")]
         public IActionResult AddConsumerToSession(string id, [FromBody] int consumer)
         {

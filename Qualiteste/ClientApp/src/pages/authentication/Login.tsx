@@ -3,14 +3,11 @@ import { Box, Button, ChakraProvider, Container, FormControl, FormLabel, Image, 
 import { changeInstanceToken, loginUser } from '../../common/APICalls';
 import { useNavigate } from 'react-router-dom';
 import { useGlobalToast } from '../../common/useGlobalToast';
-import { useAddToast, useIsToastActive } from '../../components/Layout';
 
 export default function Login() : React.ReactElement  {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState(undefined)
-  const addToast = useAddToast()
-  const isToastActive = useIsToastActive()
   const navigate = useNavigate()
   
   const handleLogin = async (event: React.FormEvent) => {
@@ -19,19 +16,12 @@ export default function Login() : React.ReactElement  {
     const resp = await loginUser(username, password).catch(err => {
       setErrorMessage(err.response.data.title)
     })
-    if(resp.status == 200){
-      const token = resp.data
+    if(resp?.status === 200){
+      const token = resp!.data
       localStorage.setItem("QualitesteToken", token)
       changeInstanceToken()
-      navigate("/")
-      if(!isToastActive("success")) {
-        addToast({
-          id: "success",
-          title: "Sucesso",
-          description: "Autenticação realizada com sucesso.",
-          status: "success"
-        })
-      }
+      const toastObj = {id: "success", title: "Sucesso", description: "Autenticação realizada com sucesso.", status: "success"}
+      navigate("/", {state : toastObj})
     }
   }
 

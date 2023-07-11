@@ -3,9 +3,10 @@ import { IConsumerOutputModel } from '../../common/Interfaces/Consumers';
 import { ISessionModel } from '../../common/Interfaces/Sessions';
 import { ITestOutputModel } from '../../common/Interfaces/Tests';
 import { addConsumerToTest, fetchTestById, uploadFile } from '../../common/APICalls';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from "react";
 import AddConsumersModal from "../../components/modals/AddConsumersModal";
+import { useGlobalToast } from "../../common/useGlobalToast";
 
 export default function Test(): React.ReactElement {
   const [session, setSession] = useState<ISessionModel | null>(null);
@@ -13,6 +14,8 @@ export default function Test(): React.ReactElement {
   const [test, setTest] = useState<ITestOutputModel | null>(null);
   const { id } = useParams();
   const navigate = useNavigate();
+  const { addToast, isToastActive } = useGlobalToast() 
+  const {state} = useLocation()
 
   const redirectToSessionPage = (id: string) => {
     navigate(`/sessions/${id}`);
@@ -28,6 +31,12 @@ export default function Test(): React.ReactElement {
   }
 
   useEffect(() => {
+    if(state !== null){
+      if(!isToastActive("success")){
+        addToast(state)
+      }
+    }
+
     const fetchData = async () => {
       try {
         const response = await fetchTestById(id!!)
