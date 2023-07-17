@@ -1,16 +1,19 @@
-import { getFizzTableValues } from '../../common/APICalls';
+import { changeFizzAttributesAlias, getFizzTableValues } from '../../common/APICalls';
 import { useNavigate, useParams } from 'react-router-dom';
 import React from "react";
 import { useEffect, useState } from "react";
 import { IFizzValues } from '../../common/Interfaces/Tests';
-import { Box, Table, Thead, Tbody, Tr, Th, Td } from "@chakra-ui/react";
+import { Box, Table, Thead, Tbody, Tr, Th, Td, Button } from "@chakra-ui/react";
 import { AttributeAliasField } from '../../components/AttributeAliasField';
+import FizzAttribute from '../../common/Interfaces/FizzAttributes';
 
 export default function FizzResults(): React.ReactElement {
   const [data, setData] = useState<IFizzValues | null>(null);
   const [commonColumns, setCommonColumns] = useState<Record<string, string>>({});
   const [productColumns, setProductColumns] = useState<Record<string, string>[]>([]);
   const [textHeight, setTextHeight] = useState<number>(0);
+  const [changedAlias, setChangedAlias] = useState<FizzAttribute[]>([])
+  const [editMode, setEditMode] = useState<boolean>(false)
 
   //test id
   const { id } = useParams();
@@ -18,6 +21,20 @@ export default function FizzResults(): React.ReactElement {
   useEffect(() => {
     populateValues();
   }, []);
+
+  function addChangedAlias(attr : FizzAttribute){
+    setChangedAlias(
+      [
+        ...changedAlias,
+        attr
+      ]
+    )
+  }
+
+  function onSave() {
+    setEditMode(false)
+    changeFizzAttributesAlias(id!, changedAlias)
+  }
 
   async function populateValues() {
     const res = await getFizzTableValues(id!);
@@ -62,6 +79,11 @@ export default function FizzResults(): React.ReactElement {
 
   return (
     <Box display="flex">
+      {!editMode && 
+        <Button onClick={() => setEditMode(true)}>Edit</Button>
+        ||
+        <Button onClick={() => onSave()}>Save</Button> 
+      }
       <Box flex="1" maxWidth="50%" overflowX="auto" marginRight="10px">
         {data && (
           <Table variant="simple" size="sm">
@@ -69,7 +91,7 @@ export default function FizzResults(): React.ReactElement {
               <Tr>
                 {Object.entries(commonColumns).map(([columnName, columnValue]) => (
                   <Th key={columnName}>
-                     <AttributeAliasField name={columnName} value={columnValue} testId={id!}></AttributeAliasField>
+                     <AttributeAliasField name={columnName} value={columnValue} editMode={editMode} addChangedAlias={addChangedAlias}></AttributeAliasField>
                   </Th>
                 ))}
               </Tr>
@@ -97,7 +119,7 @@ export default function FizzResults(): React.ReactElement {
                   {Object.entries(product).map(([columnName, columnValue]) => {
                     if (columnName !== "productKey") {
                       return <Th key={columnName}> 
-                               <AttributeAliasField name={columnName} value={columnValue} testId={id!}></AttributeAliasField>
+                               <AttributeAliasField name={columnName} value={columnValue} editMode={editMode} addChangedAlias={addChangedAlias}></AttributeAliasField>
                              </Th>;
                     }
                     return null;
