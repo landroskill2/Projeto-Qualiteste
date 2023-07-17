@@ -1,4 +1,5 @@
-﻿using Qualiteste.ServerApp.Models;
+﻿using Qualiteste.ServerApp.Dtos;
+using Qualiteste.ServerApp.Models;
 
 namespace Qualiteste.ServerApp.DataAccess.Repository
 {
@@ -9,8 +10,10 @@ namespace Qualiteste.ServerApp.DataAccess.Repository
         IEnumerable<Test> ListTestsByDate();
         IEnumerable<Test> ListTestsWithFilters(string type);
         void AddFizzAttribute(FizzAttribute fizzAttribute);
+       
+        IEnumerable<FizzAttribute> GetAttributesInTest(string id);
 
-        void AddAliasToFizzAttribute(string testId, string attributeName, string updatedAlias);
+        void AddAliasToFizzAttribute(string testId, FizzAliasDto[] alias);
         void AddAttributeValue(AttributeValue attributeValue);
         Dictionary<string, string> GetFizzColumns(int id);
         IEnumerable<IGrouping<int, AttributeValue>> GetFizzValuesGroupedByConsumer(int id);

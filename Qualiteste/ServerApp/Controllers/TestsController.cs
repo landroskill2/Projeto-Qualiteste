@@ -134,7 +134,7 @@ namespace Qualiteste.ServerApp.Controllers
                 return Problem(statusCode: 500, title: "Ocorreu um erro inesperado");
             }
         }
-
+        [Authorize(Roles = "ADMIN")]
         [HttpGet("{id}/fizz")]
         public IActionResult GetFizzTable(int id)
         {
@@ -150,9 +150,8 @@ namespace Qualiteste.ServerApp.Controllers
                 return Problem(statusCode: 500, title: "Ocorreu um erro inesperado");
             }
         }
-
         [HttpPost("{id}/fizz")]
-        public IActionResult UpdateAttributeAlias(string id, [FromBody] FizzAliasDto alias)
+        public IActionResult UpdateAttributeAlias(string id, [FromBody] FizzAliasDto[] alias)
         {
             try
             {
@@ -165,6 +164,7 @@ namespace Qualiteste.ServerApp.Controllers
             }
             catch (Exception e)
             {
+                Console.WriteLine(e.GetBaseException().ToString());
                 return Problem(statusCode: 500, title: "Ocorreu um erro inesperado");
             }
         }

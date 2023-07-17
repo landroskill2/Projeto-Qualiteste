@@ -3,6 +3,7 @@ using Qualiteste.ServerApp.Dtos;
 using Qualiteste.ServerApp.Models;
 using Qualiteste.ServerApp.Services.Errors;
 using Qualiteste.ServerApp.Utils;
+using System.Diagnostics;
 
 namespace Qualiteste.ServerApp.Services.Concrete
 {
@@ -80,12 +81,20 @@ namespace Qualiteste.ServerApp.Services.Concrete
                 throw ex;
             }
         }
-
-        public Either<CustomError, string> UpdateAttributeAlias(string testId, FizzAliasDto alias)
+        /**
+         * bulk update attributes on test
+         */
+        public Either<CustomError, string> UpdateAttributeAlias(string testId, FizzAliasDto[] alias)
         {
             try
             {
-                _unitOfWork.Tests.AddAliasToFizzAttribute(testId, alias.Name, alias.Alias);
+                
+                IEnumerable<FizzAttribute> attrsToUpdate = _unitOfWork.Tests.GetAttributesInTest(testId)
+                                                                .Where(attr => alias.Any(a => a.Name == attr.Attribute));
+                foreach(var v in alias)
+                {
+                    attrsToUpdate.Single(attr => attr.Attribute == v.Name).Alias = v.Alias;
+                }
                 _unitOfWork.Complete();
                 return "Updated Succesfully";
             }
