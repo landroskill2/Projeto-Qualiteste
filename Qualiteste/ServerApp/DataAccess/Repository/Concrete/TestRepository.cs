@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Qualiteste.ServerApp.Dtos;
 using Qualiteste.ServerApp.Models;
 using System;
 using System.Linq;
@@ -43,18 +44,20 @@ namespace Qualiteste.ServerApp.DataAccess.Repository.Concrete
             else return targetTest.Session?.ConsumerSessions.Select(cs => cs.Consumer);
 
         }
-
+        public IEnumerable<FizzAttribute> GetAttributesInTest(string id)
+        {
+            return PostgresContext.FizzAttributes.Where(attr => attr.Testid == id);
+        }
         public void AddFizzAttribute(FizzAttribute fizzAttribute)
         {
             PostgresContext.FizzAttributes.Add(fizzAttribute);
         }
 
-        public void AddAliasToFizzAttribute(string testId, string attributeName, string updatedAlias)
+        public void AddAliasToFizzAttribute(string testId, FizzAliasDto[] alias)
         {
 
-            FizzAttribute attr = PostgresContext.FizzAttributes.Single(a => a.Testid == testId && a.Attribute.Equals(attributeName));
-            attr.Alias = updatedAlias;
-            PostgresContext.FizzAttributes.Update(attr);
+            IEnumerable<FizzAttribute> attrs = alias.Select(a => a.toDbAttribute(testId));
+            PostgresContext.FizzAttributes.UpdateRange(attrs);
         }
         public void AddAttributeValue(AttributeValue attributeValue)
         {
