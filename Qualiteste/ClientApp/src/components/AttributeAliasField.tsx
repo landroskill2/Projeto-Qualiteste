@@ -21,8 +21,10 @@ export function AttributeAliasField({name, value, editMode, addChangedAlias} : A
     }
     
     const changeAlias = (recent : string) => {
+        console.log(currAlias)
+        console.log(recent)
         //If recent and old have same value, do nothing
-        if(recent == currAlias){
+        if(recent != currAlias){
             console.log("Alias updated successfully")
             //on success change currentAlias and display saying it went successfully
             addChangedAlias!({name: name, alias: recent} as FizzAttribute)
@@ -32,7 +34,7 @@ export function AttributeAliasField({name, value, editMode, addChangedAlias} : A
         <>
         { editMode && 
             <input value = {inputValue} onChange= {e => updateInputValue(e.target.value)} onBlur={ e => changeAlias(inputValue)}></input> ||
-            inputValue
+            currAlias
         }
         </>
     ) 

@@ -33,7 +33,13 @@ export default function FizzResults(): React.ReactElement {
 
   function onSave() {
     setEditMode(false)
+    console.log(changedAlias)
     changeFizzAttributesAlias(id!, changedAlias)
+  }
+
+  function onCancel(){
+    setEditMode(false)
+    
   }
 
   async function populateValues() {
@@ -82,7 +88,10 @@ export default function FizzResults(): React.ReactElement {
       {!editMode && 
         <Button onClick={() => setEditMode(true)}>Edit</Button>
         ||
-        <Button onClick={() => onSave()}>Save</Button> 
+        <>
+          <Button onClick={() => onSave()}>Save</Button>
+          <Button onClick={() => setEditMode(false)}>Cancel</Button>
+        </>
       }
       <Box flex="1" maxWidth="50%" overflowX="auto" marginRight="10px">
         {data && (
