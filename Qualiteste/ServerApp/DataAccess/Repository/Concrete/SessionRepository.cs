@@ -21,7 +21,7 @@ namespace Qualiteste.ServerApp.DataAccess.Repository.Concrete
 
         public IEnumerable<Test> GetTestsInSession(string id)
         {
-            return null;//GetSessionById(id).Tests.ToList();
+            return GetSessionById(id).Tests.ToList();
         }
 
         public void AddTestToSession(string id, Test test)
