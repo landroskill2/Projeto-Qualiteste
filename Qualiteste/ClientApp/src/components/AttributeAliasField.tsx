@@ -1,17 +1,18 @@
 import { useState, useEffect } from "react";
-import { changeFizzAttributeAlias } from "../common/APICalls";
+import FizzAttribute from "../common/Interfaces/FizzAttributes";
 
 type Attribute = {
-    testId : string
     //attribute alias value
     value : string
     //attribute designation
     name : string
+    editMode : boolean
+    addChangedAlias?: (attr: FizzAttribute) => void
 }
 
 
 
-export function AttributeAliasField({name, value, testId} : Attribute,) : React.ReactElement {
+export function AttributeAliasField({name, value, editMode, addChangedAlias} : Attribute) : React.ReactElement {
     const [currAlias, setCurrAlias] = useState(value)
     const [inputValue, setInputValue] = useState(value)
 
@@ -21,19 +22,18 @@ export function AttributeAliasField({name, value, testId} : Attribute,) : React.
     
     const changeAlias = (recent : string) => {
         //If recent and old have same value, do nothing
-        if(recent == currAlias) return 
-        changeFizzAttributeAlias(testId,name,recent).then(res => {
+        if(recent == currAlias){
             console.log("Alias updated successfully")
             //on success change currentAlias and display saying it went successfully
-            setCurrAlias(recent)
-        }).catch(err => {
-            console.log("Alias failed to update")
-             //on error change value on inputField back to the original
-            //and toast with error message
-            setInputValue(currAlias)
-        })
+            addChangedAlias!({name: name, alias: recent} as FizzAttribute)
+        }
     }
     return (
-        <input value = {inputValue} onChange= {e => updateInputValue(e.target.value)} onBlur={ e => changeAlias(inputValue)}></input>
+        <>
+        { editMode && 
+            <input value = {inputValue} onChange= {e => updateInputValue(e.target.value)} onBlur={ e => changeAlias(inputValue)}></input> ||
+            inputValue
+        }
+        </>
     ) 
 }

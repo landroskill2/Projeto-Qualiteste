@@ -2,6 +2,7 @@ import axios, { AxiosInstance, AxiosResponse } from "axios"
 import { IConsumerInputModel } from "./Interfaces/Consumers"
 import { ISessionModel } from "./Interfaces/Sessions"
 import { ITestInputModel } from "./Interfaces/Tests"
+import FizzAttribute from "./Interfaces/FizzAttributes"
 
 
 const instance: AxiosInstance = localStorage.getItem("QualitesteToken") ?
@@ -131,17 +132,12 @@ export async function getFizzTableValues(
 
 //TODO
 //IS Boolean to test stuff
-export async function changeFizzAttributeAlias(
+export async function changeFizzAttributesAlias(
     testId : string,
-    attrName : string,
-    newAlias : string
-    ) : Promise<boolean>{
-       let body = {
-        Name : attrName,
-        Alias : newAlias
-       }
+    attributes: FizzAttribute[]
+    ) : Promise<AxiosResponse>{
        const path = `/tests/${testId}/fizz`
-       return instance.post(path, JSON.stringify(body))
+       return instance.post(path, JSON.stringify(attributes))
 }
 
 //Sessions
