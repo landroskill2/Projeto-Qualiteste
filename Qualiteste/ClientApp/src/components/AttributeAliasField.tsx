@@ -13,12 +13,16 @@ type Attribute = {
 
 
 export function AttributeAliasField({name, value, editMode, addChangedAlias} : Attribute) : React.ReactElement {
-    const [currAlias, setCurrAlias] = useState(value)
+    const currAlias = value
     const [inputValue, setInputValue] = useState(value)
 
-    const updateInputValue= (value : string) => {
+    const updateInputValue = (value : string) => {
         setInputValue(value)
     }
+
+    useEffect(() => {
+        setInputValue(value)
+    },[editMode])
     
     const changeAlias = (recent : string) => {
         console.log(currAlias)

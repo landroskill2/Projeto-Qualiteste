@@ -12,6 +12,7 @@ export default function Test(): React.ReactElement {
   const [session, setSession] = useState<ISessionModel | null>(null);
   const [consumers, setConsumers] = useState<IConsumerOutputModel[] | null>(null);
   const [test, setTest] = useState<ITestOutputModel | null>(null);
+  const [isLoading, setIsLoading] = useState(true)
   const { id } = useParams();
   const navigate = useNavigate();
   const { addToast, isToastActive } = useGlobalToast() 
@@ -25,9 +26,17 @@ export default function Test(): React.ReactElement {
     navigate(`/consumers/${id}`);
   };
 
-  const addConsumer = (consumerID : number) => {
-    addConsumerToTest(id!, consumerID) // TODO: add action on response
-    window.location.reload()
+  const addConsumer = async (consumerID : number) => {
+    const resp = await addConsumerToTest(id!, consumerID).catch(err => {
+      addToast({id: "error", title: "Erro", description: err.response.data.title, status: "error"})
+    })
+    if(resp?.status === 200){
+      setIsLoading(true)
+      populateData().then(() => {
+        setIsLoading(false)
+        addToast({id: "success", title: "Sucesso", description: "Provador adicionado com sucesso.", status: "success"})
+      })   
+    }
   }
 
   useEffect(() => {
@@ -36,32 +45,41 @@ export default function Test(): React.ReactElement {
         addToast(state)
       }
     }
+    populateData().then(() => {
+      setIsLoading(false)
+    });
 
-    const fetchData = async () => {
-      try {
-        const response = await fetchTestById(id!!)
-        const data = response.data
-
-        setSession(data.session);
-        setConsumers(data.consumers);
-        setTest(data.test);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
   }, []);
 
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  async function populateData(){
+    try {
+      const response = await fetchTestById(id!!)
+      const data = response.data
+
+      setSession(data.session);
+      setConsumers(data.consumers);
+      setTest(data.test);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  }
+
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if(file) uploadFile(id!, file)
-    
+    if(file) {
+      const resp = await uploadFile(id!, file)
+      console.log(resp)
+      if(resp.status === 201) {
+        const toastObj = {id: "success", title: "Sucesso", description: "Ficheiro processado com sucesso.", status: "success"}
+        const location = resp!.headers.location.split("/api")[1]
+        navigate(location, {state: toastObj})
+      }
+    }
   };
 
   const isHomeTest = test?.type === "HT";
 
-  if (!test) {
+  if (isLoading) {
     // Render a loading spinner while waiting for the API response
     return (
       <Box
@@ -84,7 +102,7 @@ export default function Test(): React.ReactElement {
         mb={4}
       >
         <Box as="h1" fontSize="2xl" fontWeight="bold">
-          TestID = {test.id} 
+          TestID = {test!.id} 
         </Box>
 
         {isHomeTest && 
@@ -114,7 +132,7 @@ export default function Test(): React.ReactElement {
         {session?.id}
       </Box>
       <Box as="h1" fontSize="2xl" fontWeight="bold" mb={4}>
-        Number of Consumers: {test.consumersNumber.toString()}
+        Number of Consumers: {test!.consumersNumber.toString()}
       </Box>
       <Table variant="simple">
         <Thead>

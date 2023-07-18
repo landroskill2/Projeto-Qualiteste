@@ -176,7 +176,8 @@ namespace Qualiteste.ServerApp.Controllers
             try
             {
                 await _csvService.ParseCsv(csvFile, id);
-                return Ok("");
+                var actionName = nameof(TestsController.GetFizzTable);
+                return CreatedAtAction(actionName, new { id = id }, null);
             }catch(Exception ex)
             {
                 return Problem(statusCode: 500, title: "Ocorreu um erro inesperado");

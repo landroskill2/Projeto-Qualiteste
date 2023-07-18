@@ -1,11 +1,12 @@
 import { changeFizzAttributesAlias, getFizzTableValues } from '../../common/APICalls';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import React from "react";
 import { useEffect, useState } from "react";
 import { IFizzValues } from '../../common/Interfaces/Tests';
-import { Box, Table, Thead, Tbody, Tr, Th, Td, Button } from "@chakra-ui/react";
+import { Box, Table, Thead, Tbody, Tr, Th, Td, Button, Spinner } from "@chakra-ui/react";
 import { AttributeAliasField } from '../../components/AttributeAliasField';
 import FizzAttribute from '../../common/Interfaces/FizzAttributes';
+import { useGlobalToast } from '../../common/useGlobalToast';
 
 export default function FizzResults(): React.ReactElement {
   const [data, setData] = useState<IFizzValues | null>(null);
@@ -14,12 +15,21 @@ export default function FizzResults(): React.ReactElement {
   const [textHeight, setTextHeight] = useState<number>(0);
   const [changedAlias, setChangedAlias] = useState<FizzAttribute[]>([])
   const [editMode, setEditMode] = useState<boolean>(false)
+  const [isLoading, setIsLoading] = useState<boolean>(true)
+  const {addToast, isToastActive} = useGlobalToast()
+  const {state} = useLocation()
 
   //test id
   const { id } = useParams();
 
   useEffect(() => {
-    populateValues();
+    if(state !== null){
+      if(!isToastActive("success")){
+        addToast(state)
+      }
+    }
+
+    populateValues().then(() => setIsLoading(false));
   }, []);
 
   function addChangedAlias(attr : FizzAttribute){
@@ -31,15 +41,20 @@ export default function FizzResults(): React.ReactElement {
     )
   }
 
-  function onSave() {
+  async function onSave() {
     setEditMode(false)
     console.log(changedAlias)
-    changeFizzAttributesAlias(id!, changedAlias)
-  }
-
-  function onCancel(){
-    setEditMode(false)
-    
+    const resp = await changeFizzAttributesAlias(id!, changedAlias)
+    console.log(resp)
+    if(resp.status === 200) {
+      setIsLoading(true)
+      populateValues().then(() => {
+        setIsLoading(false)
+        if(!isToastActive){
+          addToast({id: "success", title: "Sucesso", description: "Nome do atributo alterado com sucesso.", status: "success"})
+        }
+      })
+    }
   }
 
   async function populateValues() {
@@ -84,73 +99,81 @@ export default function FizzResults(): React.ReactElement {
   console.log(data);
 
   return (
-    <Box display="flex">
-      {!editMode && 
-        <Button onClick={() => setEditMode(true)}>Edit</Button>
-        ||
-        <>
-          <Button onClick={() => onSave()}>Save</Button>
-          <Button onClick={() => setEditMode(false)}>Cancel</Button>
-        </>
-      }
-      <Box flex="1" maxWidth="50%" overflowX="auto" marginRight="10px">
-        {data && (
-          <Table variant="simple" size="sm">
-            <Thead>
-              <Tr>
-                {Object.entries(commonColumns).map(([columnName, columnValue]) => (
-                  <Th key={columnName}>
-                     <AttributeAliasField name={columnName} value={columnValue} editMode={editMode} addChangedAlias={addChangedAlias}></AttributeAliasField>
-                  </Th>
-                ))}
-              </Tr>
-            </Thead>
-            <Tbody>
-              {data.rows.map((row, index) => (
-                <Tr key={index}>
-                  {Object.entries(commonColumns).map(([columnName, _]) => (
-                    <Td key={columnName}>{row[columnName]}</Td>
-                  ))}
-                </Tr>
-              ))}
-            </Tbody>
-          </Table>
-        )}
-      </Box>
-
-      <Box flex="1" maxWidth="50%" overflowX="auto">
-        {productColumns.map((product, index) => (
-          <Box key={product.productKey} marginBottom="20px">
-            <h3>{`Product ${index + 1}`}</h3>
-            <Table variant="simple" size="sm">
-              <Thead>
-                <Tr>
-                  {Object.entries(product).map(([columnName, columnValue]) => {
-                    if (columnName !== "productKey") {
-                      return <Th key={columnName}> 
-                               <AttributeAliasField name={columnName} value={columnValue} editMode={editMode} addChangedAlias={addChangedAlias}></AttributeAliasField>
-                             </Th>;
-                    }
-                    return null;
-                  })}
-                </Tr>
-              </Thead>
-              <Tbody>
-                {data?.rows.map((row, rowIndex) => (
-                  <Tr key={rowIndex}>
-                    {Object.entries(product).map(([columnName, _]) => {
-                      if (columnName !== "productKey") {
-                        return <Td key={columnName}>{row[columnName]}</Td>;
-                      }
-                      return null;
-                    })}
+    <>
+      {isLoading && 
+        <div className="flex flex-col justify-center items-center h-full">
+          <Spinner size="lg" />
+        </div> ||
+        <Box display="flex">
+          {!editMode && 
+            <Button onClick={() => setEditMode(true)}>Edit</Button>
+            ||
+            <>
+              <Button onClick={() => onSave()}>Save</Button>
+              <Button onClick={() => setEditMode(false)}>Cancel</Button>
+            </>
+          }
+          <Box flex="1" maxWidth="50%" overflowX="auto" marginRight="10px">
+            {data && (
+              <Table variant="simple" size="sm">
+                <Thead>
+                  <Tr>
+                    {Object.entries(commonColumns).map(([columnName, columnValue]) => (
+                      <Th key={columnName}>
+                         <AttributeAliasField name={columnName} value={columnValue} editMode={editMode} addChangedAlias={addChangedAlias}></AttributeAliasField>
+                      </Th>
+                    ))}
                   </Tr>
-                ))}
-              </Tbody>
-            </Table>
+                </Thead>
+                <Tbody>
+                  {data.rows.map((row, index) => (
+                    <Tr key={index}>
+                      {Object.entries(commonColumns).map(([columnName, _]) => (
+                        <Td key={columnName}>{row[columnName]}</Td>
+                      ))}
+                    </Tr>
+                  ))}
+                </Tbody>
+              </Table>
+            )}
           </Box>
-        ))}
-      </Box>
-    </Box>
+
+          <Box flex="1" maxWidth="50%" overflowX="auto">
+            {productColumns.map((product, index) => (
+              <Box key={product.productKey} marginBottom="20px">
+                <h3>{`Product ${index + 1}`}</h3>
+                <Table variant="simple" size="sm">
+                  <Thead>
+                    <Tr>
+                      {Object.entries(product).map(([columnName, columnValue]) => {
+                        if (columnName !== "productKey") {
+                          return <Th key={columnName}> 
+                                   <AttributeAliasField name={columnName} value={columnValue} editMode={editMode} addChangedAlias={addChangedAlias}></AttributeAliasField>
+                                 </Th>;
+                        }
+                        return null;
+                      })}
+                    </Tr>
+                  </Thead>
+                  <Tbody>
+                    {data?.rows.map((row, rowIndex) => (
+                      <Tr key={rowIndex}>
+                        {Object.entries(product).map(([columnName, _]) => {
+                          if (columnName !== "productKey") {
+                            return <Td key={columnName}>{row[columnName]}</Td>;
+                          }
+                          return null;
+                        })}
+                      </Tr>
+                    ))}
+                  </Tbody>
+                </Table>
+              </Box>
+            ))}
+          </Box>
+        </Box>
+      }
+    </>
   );
+  
 }
