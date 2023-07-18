@@ -176,6 +176,7 @@ namespace Qualiteste.ServerApp.Controllers
             try
             {
                 await _csvService.ParseCsv(csvFile, id);
+                //Send message
                 return Ok("");
             }catch(Exception ex)
             {

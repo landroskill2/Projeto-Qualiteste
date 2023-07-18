@@ -96,6 +96,7 @@ namespace Qualiteste.ServerApp.Services.Concrete
                     attrsToUpdate.Single(attr => attr.Attribute == v.Name).Alias = v.Alias;
                 }
                 _unitOfWork.Complete();
+                //return updated attributes
                 return "Updated Succesfully";
             }
             catch (Exception e)
