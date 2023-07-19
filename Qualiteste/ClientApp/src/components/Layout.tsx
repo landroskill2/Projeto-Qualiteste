@@ -8,9 +8,9 @@ import { useGlobalToast } from '../common/useGlobalToast';
 export default function Layout() {
 
     return (
-      <div className='flex flex-col h-full w-full font-sans'>
+      <div className='flex flex-col font-sans'>
         <NavMenu />
-          <div id="main-container" className='flex flex-col flex-1 m-5 max-h-full min-h-0 text-slate-800 dark:text-white'>
+          <div id="main-container" className='text-slate-800 dark:text-white'>
             <Outlet />
           </div>
       </div>

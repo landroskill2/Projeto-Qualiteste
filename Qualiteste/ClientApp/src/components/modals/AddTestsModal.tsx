@@ -35,13 +35,13 @@ export default function AddTestsModal({onClickTest} : ModalProps) : React.ReactE
       }
 
     return(
-        <>
+        <div className='h-fit'>
             <Button
                 onClick={onOpen}
                 m={4}
                 >{`Adicionar Teste`}
             </Button>
-            <Modal onClose={onClose} size="full" isOpen={isOpen}>
+            <Modal onClose={onClose} size="5xl" isOpen={isOpen}>
                 <ModalOverlay />
                 <ModalContent>
                     <ModalHeader>Adicione Testes</ModalHeader>
@@ -62,6 +62,6 @@ export default function AddTestsModal({onClickTest} : ModalProps) : React.ReactE
                     </ModalFooter>
                 </ModalContent>
             </Modal>
-        </>
+        </div>
     )
 }

@@ -72,7 +72,7 @@ export default function Consumers(): React.ReactElement{
               />
             </div>
               
-              <div className="mt-10" style={{ maxHeight: 'calc(100vh - 220px)', overflowY: 'auto' }}>
+              <div className="mt-10" style={{ maxHeight: 'calc(100vh - 370px)', overflowY: 'auto' }}>
                 <ConsumersTable consumers={consumers} onClickConsumer={redirectToConsumerPage}/>
               </div>
             </>
