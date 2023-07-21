@@ -107,6 +107,8 @@ namespace Qualiteste.ServerApp.Services.Concrete
                 _unitOfWork.Sessions.AddConsumerToSession(id, consumer);
                 _unitOfWork.Complete();
                 return "Provador adicionado com sucesso";
+            }catch(InvalidOperationException ex){
+                return new ConsumerAlreadyInSession();
             }catch(Exception ex)
             {
                 _unitOfWork.UntrackChanges();

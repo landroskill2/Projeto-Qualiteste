@@ -48,4 +48,12 @@
                 
         }
     }
+
+    public class ConsumerAlreadyInTest : CustomError
+    {
+        public ConsumerAlreadyInTest() : base("O provador já se encontra neste teste", 409)
+        {
+
+        }
+    }
 }

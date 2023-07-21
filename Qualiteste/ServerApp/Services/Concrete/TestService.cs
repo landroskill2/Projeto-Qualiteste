@@ -136,6 +136,8 @@ namespace Qualiteste.ServerApp.Services.Concrete
                 _unitOfWork.Tests.AddConsumerToTest(id, consumer);
                 _unitOfWork.Complete();
                 return "Provador adicionado com sucesso";
+            }catch(InvalidOperationException ex){
+                return new ConsumerAlreadyInTest();
             }catch(Exception ex)
             {
                 _unitOfWork.UntrackChanges();

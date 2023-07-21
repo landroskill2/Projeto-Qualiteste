@@ -44,13 +44,13 @@ export default function AddConsumersModal({onClickConsumer} : ModalProps) : Reac
       }
 
     return(
-        <>
+        <div>
             <Button
                 onClick={onOpen}
                 m={4}
                 >{`Adicionar Provador`}
             </Button>
-            <Modal onClose={onClose} size="full" isOpen={isOpen}>
+            <Modal scrollBehavior='inside'  onClose={onClose} size="5xl" isOpen={isOpen}>
                 <ModalOverlay />
                 <ModalContent>
                     <ModalHeader>Adicione provadores</ModalHeader>
@@ -61,7 +61,7 @@ export default function AddConsumersModal({onClickConsumer} : ModalProps) : Reac
                                 <Spinner size="lg" />
                             </div>
                         ) : (
-                            <>
+                            <div className='flex flex-col'>
                                 <div className="mb-10" style={{ position: "sticky", top: "4rem", zIndex: 1 }}>
                                     <FilterBar
                                         setSex={setSex}
@@ -71,10 +71,10 @@ export default function AddConsumersModal({onClickConsumer} : ModalProps) : Reac
                                     />
                                 </div>
 
-                                <div className="mt-10" style={{ maxHeight: 'calc(100vh - 220px)', overflowY: 'auto' }}>
+                                <div className="mt-10" style={{ maxHeight: 'calc(100vh - 400px)', overflowY: 'auto' }}>
                                     <ConsumersTable consumers={consumers} onClickConsumer={onClickConsumer}/>
                                 </div>
-                            </>
+                            </div>
                         )}
                     </ModalBody>
                     <ModalFooter>
@@ -82,6 +82,6 @@ export default function AddConsumersModal({onClickConsumer} : ModalProps) : Reac
                     </ModalFooter>
                 </ModalContent>
             </Modal>
-        </>
+        </div>
     )
 }

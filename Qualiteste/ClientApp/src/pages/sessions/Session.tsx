@@ -9,6 +9,7 @@ import {
   Heading,
   Box,
   useToast,
+  Spinner,
 } from "@chakra-ui/react";
 import { ISessionModel } from '../../common/Interfaces/Sessions'
 import { IConsumerSessionOutputModel } from '../../common/Interfaces/Sessions'
@@ -25,8 +26,8 @@ export default function Session() : React.ReactElement{
   const [session, setSession] = useState<ISessionModel | null>(null);
   const [consumerSessions, setConsumerSessions] = useState<IConsumerSessionOutputModel[]>([]);
   const [tests, setTests] = useState<ITestOutputModel[]>([]);
+  const [isLoading, setIsLoading] = useState(true)
   const {id} = useParams()
-  const toast = useToast()
   const navigate = useNavigate()
   const { addToast, isToastActive } = useGlobalToast() 
   const {state} = useLocation()
@@ -39,17 +40,30 @@ export default function Session() : React.ReactElement{
     navigate(`/tests/${id}`)
   }
 
-  const addTest = (testID : string) => {
-    addTestToSession(id!, testID) // TODO: add action on response
-    window.location.reload()
+  const addTest = async (testID : string) => {
+    const resp = await addTestToSession(id!, testID).catch(err => {
+      addToast({id: "error", title: "Erro", description: err.response.data.title, status: "error"})
+    })
+    if(resp?.status === 200){
+      setIsLoading(true)
+      populateData().then(() => {
+        setIsLoading(false)
+        addToast({id: "success", title: "Sucesso", description: "Teste adicionado com sucesso.", status: "success"})
+      })
+    }
   }
 
-  const addConsumer = (consumerID : number) => {
-    addConsumerToSession(id!, consumerID) // TODO: add action on response
-    toast({
-      title: "toasty"
-    })
-    window.location.reload()
+  const addConsumer = async (consumerID : number) => {
+    const resp = await addConsumerToSession(id!, consumerID).catch(err => {
+      addToast({id: "error", title: "Erro", description: err.response.data.title, status: "error"})
+    }) 
+    if(resp?.status === 200){
+      setIsLoading(true)
+      populateData().then(() => {
+        setIsLoading(false)
+        addToast({id: "success", title: "Sucesso", description: "Provador adicionado com sucesso.", status: "success"})
+      })   
+    }
   }
 
   useEffect(() => {
@@ -59,17 +73,20 @@ export default function Session() : React.ReactElement{
       }
     }
 
-    const fetchData = async () => {
-        const response = await fetchSessionById(id!!)
-        const { session, consumers, tests } = response.data;
-  
-        setSession(session);
-        setConsumerSessions(consumers);
-        setTests(tests);
-      };
-  
-      fetchData();
+    populateData().then(() => {
+      setIsLoading(false)
+    });
+
   }, []);
+
+  async function populateData() {
+    const response = await fetchSessionById(id!!)
+    const { session, consumers, tests } = response.data;
+
+    setSession(session);
+    setConsumerSessions(consumers);
+    setTests(tests);
+  }
 
   // Helper function to group the consumerSessions by sessionTime
   const groupConsumerSessionsByTime = (): { sessionTime: string, consumers: IConsumerOutputModel[] }[] => {
@@ -96,7 +113,10 @@ export default function Session() : React.ReactElement{
   // Render the component
   return (
     <>
-      {session && (
+      {isLoading && 
+        <div className="flex flex-col justify-center items-center h-full">
+          <Spinner size="lg" />
+        </div> || 
         <>
           <Box
             display="flex"
@@ -105,7 +125,7 @@ export default function Session() : React.ReactElement{
             mb={4}
           >
             <Box as="h1" fontSize="2xl" fontWeight="bold">
-              <Heading>{session.id}</Heading>
+              <Heading>{session!.id}</Heading>
             </Box>
 
             <Box>
@@ -126,8 +146,8 @@ export default function Session() : React.ReactElement{
             </Thead>
             <Tbody>
               <Tr>
-                <Td>{session.date}</Td>
-                <Td>{session.consumersNumber.toString()}</Td>
+                <Td>{session!.date}</Td>
+                <Td>{session!.consumersNumber.toString()}</Td>
               </Tr>
             </Tbody>
           </Table>
@@ -176,7 +196,7 @@ export default function Session() : React.ReactElement{
             </Tbody>
           </Table>
         </>
-      )}
+      }
     </>
   );
 }

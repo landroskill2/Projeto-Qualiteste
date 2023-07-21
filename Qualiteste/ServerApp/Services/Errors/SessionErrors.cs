@@ -29,7 +29,15 @@
 
     public class TestAlreadyBelongsToASession : CustomError
     {
-        public TestAlreadyBelongsToASession() : base("Não foi possivel adicionar o teste à sessão. O teste já pertence a uma sessão.", 409)
+        public TestAlreadyBelongsToASession() : base("Não foi possível adicionar o teste à sessão. O teste já pertence a uma sessão.", 409)
+        {
+            
+        }
+    }
+
+    public class ConsumerAlreadyInSession : CustomError
+    {
+        public ConsumerAlreadyInSession() : base("O provador já se encontra nesta sessão.", 409)
         {
             
         }

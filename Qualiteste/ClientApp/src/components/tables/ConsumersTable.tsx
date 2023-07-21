@@ -6,6 +6,7 @@ import {
   Tr,
   Th,
   Td,
+  TableContainer,
 } from "@chakra-ui/react";
 import { IConsumerOutputModel } from "../../common/Interfaces/Consumers";
 
@@ -17,8 +18,9 @@ type TableProps = {
 export default function ConsumersTable({consumers, onClickConsumer} : TableProps) : React.ReactElement {
     
     return (
-        <Table variant="simple" overflow="auto">
-            <Thead>
+        <TableContainer overflowX="unset" overflowY="unset">
+        <Table variant="simple" size="md" overflow="auto">
+            <Thead position="sticky" top={0} zIndex="docked">
                 <Tr>
                     <Th>Id</Th>
                     <Th>Fullname</Th>
@@ -49,5 +51,6 @@ export default function ConsumersTable({consumers, onClickConsumer} : TableProps
                 )}   
             </Tbody>
         </Table>
+        </TableContainer>
     )
 }
