@@ -7,7 +7,7 @@ namespace Qualiteste.ServerApp.DataAccess.Repository
     {
         Consumer? GetConsumerById(int id);
         IEnumerable<Consumer> GetConsumersAlphabetically();
-        IEnumerable<Consumer> GetConsumersFiltered(string? sex, int? iage, string? name);
+        IEnumerable<Consumer> GetConsumersFiltered(string? sex, int? minAge, int? maxAge, string? name);
         int GetLastID();
     }
 }

@@ -26,10 +26,11 @@ namespace Qualiteste.ServerApp.DataAccess.Repository.Concrete
             return PostgresContext.Consumers.SingleOrDefault(c => c.Id == id);
         }
 
-        public IEnumerable<Consumer> GetConsumersFiltered(string? sex, int? iage, string? name) {
-            Expression<Func<Consumer, bool>> p = c => (iage == null || (c.Dateofbirth.Value.ToDateTime(TimeOnly.MinValue).Year - DateTime.Today.Year >= iage)
+        public IEnumerable<Consumer> GetConsumersFiltered(string? sex, int? minAge, int? maxAge, string? name) {
+            Expression<Func<Consumer, bool>> p = c => (minAge == 0 || (DateTime.Today.Year - c.Dateofbirth.Value.Year ) >= minAge)
+                                                 && (maxAge == 0 || (DateTime.Today.Year - c.Dateofbirth.Value.Year ) <= maxAge)
                                                  && (name == null || c.Fullname.Contains(name.ToUpper()))
-                                                 && (sex == null || c.Sex == sex.ToUpper()));
+                                                 && (sex == null || c.Sex == sex.ToUpper());
 
             
             var consumers = PostgresContext.Consumers.Where(p);
