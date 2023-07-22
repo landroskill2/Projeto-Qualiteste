@@ -11,7 +11,7 @@ namespace Qualiteste.ServerApp.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class ConsumersController : ControllerBase
     {
         private readonly IConsumerService _consumerService;
@@ -46,13 +46,13 @@ namespace Qualiteste.ServerApp.Controllers
         [HttpGet]
         [ProducesResponseType(200, Type = typeof(IEnumerable<ConsumerOutputModel>))]
         [ProducesResponseType(500)]
-        public IActionResult GetConsumersList([FromQuery] string? sex, [FromQuery] string? age, [FromQuery] string? name) 
+        public IActionResult GetConsumersList([FromQuery] string? sex, [FromQuery] string? minAge, [FromQuery] string? maxAge, [FromQuery] string? name) 
         {
             Either<CustomError, IEnumerable<ConsumerOutputModel>> result;
             try {
-                if (sex != null || age != null || name != null)
+                if (sex != null || minAge != null || maxAge != null || name != null)
                 {
-                    result = _consumerService.GetConsumersFiltered(sex,age,name);
+                    result = _consumerService.GetConsumersFiltered(sex, minAge, maxAge, name);
                     return result.Match(
                             error => Problem(statusCode: error.StatusCode, title: error.Message),
                             success => Ok(success)

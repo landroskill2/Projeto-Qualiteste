@@ -24,13 +24,14 @@ export default function Consumers(): React.ReactElement{
     const [consumers, setConsumers] = useState<IConsumerOutputModel[] | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [sex, setSex] = useState(null)
-    const [age, setAge] = useState(null)
+    const [maxAge, setMaxAge] = useState<number>(100)
+    const [minAge, setMinAge] = useState<number>(0)
     const [searchString, setSearchString] = useState(null)
     const navigate = useNavigate()
 
   useEffect(() => {
     populateData() 
-  }, [sex, age, searchString]);
+  }, [sex, maxAge, minAge, searchString]);
 
   const redirectToConsumerCreation = () => {
     navigate("create")
@@ -44,7 +45,8 @@ export default function Consumers(): React.ReactElement{
     const filters = Object.assign(
       {},
       sex === null ? null : {sex: sex},
-      age === null ? null : {age: age},
+      minAge === null ? null : {minAge: minAge},
+      maxAge === null ? null : {maxAge: maxAge},
       searchString === null ? null : {name: searchString}
     )
 

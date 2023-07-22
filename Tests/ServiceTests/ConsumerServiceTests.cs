@@ -59,10 +59,11 @@ namespace Tests.ServiceTests
         public void GetConsumersFullFilteredTest()
         {
             var nameFilter = "Maria";
-            var ageFilter = "60";
+            var minAge = "50";
+            var maxAge = "70";
             var sexFilter = "F";
             IEnumerable<ConsumerOutputModel> consumers;
-            Either<CustomError, IEnumerable<ConsumerOutputModel>> res = consumerService.GetConsumersFiltered(sexFilter, ageFilter, nameFilter);
+            Either<CustomError, IEnumerable<ConsumerOutputModel>> res = consumerService.GetConsumersFiltered(sexFilter, minAge, maxAge, nameFilter);
             consumers = res.Match(error => throw new Exception("Not supposed to fail"),
                                   success => success);
 
@@ -71,7 +72,8 @@ namespace Tests.ServiceTests
             {
                 Assert.True(c.Fullname.Contains(nameFilter.ToUpper()));
                 Assert.That(sexFilter, Is.EqualTo(c.Sex));
-                Assert.That(int.Parse(ageFilter), Is.AtMost(int.Parse(c.Age)));
+                Assert.That(int.Parse(c.Age), Is.AtMost(int.Parse(maxAge)));
+                Assert.That(int.Parse(c.Age), Is.AtLeast(int.Parse(minAge)));
             }
         }
 
@@ -82,7 +84,7 @@ namespace Tests.ServiceTests
 
 
             IEnumerable<ConsumerOutputModel> consumers;
-            Either<CustomError, IEnumerable<ConsumerOutputModel>> res = consumerService.GetConsumersFiltered(null, null, nameFilter);
+            Either<CustomError, IEnumerable<ConsumerOutputModel>> res = consumerService.GetConsumersFiltered(null, null, null, nameFilter);
             consumers = res.Match(error => throw new Exception("Not supposed to fail"),
                                   success => success);
 
@@ -96,17 +98,19 @@ namespace Tests.ServiceTests
         [Test]
         public void GetConsumersWithAgeFilterTest()
         {
-            var ageFilter = "60";
+            var maxAge = "50";
+            var minAge = "70";
 
             IEnumerable<ConsumerOutputModel> consumers;
-            Either<CustomError, IEnumerable<ConsumerOutputModel>> res = consumerService.GetConsumersFiltered(null, ageFilter, null);
+            Either<CustomError, IEnumerable<ConsumerOutputModel>> res = consumerService.GetConsumersFiltered(null, minAge, maxAge, null);
             consumers = res.Match(error => throw new Exception("Not supposed to fail"),
                                   success => success);
 
 
             foreach (ConsumerOutputModel c in consumers)
             {
-                Assert.That(int.Parse(ageFilter), Is.AtMost(int.Parse(c.Age)));
+                Assert.That(int.Parse(c.Age), Is.AtMost(int.Parse(maxAge)));
+                Assert.That(int.Parse(c.Age), Is.AtLeast(int.Parse(minAge)));
             }
         }
 
@@ -116,7 +120,7 @@ namespace Tests.ServiceTests
             var sexFilter = "f";
 
             IEnumerable<ConsumerOutputModel> consumers;
-            Either<CustomError, IEnumerable<ConsumerOutputModel>> res = consumerService.GetConsumersFiltered(sexFilter, null, null);
+            Either<CustomError, IEnumerable<ConsumerOutputModel>> res = consumerService.GetConsumersFiltered(sexFilter, null, null, null);
             consumers = res.Match(error => throw new Exception("Not supposed to fail"),
                                   success => success);
 
@@ -181,15 +185,14 @@ namespace Tests.ServiceTests
         }
 
         //Test Errors returned from ConsumerServices
-
-            [Test]  
+        [Test]  
         public void GetConsumersWithInvalidSexFilter()
         {
             var sexFilter = "T";
 
             IEnumerable<ConsumerOutputModel> consumers;
             CustomError e;
-            Either<CustomError, IEnumerable<ConsumerOutputModel>> res = consumerService.GetConsumersFiltered(sexFilter, "0", "*");
+            Either<CustomError, IEnumerable<ConsumerOutputModel>> res = consumerService.GetConsumersFiltered(sexFilter, "0", "0", "*");
             e = res.Match(
                 error => error,
                 success => throw new Exception()
@@ -201,12 +204,12 @@ namespace Tests.ServiceTests
         [Test]
         public void GetConsumersWithInvalidAgeFilter()
         {
-            var ageFilter1 = "-1";
+            var ageFilter1 = "0";
             var ageFilter2 = "Not a valid age";
 
             IEnumerable<ConsumerOutputModel> consumers;
             CustomError e;
-            Either<CustomError, IEnumerable<ConsumerOutputModel>> res = consumerService.GetConsumersFiltered("*", ageFilter1, "*");
+            Either<CustomError, IEnumerable<ConsumerOutputModel>> res = consumerService.GetConsumersFiltered("*", ageFilter1, ageFilter1, "*");
             e = res.Match(
                 error => error,
                 success => throw new Exception("Test is suposed to fail, not succeed")
@@ -214,7 +217,7 @@ namespace Tests.ServiceTests
 
             Assert.That(e, Is.TypeOf(typeof(ConsumerFilterNotValid)));
 
-            res = consumerService.GetConsumersFiltered("*", ageFilter2, "*");
+            res = consumerService.GetConsumersFiltered("*", ageFilter2, ageFilter2, "*");
             e = res.Match(error => error,
                           success => throw new Exception()
                           );

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Qualiteste.ServerApp.DataAccess;
 using Qualiteste.ServerApp.Dtos;
 using Qualiteste.ServerApp.Models;
@@ -93,17 +94,19 @@ namespace Qualiteste.ServerApp.Services.Concrete
             
         }
 
-        public Either<CustomError, IEnumerable<ConsumerOutputModel>> GetConsumersFiltered(string sex, string age, string name)
+        public Either<CustomError, IEnumerable<ConsumerOutputModel>> GetConsumersFiltered(string sex, string minAge, string maxAge, string name)
         {
             try
             {
-                int iage;
-                int.TryParse(age, out iage);
-                if (iage < 0) return new ConsumerFilterNotValid();
+                int minIAge = -1;
+                int maxIAge = -1;
+                int.TryParse(minAge, out minIAge);
+                int.TryParse(maxAge, out maxIAge);
+                //if (iage < 0) return new ConsumerFilterNotValid();
                 if (!(sex == null|| sex.ToUpper().Equals("M") || sex.ToUpper().Equals("F"))) return new ConsumerFilterNotValid();
 
                 //Might be a problem, there are consumers with no specified dateOfBirth
-                IEnumerable<ConsumerOutputModel> consumers = _unitOfWork.Consumers.GetConsumersFiltered(sex, iage, name)
+                IEnumerable<ConsumerOutputModel> consumers = _unitOfWork.Consumers.GetConsumersFiltered(sex, minIAge, maxIAge, name)
                         .Select(c => c.ToOutputModel());
                 return consumers.ToList();
             }

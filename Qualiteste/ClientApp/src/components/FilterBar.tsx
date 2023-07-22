@@ -9,27 +9,31 @@ import {
   MenuList,
 } from "@chakra-ui/react";
 import { BsChevronDown, BsSearch } from "react-icons/bs";
-
+import AgeFilter from "./AgeFilter"
 interface Params {
     sex? : string,
-    age? : string,
+    minAge? : number,
+    maxAge? : number,
     searchBar? : boolean,
-    setSex? : any,
-    setAge? : any,
-    setSearchString? : any
+    setSex? : ()=>{},
+    setMinAge? : ()=>{},
+    setMaxAge? : ()=>{},
+    setSearchString? : ()=>{}
 }
 
 export default function FilterBar({
     sex = "Sexo",
-    age,
+    minAge,
+    maxAge,
     searchBar,
     setSex,
-    setAge,
+    setMinAge,
+    setMaxAge,
     setSearchString
 }: Params) {
     const [dropdownText, setDropdownText] = useState(sex)
     const [searchInputValue, setSearchInputValue] = useState<string>("")
-
+    
     function onClickSearch() {
         setSearchString(searchInputValue)
     }
@@ -104,6 +108,7 @@ export default function FilterBar({
                     </Menu>
                 )}
             </div>
+            <AgeFilter minAge={minAge} maxAge={maxAge} setMinAge={setMinAge} setMaxAge={setMaxAge}></AgeFilter>
             {useSearchBar()}
         </div>
     )

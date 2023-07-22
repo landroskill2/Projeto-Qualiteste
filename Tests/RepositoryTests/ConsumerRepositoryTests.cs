@@ -35,7 +35,7 @@ namespace Tests.RepositoryTests
         public void GetConsumersWithSexFilteredTest()
         {
             var sexFilter = "F";
-            var consumers = consumerRepository.GetConsumersFiltered(sexFilter, 0, null);
+            var consumers = consumerRepository.GetConsumersFiltered(sexFilter, null, null, null);
             foreach(Consumer c in consumers){
                 Assert.That(sexFilter, Is.EqualTo(c.Sex));
             }
@@ -45,13 +45,14 @@ namespace Tests.RepositoryTests
         [Test]
         public void GetConsumersWithAgeFilteredTest()
         {
-            var ageFilter = 70;
-            var consumers = consumerRepository.GetConsumersFiltered(null, ageFilter, null);
-            var yearOfBirth = DateTime.Today.Year - ageFilter;
-            Console.WriteLine(consumers.Count());
+            var maxAge = 70;
+            var minAge = 50;
+            var consumers = consumerRepository.GetConsumersFiltered(null, minAge, maxAge, null);
             foreach (Consumer c in consumers)
             {
-                Assert.That(c.Dateofbirth?.Year, Is.AtMost(yearOfBirth));
+                var age = DateTime.Now.Year - c.Dateofbirth.Value.Year;
+                Assert.That(age, Is.AtMost(maxAge));
+                Assert.That(age, Is.AtLeast(minAge));
             }
 
         }
@@ -59,7 +60,7 @@ namespace Tests.RepositoryTests
         public void GetConsumersWithNameFilteredTest()
         {
             var nameFilter = "Maria";
-            var consumers = consumerRepository.GetConsumersFiltered(null, 0, nameFilter);
+            var consumers = consumerRepository.GetConsumersFiltered(null, null, null, nameFilter);
             foreach (Consumer c in consumers)
             {
                 Assert.True(c.Fullname.Contains(nameFilter.ToUpper()));
@@ -72,13 +73,15 @@ namespace Tests.RepositoryTests
         {
             var nameFilter = "Maria";
             var sexFilter = "F";
-            var ageFilter = 70;
-            var yearOfBirth = DateTime.Today.Year - ageFilter;
-            var consumers = consumerRepository.GetConsumersFiltered(sexFilter, ageFilter, nameFilter);
+            var minAge = 50;
+            var maxAge = 70;
+            var consumers = consumerRepository.GetConsumersFiltered(sexFilter, minAge, maxAge, nameFilter);
             foreach (Consumer c in consumers)
             {
+                var age = DateTime.Now.Year - c.Dateofbirth.Value.Year;
+                Assert.That(age, Is.AtMost(maxAge));
+                Assert.That(age, Is.AtLeast(minAge));
                 Assert.That(sexFilter, Is.EqualTo(c.Sex));
-                Assert.That(c.Dateofbirth?.Year, Is.AtMost(yearOfBirth));
                 Assert.True(c.Fullname.Contains(nameFilter.ToUpper()));
             }
         }
