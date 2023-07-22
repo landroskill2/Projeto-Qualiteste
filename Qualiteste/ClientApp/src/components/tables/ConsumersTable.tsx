@@ -20,7 +20,7 @@ export default function ConsumersTable({consumers, onClickConsumer} : TableProps
     return (
         <TableContainer overflowX="unset" overflowY="unset">
         <Table variant="simple" size="md" overflow="auto">
-            <Thead position="sticky" top={0} zIndex="docked">
+            <Thead top={0} zIndex="docked">
                 <Tr>
                     <Th>Id</Th>
                     <Th>Fullname</Th>
