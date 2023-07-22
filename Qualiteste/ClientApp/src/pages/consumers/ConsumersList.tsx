@@ -54,39 +54,40 @@ export default function Consumers(): React.ReactElement{
   }
 
   return (
-    <div className="flex flex-col h-full" style={{ height: "calc(100vh - 115px)" }}>
-      <div className="p-6 flex-grow overflow-y-hidden">
-        <h1 className="text-5xl font-bold text-center">Provadores</h1>
-          {consumers === null ? (
-            <div className="flex justify-center items-center h-full">
-              <Spinner size="lg" />
-            </div>
-          ) : (
-            <>
-            <div className="mb-10" style={{ position: "sticky", top: "4rem", zIndex: 1 }}>
-              <FilterBar
-                setSex={setSex}
-                setAge={setAge}
-                setSearchString={setSearchString}
-                searchBar
-              />
-            </div>
-              
-              <div className="mt-10" style={{ maxHeight: 'calc(100vh - 370px)', overflowY: 'auto' }}>
-                <ConsumersTable consumers={consumers} onClickConsumer={redirectToConsumerPage}/>
-              </div>
-            </>
-          )}
-      </div>
-      <WithPermission roleRequired="ADMIN">
-        <div className="p-6 bg-white" style={{ flexShrink: 0 }}>
-          <Button colorScheme="blue" onClick={redirectToConsumerCreation}>
-            Criar Provador
-          </Button>
+    <div className="flex flex-col flex-grow w-full min-h-full">
+        <div className="col-span-full">
+          <h1 className="text-5xl font-bold text-center bg-white">Provadores</h1>
         </div>
-      </WithPermission>
-    </div>
-  );
+        <div className="min-h-full w-full flex flex-col flex-grow items-center justify-center">
+          <div className="p-6 overflow-y-hidden w-full items-center justify-center">
+            {consumers === null ? (
+              <div className="flex justify-center items-center h-full self-center">
+                <Spinner size="lg" />
+              </div>
+            ) : (
+              <>
+                <div className="mt-4">
+                  <FilterBar setSex={setSex} setAge={setAge} setSearchString={setSearchString} searchBar />
+                </div>
+
+                <div className="mt-10" style={{ maxHeight: 'calc(100vh - 370px)', overflowY: 'auto' }}>
+                  <ConsumersTable consumers={consumers} onClickConsumer={redirectToConsumerPage} />
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+        <div className="content-end justify-end items-baseline">
+          <WithPermission roleRequired="ADMIN">
+            <div className="p-6 bg-white" style={{ flexShrink: 0 }}>
+              <Button colorScheme="blue" onClick={redirectToConsumerCreation}>
+                Criar Provador
+              </Button>
+            </div>
+          </WithPermission>
+        </div>
+      </div>
+  );  
 }
 
 

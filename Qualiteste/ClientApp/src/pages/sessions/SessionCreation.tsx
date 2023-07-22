@@ -67,43 +67,51 @@ export default function SessionCreation(): React.ReactElement {
   };
 
   return (
-    <Box p={4}>
-      <form onSubmit={handleSubmit}>
-        <FormControl id="id" isRequired>
-          <FormLabel>ID</FormLabel>
-          <Input
-            name="id"
-            type="text"
-            value={session.id}
-            onChange={handleInputChange}
-          />
-        </FormControl>
+    <div className="h-screen flex flex-col items-center justify-center bg-white">
+      <h1 className="text-center text-lg">Criar uma Sessão</h1>
+      <Box
+        className="bg-slate-800 shadow-slate-600 p-6 rounded-lg shadow-md w-96 "
+      >
+        <form onSubmit={handleSubmit}>
+          <FormControl id="id" isRequired>
+            <FormLabel textColor="white">ID</FormLabel>
+            <Input
+              name="id"
+              type="text"
+              value={session.id}
+              onChange={handleInputChange}
+              background="white"
+            />
+          </FormControl>
 
-        <FormControl id="date" isRequired>
-          <FormLabel>Date</FormLabel>
-          <Input
-            name="date"
-            type="date"
-            value={session.date}
-            onChange={handleInputChange}
-          />
-        </FormControl>
+          <FormControl id="date" isRequired>
+            <FormLabel textColor="white">Date</FormLabel>
+            <Input
+              name="date"
+              type="date"
+              value={session.date}
+              onChange={handleInputChange}
+              background="white"
+            />
+          </FormControl>
 
-        <FormControl id="consumersNumber" isRequired>
-          <FormLabel>Consumers Number</FormLabel>
-          <Input
-            name="consumersNumber"
-            type="number"
-            min={0}
-            value={session.consumersNumber}
-            onChange={handleInputChange}
-          />
-        </FormControl>
+          <FormControl id="consumersNumber" isRequired>
+            <FormLabel textColor="white">Consumers Number</FormLabel>
+            <Input
+              name="consumersNumber"
+              type="number"
+              min={0}
+              value={session.consumersNumber}
+              onChange={handleInputChange}
+              background="white"
+            />
+          </FormControl>
 
-        <Button type="submit" mt={4} colorScheme="blue">
-          Submit
-        </Button>
-      </form>
-    </Box>
+          <Button type="submit" mt={4} colorScheme="blue">
+            Submit
+          </Button>
+        </form>
+      </Box>
+    </div>
   );
-};
+}

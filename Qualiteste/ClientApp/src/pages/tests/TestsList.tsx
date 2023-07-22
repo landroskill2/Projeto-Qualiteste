@@ -48,7 +48,7 @@ export default function Tests(): React.ReactElement{
     setIsLoading(false)
   }
   return (
-    <div className="flex flex-col h-full" style={{ height: "calc(100vh - 115px)" }}>
+    <div className="flex flex-col h-full w-full" >
       <div className="p-6 flex-grow overflow-y-hidden">
         <h1 className="text-5xl font-bold text-center">Testes</h1>
           {tests === null ? (

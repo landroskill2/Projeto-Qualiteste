@@ -27,9 +27,9 @@ namespace Qualiteste.ServerApp.DataAccess.Repository.Concrete
         }
 
         public IEnumerable<Consumer> GetConsumersFiltered(string? sex, int? iage, string? name) {
-            Expression<Func<Consumer, bool>> p = c => (iage == null || (c.Dateofbirth.Value.ToDateTime(TimeOnly.MinValue).Year - DateTime.Today.Year >= iage)
+            Expression<Func<Consumer, bool>> p = c => (iage == null || (DateTime.Today.Year - c.Dateofbirth.Value.ToDateTime(TimeOnly.MinValue).Year >= iage))
                                                  && (name == null || c.Fullname.Contains(name.ToUpper()))
-                                                 && (sex == null || c.Sex == sex.ToUpper()));
+                                                 && (sex == null || c.Sex == sex.ToUpper());
 
             
             var consumers = PostgresContext.Consumers.Where(p);

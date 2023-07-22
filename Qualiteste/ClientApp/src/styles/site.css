@@ -6,7 +6,7 @@
 /* Provide sufficient contrast against white background */
 
 #root {
-  @apply w-full h-full;
+  @apply w-full min-h-screen;
 }
 .active-nav-link {
   @apply block py-2 pl-3 pr-4 bg-slate-700 rounded md:bg-transparent md:p-0 !text-sky-400 ;

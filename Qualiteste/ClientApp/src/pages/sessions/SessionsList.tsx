@@ -44,9 +44,9 @@ export default function Sessions(): React.ReactElement{
   }
 
   return (
-    <div className="flex flex-col h-full" style={{ height: "calc(100vh - 115px)" }}>
+    <div className="flex flex-col h-full w-full">
+      <h1 className="text-5xl font-bold text-center self-center absolute">Sessões</h1>
       <div className="p-6 flex-grow overflow-y-hidden">
-        <h1 className="text-5xl font-bold text-center">Sessões</h1>
           {sessions === null ? (
             <div className="flex justify-center items-center h-full">
               <Spinner size="lg" />
