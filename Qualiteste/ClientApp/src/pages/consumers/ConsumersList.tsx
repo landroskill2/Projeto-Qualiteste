@@ -57,38 +57,33 @@ export default function Consumers(): React.ReactElement{
 
   return (
     <div className="flex flex-col flex-grow w-full min-h-full">
-        <div className="col-span-full">
-          <h1 className="text-5xl font-bold text-center bg-white">Provadores</h1>
-        </div>
+      <div>
+        <h1 className="text-5xl font-bold text-center bg-white">Provadores</h1>
+      </div>
+      {consumers === null ? (
         <div className="min-h-full w-full flex flex-col flex-grow items-center justify-center">
-          <div className="p-6 overflow-y-hidden w-full items-center justify-center">
-            {consumers === null ? (
-              <div className="flex justify-center items-center h-full self-center">
-                <Spinner size="lg" />
-              </div>
-            ) : (
-              <>
-                <div className="mt-4">
-                  <FilterBar setSex={setSex} setAge={setAge} setSearchString={setSearchString} searchBar />
-                </div>
-
-                <div className="mt-10" style={{ maxHeight: 'calc(100vh - 370px)', overflowY: 'auto' }}>
-                  <ConsumersTable consumers={consumers} onClickConsumer={redirectToConsumerPage} />
-                </div>
-              </>
-            )}
+          <Spinner size="lg" />
+        </div>
+      ) : (
+        <div className="mt-10 px-6 min-h-full w-full flex flex-col flex-grow items-center justify-center">
+          <div className="mt-4 w-full">
+            <FilterBar setSex={setSex} setMinAge={setMinAge} setMaxAge={setMaxAge} setSearchString={setSearchString} searchBar />
+          </div>
+          <div className="mt-10 w-full" style={{ maxHeight: 'calc(100vh - 370px)', overflowY: 'auto' }}>
+            <ConsumersTable consumers={consumers} onClickConsumer={redirectToConsumerPage} />
           </div>
         </div>
-        <div className="content-end justify-end items-baseline">
-          <WithPermission roleRequired="ADMIN">
-            <div className="p-6 bg-white" style={{ flexShrink: 0 }}>
-              <Button colorScheme="blue" onClick={redirectToConsumerCreation}>
-                Criar Provador
-              </Button>
-            </div>
-          </WithPermission>
-        </div>
+      )}
+      <div className="content-end justify-end items-baseline">
+        <WithPermission roleRequired="ADMIN">
+          <div className="p-6 bg-white" style={{ flexShrink: 0 }}>
+            <Button colorScheme="blue" onClick={redirectToConsumerCreation}>
+              Criar Provador
+            </Button>
+          </div>
+        </WithPermission>
       </div>
+    </div>
   );  
 }
 

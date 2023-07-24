@@ -44,38 +44,36 @@ export default function Sessions(): React.ReactElement{
   }
 
   return (
-    <div className="flex flex-col h-full w-full">
-      <h1 className="text-5xl font-bold text-center self-center absolute">Sessões</h1>
-      <div className="p-6 flex-grow overflow-y-hidden">
-          {sessions === null ? (
-            <div className="flex justify-center items-center h-full">
-              <Spinner size="lg" />
-            </div>
-          ) : (
-            <>
-              <div className="mt-10" style={{ maxHeight: 'calc(100vh - 220px)', overflowY: 'auto' }}>
-              <Table variant="simple" overflow="auto">
-                <Thead>
-                  <Tr>
-                    <Th>Id</Th>
-                    <Th>Data</Th>
-                    <Th>Nº de provadores</Th>
-                  </Tr>
-                </Thead>
-                <Tbody>
-                  {sessions.map((session) => (
-                    <Tr className="hover:bg-slate-200 cursor-pointer" key={session.id} onClick={() => redirectToSession(session.id)}>
-                      <Td>{session.id}</Td>
-                      <Td>{session.date}</Td>
-                      <Td>{session.consumersNumber.toString()}</Td>
-                    </Tr>
-                  ))}
-                </Tbody>
-              </Table>
-              </div>
-            </>
-          )}
+    <div className="flex flex-col flex-grow h-full w-full">
+      <div>
+        <h1 className="text-5xl font-bold text-center bg-white">Sessões</h1>
       </div>
+      {sessions === null ? (
+        <div className="min-h-full w-full flex flex-col flex-grow items-center justify-center">
+          <Spinner size="lg" />
+        </div>
+      ) : (
+        <div className="mt-10 px-6 min-h-full w-full flex flex-col flex-grow items-center">
+          <Table variant="simple" overflow="auto">
+            <Thead>
+              <Tr>
+                <Th>Id</Th>
+                <Th>Data</Th>
+                <Th>Nº de provadores</Th>
+              </Tr>
+            </Thead>
+            <Tbody>
+              {sessions.map((session) => (
+                <Tr className="hover:bg-slate-200 cursor-pointer" key={session.id} onClick={() => redirectToSession(session.id)}>
+                  <Td>{session.id}</Td>
+                  <Td>{session.date}</Td>
+                  <Td>{session.consumersNumber.toString()}</Td>
+                </Tr>
+              ))}
+            </Tbody>
+          </Table>
+        </div>
+      )}
       <div className="p-6 bg-white" style={{ flexShrink: 0 }}>
         <Button colorScheme="blue" onClick={redirectToSessionCreation}>
           Criar Sessão

@@ -15,10 +15,10 @@ interface Params {
     minAge? : number,
     maxAge? : number,
     searchBar? : boolean,
-    setSex? : ()=>{},
-    setMinAge? : ()=>{},
-    setMaxAge? : ()=>{},
-    setSearchString? : ()=>{}
+    setSex? : any,
+    setMinAge? : any,
+    setMaxAge? : any,
+    setSearchString? : any
 }
 
 export default function FilterBar({
