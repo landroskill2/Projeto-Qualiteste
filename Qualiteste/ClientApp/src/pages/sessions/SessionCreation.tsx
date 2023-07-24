@@ -68,10 +68,13 @@ export default function SessionCreation(): React.ReactElement {
 
   return (
     <div className="h-screen flex flex-col items-center justify-center bg-white">
-      <h1 className="text-center text-lg">Criar uma Sessão</h1>
       <Box
         className="bg-slate-800 shadow-slate-600 p-6 rounded-lg shadow-md w-96 "
       >
+        <div className="flex flex-col items-center justify-center mb-4">
+          <h1 className="text-center text-3xl font-bold text-white">Criar Sessão</h1>
+        </div>
+        
         <form onSubmit={handleSubmit}>
           <FormControl id="id" isRequired>
             <FormLabel textColor="white">ID</FormLabel>

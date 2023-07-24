@@ -48,22 +48,23 @@ export default function Tests(): React.ReactElement{
     setIsLoading(false)
   }
   return (
-    <div className="flex flex-col h-full w-full" >
-      <div className="p-6 flex-grow overflow-y-hidden">
-        <h1 className="text-5xl font-bold text-center">Testes</h1>
-          {tests === null ? (
-            <div className="flex justify-center items-center h-full">
-              <Spinner size="lg" />
-            </div>
-          ) : (
-            <>
-              <TestTypeFilter type={type} setType={setType} />
-              <div className="mt-10" style={{ maxHeight: 'calc(100vh - 220px)', overflowY: 'auto' }}>
-                <TestsTable tests={tests} onClickTest={redirectToTestPage} />
-              </div>
-            </>
-          )}
+    <div  className="flex flex-col flex-grow w-full min-h-full" >
+      <div>
+        <h1 className="text-5xl font-bold text-center bg-white">Testes</h1>
       </div>
+        {tests === null ? (
+          <div className="flex justify-center items-center h-full flex-grow">
+            <Spinner size="lg" />
+          </div>
+        ) : (
+          <div className="mt-10 px-6 min-h-full w-full flex flex-col flex-grow">
+            <TestTypeFilter type={type} setType={setType} />
+            <div className="mt-10" style={{ maxHeight: 'calc(100vh - 220px)', overflowY: 'auto' }}>
+              <TestsTable tests={tests} onClickTest={redirectToTestPage} />
+            </div>
+          </div>
+          )}
+      
       <div className="p-6 bg-white" style={{ flexShrink: 0 }}>
         <Button colorScheme="blue" onClick={redirectToTestCreation}>
           Criar Teste
