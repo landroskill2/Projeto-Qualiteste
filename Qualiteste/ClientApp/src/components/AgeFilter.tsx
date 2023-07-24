@@ -70,50 +70,48 @@ export default function AgeFilter({
         setMaxAge(100)
     }
     return (
-        <>
         <div>
             <Popover
-            isOpen={isOpen}
-            onOpen={onOpen}
-            onClose={onClose}
-            placement='bottom'
-            closeOnBlur={true}>
-            <PopoverTrigger>
-                <Button className="capitalize">{filterText}</Button>
-            </PopoverTrigger>
-            <PopoverContent p={5}>
-                <FocusLock persistentFocus={false}>
-                <PopoverArrow />
-                <PopoverCloseButton />
-                <Text>Mínimo:</Text>
-                <NumberInput value={minAgeField} min={0} max={maxAgeField-1} onChange={(_ , valueAsNumber) => setMinAgeField(valueAsNumber)}>
-                    <NumberInputField />
-                    <NumberInputStepper>
-                        <NumberIncrementStepper />
-                        <NumberDecrementStepper />
-                    </NumberInputStepper>
-                </NumberInput>
-                <Text>Máximo:</Text>
-                <NumberInput value={maxAgeField} min={minAgeField+1} max={100} onChange={(_ , valueAsNumber) => setMaxAgeField(valueAsNumber)}>
-                <NumberInputField />
-                    <NumberInputStepper>
-                        <NumberIncrementStepper />
-                        <NumberDecrementStepper />
-                    </NumberInputStepper>
-                </NumberInput>
-                <div>
-                    <Button colorScheme="green" className="bg-green-500  text-white font-bold py-2 px-4 border-b-4 hover:border-green-600 rounded" onClick={applyFilter}>
-                        Confirmar
-                    </Button>
-                    <Button colorScheme="red" className="bg-red-500  text-white font-bold py-2 px-4 border-b-4 hover:border-red-600 rounded" onClick={clearFilter}>
-                        Limpar
-                    </Button>
-                </div>
-                
-                </FocusLock>
-            </PopoverContent>
+                isOpen={isOpen}
+                onOpen={onOpen}
+                onClose={onClose}
+                placement='bottom'
+                closeOnBlur={true}
+            >
+                <PopoverTrigger>
+                    <Button className="capitalize" colorScheme="blue">{filterText}</Button>
+                </PopoverTrigger>
+                <PopoverContent p={5}>
+                    <FocusLock persistentFocus={false}>
+                        <PopoverArrow />
+                        <PopoverCloseButton />
+                        <Text>Mínimo:</Text>
+                        <NumberInput value={minAgeField} min={0} max={maxAgeField-1} onChange={(_ , valueAsNumber) => setMinAgeField(valueAsNumber)}>
+                            <NumberInputField />
+                            <NumberInputStepper>
+                                <NumberIncrementStepper />
+                                <NumberDecrementStepper />
+                            </NumberInputStepper>
+                        </NumberInput>
+                        <Text>Máximo:</Text>
+                        <NumberInput value={maxAgeField} min={minAgeField+1} max={100} onChange={(_ , valueAsNumber) => setMaxAgeField(valueAsNumber)}>
+                            <NumberInputField />
+                            <NumberInputStepper>
+                                <NumberIncrementStepper />
+                                <NumberDecrementStepper />
+                            </NumberInputStepper>
+                        </NumberInput>
+                        <div className="mt-3 flex w-full items-stretch justify-between">
+                            <Button colorScheme="green" className="bg-green-500  text-white font-bold py-2 px-4 border-b-4 hover:border-green-600 rounded" onClick={applyFilter}>
+                                Confirmar
+                            </Button>
+                            <Button colorScheme="red" className="bg-red-500  text-white font-bold py-2 px-4 border-b-4 hover:border-red-600 rounded" onClick={clearFilter}>
+                                Limpar
+                            </Button>
+                        </div>
+                    </FocusLock>
+                </PopoverContent>
             </Popover>
         </div>
-        </>
     )
 }

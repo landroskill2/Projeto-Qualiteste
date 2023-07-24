@@ -52,7 +52,7 @@ export default function FilterBar({
             return (
                 <div className="flex w-full">
                   <Input
-                    className="!bg-slate-50"
+                    className="!bg-white"
                     id="searchBar"
                     type="search"
                     placeholder="Procurar"
@@ -74,42 +74,48 @@ export default function FilterBar({
     }
 
     return(
-        <div className="w-full flex justify-between">
-            <div id="sex-dropdown" className="flex-1">
-                {setSex && (
-                    <Menu>
-                        <MenuButton
-                            className="capitalize"
-                            as={Button}
-                            rightIcon={<BsChevronDown/>}
-                        >
-                            {dropdownText}
-                        </MenuButton>
-                        <MenuList>
-                            <MenuItem
-                                className="capitalize"
-                                onClick={() => onClickDropDownItem(undefined)}
-                            >
-                                Ambos
-                            </MenuItem>
-                            <MenuItem
-                                className="capitalize"
-                                onClick={() => onClickDropDownItem("M")}
-                            >
-                                Masculino
-                            </MenuItem>
-                            <MenuItem
-                                className="capitalize"
-                                onClick={() => onClickDropDownItem("F")}
-                            >
-                                Feminino
-                            </MenuItem>
-                        </MenuList>
-                    </Menu>
-                )}
+            <div className="w-full flex flex-row justify-between bg-slate-100 p-2 rounded-xl">
+                <div className="w-fit flex flex-row gap-3 justify-between">
+                    <div id="sex-dropdown" className="flex-1">
+                        {setSex && (
+                            <Menu>
+                                <MenuButton
+                                    className="capitalize "
+                                    colorScheme="blue"
+                                    as={Button}
+                                    rightIcon={<BsChevronDown/>}
+                                >
+                                    {dropdownText}
+                                </MenuButton>
+                                <MenuList>
+                                    <MenuItem
+                                        className="capitalize"
+                                        onClick={() => onClickDropDownItem(undefined)}
+                                    >
+                                        Ambos
+                                    </MenuItem>
+                                    <MenuItem
+                                        className="capitalize"
+                                        onClick={() => onClickDropDownItem("M")}
+                                    >
+                                        Masculino
+                                    </MenuItem>
+                                    <MenuItem
+                                        className="capitalize"
+                                        onClick={() => onClickDropDownItem("F")}
+                                    >
+                                        Feminino
+                                    </MenuItem>
+                                </MenuList>
+                            </Menu>
+                        )}
+                    </div>
+                    <AgeFilter minAge={minAge} maxAge={maxAge} setMinAge={setMinAge} setMaxAge={setMaxAge}></AgeFilter>
+                </div>
+                <div className="flex justify-end flex-shrink">
+                    {useSearchBar()}
+                </div>
+                        
             </div>
-            <AgeFilter minAge={minAge} maxAge={maxAge} setMinAge={setMinAge} setMaxAge={setMaxAge}></AgeFilter>
-            {useSearchBar()}
-        </div>
     )
 }

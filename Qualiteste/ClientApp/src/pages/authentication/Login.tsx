@@ -27,7 +27,7 @@ export default function Login() : React.ReactElement  {
 
   return (
     <ChakraProvider>
-      <Box height="100vh" display="flex" alignItems="center" justifyContent="center">
+      <Box className='h-full w-full flex flex-grow items-center justify-center'>
         <Container maxW="lg" boxShadow="lg" rounded="md" p={6}>
           <Box mx="auto" my={4} width="100%" height={32}>
             <Image src="..\..\..\public\qualiteste.png" alt="Logo" mx="auto" width="100%" height="100%" objectFit="cover" /> {/* Replace with your actual image */}

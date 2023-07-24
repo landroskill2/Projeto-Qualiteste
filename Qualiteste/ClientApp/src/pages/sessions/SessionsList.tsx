@@ -45,7 +45,7 @@ export default function Sessions(): React.ReactElement{
 
   return (
     <div className="flex flex-col flex-grow h-full w-full">
-      <div>
+      <div className="mt-5">
         <h1 className="text-5xl font-bold text-center bg-white">Sessões</h1>
       </div>
       {sessions === null ? (
@@ -53,7 +53,7 @@ export default function Sessions(): React.ReactElement{
           <Spinner size="lg" />
         </div>
       ) : (
-        <div className="mt-10 px-6 min-h-full w-full flex flex-col flex-grow items-center">
+        <div className="mt-6 px-6 min-h-full w-full flex flex-col flex-grow items-center">
           <Table variant="simple" overflow="auto">
             <Thead>
               <Tr>

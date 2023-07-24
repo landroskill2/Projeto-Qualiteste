@@ -57,7 +57,7 @@ export default function Consumers(): React.ReactElement{
 
   return (
     <div className="flex flex-col flex-grow w-full min-h-full">
-      <div>
+      <div className="mt-5">
         <h1 className="text-5xl font-bold text-center bg-white">Provadores</h1>
       </div>
       {consumers === null ? (
@@ -65,11 +65,11 @@ export default function Consumers(): React.ReactElement{
           <Spinner size="lg" />
         </div>
       ) : (
-        <div className="mt-10 px-6 min-h-full w-full flex flex-col flex-grow items-center justify-center">
-          <div className="mt-4 w-full">
+        <div className="mt-6 px-6 min-h-full w-full flex flex-col flex-grow items-center justify-center">
+          <div className="w-full">
             <FilterBar setSex={setSex} setMinAge={setMinAge} setMaxAge={setMaxAge} setSearchString={setSearchString} searchBar />
           </div>
-          <div className="mt-10 w-full" style={{ maxHeight: 'calc(100vh - 370px)', overflowY: 'auto' }}>
+          <div className="mt-3 w-full" style={{ maxHeight: 'calc(100vh - 370px)', overflowY: 'auto' }}>
             <ConsumersTable consumers={consumers} onClickConsumer={redirectToConsumerPage} />
           </div>
         </div>
