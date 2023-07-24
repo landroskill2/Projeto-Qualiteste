@@ -71,24 +71,30 @@ export default function TestCreation(): React.ReactElement {
   const isHomeTest = formValues.testType === "HT";
 
   return (
-    <Box p={4}>
+    <Box className="bg-slate-800 shadow-slate-600 p-6 rounded-lg shadow-md w-96 ">
+      <div className="flex flex-col items-center mb-4">
+        <h1 className="text-center text-3xl font-bold text-white">Criar Teste</h1>
+      </div>
       <form onSubmit={handleSubmit}>
         <FormControl id="id" isRequired>
-          <FormLabel>ID</FormLabel>
+          <FormLabel textColor={"white"}>ID</FormLabel>
           <Input
             name="id"
             type="text"
             value={formValues.id}
             onChange={handleInputChange}
+            background="white"
+
           />
         </FormControl>
 
         <FormControl id="testType" isRequired>
-          <FormLabel>Type</FormLabel>
+          <FormLabel textColor={"white"}>Type</FormLabel>
           <Select
             name="testType"
             value={formValues.testType}
             onChange={handleInputChange}
+            background="white"
           >
             <option value="SP">Sala de Provas</option>
             <option value="HT">Home Test</option>
@@ -96,54 +102,63 @@ export default function TestCreation(): React.ReactElement {
         </FormControl>
 
         <FormControl id="consumersNumber" isRequired>
-          <FormLabel>Consumers Number</FormLabel>
+          <FormLabel textColor={"white"}>Consumers Number</FormLabel>
           <Input
             name="consumersNumber"
             type="number"
             value={formValues.consumersNumber}
             onChange={handleInputChange}
+            background="white"
+
           />
         </FormControl>
 
         <FormControl id="requestDate" isRequired>
-          <FormLabel>Request Date</FormLabel>
+          <FormLabel textColor={"white"}>Request Date</FormLabel>
           <Input
             name="requestDate"
             type="date"
             value={formValues.requestDate}
             onChange={handleInputChange}
+            background="white"
+
           />
         </FormControl>
 
         {isHomeTest && (
           <>
             <FormControl id="validationDate">
-              <FormLabel>Validation Date</FormLabel>
+              <FormLabel textColor={"white"}>Validation Date</FormLabel>
               <Input
                 name="validationDate"
                 type="date"
                 value={formValues.validationDate}
                 onChange={handleInputChange}
+                background="white"
+
                 />
             </FormControl>
 
             <FormControl id="dueDate">
-              <FormLabel>Due Date</FormLabel>
+              <FormLabel textColor={"white"}>Due Date</FormLabel>
                 <Input
                   name="dueDate"
                   type="date"
                   value={formValues.dueDate}
                   onChange={handleInputChange}
+                  background="white"
+
                 />
             </FormControl>
 
             <FormControl id="reportDeliveryDate">
-              <FormLabel>Report Delivery Date</FormLabel>
+              <FormLabel textColor={"white"}>Report Delivery Date</FormLabel>
                 <Input
                   name="reportDeliveryDate"
                   type="date"
                   value={formValues.reportDeliveryDate}
                   onChange={handleInputChange}
+                  background="white"
                 />
             </FormControl>
           </>
