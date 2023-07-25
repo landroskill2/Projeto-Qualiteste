@@ -5,14 +5,21 @@ import {
 } from "react-router-dom";
 
 import AppRoutes from "./common/AppRoutes"
-import { ChakraProvider } from "@chakra-ui/react";
+import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 
-
+const theme = extendTheme({
+  fonts: {
+    heading: `'Mukta', sans-serif`,
+  },
+  fontSizes: {
+    xs: "1rem"
+  }
+})
 
 function App() {
   return (
     <BrowserRouter>
-      <ChakraProvider toastOptions={{ defaultOptions: {position: 'bottom'} }}>
+      <ChakraProvider theme={theme} toastOptions={{ defaultOptions: {position: 'bottom'} }}>
           <AppRoutes />
       </ChakraProvider>
     </BrowserRouter>

@@ -8,7 +8,8 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        "Dosis" : ['Dosis', 'sans-serif']
+        "Dosis" : ['Dosis', 'sans-serif'],
+        "Mukta" : ['Mukta', 'sans-serif']
       },
       animation: {
         aurora: 'aurora 2s ease-out infinite'

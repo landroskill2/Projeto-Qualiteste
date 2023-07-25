@@ -59,7 +59,7 @@ export default function Sessions(): React.ReactElement{
               <Tr>
                 <Th>Id</Th>
                 <Th>Data</Th>
-                <Th>Nº de provadores</Th>
+                <Th>Num. de provadores</Th>
               </Tr>
             </Thead>
             <Tbody>

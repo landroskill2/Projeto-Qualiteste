@@ -19,14 +19,14 @@ export default function ConsumersTable({consumers, onClickConsumer} : TableProps
     
     return (
         <TableContainer overflowX="unset" overflowY="unset">
-        <Table variant="simple" size="md" overflow="auto">
+        <Table variant="simple" size="md" overflow="auto" colorScheme="blackAlpha">
             <Thead top={0} zIndex="docked">
                 <Tr>
                     <Th>Id</Th>
-                    <Th>Fullname</Th>
-                    <Th>Age</Th>
-                    <Th>Sex</Th>
-                    <Th>Contact</Th>
+                    <Th>Nome</Th>
+                    <Th>Idade</Th>
+                    <Th>Sexo</Th>
+                    <Th>Contacto</Th>
                 </Tr>
             </Thead>
     
