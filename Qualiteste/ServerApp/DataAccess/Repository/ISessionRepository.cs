@@ -8,7 +8,7 @@ namespace Qualiteste.ServerApp.DataAccess.Repository
         IEnumerable<Session> GetSessionsByDate();
         IEnumerable<Test> GetTestsInSession(string id);
         IEnumerable<Consumer> GetConsumersInSession(string id);
-        void AddConsumerToSession(string id, int consumer);
+        void AddConsumerToSession(string id, int consumer, TimeOnly? sessionTime);
         void AddTestToSession(string id, Test test);
     }
 }

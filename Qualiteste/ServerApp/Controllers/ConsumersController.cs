@@ -11,7 +11,7 @@ namespace Qualiteste.ServerApp.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class ConsumersController : ControllerBase
     {
         private readonly IConsumerService _consumerService;

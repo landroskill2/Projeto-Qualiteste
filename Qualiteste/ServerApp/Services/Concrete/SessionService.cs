@@ -100,18 +100,29 @@ namespace Qualiteste.ServerApp.Services.Concrete
             }
         }
 
-        public Either<CustomError, string> AddConsumerToSession(string id, int consumer)
+        public Either<CustomError, string> AddConsumerToSession(string id, ConsumerSessionInputModel consumerSession)
         {
             try
             {
-                _unitOfWork.Sessions.AddConsumerToSession(id, consumer);
+                if(consumerSession.sessionTime == null) _unitOfWork.Sessions.AddConsumerToSession(id, consumerSession.consumerId, null);
+                else
+                {
+                    TimeOnly sessionTime = TimeOnly.Parse(consumerSession.sessionTime);
+                    _unitOfWork.Sessions.AddConsumerToSession(id, consumerSession.consumerId, sessionTime);
+                }
                 _unitOfWork.Complete();
                 return "Provador adicionado com sucesso";
             }catch(InvalidOperationException ex){
+                _unitOfWork.UntrackChanges();
                 return new ConsumerAlreadyInSession();
             }catch(Exception ex)
             {
                 _unitOfWork.UntrackChanges();
+                if (ex is FormatException)
+                {
+                    return new InvalidSessionTimeValue();
+                }
+                
                 throw ex;
             }
         }
