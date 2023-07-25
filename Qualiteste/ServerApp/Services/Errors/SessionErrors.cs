@@ -43,4 +43,12 @@
         }
     }
 
+    public class InvalidSessionTimeValue : CustomError
+    {
+        public InvalidSessionTimeValue() : base("Não foi possível processar o valor da hora da sessão.", 400)
+        {
+
+        }
+    }
+
 }

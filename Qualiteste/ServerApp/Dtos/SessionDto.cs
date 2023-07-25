@@ -38,6 +38,13 @@ namespace Qualiteste.ServerApp.Dtos
 
     }
 
+    public record ConsumerSessionInputModel
+    {
+        public int consumerId { get; init; }
+        public string? sessionTime { get; init; }
+
+    }
+
     public record SessionPageModel
     {
         public SessionOutputModel Session { get; init; }

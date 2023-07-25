@@ -29,9 +29,9 @@ namespace Qualiteste.ServerApp.DataAccess.Repository.Concrete
             GetSessionById(id).Tests.Add(test);
         }
 
-        public void AddConsumerToSession(string id, int consumer)
+        public void AddConsumerToSession(string id, int consumer, TimeOnly? sessionTime)
         {
-            ConsumerSession cs = new ConsumerSession {Sessionid = id, Consumerid = consumer};
+            ConsumerSession cs = new ConsumerSession {Sessionid = id, Consumerid = consumer, Sessiontime = sessionTime};
             GetSessionById(id).ConsumerSessions.Add(cs);
         }
 
