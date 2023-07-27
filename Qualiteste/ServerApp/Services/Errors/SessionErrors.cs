@@ -51,4 +51,13 @@
         }
     }
 
+    //Its not really an error is it
+    /**public class SessionHasNoConsumers : CustomError
+    {
+        public SessionHasNoConsumers() : base("A sessão encontra-se sem consumidores.", 400)
+        {
+
+        }
+    }*/
+
 }

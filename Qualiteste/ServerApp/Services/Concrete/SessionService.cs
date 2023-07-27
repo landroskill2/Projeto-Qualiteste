@@ -4,6 +4,7 @@ using Qualiteste.ServerApp.Dtos;
 using Qualiteste.ServerApp.Models;
 using Qualiteste.ServerApp.Services.Errors;
 using Qualiteste.ServerApp.Utils;
+using System.Collections.Generic;
 
 namespace Qualiteste.ServerApp.Services.Concrete
 {
@@ -78,7 +79,7 @@ namespace Qualiteste.ServerApp.Services.Concrete
             }
             catch (Exception ex)
             {
-                return null;
+                throw ex;
             }
         }
 
@@ -100,18 +101,14 @@ namespace Qualiteste.ServerApp.Services.Concrete
             }
         }
 
-        public Either<CustomError, string> AddConsumerToSession(string id, ConsumerSessionInputModel consumerSession)
+        public Either<CustomError, string> AddConsumerToSession(string id, IEnumerable<ConsumerSessionInputModel> consumerSession)
         {
             try
             {
-                if(consumerSession.sessionTime == null) _unitOfWork.Sessions.AddConsumerToSession(id, consumerSession.consumerId, null);
-                else
-                {
-                    TimeOnly sessionTime = TimeOnly.Parse(consumerSession.sessionTime);
-                    _unitOfWork.Sessions.AddConsumerToSession(id, consumerSession.consumerId, sessionTime);
-                }
+                IEnumerable<ConsumerSession> cs = consumerSession.Select(c => c.toDbConsumerSession());
+                _unitOfWork.Sessions.AddConsumerToSession(id, cs);
                 _unitOfWork.Complete();
-                return "Provador adicionado com sucesso";
+                return "Operação executada com sucesso";
             }catch(InvalidOperationException ex){
                 _unitOfWork.UntrackChanges();
                 return new ConsumerAlreadyInSession();
@@ -125,6 +122,27 @@ namespace Qualiteste.ServerApp.Services.Concrete
                 
                 throw ex;
             }
+        }
+
+
+        /**
+        - Works with ToList but not if i immediately return the IEnumerable
+        - Maybe repository functions are obsolete for this kind of operations
+        - Service Controller needs a endpoint for this operation
+         */
+        public Either<CustomError, IEnumerable<ConsumerSessionOutputModel>> GetConfirmedConsumersInSession(string sessionId)
+        {
+ 
+            Session? s = _unitOfWork.Sessions.GetSessionById(sessionId);
+            if(s == null) return new NoSessionFoundWithId();
+            List<ConsumerSessionOutputModel> res = s.ConsumerSessions.Where(cs => cs.Sessiontime != null).Select(el => el.toOutputModel()).ToList();
+            return res;
+
+        }
+
+        public Either<CustomError, string> GetNotConfirmedConsumersInSession(string sessionId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

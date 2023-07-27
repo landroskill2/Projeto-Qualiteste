@@ -8,7 +8,7 @@ using Qualiteste.ServerApp.Utils;
 
 namespace Qualiteste.ServerApp.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class SessionsController : ControllerBase
@@ -122,9 +122,9 @@ namespace Qualiteste.ServerApp.Controllers
         }
 
 
-        //[Authorize(Roles = "ADMIN")]
+        [Authorize(Roles = "ADMIN")]
         [HttpPost("{id}/consumers")]
-        public IActionResult AddConsumerToSession(string id, [FromBody] ConsumerSessionInputModel consumerSession)
+        public IActionResult AddConsumerToSession(string id, [FromBody] IEnumerable<ConsumerSessionInputModel> consumerSession)
         {
             try
             { 
@@ -139,5 +139,6 @@ namespace Qualiteste.ServerApp.Controllers
                 return Problem(statusCode: 500, title: "Ocorreu um erro inesperado");
             }
         }
+
     }
 }
