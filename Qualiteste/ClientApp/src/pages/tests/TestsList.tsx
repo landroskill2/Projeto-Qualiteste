@@ -49,7 +49,7 @@ export default function Tests(): React.ReactElement{
   }
   return (
     <div  className="flex flex-col flex-grow w-full min-h-full" >
-      <div>
+      <div className="mt-5">
         <h1 className="text-5xl font-bold text-center bg-white">Testes</h1>
       </div>
         {tests === null ? (
@@ -57,7 +57,7 @@ export default function Tests(): React.ReactElement{
             <Spinner size="lg" />
           </div>
         ) : (
-          <div className="mt-10 px-6 min-h-full w-full flex flex-col flex-grow">
+          <div className="mt-6 px-6 min-h-full w-full flex flex-col flex-grow">
             <TestTypeFilter type={type} setType={setType} />
             <div className="mt-10" style={{ maxHeight: 'calc(100vh - 220px)', overflowY: 'auto' }}>
               <TestsTable tests={tests} onClickTest={redirectToTestPage} />
