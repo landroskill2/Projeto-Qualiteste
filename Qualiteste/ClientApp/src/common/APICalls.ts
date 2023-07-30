@@ -183,12 +183,15 @@ export async function addTestToSession(
     // })
 }
 
+//Now consumer needs to be in an array
+//Change method signature to receive an array of consumers instead of a single consumer
 export async function addConsumerToSession(
     sessionID : string,
-    consumer : number
+    consumerId : number
 ) : Promise<AxiosResponse>{
     let path = `/sessions/${sessionID}/consumers`
-    return instance.post(path, consumer)
+    
+    return instance.post(path, [{consumerId}])
     // return fetch(path, {
     //     method: "POST",
     //     headers: {

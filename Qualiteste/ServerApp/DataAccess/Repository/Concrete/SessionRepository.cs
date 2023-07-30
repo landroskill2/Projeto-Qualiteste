@@ -29,11 +29,41 @@ namespace Qualiteste.ServerApp.DataAccess.Repository.Concrete
             GetSessionById(id).Tests.Add(test);
         }
 
-        public void AddConsumerToSession(string id, int consumer, TimeOnly? sessionTime)
+        public void AddConsumerToSession(string id, IEnumerable<ConsumerSession> consumerSessions)
         {
-            ConsumerSession cs = new ConsumerSession {Sessionid = id, Consumerid = consumer, Sessiontime = sessionTime};
-            GetSessionById(id).ConsumerSessions.Add(cs);
+            //Does not work because creates a new list that is not associated with EF operations
+            //GetSessionById(id).ConsumerSessions.ToList().AddRange(consumerSessions);
+            foreach (ConsumerSession consumerSession in consumerSessions)
+            {
+                GetSessionById(id).ConsumerSessions.Add(consumerSession);
+            }
+            //GetSessionById(id).ConsumerSessions.Add(cs);
         }
+
+        public void UpdateConsumerSession(string id, string consumerId)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        /*
+         These functions may be obsolete on the repository
+         */
+        public IEnumerable<ConsumerSession> GetNotConfirmedConsumerSessions(string sessionId)
+        {
+            //Fetch consumers without a sessionTime defined
+            return GetSessionById(sessionId).ConsumerSessions.Where(cs => cs.Sessiontime == null);
+        }
+
+        public IEnumerable<ConsumerSession> GetConfirmedConsumerSessions(string sessionId)
+        {
+            Session s = PostgresContext.Sessions.SingleOrDefault(s => s.Sessionid == sessionId);
+            return s.ConsumerSessions.Where(cs => cs.Sessiontime != null);
+        }
+        /*
+         ----
+        */
+
 
         public IEnumerable<Consumer> GetConsumersInSession(string id)
         {

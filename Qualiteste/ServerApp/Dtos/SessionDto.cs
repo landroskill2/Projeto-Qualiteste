@@ -43,6 +43,15 @@ namespace Qualiteste.ServerApp.Dtos
         public int consumerId { get; init; }
         public string? sessionTime { get; init; }
 
+
+        public ConsumerSession toDbConsumerSession()
+        {
+            return new ConsumerSession
+            {
+                Consumerid = consumerId,
+                Sessiontime = sessionTime != null ? TimeOnly.Parse(sessionTime) : null,
+            };
+        }
     }
 
     public record SessionPageModel
