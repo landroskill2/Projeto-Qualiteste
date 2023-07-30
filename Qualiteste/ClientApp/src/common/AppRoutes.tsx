@@ -13,6 +13,8 @@ import SessionCreation from "../pages/sessions/SessionCreation";
 import Login from "../pages/authentication/Login";
 import Layout from "../components/Layout";
 import { RequireAuth } from "../auth/RequireAuth";
+import { RequireRole } from "../auth/RequireRole";
+import Admin from "../pages/admin/Admin";
 
 export default function AppRoutes() {
   return (
@@ -23,6 +25,9 @@ export default function AppRoutes() {
         <Route path="/" element={<Home/>}/>
         {/* Authenticated Routes */}
         <Route element={<RequireAuth/>}>
+          <Route element={<RequireRole allowedRoles={["ADMIN"]} />}>
+            <Route path="admin" element={<Admin/>}/>
+          </Route>
           <Route path="consumers" element ={<Consumers />} />
           <Route path="consumers/create" element={<ConsumerCreation />} />
           <Route path="consumers/:id" element={<Consumer />} />

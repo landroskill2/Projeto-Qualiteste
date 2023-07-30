@@ -3,6 +3,8 @@ import CustomNavLink from './CustomNavLink';
 import AppRoutes from '../common/AppRoutes';
 import { useAuth } from '../auth/useAuth';
 import { useNavigate } from 'react-router-dom';
+import { SettingsIcon } from '@chakra-ui/icons'
+import WithPermission from '../auth/WithPermission';
 
 
 export default function NavMenu() {
@@ -52,7 +54,7 @@ export default function NavMenu() {
                 </CustomNavLink>
               </li>
               {account ? (
-                <>
+                <>                  
                   <li className="text-white">
                     <CustomNavLink href="/consumers" toggleNavBar={changeToggle}>
                       Provadores
@@ -68,6 +70,15 @@ export default function NavMenu() {
                       Sessões
                     </CustomNavLink>
                   </li>
+
+                  <WithPermission roleRequired='ADMIN'>
+                    <li>
+                      <CustomNavLink href="/admin" toggleNavBar={changeToggle}>
+                        <SettingsIcon />
+                      </CustomNavLink>
+                    </li>
+                  </WithPermission>
+
                   <li className="text-white">
                     <CustomNavLink href="/" toggleNavBar={changeToggle} onClick={() => {localStorage.clear(); navigate("/")}}>
                       Logout

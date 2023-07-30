@@ -71,9 +71,7 @@ export default function AddConsumersModal({onClickConsumer} : ModalProps) : Reac
                             </div>
                         ) : (
                             <div className='flex flex-col'>
-                                <div className="mb-10" style={{ position: "sticky", top: "4rem", zIndex: 1 }}>
-                                    <Text>Tempo da Sessão</Text>
-                                    <Input type="time" onChange={handleSessionTimeChange}></Input>
+                                <div className="mb-5" style={{ position: "sticky", top: "1rem", zIndex: 1 }}>
                                     <FilterBar
                                         setSex={setSex}
                                         setMinAge={setMinAge}
