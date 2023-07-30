@@ -15,6 +15,7 @@ import Layout from "../components/Layout";
 import { RequireAuth } from "../auth/RequireAuth";
 import { RequireRole } from "../auth/RequireRole";
 import Admin from "../pages/admin/Admin";
+import AccountCreation from "../pages/admin/AccountCreation";
 
 export default function AppRoutes() {
   return (
@@ -27,6 +28,7 @@ export default function AppRoutes() {
         <Route element={<RequireAuth/>}>
           <Route element={<RequireRole allowedRoles={["ADMIN"]} />}>
             <Route path="admin" element={<Admin/>}/>
+            <Route path="admin/register-account" element={<AccountCreation />} /> {/** mudar href */}
           </Route>
           <Route path="consumers" element ={<Consumers />} />
           <Route path="consumers/create" element={<ConsumerCreation />} />
