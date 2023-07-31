@@ -1,6 +1,6 @@
 import axios, { AxiosInstance, AxiosResponse } from "axios"
 import { IConsumerInputModel } from "./Interfaces/Consumers"
-import { ISessionModel } from "./Interfaces/Sessions"
+import { IConsumerSessionInputModel, ISessionModel } from "./Interfaces/Sessions"
 import { ITestInputModel } from "./Interfaces/Tests"
 import FizzAttribute from "./Interfaces/FizzAttributes"
 
@@ -88,10 +88,10 @@ export async function createTest(
 
 export async function addConsumerToTest(
     testID : string,
-    consumer : number
+    consumers : number[]
 ) : Promise<AxiosResponse>{
     let path = `/tests/${testID}/consumers`
-    return instance.post(path, consumer)
+    return instance.post(path, consumers)
 
     // return fetch(path, {
     //     method: "POST",
@@ -187,11 +187,11 @@ export async function addTestToSession(
 //Change method signature to receive an array of consumers instead of a single consumer
 export async function addConsumerToSession(
     sessionID : string,
-    consumerId : number
+    consumers : IConsumerSessionInputModel[]
 ) : Promise<AxiosResponse>{
     let path = `/sessions/${sessionID}/consumers`
     
-    return instance.post(path, [{consumerId}])
+    return instance.post(path, consumers)
     // return fetch(path, {
     //     method: "POST",
     //     headers: {

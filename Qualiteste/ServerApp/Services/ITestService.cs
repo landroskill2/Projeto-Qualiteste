@@ -6,7 +6,7 @@ namespace Qualiteste.ServerApp.Services
 {
     public interface ITestService
     {
-        Either<CustomError, string> AddConsumerToTest(string id, int consumer);
+        Either<CustomError, string> AddConsumerToTest(string id, IEnumerable<int> consumer);
         Either<CustomError, string> CreateNewTest(TestInputModel testInput);
         Either<CustomError, string> UpdateAttributeAlias(string testId, FizzAliasDto[] alias);
         Either<CustomError, IEnumerable<TestOutputModel>> GetFilteredTestsList(string type);

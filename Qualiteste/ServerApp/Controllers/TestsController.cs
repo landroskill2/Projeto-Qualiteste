@@ -30,7 +30,7 @@ namespace Qualiteste.ServerApp.Controllers
         {
             try
             {
-                if(type != null)
+                if (type != null)
                 {
                     Either<CustomError, IEnumerable<TestOutputModel>> result = _testService.GetFilteredTestsList(type);
                     return result.Match(
@@ -38,7 +38,7 @@ namespace Qualiteste.ServerApp.Controllers
                         success => Ok(success)
                         );
                 }
-                else 
+                else
                 {
                     Either<CustomError, IEnumerable<TestOutputModel>> result = _testService.GetTestsList();
                     return result.Match(
@@ -119,7 +119,7 @@ namespace Qualiteste.ServerApp.Controllers
         [Authorize(Roles = "ADMIN")]
         [HttpPost("{id}/consumers")]
         [ProducesResponseType(200, Type = typeof(string))]
-        public IActionResult AddConsumerToTest(string id, [FromBody] int consumer)
+        public IActionResult AddConsumerToTest(string id, [FromBody] IEnumerable<int> consumer)
         {
             try
             {
