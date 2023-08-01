@@ -42,7 +42,20 @@ namespace Qualiteste.ServerApp.Controllers
         [HttpPost("register")]
         public IActionResult Register(UserDto user)
         {
-            throw new NotImplementedException();
+            try
+            {
+                Either<CustomError, string> result = _accountService.CreateAccount(user);
+
+                return result.Match(
+                    error => Problem(statusCode: error.StatusCode, title: error.Message),
+                    success => Ok(success)
+                );
+                
+            }catch(Exception e)
+            {
+
+                return Problem(statusCode: 500, title: "Ocorreu um erro inesperado");
+            }
         }
     }
 }

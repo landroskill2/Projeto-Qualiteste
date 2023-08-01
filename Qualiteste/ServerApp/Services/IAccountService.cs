@@ -8,6 +8,6 @@ namespace Qualiteste.ServerApp.Services
     public interface IAccountService
     {
         Either<CustomError, string> Login(UserDto user);
-        string CreateUser(UserDto user);
+        Either<CustomError, string> CreateAccount(UserDto user);
     }
 }

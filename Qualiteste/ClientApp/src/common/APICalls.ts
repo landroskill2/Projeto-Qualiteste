@@ -3,6 +3,7 @@ import { IConsumerInputModel } from "./Interfaces/Consumers"
 import { ISessionModel } from "./Interfaces/Sessions"
 import { ITestInputModel } from "./Interfaces/Tests"
 import FizzAttribute from "./Interfaces/FizzAttributes"
+import IAccountOutput from "./Interfaces/Accounts"
 
 
 const instance: AxiosInstance = localStorage.getItem("QualitesteToken") ?
@@ -216,6 +217,12 @@ export async function loginUser(
     //     },
     //     body: JSON.stringify({ username, password })
     // })
+}
+
+export async function registerUser(
+    user: IAccountOutput
+) : Promise<AxiosResponse>{
+    return instance.post(path, user)
 }
 
 function addFiltersToQuery(

@@ -1,4 +1,5 @@
 export default interface IAccountOutput {
     username: string,
-    role: string
+    password: string,
+    role: "ADMIN" | "CLIENT"
 }

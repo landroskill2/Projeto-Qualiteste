@@ -7,29 +7,35 @@ import {
   Select,
   Button,
 } from "@chakra-ui/react";
-import { IConsumerInputModel } from "../../common/Interfaces/Consumers";
-import { createConsumer } from "../../common/APICalls";
+
 import { useGlobalToast } from "../../common/useGlobalToast";
 import { useNavigate } from "react-router-dom";
+import IAccountOutput from "../../common/Interfaces/Accounts";
+import { registerUser } from "../../common/APICalls";
 
-type AccountCredentials = {
-    username: string,
-    password: string,
-    type: "ADMIN" | "CLIENT"
-}
-
-const initialAccount : AccountCredentials = {
+const initialAccount : IAccountOutput = {
     username : "",
     password : "",
-    type : "ADMIN"
+    role : "ADMIN"
+}
+
+type ClientAttributes = {
+    id : string,
+    name : string
+}
+
+const initialClient : ClientAttributes = {
+    id : "",
+    name : ""
 }
   
   export default function AccountCreation(): React.ReactElement {
-    const [accountCredentials, setAccountCredentials] = useState<AccountCredentials>(initialAccount);
+    const [accountCredentials, setAccountCredentials] = useState<IAccountOutput>(initialAccount);
+    const [clientAttributes, setClientAttributes] = useState<ClientAttributes>(initialClient)
     const { addToast, isToastActive } = useGlobalToast() 
     const navigate = useNavigate()
   
-    const handleInputChange = (
+    const handleAccountInputChange = (
       e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
     ) => {
       const { name, value } = e.target;
@@ -39,31 +45,41 @@ const initialAccount : AccountCredentials = {
         [name]: value,
       }));
     };
+
+    const handleClientInputChange = (
+      e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+      ) => {
+        const { name, value} = e.target
+        setClientAttributes((prevClientAttributes) => ({
+          ...prevClientAttributes,
+          [name] : value
+        }))
+      }
   
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    //   e.preventDefault();
-    //   const resp = await createConsumer(consumer).catch(err => {
-    //     console.log(err)
-    //     if(!isToastActive("error")){
-    //       addToast({
-    //         id: "error",
-    //         title: "Erro",
-    //         description: err.response.data.title,
-    //         status: "error"
-    //       })
-    //     }
-    //   })
-    //   if(resp?.status === 201){
-    //     const toastObj = {id: "success", title: "Sucesso", description: "Provador criado com sucesso.", status: "success"}
-    //     const location = resp!.headers.location.split("/api")[1]
-    //     navigate(location, {state: toastObj})
-    //   }
+      e.preventDefault();
+      const resp = await registerUser(accountCredentials).catch(err => {
+        console.log(err)
+        if(!isToastActive("error")){
+          addToast({
+            id: "error",
+            title: "Erro",
+            description: err.response.data.title,
+            status: "error"
+          })
+        }
+      })
+      if(resp?.status === 201){
+        const toastObj = {id: "success", title: "Sucesso", description: "Provador criado com sucesso.", status: "success"}
+        const location = resp!.headers.location.split("/api")[1]
+        navigate(location, {state: toastObj})
+      }
     };
 
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-white">
          <form onSubmit={handleSubmit}>
-          <Box className="bg-slate-800 shadow-slate-600 rounded-lg shadow-md p-6 gap-4">
+          <Box className="bg-slate-800 shadow-slate-600 rounded-lg shadow-md p-6">
             <div className="flex flex-col items-center justify-center mb-4">
                 <h1 className="text-center text-3xl font-bold text-white">Criar Conta</h1>
             </div>
@@ -73,9 +89,9 @@ const initialAccount : AccountCredentials = {
               <Input
                 name="username"
                 type="text"
-                min={1}
+                min={4}
                 value={accountCredentials.username}
-                onChange={handleInputChange}
+                onChange={handleAccountInputChange}
                 background="white"
               />
             </FormControl>  
@@ -85,20 +101,20 @@ const initialAccount : AccountCredentials = {
               <Input
                 name="password"
                 type="password"
-                maxLength={200}
+                maxLength={16}
                 value={accountCredentials.password}
-                onChange={handleInputChange}
+                onChange={handleAccountInputChange}
                 background="white"
               />
             </FormControl>
             </div>
             <div className="flex flex-row justify-between gap-3">
-              <FormControl id="type" isRequired>
+              <FormControl id="role" isRequired>
                 <FormLabel textColor="white">Tipo de conta</FormLabel>
                 <Select
-                  name="type"
-                  value={accountCredentials.type}
-                  onChange={handleInputChange}
+                  name="role"
+                  value={accountCredentials.role}
+                  onChange={handleAccountInputChange}
                   background="white"
                 >
                   <option value="ADMIN">Admin</option>
@@ -107,41 +123,34 @@ const initialAccount : AccountCredentials = {
               </FormControl>
             </div>
             
-            
-            {/* <div className="flex flex-row justify-between gap-3">
-              <FormControl id="dateofbirth" isRequired>
-                <FormLabel textColor="white">Date of Birth</FormLabel>
-                <Input
-                  name="dateofbirth"
-                  type="date"
-                  value={consumer.dateofbirth}
-                  onChange={handleInputChange}
-                  background="white"
-                />
-              </FormControl>
-      
-              <FormControl id="contact" isRequired>
-                <FormLabel textColor="white">Contact</FormLabel>
-                <Input
-                  name="contact"
-                  type="text"
-                  value={consumer.contact}
-                  onChange={handleInputChange}
-                  background="white"
-                />
-              </FormControl>   
-            </div>
-            
-            <FormControl className="grid-span-full" id="email">
-              <FormLabel textColor="white">Email</FormLabel>
-              <Input
-                name="email"
-                type="email"
-                value={consumer.email || ""}
-                onChange={handleInputChange}
-                background="white"
-              />
-            </FormControl> */}
+            {accountCredentials.role == "CLIENT" && 
+              <div className="flex flex-row justify-between gap-3">
+                <FormControl id="id" isRequired>
+                  <FormLabel textColor="white">ID de cliente</FormLabel>
+                  <Input
+                    name="id"
+                    type="text"
+                    min={1}
+                    value={clientAttributes.id}
+                    onChange={handleClientInputChange}
+                    background="white"
+                  />
+                </FormControl>  
+    
+                <FormControl id="name" isRequired>
+                  <FormLabel textColor="white">Designação de cliente</FormLabel>
+                  <Input
+                    name="name"
+                    type="text"
+                    maxLength={40}
+                    value={clientAttributes.name}
+                    onChange={handleClientInputChange}
+                    background="white"
+                  />
+                </FormControl>
+              </div>
+            }
+          
             <Button type="submit" mt={4} colorScheme="blue">
               Criar
             </Button>

@@ -21,11 +21,6 @@ namespace Qualiteste.ServerApp.Services.Concrete
             _unitOfWork = unitOfWork;
         }
 
-        public string CreateUser(UserDto user)
-        {
-            throw new NotImplementedException();
-        }
-
         // MUDAR RETORNO COM SUCESSO DO EITHER PARA O ID TOKEN
         Either<CustomError, string> IAccountService.Login(UserDto user)
         {
@@ -67,6 +62,11 @@ namespace Qualiteste.ServerApp.Services.Concrete
                 var token = tokenHandler.CreateToken(tokenDescriptor);
                 return tokenHandler.WriteToken(token);
             }
+        }
+
+        public Either<CustomError, string> CreateAccount(UserDto user)
+        {
+            throw new NotImplementedException();
         }
     }
 }
