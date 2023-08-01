@@ -124,6 +124,41 @@ namespace Qualiteste.ServerApp.Services.Concrete
             }
         }
 
+        public Either<CustomError, string> RemoveInvitedConsumerFromSession(string sessionId, string selection)
+        {
+
+            try
+            {
+                int consumerId;
+                if (selection.ToLower().Equals("all"))
+                {
+                    _unitOfWork.Sessions.RemoveAllInvitedConsumersFromSession(sessionId);
+                }
+                else if (int.TryParse(selection, out consumerId))
+                {
+                    _unitOfWork.Sessions.RemoveInvitedConsumerFromSession(sessionId, consumerId);
+                }
+                else
+                {
+                    return new InvalidQueryParameterValue();
+                }
+                _unitOfWork.Complete();
+                return "Operação executada com sucesso.";
+            }catch(Exception ex)
+            {
+                _unitOfWork.UntrackChanges();
+                if (ex is ArgumentNullException)
+                {
+                    return new NoConsumerFoundWithId();
+                }
+                else if(ex is NullReferenceException)
+                {
+                    return new NoSessionFoundWithId();
+                }
+                throw ex;
+            }
+        }
+
 
         /**
         - Works with ToList but not if i immediately return the IEnumerable

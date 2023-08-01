@@ -8,7 +8,7 @@ using Qualiteste.ServerApp.Utils;
 
 namespace Qualiteste.ServerApp.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class SessionsController : ControllerBase
@@ -129,6 +129,24 @@ namespace Qualiteste.ServerApp.Controllers
             try
             { 
                 Either<CustomError, string> c = _sessionService.AddConsumerToSession(id, consumerSession);
+                return c.Match(
+                    error => Problem(statusCode: error.StatusCode, title: error.Message),
+                    success => Ok(success)
+                    );
+            }
+            catch (Exception e)
+            {
+                return Problem(statusCode: 500, title: "Ocorreu um erro inesperado");
+            }
+        }
+
+        //[Authorize(Roles = "ADMIN")]
+        [HttpDelete("{id}/consumers")]
+        public IActionResult RemoveInvitedConsumerFromSession(string id, [FromQuery] string selection)
+        {
+            try
+            {
+                Either<CustomError, string> c = _sessionService.RemoveInvitedConsumerFromSession(id, selection);
                 return c.Match(
                     error => Problem(statusCode: error.StatusCode, title: error.Message),
                     success => Ok(success)

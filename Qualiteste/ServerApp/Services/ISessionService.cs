@@ -14,5 +14,7 @@ namespace Qualiteste.ServerApp.Services
         Either<CustomError, IEnumerable<SessionOutputModel>> GetSessionsList();
         Either<CustomError, SessionOutputModel> UpdateSession(int id, SessionInputModel sessionInput);
         Either<CustomError, IEnumerable<ConsumerSessionOutputModel>> GetConfirmedConsumersInSession(string sessionId);
+
+        Either<CustomError, string> RemoveInvitedConsumerFromSession(string sessionId, string selection);
     }
 }

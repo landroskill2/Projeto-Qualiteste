@@ -51,6 +51,14 @@
         }
     }
 
+    public class InvalidQueryParameterValue : CustomError
+    {
+        public InvalidQueryParameterValue() : base("Não foi possível processar o valor da query recebida.", 400)
+        {
+
+        }
+    }
+
     //Its not really an error is it
     /**public class SessionHasNoConsumers : CustomError
     {

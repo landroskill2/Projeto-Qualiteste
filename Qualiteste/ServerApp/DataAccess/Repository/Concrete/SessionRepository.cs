@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Qualiteste.ServerApp.Models;
+using Qualiteste.ServerApp.Services.Errors;
 
 namespace Qualiteste.ServerApp.DataAccess.Repository.Concrete
 {
@@ -38,6 +39,19 @@ namespace Qualiteste.ServerApp.DataAccess.Repository.Concrete
                 GetSessionById(id).ConsumerSessions.Add(consumerSession);
             }
             //GetSessionById(id).ConsumerSessions.Add(cs);
+        }
+
+        public void RemoveInvitedConsumerFromSession(string sessionId, int consumerId)
+        {
+            ConsumerSession cs = GetSessionById(sessionId).ConsumerSessions.SingleOrDefault(cs => consumerId == cs.Consumerid);
+            
+                PostgresContext.ConsumerSessions.Remove(cs);
+        }
+
+        public void RemoveAllInvitedConsumersFromSession(string sessionId)
+        {
+            IEnumerable<ConsumerSession> cSessions = GetSessionById(sessionId).ConsumerSessions.Where(cs => cs.Sessiontime == null);
+            PostgresContext.ConsumerSessions.RemoveRange(cSessions);
         }
 
         public void UpdateConsumerSession(string id, string consumerId)

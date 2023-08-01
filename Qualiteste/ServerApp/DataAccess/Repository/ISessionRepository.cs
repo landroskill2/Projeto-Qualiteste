@@ -1,4 +1,5 @@
 ﻿using Qualiteste.ServerApp.Models;
+using Qualiteste.ServerApp.Services.Errors;
 
 namespace Qualiteste.ServerApp.DataAccess.Repository
 {
@@ -13,6 +14,10 @@ namespace Qualiteste.ServerApp.DataAccess.Repository
         IEnumerable<ConsumerSession> GetNotConfirmedConsumerSessions(string sessionId);
 
         void AddConsumerToSession(string id, IEnumerable<ConsumerSession> consumerSessions);
+
+        void RemoveInvitedConsumerFromSession(string sessionId, int consumerId);
+
+        void RemoveAllInvitedConsumersFromSession(string sessionId);
         void AddTestToSession(string id, Test test);
     }
 }
