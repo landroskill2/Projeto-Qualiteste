@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import {
+  Button,
   Table,
   Thead,
   Tbody,
@@ -14,7 +15,7 @@ import {
 import { ISessionModel } from '../../common/Interfaces/Sessions'
 import { IConsumerSessionOutputModel, IConsumerSessionInputModel } from '../../common/Interfaces/Sessions'
 import { ITestOutputModel } from "../../common/Interfaces/Tests";
-import { addConsumerToSession, addTestToSession, fetchSessionById } from '../../common/APICalls';
+import { addConsumerToSession, addTestToSession, fetchSessionById, removeNotConfirmedConsumers } from '../../common/APICalls';
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { IConsumerOutputModel} from "../../common/Interfaces/Consumers";
 import AddConsumersModal from "../../components/modals/AddConsumersModal";
@@ -38,6 +39,20 @@ export default function Session() : React.ReactElement{
 
   const redirectToTestPage = (id: string) => {
     navigate(`/tests/${id}`)
+  }
+
+  const removeNotConfirmed = async (sessionId : string, selection? : string) => {
+    const resp = await removeNotConfirmedConsumers(sessionId, selection).catch(err => {
+      addToast({id: "error", title: "Erro", description: err.response.data.title, status: "error"})
+    })
+
+    if(resp?.status === 200){
+      setIsLoading(true)
+      populateData().then(() => {
+        setIsLoading(false)
+        addToast({id: "success", title: "Sucesso", description: resp.data, status: "success"})
+      })
+    } 
   }
 
   const addTest = async (testID : string) => {
@@ -154,11 +169,13 @@ export default function Session() : React.ReactElement{
             </Tbody>
           </Table>
           <Heading>Consumer Sessions</Heading>
+          /**Temporario, mudar aspecto e interação com o butão*/
+          <Button onClick={() => {removeNotConfirmed(session!.id)}}>Validar Consumidores</Button>
           <Table variant="simple">
             <Thead>
               <Tr>
                 {groupConsumerSessionsByTime().map(({ sessionTime }) => (
-                  <Th key={sessionTime}>{sessionTime}</Th>
+                  sessionTime && <Th key={sessionTime}>{sessionTime}</Th>
                 ))}
               </Tr>
             </Thead>

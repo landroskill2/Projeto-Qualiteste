@@ -8,7 +8,7 @@ using Qualiteste.ServerApp.Utils;
 
 namespace Qualiteste.ServerApp.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class SessionsController : ControllerBase
@@ -140,7 +140,7 @@ namespace Qualiteste.ServerApp.Controllers
             }
         }
 
-        //[Authorize(Roles = "ADMIN")]
+        [Authorize(Roles = "ADMIN")]
         [HttpDelete("{id}/consumers")]
         public IActionResult RemoveInvitedConsumerFromSession(string id, [FromQuery] string selection)
         {

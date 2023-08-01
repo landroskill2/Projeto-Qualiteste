@@ -131,8 +131,6 @@ export async function getFizzTableValues(
     //return fetch(path)
 }
 
-//TODO
-//IS Boolean to test stuff
 export async function changeFizzAttributesAlias(
     testId : string,
     attributes: FizzAttribute[]
@@ -184,8 +182,14 @@ export async function addTestToSession(
     // })
 }
 
-//Now consumer needs to be in an array
-//Change method signature to receive an array of consumers instead of a single consumer
+export async function removeNotConfirmedConsumers(
+    sessionID : string,
+    selection : string = "all"
+) : Promise<AxiosResponse>{
+    let path = `sessions/${sessionID}/consumers?selection=${selection}`
+    return instance.delete(path)
+}
+
 export async function addConsumerToSession(
     sessionID : string,
     consumers : IConsumerSessionInputModel[]
