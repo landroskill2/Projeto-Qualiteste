@@ -17,6 +17,6 @@ namespace Qualiteste.ServerApp.DataAccess.Repository
         void AddAttributeValue(AttributeValue attributeValue);
         Dictionary<string, string> GetFizzColumns(int id);
         IEnumerable<IGrouping<int, AttributeValue>> GetFizzValuesGroupedByConsumer(int id);
-        void AddConsumerToTest(string id, int consumer);
+        void AddConsumerToTest(string id, IEnumerable<int> consumer);
     }
 }

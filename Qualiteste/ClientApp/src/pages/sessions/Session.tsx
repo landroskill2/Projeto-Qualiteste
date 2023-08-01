@@ -12,11 +12,11 @@ import {
   Spinner,
 } from "@chakra-ui/react";
 import { ISessionModel } from '../../common/Interfaces/Sessions'
-import { IConsumerSessionOutputModel } from '../../common/Interfaces/Sessions'
+import { IConsumerSessionOutputModel, IConsumerSessionInputModel } from '../../common/Interfaces/Sessions'
 import { ITestOutputModel } from "../../common/Interfaces/Tests";
 import { addConsumerToSession, addTestToSession, fetchSessionById } from '../../common/APICalls';
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { IConsumerOutputModel } from "../../common/Interfaces/Consumers";
+import { IConsumerOutputModel} from "../../common/Interfaces/Consumers";
 import AddConsumersModal from "../../components/modals/AddConsumersModal";
 import AddTestsModal from "../../components/modals/AddTestsModal";
 import { useGlobalToast } from "../../common/useGlobalToast";
@@ -53,8 +53,9 @@ export default function Session() : React.ReactElement{
     }
   }
 
-  const addConsumer = async (consumerID : number) => {
-    const resp = await addConsumerToSession(id!, consumerID).catch(err => {
+  const addConsumers = async (consumersID : number[]) => {
+    let body = consumersID.map(n => { return {consumerId : n} as IConsumerSessionInputModel} )
+    const resp = await addConsumerToSession(id!, body).catch(err => {
       addToast({id: "error", title: "Erro", description: err.response.data.title, status: "error"})
     }) 
     if(resp?.status === 200){
@@ -64,6 +65,7 @@ export default function Session() : React.ReactElement{
         addToast({id: "success", title: "Sucesso", description: "Provador adicionado com sucesso.", status: "success"})
       })   
     }
+    
   }
 
   useEffect(() => {
@@ -133,7 +135,7 @@ export default function Session() : React.ReactElement{
             </Box>
 
             <Box>
-              <AddConsumersModal onClickConsumer={addConsumer}/>
+              <AddConsumersModal onSubmit={addConsumers}/>
             </Box>
           </Box>
           

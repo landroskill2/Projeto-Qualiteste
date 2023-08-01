@@ -26,8 +26,8 @@ export default function Test(): React.ReactElement {
     navigate(`/consumers/${id}`);
   };
 
-  const addConsumer = async (consumerID : number) => {
-    const resp = await addConsumerToTest(id!, consumerID).catch(err => {
+  const addConsumers = async (consumers : number[]) => {
+    const resp = await addConsumerToTest(id!, consumers).catch(err => {
       addToast({id: "error", title: "Erro", description: err.response.data.title, status: "error"})
     })
     if(resp?.status === 200){
@@ -107,7 +107,7 @@ export default function Test(): React.ReactElement {
 
         {isHomeTest && 
           <Box>
-            <AddConsumersModal onClickConsumer={addConsumer}/>
+            <AddConsumersModal onSubmit={addConsumers}/>
           </Box>
         }
         {!isHomeTest &&

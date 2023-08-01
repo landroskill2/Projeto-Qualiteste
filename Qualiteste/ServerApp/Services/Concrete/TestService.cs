@@ -129,7 +129,7 @@ namespace Qualiteste.ServerApp.Services.Concrete
             }
         }
 
-        public Either<CustomError, string> AddConsumerToTest(string id, int consumer)
+        public Either<CustomError, string> AddConsumerToTest(string id, IEnumerable<int> consumer)
         {
             try
             {

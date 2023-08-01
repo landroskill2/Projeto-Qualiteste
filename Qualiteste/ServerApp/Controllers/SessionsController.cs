@@ -140,5 +140,19 @@ namespace Qualiteste.ServerApp.Controllers
             }
         }
 
+        [Authorize(Roles = "ADMIN")]
+        [HttpPut("{id}/consumers")]
+        public IActionResult UpdateConsumerSessionTime(string id, [FromBody] IEnumerable<ConsumerSessionInputModel> consumerSession)
+        {
+            try
+            {
+                throw new NotImplementedException();
+            }
+            catch (Exception e)
+            {
+                return Problem(statusCode: 500, title: "Ocorreu um erro inesperado");
+            }
+        }
+
     }
 }

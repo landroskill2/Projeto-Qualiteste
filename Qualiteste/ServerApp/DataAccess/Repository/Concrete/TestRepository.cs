@@ -64,10 +64,13 @@ namespace Qualiteste.ServerApp.DataAccess.Repository.Concrete
             PostgresContext.AttributeValues.Add(attributeValue);
         }
 
-        public void AddConsumerToTest(string id, int consumer)
+        public void AddConsumerToTest(string id, IEnumerable<int> consumers)
         {
-            ConsumerHt cHT = new ConsumerHt {Testid = id, Consumerid = consumer};
-            GetTestById(id)?.ConsumerHts.Add(cHT);
+            IEnumerable<ConsumerHt> cHT = consumers.Select(cid => new ConsumerHt { Testid = id, Consumerid = cid });
+            foreach(ConsumerHt c in cHT)
+            {
+                GetTestById(id)?.ConsumerHts.Add(c);
+            }
         }
 
         public Dictionary<string, string> GetFizzColumns(int id)
