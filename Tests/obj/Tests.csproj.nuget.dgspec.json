@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\landr\\Desktop\\Qualiteste\\Tests\\Tests.csproj": {}
+    "C:\\Users\\Leandro\\Desktop\\Qualiteste\\Projeto-Qualiteste\\Tests\\Tests.csproj": {}
   },
   "projects": {
-    "C:\\Users\\landr\\Desktop\\Qualiteste\\Qualiteste\\Qualiteste.csproj": {
+    "C:\\Users\\Leandro\\Desktop\\Qualiteste\\Projeto-Qualiteste\\Qualiteste\\Qualiteste.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\landr\\Desktop\\Qualiteste\\Qualiteste\\Qualiteste.csproj",
+        "projectUniqueName": "C:\\Users\\Leandro\\Desktop\\Qualiteste\\Projeto-Qualiteste\\Qualiteste\\Qualiteste.csproj",
         "projectName": "Qualiteste",
-        "projectPath": "C:\\Users\\landr\\Desktop\\Qualiteste\\Qualiteste\\Qualiteste.csproj",
-        "packagesPath": "C:\\Users\\landr\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\landr\\Desktop\\Qualiteste\\Qualiteste\\obj\\",
+        "projectPath": "C:\\Users\\Leandro\\Desktop\\Qualiteste\\Projeto-Qualiteste\\Qualiteste\\Qualiteste.csproj",
+        "packagesPath": "C:\\Users\\Leandro\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Leandro\\Desktop\\Qualiteste\\Projeto-Qualiteste\\Qualiteste\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\landr\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Leandro\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -22,7 +22,7 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\sdk\\7.0.304\\Sdks\\Microsoft.NET.Sdk.Web\\library-packs": {},
+          "C:\\Program Files\\dotnet\\sdk\\7.0.306\\Sdks\\Microsoft.NET.Sdk.Web\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -111,21 +111,21 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.304\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.306\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\landr\\Desktop\\Qualiteste\\Tests\\Tests.csproj": {
+    "C:\\Users\\Leandro\\Desktop\\Qualiteste\\Projeto-Qualiteste\\Tests\\Tests.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\landr\\Desktop\\Qualiteste\\Tests\\Tests.csproj",
+        "projectUniqueName": "C:\\Users\\Leandro\\Desktop\\Qualiteste\\Projeto-Qualiteste\\Tests\\Tests.csproj",
         "projectName": "Tests",
-        "projectPath": "C:\\Users\\landr\\Desktop\\Qualiteste\\Tests\\Tests.csproj",
-        "packagesPath": "C:\\Users\\landr\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\landr\\Desktop\\Qualiteste\\Tests\\obj\\",
+        "projectPath": "C:\\Users\\Leandro\\Desktop\\Qualiteste\\Projeto-Qualiteste\\Tests\\Tests.csproj",
+        "packagesPath": "C:\\Users\\Leandro\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Leandro\\Desktop\\Qualiteste\\Projeto-Qualiteste\\Tests\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\landr\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Leandro\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -139,8 +139,8 @@
           "net7.0": {
             "targetAlias": "net7.0",
             "projectReferences": {
-              "C:\\Users\\landr\\Desktop\\Qualiteste\\Qualiteste\\Qualiteste.csproj": {
-                "projectPath": "C:\\Users\\landr\\Desktop\\Qualiteste\\Qualiteste\\Qualiteste.csproj"
+              "C:\\Users\\Leandro\\Desktop\\Qualiteste\\Projeto-Qualiteste\\Qualiteste\\Qualiteste.csproj": {
+                "projectPath": "C:\\Users\\Leandro\\Desktop\\Qualiteste\\Projeto-Qualiteste\\Qualiteste\\Qualiteste.csproj"
               }
             }
           }
@@ -196,7 +196,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.304\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.306\\RuntimeIdentifierGraph.json"
         }
       }
     }
