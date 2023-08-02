@@ -170,7 +170,8 @@ export default function Session() : React.ReactElement{
           </Table>
           <Heading>Consumer Sessions</Heading>
           /**Temporario, mudar aspecto e interação com o butão*/
-          <Button onClick={() => {removeNotConfirmed(session!.id)}}>Validar Consumidores</Button>
+          {groupConsumerSessionsByTime().filter(cs => {cs.sessionTime == undefined})
+           && <Button onClick={() => {removeNotConfirmed(session!.id)}}>Limpar Não Confirmados</Button>}
           <Table variant="simple">
             <Thead>
               <Tr>
