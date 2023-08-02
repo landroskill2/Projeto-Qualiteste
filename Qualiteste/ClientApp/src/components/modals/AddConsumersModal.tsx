@@ -40,10 +40,7 @@ export default function AddConsumersModal({onSubmit} : ModalProps) : React.React
         populateData() 
     }, [sex, minAge, maxAge, searchString]);
     
-    useEffect(() => {
-       console.log(selectedConsumers)
-    }, [selectedConsumers]);
-    
+
     async function populateData() {
     const filters = Object.assign(
         {},

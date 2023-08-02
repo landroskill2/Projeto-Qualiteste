@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import { CheckIcon, CloseIcon } from "@chakra-ui/icons";
+
 import {
   Button,
   Table,
@@ -22,12 +24,19 @@ import AddConsumersModal from "../../components/modals/AddConsumersModal";
 import AddTestsModal from "../../components/modals/AddTestsModal";
 import { useGlobalToast } from "../../common/useGlobalToast";
 
+type ConsumersInSession = {
+  sessionTime: string,
+  consumers: IConsumerOutputModel[]
+}
+
 export default function Session() : React.ReactElement{
   // State variables to hold the session, consumerSessions, and tests data
   const [session, setSession] = useState<ISessionModel | null>(null);
   const [consumerSessions, setConsumerSessions] = useState<IConsumerSessionOutputModel[]>([]);
   const [tests, setTests] = useState<ITestOutputModel[]>([]);
   const [isLoading, setIsLoading] = useState(true)
+  
+
   const {id} = useParams()
   const navigate = useNavigate()
   const { addToast, isToastActive } = useGlobalToast() 
@@ -41,7 +50,7 @@ export default function Session() : React.ReactElement{
     navigate(`/tests/${id}`)
   }
 
-  const removeNotConfirmed = async (sessionId : string, selection? : string) => {
+  const removeNotConfirmed = async (sessionId : string, selection? : string | number) => {
     const resp = await removeNotConfirmedConsumers(sessionId, selection).catch(err => {
       addToast({id: "error", title: "Erro", description: err.response.data.title, status: "error"})
     })
@@ -93,7 +102,6 @@ export default function Session() : React.ReactElement{
     populateData().then(() => {
       setIsLoading(false)
     });
-
   }, []);
 
   async function populateData() {
@@ -103,10 +111,11 @@ export default function Session() : React.ReactElement{
     setSession(session);
     setConsumerSessions(consumers);
     setTests(tests);
+    
   }
 
   // Helper function to group the consumerSessions by sessionTime
-  const groupConsumerSessionsByTime = (): { sessionTime: string, consumers: IConsumerOutputModel[] }[] => {
+  const groupConsumerSessionsByTime = (): {confirmed : ConsumersInSession[], invited : ConsumersInSession[]} => {
     const grouped: { [key: string]: IConsumerOutputModel[] } = {};
     if (consumerSessions) {
       consumerSessions.forEach((consumerSession) => {
@@ -118,15 +127,20 @@ export default function Session() : React.ReactElement{
       });
     }
 
+    
+    
+
     // convert the grouped object to an array of objects with sessionTime and consumers properties
-    const result = [];
+    const confirmed = [];
+    const invited = []
     for (const [sessionTime, consumers] of Object.entries(grouped)) {
-      result.push({ sessionTime, consumers });
+      if(sessionTime === "null") invited.push({ sessionTime : "Convidados", consumers });
+      else confirmed.push({ sessionTime, consumers });
     }
 
-    return result;
+    return {confirmed, invited};
   };
-
+  let sortedConsumerSessions : {confirmed : ConsumersInSession[], invited : ConsumersInSession[]} = groupConsumerSessionsByTime()
   // Render the component
   return (
     <>
@@ -168,21 +182,52 @@ export default function Session() : React.ReactElement{
               </Tr>
             </Tbody>
           </Table>
-          <Heading>Consumer Sessions</Heading>
-          /**Temporario, mudar aspecto e interação com o butão*/
-          {groupConsumerSessionsByTime().filter(cs => {cs.sessionTime == undefined})
-           && <Button onClick={() => {removeNotConfirmed(session!.id)}}>Limpar Não Confirmados</Button>}
+          
+          {sortedConsumerSessions.invited.length>0
+           && (
+           <>
+           <Heading>Provadores Convidados</Heading>
+           <Button onClick={() => {removeNotConfirmed(session!.id)}}>Limpar Convidados</Button>
+           <Table variant="simple">
+           <Tbody>
+              <Tr>
+                {sortedConsumerSessions.invited.map(({ consumers }) => (
+                  <Td key={consumers[0].id}>
+                    {consumers.map((consumer) => (
+                      <div className="flex items-center justify-center">
+                        <Tr key={consumer.id} onClick={() => redirectToConsumerPage(consumer.id)}>
+                          <Td className="hover:bg-slate-200 cursor-pointer">{consumer.fullname}</Td>
+                        </Tr>
+                        <div className="flex gap-4 items-center content-between">
+                          <div className="hover:bg-slate-200 cursor-pointer px-1">
+                            <CloseIcon boxSize="0.7em" onClick={() => {removeNotConfirmed(session!.id, consumer.id)}} />
+                          </div>
+                          <div className="hover:bg-slate-200 cursor-pointer px-1">
+                            <CheckIcon boxSize="0.9em"onClick={() => {console.log("click confirm")}} />
+                          </div>
+                        </div>
+                      </div>
+                      
+                    ))}
+                  </Td>
+                ))}
+              </Tr>
+            </Tbody>
+           </Table>
+           </>
+           )}
+          <Heading>Provadores Confirmados</Heading>
           <Table variant="simple">
             <Thead>
               <Tr>
-                {groupConsumerSessionsByTime().map(({ sessionTime }) => (
+                {sortedConsumerSessions.confirmed.map(({ sessionTime }) => (
                   sessionTime && <Th key={sessionTime}>{sessionTime}</Th>
                 ))}
               </Tr>
             </Thead>
             <Tbody>
               <Tr>
-                {groupConsumerSessionsByTime().map(({ consumers }) => (
+                {sortedConsumerSessions.confirmed.map(({ consumers }) => (
                   <Td key={consumers[0].id}>
                     {consumers.map((consumer) => (
                       <Tr key={consumer.id} onClick={() => redirectToConsumerPage(consumer.id)}>
