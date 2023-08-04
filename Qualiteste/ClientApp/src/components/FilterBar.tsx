@@ -15,9 +15,13 @@ interface Params {
     minAge? : number,
     maxAge? : number,
     searchBar? : boolean,
+    brands? : string[],
+    type? : string,
     setSex? : any,
     setMinAge? : any,
     setMaxAge? : any,
+    setBrands : any,
+    setType : any,
     setSearchString? : any
 }
 
@@ -26,9 +30,13 @@ export default function FilterBar({
     minAge,
     maxAge,
     searchBar,
+    brands = [],
+    type = "Ambos",
     setSex,
     setMinAge,
     setMaxAge,
+    setBrand,
+    setType,
     setSearchString
 }: Params) {
     const [dropdownText, setDropdownText] = useState(sex)
@@ -38,13 +46,22 @@ export default function FilterBar({
         setSearchString(searchInputValue)
     }
 
-    function onClickDropDownItem(sex: string | undefined){
+    function onClickSexDropDown(sex: string | undefined){
         if(sex) {
             setDropdownText(sex)
         }else{
             setDropdownText("Sexo")
         }
         setSex(sex)
+    }
+
+    function onClickTypeDropDown(type: string | undefined){
+        if(type) {
+            setDropdownText(type)
+        }else{
+            setDropdownText("Ambos")
+        }
+        setType(type)
     }
 
     function useSearchBar() {
@@ -90,19 +107,19 @@ export default function FilterBar({
                                 <MenuList>
                                     <MenuItem
                                         className="capitalize"
-                                        onClick={() => onClickDropDownItem(undefined)}
+                                        onClick={() => onClickSexDropDown(undefined)}
                                     >
                                         Ambos
                                     </MenuItem>
                                     <MenuItem
                                         className="capitalize"
-                                        onClick={() => onClickDropDownItem("M")}
+                                        onClick={() => onClickSexDropDown("M")}
                                     >
                                         Masculino
                                     </MenuItem>
                                     <MenuItem
                                         className="capitalize"
-                                        onClick={() => onClickDropDownItem("F")}
+                                        onClick={() => onClickSexDropDown("F")}
                                     >
                                         Feminino
                                     </MenuItem>
