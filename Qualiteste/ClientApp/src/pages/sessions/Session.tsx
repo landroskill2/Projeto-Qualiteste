@@ -17,10 +17,11 @@ import {
 import { ISessionModel } from '../../common/Interfaces/Sessions'
 import { IConsumerSessionOutputModel, IConsumerSessionInputModel } from '../../common/Interfaces/Sessions'
 import { ITestOutputModel } from "../../common/Interfaces/Tests";
-import { addConsumerToSession, addTestToSession, fetchSessionById, removeNotConfirmedConsumers } from '../../common/APICalls';
+import { addConsumerToSession, addTestToSession, fetchSessionById, removeNotConfirmedConsumers, confirmConsumerSession } from '../../common/APICalls';
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { IConsumerOutputModel} from "../../common/Interfaces/Consumers";
 import AddConsumersModal from "../../components/modals/AddConsumersModal";
+import SessionTimeSelector from "../../components/SessionTimeSelector";
 import AddTestsModal from "../../components/modals/AddTestsModal";
 import { useGlobalToast } from "../../common/useGlobalToast";
 
@@ -62,6 +63,20 @@ export default function Session() : React.ReactElement{
         addToast({id: "success", title: "Sucesso", description: resp.data, status: "success"})
       })
     } 
+  }
+
+  async function confirmSessionTime (sessionId : string, consumerId : number, sessionTime : string){
+    let body = {consumerId : consumerId, sessionTime : sessionTime} as IConsumerSessionInputModel
+    const resp = await confirmConsumerSession(sessionId, body).catch(err => {
+      addToast({id: "error", title: "Erro", description: err.response.data.title, status: "error"})
+    })
+    if(resp?.status === 200){
+      setIsLoading(true)
+      populateData().then(() => {
+        setIsLoading(false)
+        addToast({id: "success", title: "Sucesso", description: resp.data, status: "success"})
+      })
+    }
   }
 
   const addTest = async (testID : string) => {
@@ -126,10 +141,6 @@ export default function Session() : React.ReactElement{
         }
       });
     }
-
-    
-    
-
     // convert the grouped object to an array of objects with sessionTime and consumers properties
     const confirmed = [];
     const invited = []
@@ -202,8 +213,9 @@ export default function Session() : React.ReactElement{
                           <div className="hover:bg-slate-200 cursor-pointer px-1">
                             <CloseIcon boxSize="0.7em" onClick={() => {removeNotConfirmed(session!.id, consumer.id)}} />
                           </div>
+                          
                           <div className="hover:bg-slate-200 cursor-pointer px-1">
-                            <CheckIcon boxSize="0.9em"onClick={() => {console.log("click confirm")}} />
+                            <SessionTimeSelector consumerId={consumer.id} sessionId={session!.id} onSubmit={confirmSessionTime}></SessionTimeSelector>
                           </div>
                         </div>
                       </div>

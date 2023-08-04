@@ -13,6 +13,7 @@ namespace Qualiteste.ServerApp.DataAccess.Repository
         IEnumerable<ConsumerSession> GetConfirmedConsumerSessions(string sessionId);
         IEnumerable<ConsumerSession> GetNotConfirmedConsumerSessions(string sessionId);
 
+        ConsumerSession GetConsumerSession(string sessionId, int consumerId);
         void AddConsumerToSession(string id, IEnumerable<ConsumerSession> consumerSessions);
 
         void RemoveInvitedConsumerFromSession(string sessionId, int consumerId);

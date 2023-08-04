@@ -44,14 +44,19 @@ namespace Qualiteste.ServerApp.DataAccess.Repository.Concrete
         public void RemoveInvitedConsumerFromSession(string sessionId, int consumerId)
         {
             ConsumerSession cs = GetSessionById(sessionId).ConsumerSessions.SingleOrDefault(cs => consumerId == cs.Consumerid);
-            
-                PostgresContext.ConsumerSessions.Remove(cs);
+            PostgresContext.ConsumerSessions.Remove(cs);
         }
 
         public void RemoveAllInvitedConsumersFromSession(string sessionId)
         {
             IEnumerable<ConsumerSession> cSessions = GetSessionById(sessionId).ConsumerSessions.Where(cs => cs.Sessiontime == null);
             PostgresContext.ConsumerSessions.RemoveRange(cSessions);
+        }
+
+        public ConsumerSession GetConsumerSession(string sessionId, int consumerId)
+        {
+            ConsumerSession cSession = GetSessionById(sessionId).ConsumerSessions.Single(cs => cs.Consumerid == consumerId);
+            return cSession;
         }
 
         public void UpdateConsumerSession(string id, string consumerId)

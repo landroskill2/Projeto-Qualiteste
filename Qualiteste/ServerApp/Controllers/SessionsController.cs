@@ -8,7 +8,7 @@ using Qualiteste.ServerApp.Utils;
 
 namespace Qualiteste.ServerApp.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class SessionsController : ControllerBase
@@ -86,7 +86,7 @@ namespace Qualiteste.ServerApp.Controllers
         [Authorize(Roles = "ADMIN")]
         [HttpPut("{id}")]
         [ProducesResponseType(200, Type = typeof(SessionOutputModel))]
-        public IActionResult UpdateSession(int id, [FromBody] SessionInputModel sessionInput)
+        public IActionResult UpdateSession(string id, [FromBody] SessionInputModel sessionInput)
         {
             try
             {
@@ -158,13 +158,17 @@ namespace Qualiteste.ServerApp.Controllers
             }
         }
 
-        [Authorize(Roles = "ADMIN")]
+        //[Authorize(Roles = "ADMIN")]
         [HttpPut("{id}/consumers")]
-        public IActionResult UpdateConsumerSessionTime(string id, [FromBody] IEnumerable<ConsumerSessionInputModel> consumerSession)
+        public IActionResult UpdateConsumerSessionTime(string id, [FromBody] ConsumerSessionInputModel consumerSession)
         {
             try
             {
-                throw new NotImplementedException();
+                Either<CustomError, string> c = _sessionService.ConfirmConsumerSession(id, consumerSession);
+                return c.Match(
+                    error => Problem(statusCode: error.StatusCode, title: error.Message),
+                    success => Ok(success)
+                    );
             }
             catch (Exception e)
             {

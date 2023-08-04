@@ -190,6 +190,14 @@ export async function removeNotConfirmedConsumers(
     return instance.delete(path)
 }
 
+export async function confirmConsumerSession(
+    sessionID : string,
+    consumerSession : IConsumerSessionInputModel
+){
+    let path = `/sessions/${sessionID}/consumers`
+    return instance.put(path, consumerSession)
+}
+
 export async function addConsumerToSession(
     sessionID : string,
     consumers : IConsumerSessionInputModel[]

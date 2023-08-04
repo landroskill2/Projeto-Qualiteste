@@ -59,6 +59,14 @@
         }
     }
 
+    public class ConsumerIsNotPresentInSession : CustomError
+    {
+        public ConsumerIsNotPresentInSession() : base("O consumidor não se encontra convidado para esta sessão", 404) 
+        {
+
+        }
+    }
+
     //Its not really an error is it
     /**public class SessionHasNoConsumers : CustomError
     {
