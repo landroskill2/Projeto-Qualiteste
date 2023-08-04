@@ -77,7 +77,7 @@ const initialClient : ClientAttributes = {
     };
 
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-white">
+      <div className="h-full flex flex-col items-center justify-center bg-white">
          <form onSubmit={handleSubmit}>
           <Box className="bg-slate-800 shadow-slate-600 rounded-lg shadow-md p-6">
             <div className="flex flex-col items-center justify-center mb-4">

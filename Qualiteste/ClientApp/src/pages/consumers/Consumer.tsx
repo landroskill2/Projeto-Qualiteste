@@ -45,87 +45,97 @@ export default function Consumer(): React.ReactElement {
   }, []);
 
   return (
-    <Box>
-      <Box as="h1" fontSize="2xl" fontWeight="bold" mb={4}>
-        {consumerData?.fullname}
-      </Box>
+    <div className='flex flex-col flex-grow w-full min-h-full p-6 gap-10'>
+      <div className="justify-center items-center">
+        <div className="mt-5">
+          <h1 className="text-5xl font-bold text-center bg-white">{consumerData?.fullname}</h1>
+        </div>
+      </div>
+      <div>
+        <div className='flex-grow justify-center items-center'>
+          <div className='p-10 rounded-lg shadow-lg'>
+            <Box as="h2" fontSize="xl" fontWeight="bold" mb={4}>
+               Dados do Provador
+             </Box>
+            <Table variant="simple" mb={8}>
+              <Tbody>
+                <Tr>
+                  <Td>Idade:</Td>
+                  <Td>{consumerData?.age}</Td>
+                </Tr>
+                <Tr>
+                  <Td>Sexo:</Td>
+                  <Td>{consumerData?.sex}</Td>
+                </Tr>
+                <Tr>
+                  <Td>Contacto:</Td>
+                  <Td>{consumerData?.contact}</Td>
+                </Tr>
+                <Tr>
+                  <Td>Email:</Td>
+                  <Td>{consumerData?.email || '-'}</Td>
+                </Tr>
+              </Tbody>
+            </Table>
+          </div>
+        </div>
+      </div>
+      <div className='flex flex-row flex-grow gap-10'>
+        <div className="min-h-full w-fit flex-grow">
+          <div className='min-h-full p-10 rounded-lg shadow-lg max-w-lg'>
+            <Box as="h2" fontSize="xl" fontWeight="bold" mb={4}>
+               Sessões do Provador
+             </Box>
 
-      <Table variant="simple" mb={8}>
-        <Tbody>
-          <Tr>
-            <Td>Age:</Td>
-            <Td>{consumerData?.age}</Td>
-          </Tr>
-          <Tr>
-            <Td>Sex:</Td>
-            <Td>{consumerData?.sex}</Td>
-          </Tr>
-          <Tr>
-            <Td>Contact:</Td>
-            <Td>{consumerData?.contact}</Td>
-          </Tr>
-          <Tr>
-            <Td>Email:</Td>
-            <Td>{consumerData?.email || '-'}</Td>
-          </Tr>
-        </Tbody>
-      </Table>
+            <Table variant="simple">
+              <Thead>
+                <Tr>
+                  <Th>ID</Th>
+                  <Th>Data</Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                {sessionData.map((session) => (
+                  <Tr className="hover:bg-slate-200 cursor-pointer" key={session.id} onClick={ () => redirectToSessionPage(session.id)}>
+                    <Td>{session.id}</Td>
+                    <Td>{session.date}</Td>
+                  </Tr>
+                ))}
+              </Tbody>
+            </Table>
+          </div>
+        </div>
 
-      <Box mb={8}>
-        <Box as="h2" fontSize="xl" fontWeight="bold" mb={4}>
-          Sessions
-        </Box>
-
-        <Table variant="simple">
-          <Thead>
-            <Tr>
-              <Th>ID</Th>
-              <Th>Date</Th>
-              <Th>Consumers Number</Th>
-            </Tr>
-          </Thead>
-          <Tbody>
-            {sessionData.map((session) => (
-              <Tr className="hover:bg-slate-200 cursor-pointer" key={session.id} onClick={ () => redirectToSessionPage(session.id)}>
-                <Td>{session.id}</Td>
-                <Td>{session.date}</Td>
-                <Td>{session.consumersNumber.toString()}</Td>
-              </Tr>
-            ))}
-          </Tbody>
-        </Table>
-      </Box>
-
-      <Box mb={8}>
-        <Box as="h2" fontSize="xl" fontWeight="bold" mb={4}>
-          Home Tests
-        </Box>
-
-        <Table variant="simple">
-          <Thead>
-            <Tr>
-              <Th>ID</Th>
-              <Th>Consumers Number</Th>
-              <Th>Request Date</Th>
-              <Th>Validation Date</Th>
-              <Th>Due Date</Th>
-              <Th>Report Delivery Date</Th>
-            </Tr>
-          </Thead>
-          <Tbody>
-            {testData.map((test) => (
-              <Tr className="hover:bg-slate-200 cursor-pointer" key={test.id} onClick={ () => redirectToTestPage(test.id)}>
-                <Td>{test.id}</Td>
-                <Td>{test.consumersNumber.toString()}</Td>
-                <Td>{test.requestDate || '-'}</Td>
-                <Td>{test.validationDate || '-'}</Td>
-                <Td>{test.dueDate || '-'}</Td>
-                <Td>{test.reportDeliveryDate || '-'}</Td>
-              </Tr>
-            ))}
-          </Tbody>
-        </Table>
-      </Box>
-    </Box>
+        <div className='min-h-full w-fit justify-center items-center flex-grow'>
+          <div className='p-10 rounded-lg shadow-lg min-h-full'>
+            <Box as="h2" fontSize="xl" fontWeight="bold" mb={4}>
+              Testes HT
+            </Box>
+            <Table variant="simple">
+              <Thead>
+                <Tr>
+                  <Th>ID</Th>
+                  <Th>Data do pedido</Th>
+                  <Th>Data de validação</Th>
+                  <Th>Data final do teste</Th>
+                  <Th>Data de entrega do relatório</Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                {testData.map((test) => (
+                  <Tr className="hover:bg-slate-200 cursor-pointer" key={test.id} onClick={ () => redirectToTestPage(test.id)}>
+                    <Td>{test.id}</Td>
+                    <Td>{test.requestDate || '-'}</Td>
+                    <Td>{test.validationDate || '-'}</Td>
+                    <Td>{test.dueDate || '-'}</Td>
+                    <Td>{test.reportDeliveryDate || '-'}</Td>
+                  </Tr>
+                ))}
+              </Tbody>
+            </Table>
+          </div>
+        </div>
+      </div>     
+    </div>
   );
 }

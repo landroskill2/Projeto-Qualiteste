@@ -16,6 +16,7 @@ import { RequireAuth } from "../auth/RequireAuth";
 import { RequireRole } from "../auth/RequireRole";
 import Admin from "../pages/admin/Admin";
 import AccountCreation from "../pages/admin/AccountCreation";
+import Page404 from "../pages/Page404";
 
 export default function AppRoutes() {
   return (
@@ -24,6 +25,7 @@ export default function AppRoutes() {
       <Route element= {<Layout />}>
         <Route path="login" element={<Login />}/>
         <Route path="/" element={<Home/>}/>
+        <Route path="*" element={<Page404 />} />
         {/* Authenticated Routes */}
         <Route element={<RequireAuth/>}>
           <Route element={<RequireRole allowedRoles={["ADMIN"]} />}>

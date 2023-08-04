@@ -94,80 +94,82 @@ export default function Test(): React.ReactElement {
   }
 
   return (
-    <Box>
-      <Box
-        display="flex"
-        justifyContent="space-between"
-        alignItems="center"
-        mb={4}
-      >
-        <Box as="h1" fontSize="2xl" fontWeight="bold">
-          TestID = {test!.id} 
-        </Box>
+    <div className='flex flex-col flex-grow w-full min-h-full p-6'>
+      <Box>
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
+          mb={4}
+        >
+          <Box as="h1" fontSize="2xl" fontWeight="bold">
+            TestID = {test?.id} 
+          </Box>
 
-        {isHomeTest && 
-          <Box>
-            <AddConsumersModal onSubmit={addConsumers}/>
-          </Box>
-        }
-        {!isHomeTest &&
-        <>
-          <Box>
-            <Button onClick={() => navigate("fizz")}>Fizz Results</Button>
-          </Box>
-          <Box>
-            <Input type="file" accept=".txt,.csv" onChange={handleFileUpload} display="none" id="file-upload" />
-              <label htmlFor="file-upload">
-              <Button as="span" colorScheme="blue" mr={2}>
-                Upload File
-              </Button>
-            </label>
-          </Box>
-        </>
-        }
-        
-        
+          {isHomeTest && 
+            <Box>
+              <AddConsumersModal onSubmit={addConsumers}/>
+            </Box>
+          }
+          {!isHomeTest &&
+          <>
+            <Box>
+              <Button onClick={() => navigate("fizz")}>Fizz Results</Button>
+            </Box>
+            <Box>
+              <Input type="file" accept=".txt,.csv" onChange={handleFileUpload} display="none" id="file-upload" />
+                <label htmlFor="file-upload">
+                <Button as="span" colorScheme="blue" mr={2}>
+                  Upload File
+                </Button>
+              </label>
+            </Box>
+          </>
+          }
+
+
+        </Box>
+        <Box className="hover:cursor-pointer" as="h1" fontSize="2xl" fontWeight="bold" mb={4} onClick={() => redirectToSessionPage(session!.id)}>
+          {session?.id}
+        </Box>
+        <Box as="h1" fontSize="2xl" fontWeight="bold" mb={4}>
+          Number of Consumers: {test?.consumersNumber.toString()}
+        </Box>
+        <Table variant="simple">
+          <Thead>
+            <Tr>
+              <Th>ID</Th>
+              <Th>Full Name</Th>
+              <Th>Age</Th>
+              <Th>Sex</Th>
+              <Th>Contact</Th>
+              <Th>Email</Th>
+            </Tr>
+          </Thead>
+          <Tbody>
+
+            {consumers && (
+              <>
+                {consumers.map(consumer => (
+                  <Tr className="hover:bg-slate-200 cursor-pointer" key={consumer.id} onClick={() => redirectToConsumerPage(consumer.id)}>
+                    <Td>{consumer.id}</Td>
+                    <Td>{consumer.fullname}</Td>
+                    <Td>{consumer.age}</Td>
+                    <Td>{consumer.sex}</Td>
+                    <Td>{consumer.contact}</Td>
+                    <Td>{consumer.email || "-"}</Td>
+                  </Tr>
+                ))}
+              </>
+            )}
+            {!consumers && (
+              <>
+                <p>Sem dados.</p>
+              </>
+            )}
+          </Tbody>
+        </Table>
       </Box>
-      <Box className="hover:cursor-pointer" as="h1" fontSize="2xl" fontWeight="bold" mb={4} onClick={() => redirectToSessionPage(session!.id)}>
-        {session?.id}
-      </Box>
-      <Box as="h1" fontSize="2xl" fontWeight="bold" mb={4}>
-        Number of Consumers: {test!.consumersNumber.toString()}
-      </Box>
-      <Table variant="simple">
-        <Thead>
-          <Tr>
-            <Th>ID</Th>
-            <Th>Full Name</Th>
-            <Th>Age</Th>
-            <Th>Sex</Th>
-            <Th>Contact</Th>
-            <Th>Email</Th>
-          </Tr>
-        </Thead>
-        <Tbody>
-          
-          {consumers && (
-            <>
-              {consumers.map(consumer => (
-                <Tr className="hover:bg-slate-200 cursor-pointer" key={consumer.id} onClick={() => redirectToConsumerPage(consumer.id)}>
-                  <Td>{consumer.id}</Td>
-                  <Td>{consumer.fullname}</Td>
-                  <Td>{consumer.age}</Td>
-                  <Td>{consumer.sex}</Td>
-                  <Td>{consumer.contact}</Td>
-                  <Td>{consumer.email || "-"}</Td>
-                </Tr>
-              ))}
-            </>
-          )}
-          {!consumers && (
-            <>
-              <p>Sem dados.</p>
-            </>
-          )}
-        </Tbody>
-      </Table>
-    </Box>
+    </div>
   );
 }
