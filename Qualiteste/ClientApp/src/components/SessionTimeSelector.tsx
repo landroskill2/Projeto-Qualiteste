@@ -51,7 +51,7 @@ export default function SessionTimeSelector({consumerId, sessionId, availableSes
                     <FocusLock persistentFocus={false}>
                         <PopoverArrow />
                         <PopoverCloseButton />
-                        <Text>Tempo:</Text>
+                        <Text>Hora:</Text>
                         <Input type="time" value={sessionTime} onChange={(e) => setSessionTime(e.target.value)}></Input>
                         <div className="mt-3 flex w-full items-stretch justify-between">
                             <Button colorScheme="red" className="bg-red-500  text-white font-bold py-2 px-4 border-b-4 hover:border-red-600 rounded" onClick={onCancel}>
