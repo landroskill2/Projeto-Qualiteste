@@ -69,10 +69,12 @@ namespace Qualiteste.ServerApp.Services.Concrete
             }
         }
 
-        public Either<CustomError, SessionOutputModel> UpdateSession(int id, SessionInputModel sessionInput)
+        public Either<CustomError, SessionOutputModel> UpdateSession(string id, SessionInputModel sessionInput)
         {
             try
             {
+                Session target = _unitOfWork.Sessions.GetSessionById(id);
+                if (target == null) return new NoSessionFoundWithId();
                 Session dbSession = sessionInput.toDbSession();
                 _unitOfWork.Sessions.Update(dbSession);
                 return dbSession.toOutputModel();
@@ -155,6 +157,26 @@ namespace Qualiteste.ServerApp.Services.Concrete
                 {
                     return new NoSessionFoundWithId();
                 }
+                throw ex;
+            }
+        }
+
+        public Either<CustomError, string> ConfirmConsumerSession(string sessionId, ConsumerSessionInputModel cSession)
+        {
+            try
+            {
+                Session targetSession = _unitOfWork.Sessions.GetSessionById(sessionId);
+                if(targetSession == null) return new NoSessionFoundWithId();
+                ConsumerSession toUpdate = _unitOfWork.Sessions.GetConsumerSession(sessionId, cSession.consumerId);
+                if (toUpdate == null) return new ConsumerIsNotPresentInSession();
+                toUpdate.Sessiontime = cSession.toDbConsumerSession().Sessiontime;
+                _unitOfWork.Complete();
+                return "Consumer session confirmed";
+                
+            }
+            catch(Exception ex)
+            {
+                _unitOfWork.UntrackChanges();
                 throw ex;
             }
         }

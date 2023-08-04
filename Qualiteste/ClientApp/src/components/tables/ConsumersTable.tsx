@@ -26,11 +26,6 @@ export default function ConsumersTable({consumers, onClickConsumer, selectedCons
         )
         
     }
-    useEffect(() => {
-        
-        console.log(selectedConsumers)
-     }, [selectedConsumers]);
-
     return (
         <TableContainer overflowX="unset" overflowY="unset">
         <Table variant="simple" size="md" overflow="auto" colorScheme="blackAlpha">

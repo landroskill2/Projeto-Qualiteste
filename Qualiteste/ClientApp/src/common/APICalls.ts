@@ -184,10 +184,18 @@ export async function addTestToSession(
 
 export async function removeNotConfirmedConsumers(
     sessionID : string,
-    selection : string = "all"
+    selection : string | number = "all"
 ) : Promise<AxiosResponse>{
     let path = `sessions/${sessionID}/consumers?selection=${selection}`
     return instance.delete(path)
+}
+
+export async function confirmConsumerSession(
+    sessionID : string,
+    consumerSession : IConsumerSessionInputModel
+){
+    let path = `/sessions/${sessionID}/consumers`
+    return instance.put(path, consumerSession)
 }
 
 export async function addConsumerToSession(
