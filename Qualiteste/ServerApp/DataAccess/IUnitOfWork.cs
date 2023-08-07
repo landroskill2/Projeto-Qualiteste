@@ -8,6 +8,7 @@ namespace Qualiteste.ServerApp.DataAccess
         ITestRepository Tests { get; }
         ISessionRepository Sessions { get; }
         IUserRepository Users { get; }
+        IProductRepository Products { get; }
         int Complete();
         void UntrackChanges();
     }

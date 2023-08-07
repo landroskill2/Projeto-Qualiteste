@@ -1,11 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Qualiteste.ServerApp.Dtos;
-using Qualiteste.ServerApp.Models;
 using Qualiteste.ServerApp.Services;
 using Qualiteste.ServerApp.Services.Errors;
 using Qualiteste.ServerApp.Utils;
-using System.Reflection.Metadata.Ecma335;
 
 namespace Qualiteste.ServerApp.Controllers
 {
