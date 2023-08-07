@@ -152,6 +152,9 @@ export default function Session() : React.ReactElement{
     return {confirmed, invited};
   };
   let sortedConsumerSessions : {confirmed : ConsumersInSession[], invited : ConsumersInSession[]} = groupConsumerSessionsByTime()
+  
+  let availableSessionTimes = sortedConsumerSessions.confirmed.map(cSession => cSession.sessionTime)
+  console.log(availableSessionTimes)
   // Render the component
   return (
     <>
@@ -215,7 +218,7 @@ export default function Session() : React.ReactElement{
                           </div>
                           
                           <div className="hover:bg-slate-200 cursor-pointer px-1">
-                            <SessionTimeSelector consumerId={consumer.id} sessionId={session!.id} onSubmit={confirmSessionTime}></SessionTimeSelector>
+                            <SessionTimeSelector consumerId={consumer.id} sessionId={session!.id} availableSessionTimes={availableSessionTimes} onSubmit={confirmSessionTime}></SessionTimeSelector>
                           </div>
                         </div>
                       </div>

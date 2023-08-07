@@ -8,7 +8,7 @@ using Qualiteste.ServerApp.Utils;
 
 namespace Qualiteste.ServerApp.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class SessionsController : ControllerBase
@@ -158,7 +158,7 @@ namespace Qualiteste.ServerApp.Controllers
             }
         }
 
-        //[Authorize(Roles = "ADMIN")]
+        [Authorize(Roles = "ADMIN")]
         [HttpPut("{id}/consumers")]
         public IActionResult UpdateConsumerSessionTime(string id, [FromBody] ConsumerSessionInputModel consumerSession)
         {
