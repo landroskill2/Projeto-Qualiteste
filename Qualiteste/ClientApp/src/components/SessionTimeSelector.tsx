@@ -53,16 +53,20 @@ export default function SessionTimeSelector({consumerId, sessionId, availableSes
                         <PopoverCloseButton />
                         <Text>Adicionar nova hora:</Text>
                         <Input type="time" value={sessionTime} onChange={(e) => setSessionTime(e.target.value)}></Input>
-                        <div className="mt-3">Horas Disponiveis:</div>
-                        <div className="mt-3 flex w-full items-stretch justify-between">
+                        
                             {availableSessionTimes && (
-                                availableSessionTimes.map(sTime => 
-                                    <div className="hover:bg-slate-200 cursor-pointer px-1" onClick={() => setSessionTime(sTime)}>
+                                <>
+                                <div className="flex mt-3">Horários Disponiveis</div>
+                                <div className="mt-3 flex w-full items-stretch ">
+                                {availableSessionTimes.map(sTime => 
+                                    <div className="hover:bg-slate-200 cursor-pointer px-2" onClick={() => setSessionTime(sTime)}>
                                         {sTime}
                                     </div>
-                                ) 
+                                )}
+                                </div>
+                                </>
                             )}
-                        </div>
+                        
                         <div className="mt-3 flex w-full items-stretch justify-between">
                             <Button colorScheme="red" className="bg-red-500  text-white font-bold py-2 px-4 border-b-4 hover:border-red-600 rounded" onClick={onCancel}>
                                 Cancelar

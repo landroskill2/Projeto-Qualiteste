@@ -70,7 +70,11 @@ export default function NavMenu() {
                       Sessões
                     </CustomNavLink>
                   </li>
-
+                  <li className="text-white">
+                    <CustomNavLink href="/products" toggleNavBar={changeToggle}>
+                      Produtos
+                    </CustomNavLink>
+                  </li>
                   <WithPermission roleRequired='ADMIN'>
                     <li>
                       <CustomNavLink href="/admin" toggleNavBar={changeToggle}>

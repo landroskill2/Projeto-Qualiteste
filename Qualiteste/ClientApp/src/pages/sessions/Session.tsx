@@ -152,9 +152,7 @@ export default function Session() : React.ReactElement{
     return {confirmed, invited};
   };
   let sortedConsumerSessions : {confirmed : ConsumersInSession[], invited : ConsumersInSession[]} = groupConsumerSessionsByTime()
-  
   let availableSessionTimes = sortedConsumerSessions.confirmed.map(cSession => cSession.sessionTime)
-  console.log(availableSessionTimes)
   // Render the component
   return (
     <>

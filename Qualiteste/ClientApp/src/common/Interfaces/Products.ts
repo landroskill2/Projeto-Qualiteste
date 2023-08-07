@@ -3,3 +3,10 @@ export default interface Product {
     type: "A" | "NA",
     designation: string
 }
+
+export interface ProductOutputModel
+{
+    productid  : number,
+    designation : string,
+    brand : string
+}

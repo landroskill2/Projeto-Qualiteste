@@ -20,8 +20,8 @@ interface Params {
     setSex? : any,
     setMinAge? : any,
     setMaxAge? : any,
-    setBrands : any,
-    setType : any,
+    setBrand? : any,
+    setType? : any,
     setSearchString? : any
 }
 
@@ -41,6 +41,7 @@ export default function FilterBar({
 }: Params) {
     const [dropdownText, setDropdownText] = useState(sex)
     const [searchInputValue, setSearchInputValue] = useState<string>("")
+    const [brandDropdownText, setBrandDropdownText] = useState<string>("Marca")
     
     function onClickSearch() {
         setSearchString(searchInputValue)
@@ -89,7 +90,6 @@ export default function FilterBar({
               );
         }
     }
-
     return(
             <div className="w-full flex flex-row justify-between bg-slate-100 p-2 rounded-xl">
                 <div className="w-fit flex flex-row gap-3 justify-between">
@@ -127,7 +127,47 @@ export default function FilterBar({
                             </Menu>
                         )}
                     </div>
-                    <AgeFilter minAge={minAge} maxAge={maxAge} setMinAge={setMinAge} setMaxAge={setMaxAge}></AgeFilter>
+                    {setMinAge && setMaxAge && (
+                        <>
+                        <AgeFilter minAge={minAge} maxAge={maxAge} setMinAge={setMinAge} setMaxAge={setMaxAge}></AgeFilter>
+                        </>
+                        
+                    )}
+                    {setBrand && (
+                        <>
+                           <Menu>
+                                <MenuButton
+                                    className="capitalize "
+                                    colorScheme="blue"
+                                    as={Button}
+                                    rightIcon={<BsChevronDown/>}
+                                >
+                                {brandDropdownText}
+                                </MenuButton>
+                                <MenuList>
+                                    {brands && (
+                                        brands.map((b) => (
+                                            <>
+                                            <MenuItem
+                                            className="capitalize"
+                                            onClick={() => {setBrand(b); setBrandDropdownText(b)}}
+                                            >
+                                            {b}
+                                            </MenuItem>
+                                            </>
+                                            
+                                        ))
+                                    )}
+                                    <MenuItem
+                                            className="capitalize"
+                                            onClick={() => {setBrand(undefined); setBrandDropdownText("Marca")}}
+                                            >
+                                            Limpar Filtros
+                                            </MenuItem>
+                                </MenuList>
+                            </Menu>  
+                        </>
+                    )}
                 </div>
                 <div className="flex justify-end flex-shrink">
                     {useSearchBar()}

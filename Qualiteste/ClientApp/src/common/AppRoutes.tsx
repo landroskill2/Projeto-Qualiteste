@@ -17,6 +17,7 @@ import { RequireRole } from "../auth/RequireRole";
 import Admin from "../pages/admin/Admin";
 import AccountCreation from "../pages/admin/AccountCreation";
 import Page404 from "../pages/Page404";
+import Products from "../pages/products/ProductsList";
 
 export default function AppRoutes() {
   return (
@@ -42,6 +43,7 @@ export default function AppRoutes() {
           <Route path="tests/create" element={<TestCreation />} />
           <Route path="tests/:id" element={<Test />} />
           <Route path="tests/:id/fizz" element={<FizzResults />} />
+          <Route path="products" element ={<Products />} />
         </Route>
       </Route>
     </Routes>

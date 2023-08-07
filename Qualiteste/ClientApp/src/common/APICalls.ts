@@ -255,3 +255,15 @@ function addFiltersToQuery(
     }
     return path
 }
+
+//Products
+export function getAvailableBrands() : Promise<AxiosResponse>{
+    let path = `/products/brands`
+    return instance.get(path)
+}
+
+export function queryProducts(brandName : string | undefined) : Promise<AxiosResponse>{
+    let path = `/products`
+    if(brandName) path = path.concat(`?brandName=${brandName}`)
+    return instance.get(path)
+}

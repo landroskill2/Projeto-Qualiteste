@@ -12,40 +12,37 @@ import {
   Spinner,
   Box
 } from "@chakra-ui/react";
-import { IConsumerOutputModel } from "../../common/Interfaces/Consumers";
+import { ProductOutputModel } from "../../common/Interfaces/Products";
 import { useNavigate } from "react-router-dom";
 import FilterBar from "../../components/FilterBar";
-import { fetchConsumers } from "../../common/APICalls";
-import ConsumersTable from "../../components/tables/ConsumersTable";
+import { getAvailableBrands, queryProducts } from "../../common/APICalls";
+import ProductsTable from "../../components/tables/ProductsTable";
 import WithPermission from "../../auth/WithPermission";
-import Product from "../../common/Interfaces/Products";
 
 
-export default function Consumers(): React.ReactElement{
-    const [products, setProducts] = useState<Product[] | null>(null);
+export default function Products(): React.ReactElement{
+    const [products, setProducts] = useState<ProductOutputModel[] | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [brands, setBrands] = useState<string[]>([])
+    const [brandFilter, setBrandFilter] = useState<string|undefined>(undefined)
     const [type, setType] = useState<string | null>(null)
     const [searchString, setSearchString] = useState(null)
     const navigate = useNavigate()
 
   useEffect(() => {
     populateData() 
-  }, [brand, type, searchString]);
+  }, [type, searchString, brandFilter]);
 
   async function populateData() {
-    const filters = Object.assign(
-      {},
-      brand === null ? null : {brand: brand},
-      type === null ? null : {type: type},
-      searchString === null ? null : {name: searchString}
-    )
+    const productsResponse = await queryProducts(brandFilter)
+    const availableBrands = await getAvailableBrands()
 
-    const response = await fetchConsumers(filters)
-    setProducts(response.data)
+    setProducts(productsResponse.data)
+    setBrands(availableBrands.data.brands)
     setIsLoading(false)
   }
 
+  console.log(products)
   return (
     <div className="flex flex-col flex-grow w-full min-h-full">
       <div className="mt-5">
@@ -58,17 +55,17 @@ export default function Consumers(): React.ReactElement{
       ) : (
         <div className="mt-6 px-6 min-h-full w-full flex flex-col flex-grow items-center justify-center">
           <div className="w-full">
-            <FilterBar brands={brands} setBrands={setBrands} setType={setType} setSearchString={setSearchString} searchBar />
+            <FilterBar brands={brands} setBrand={setBrandFilter} setType={setType} setSearchString={setSearchString} searchBar />
           </div>
           <div className="mt-3 w-full" style={{ maxHeight: 'calc(100vh - 370px)', overflowY: 'auto' }}>
-            <ProductsTable products={products} />
+            <ProductsTable products={products}/>
           </div>
         </div>
       )}
       <div className="content-end justify-end items-baseline">
         <WithPermission roleRequired="ADMIN">
           <div className="p-6 bg-white" style={{ flexShrink: 0 }}>
-            <Button colorScheme="blue" onClick={}>
+            <Button colorScheme="blue" onClick={() => {console.log("Clicked")}}>
               Criar Produto
             </Button>
           </div>
