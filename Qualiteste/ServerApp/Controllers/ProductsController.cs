@@ -46,9 +46,31 @@ namespace Qualiteste.ServerApp.Controllers
         [ProducesResponseType(200, Type = typeof(IEnumerable<string>))]
         [ProducesResponseType(500)]
         public IActionResult GetAllDistinctBrands() {
+           try
+           {
+                Either<CustomError, BrandOutputModel> result = _productService.GetAllBrands();
+
+                return result.Match(
+                    error => Problem(statusCode: error.StatusCode, title: error.Message),
+                    success => Ok(success)
+                );
+
+            }
+            catch (Exception e)
+            {
+
+                return Problem(statusCode: 500, title: "Ocorreu um erro inesperado");
+            }
+        }
+
+        [HttpPost]
+        [ProducesResponseType(200, Type = typeof(string))]
+        [ProducesResponseType(500)]
+        public IActionResult CreateNewProduct([FromBody] ProductInputModel product)
+        {
             try
             {
-                Either<CustomError, BrandOutputModel> result = _productService.GetAllBrands();
+                Either<CustomError, string> result = _productService.CreateNewProduct(product);
 
                 return result.Match(
                     error => Problem(statusCode: error.StatusCode, title: error.Message),

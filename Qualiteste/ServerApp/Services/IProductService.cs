@@ -13,5 +13,7 @@ namespace Qualiteste.ServerApp.Services
         // - IEnumerable<Brand>?
         Either<CustomError, BrandOutputModel> GetAllBrands();
 
+        Either<CustomError, string> CreateNewProduct(ProductInputModel product);
+
     }
 }

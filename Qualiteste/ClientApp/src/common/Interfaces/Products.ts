@@ -10,3 +10,9 @@ export interface ProductOutputModel
     designation : string,
     brand : string
 }
+export interface ProductInputModel
+{
+    productid  : number,
+    designation : string,
+    brand : string
+}

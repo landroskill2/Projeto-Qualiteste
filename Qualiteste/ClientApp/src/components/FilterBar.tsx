@@ -90,6 +90,45 @@ export default function FilterBar({
               );
         }
     }
+
+    function useProductFilters(){
+        if(setBrand){
+            return (
+                <>
+                    <Menu>
+                        <MenuButton
+                            className="capitalize "
+                            colorScheme="blue"
+                            as={Button}
+                            rightIcon={<BsChevronDown/>}
+                            >
+                            {brandDropdownText}
+                        </MenuButton>
+                        <MenuList>
+                            {brands && (
+                                brands.map((b) => (
+                                    <>
+                                        <MenuItem
+                                           className="capitalize"
+                                           onClick={() => {setBrand(b); setBrandDropdownText(b)}}
+                                        >
+                                            {b}
+                                        </MenuItem>
+                                    </>   
+                                    ))
+                                )}
+                            <MenuItem
+                                className="capitalize"
+                                onClick={() => {setBrand(undefined); setBrandDropdownText("Marca")}}
+                                >
+                                Limpar Filtros
+                            </MenuItem>
+                        </MenuList>
+                    </Menu>  
+                </>
+            )
+        }
+    }
     return(
             <div className="w-full flex flex-row justify-between bg-slate-100 p-2 rounded-xl">
                 <div className="w-fit flex flex-row gap-3 justify-between">
@@ -133,41 +172,7 @@ export default function FilterBar({
                         </>
                         
                     )}
-                    {setBrand && (
-                        <>
-                           <Menu>
-                                <MenuButton
-                                    className="capitalize "
-                                    colorScheme="blue"
-                                    as={Button}
-                                    rightIcon={<BsChevronDown/>}
-                                >
-                                {brandDropdownText}
-                                </MenuButton>
-                                <MenuList>
-                                    {brands && (
-                                        brands.map((b) => (
-                                            <>
-                                            <MenuItem
-                                            className="capitalize"
-                                            onClick={() => {setBrand(b); setBrandDropdownText(b)}}
-                                            >
-                                            {b}
-                                            </MenuItem>
-                                            </>
-                                            
-                                        ))
-                                    )}
-                                    <MenuItem
-                                            className="capitalize"
-                                            onClick={() => {setBrand(undefined); setBrandDropdownText("Marca")}}
-                                            >
-                                            Limpar Filtros
-                                            </MenuItem>
-                                </MenuList>
-                            </Menu>  
-                        </>
-                    )}
+                    {useProductFilters()}
                 </div>
                 <div className="flex justify-end flex-shrink">
                     {useSearchBar()}

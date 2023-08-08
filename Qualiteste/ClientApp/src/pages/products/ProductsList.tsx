@@ -33,6 +33,10 @@ export default function Products(): React.ReactElement{
     populateData() 
   }, [type, searchString, brandFilter]);
 
+
+  const redirectToProductCreation = () => {
+    navigate("create")
+  }
   async function populateData() {
     const productsResponse = await queryProducts(brandFilter)
     const availableBrands = await getAvailableBrands()
@@ -42,7 +46,6 @@ export default function Products(): React.ReactElement{
     setIsLoading(false)
   }
 
-  console.log(products)
   return (
     <div className="flex flex-col flex-grow w-full min-h-full">
       <div className="mt-5">
@@ -65,7 +68,7 @@ export default function Products(): React.ReactElement{
       <div className="content-end justify-end items-baseline">
         <WithPermission roleRequired="ADMIN">
           <div className="p-6 bg-white" style={{ flexShrink: 0 }}>
-            <Button colorScheme="blue" onClick={() => {console.log("Clicked")}}>
+            <Button colorScheme="blue" onClick={redirectToProductCreation}>
               Criar Produto
             </Button>
           </div>
