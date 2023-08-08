@@ -7,7 +7,7 @@ using Qualiteste.ServerApp.Utils;
 
 namespace Qualiteste.ServerApp.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ProductsController : ControllerBase
@@ -19,6 +19,7 @@ namespace Qualiteste.ServerApp.Controllers
             _productService = productService;
         }
 
+        [Authorize(Roles = "ADMIN")]
         [HttpGet]
         [ProducesResponseType(200, Type = typeof(IEnumerable<ProductOutputModel>))]
         [ProducesResponseType(500)]
@@ -41,7 +42,7 @@ namespace Qualiteste.ServerApp.Controllers
         }
 
 
-
+        [Authorize(Roles = "ADMIN")]
         [HttpGet("brands")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<string>))]
         [ProducesResponseType(500)]
@@ -62,19 +63,20 @@ namespace Qualiteste.ServerApp.Controllers
                 return Problem(statusCode: 500, title: "Ocorreu um erro inesperado");
             }
         }
-
+        [Authorize(Roles = "ADMIN")]
         [HttpPost]
-        [ProducesResponseType(200, Type = typeof(string))]
-        [ProducesResponseType(500)]
+        [ProducesResponseType(201)]
         public IActionResult CreateNewProduct([FromBody] ProductInputModel product)
         {
             try
             {
                 Either<CustomError, string> result = _productService.CreateNewProduct(product);
+                var actionName = product.Ref;
 
                 return result.Match(
                     error => Problem(statusCode: error.StatusCode, title: error.Message),
-                    success => Ok(success)
+                    //TODO
+                    success => CreatedAtRoute(null, success)
                 );
 
             }

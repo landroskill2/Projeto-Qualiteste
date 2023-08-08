@@ -10,7 +10,6 @@ import FizzResults from "../pages/tests/FizzTable";
 import TestCreation from "../pages/tests/TestCreation";
 import ConsumerCreation from "../pages/consumers/ConsumerCreation";
 import SessionCreation from "../pages/sessions/SessionCreation";
-import ProductCreation from "../pages/products/ProductCreation";
 import Login from "../pages/authentication/Login";
 import Layout from "../components/Layout";
 import { RequireAuth } from "../auth/RequireAuth";
@@ -45,7 +44,6 @@ export default function AppRoutes() {
           <Route path="tests/:id" element={<Test />} />
           <Route path="tests/:id/fizz" element={<FizzResults />} />
           <Route path="products" element ={<Products />} />
-          <Route path="products/create" element ={<ProductCreation />} />
         </Route>
       </Route>
     </Routes>
