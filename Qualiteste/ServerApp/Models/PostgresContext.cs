@@ -218,6 +218,8 @@ public partial class PostgresContext : DbContext
 
             entity.ToTable("product");
 
+            entity.HasIndex(e => e.Ref, "product_ref_key").IsUnique();
+
             entity.Property(e => e.Productid)
                 .ValueGeneratedNever()
                 .HasColumnName("productid");
@@ -227,6 +229,9 @@ public partial class PostgresContext : DbContext
             entity.Property(e => e.Designation)
                 .HasMaxLength(200)
                 .HasColumnName("designation");
+            entity.Property(e => e.Ref)
+                .HasMaxLength(50)
+                .HasColumnName("ref");
         });
 
         modelBuilder.Entity<Role>(entity =>

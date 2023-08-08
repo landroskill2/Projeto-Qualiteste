@@ -7,12 +7,13 @@ export default interface Product {
 export interface ProductOutputModel
 {
     productid  : number,
+    ref : string,
     designation : string,
     brand : string
 }
 export interface ProductInputModel
 {
-    productid  : number,
+    ref  : string,
     designation : string,
     brand : string
 }

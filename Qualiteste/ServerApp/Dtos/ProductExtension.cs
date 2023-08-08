@@ -8,6 +8,7 @@ public partial class Product
         return new ProductOutputModel
         {
             Productid = Productid,
+            Ref = Ref,
             Brand = Brand,
             Designation = Designation
         };

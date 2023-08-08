@@ -18,7 +18,7 @@ export default function ProductsTable( {products, onClickProduct} : TableProps) 
         <Table variant="simple" overflow="auto">
             <Thead>
                 <Tr>
-                    <Th>Id</Th>
+                    <Th>Referência</Th>
                     <Th>Designação</Th>
                     <Th>Marca</Th>
                 </Tr>
@@ -27,7 +27,7 @@ export default function ProductsTable( {products, onClickProduct} : TableProps) 
                 {products && <>
                     {products.map((p) => (
                         <Tr className="hover:bg-slate-200 cursor-pointer" key={p.productid} onClick ={() => {console.log("Redirect to product page")}} >
-                            <Td>{p.productid}</Td>
+                            <Td>{p.ref}</Td>
                             <Td>{p.designation}</Td>
                             <Td>{p.brand}</Td>
                         </Tr>

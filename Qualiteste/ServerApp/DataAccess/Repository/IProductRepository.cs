@@ -6,6 +6,8 @@ namespace Qualiteste.ServerApp.DataAccess.Repository
     {
         IEnumerable<Product> GetAllProducts(string? brandName);
 
+        int GetLastId();
+
         //No need for GetAllBrands operation in repository
     }
 }

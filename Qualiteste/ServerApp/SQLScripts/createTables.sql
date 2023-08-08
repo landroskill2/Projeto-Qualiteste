@@ -15,10 +15,11 @@ CREATE TABLE SESSION(
 );
 
 CREATE TABLE PRODUCT(
-    ProductID int PRIMARY KEY,
+    ProductID int GENERATED ALWAYS PRIMARY KEY,
+    Ref varchar(50) UNIQUE NOT NULL,
     Designation varchar(200),
     Brand varchar(50)
-); 
+);
 
 CREATE TABLE TEST(
     InternalID varchar(20) PRIMARY KEY,

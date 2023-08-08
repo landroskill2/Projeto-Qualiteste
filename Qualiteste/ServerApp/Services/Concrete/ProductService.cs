@@ -19,7 +19,9 @@ namespace Qualiteste.ServerApp.Services.Concrete
         {
             try
             {
-                Product newP = product.toDbModel();
+                int pid = _unitOfWork.Products.GetLastId() + 1;
+                Product newP = product.toDbModel(pid);
+                
                 _unitOfWork.Products.Add(newP);
                 _unitOfWork.Complete();
                 return "Product created successfully";
@@ -31,9 +33,9 @@ namespace Qualiteste.ServerApp.Services.Concrete
                 {
                     var state = dbException.Data["SqlState"];
                     var constraint = dbException.Data["ConstraintName"];
-                    if(state.Equals("23505") && constraint.Equals("product_pkey"))
+                    if(state.Equals("23505") && constraint.Equals("product_ref_key"))
                     {
-                        return new ProductWithIdAlreadyPresent();
+                        return new ProductWithRefAlreadyPresent();
                     }
                 }
                 throw ex;

@@ -12,6 +12,11 @@ namespace Qualiteste.ServerApp.DataAccess.Repository.Concrete
             return PostgresContext.Products.AsEnumerable();
         }
 
+        public int GetLastId()
+        {
+            return PostgresContext.Products.Max(c => c.Productid);
+        }
+
         public PostgresContext PostgresContext
         {
             get { return Context as PostgresContext; }

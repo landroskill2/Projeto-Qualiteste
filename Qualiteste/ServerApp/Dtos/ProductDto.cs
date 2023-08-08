@@ -5,6 +5,7 @@ namespace Qualiteste.ServerApp.Dtos
     public record ProductOutputModel
     {
         public int Productid { get; init; }
+        public string Ref{ get; init; }
         public string Designation { get; init; }
         public string Brand { get; init; }
     }
@@ -14,18 +15,21 @@ namespace Qualiteste.ServerApp.Dtos
         public IEnumerable<string> brands { get; init; }
     }
 
-    //Something is weird here, why OutputModel and InputModel is the same
 
     public record ProductInputModel
     {
-        public int Productid { get; init;}
         public string Designation { get; init; }
         public string Brand { get; init; }
 
-        public Product toDbModel()
+        public string Ref {get; init;}
+
+
+        //must provide id 
+        public Product toDbModel(int pid)
         {
             return new Product {
-                Productid = Productid,
+                Productid = pid,
+                Ref = Ref,
                 Designation = Designation,
                 Brand = Brand
             };

@@ -11,9 +11,10 @@ import {
 import { ProductInputModel } from "../../common/Interfaces/Products"
 import { useGlobalToast } from "../../common/useGlobalToast";
 import { useNavigate } from "react-router-dom";
+import { createProduct } from "../../common/APICalls";
 
 const initialProduct : ProductInputModel = {
-    productid : 0,
+    ref : "",
     designation : "",
     brand : ""
 }
@@ -23,10 +24,26 @@ const initialProduct : ProductInputModel = {
 export default function ProductCreation() : React.ReactElement {
     const [product, setProduct] = useState<ProductInputModel>(initialProduct)
     const { addToast, isToastActive } = useGlobalToast() 
+    const navigate = useNavigate()
 
 
     const handleSubmit = async (e : React.FormEvent<HTMLFormElement>) => {
-        console.log("Request Creation")
+        e.preventDefault()
+        const resp = await createProduct(product).catch(err => {
+            if(!isToastActive("error")){
+              addToast({
+                id: "error",
+                title: "Erro",
+                description: err.response.data.title,
+                status: "error"
+              })
+            }
+          })
+        if(resp?.status === 201){
+            const toastObj = {id: "success", title: "Sucesso", description: resp.data, status: "success"}
+            const location = "/products"
+            navigate(location, {state: toastObj})
+        }
     }
     const handleInputChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -46,17 +63,42 @@ export default function ProductCreation() : React.ReactElement {
                     <div className="flex flex-col items-center justify-start mb-4">
                         <h1 className="text-center text-3xl font-bold text-white">Criar Produto</h1>
                     </div>
-                    <div className="flex flex-grow justify-between gap-3">
-                        <FormControl id="id">
-                            <FormLabel textColor="white">ID</FormLabel>
+                    <div className="flex flex-grow flex-col justify-between gap-3">
+                        <FormControl id="id" isRequired>
+                            <FormLabel textColor="white">Referência</FormLabel>
                             <Input
-                                name="productid"
-                                type="number"
-                                min={0}
-                                value={product.productid || 0}
+                                name="ref"
+                                type="text"
+                                value={product.ref || ""}
                                 onChange={handleInputChange}
-                                background="white"/>
+                                background="white" />
                         </FormControl>
+
+                        <FormControl id="id" isRequired>
+                            <FormLabel textColor="white">Designação</FormLabel>
+                            <Input
+                                name="designation"
+                                type="text"
+                                value={product.designation || ""}
+                                onChange={handleInputChange}
+                                background="white" />
+                        </FormControl>
+
+                        <FormControl id="id" isRequired>
+                            <FormLabel textColor="white">Marca</FormLabel>
+                            <Input
+                                name="brand"
+                                type="text"
+                                value={product.brand || ""}
+                                onChange={handleInputChange}
+                                background="white" />
+                        </FormControl>
+                        <div className="flex justify-center">
+                        <Button type="submit" mt={4} colorScheme="blue">
+                            Criar
+                        </Button>
+                        </div>
+                        
                     </div>
                 </Box>
             </form>

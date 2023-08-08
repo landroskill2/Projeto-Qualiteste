@@ -4,6 +4,7 @@ import { IConsumerSessionInputModel, ISessionModel } from "./Interfaces/Sessions
 import { ITestInputModel } from "./Interfaces/Tests"
 import FizzAttribute from "./Interfaces/FizzAttributes"
 import IAccountOutput from "./Interfaces/Accounts"
+import { ProductInputModel } from "./Interfaces/Products"
 
 
 const instance: AxiosInstance = localStorage.getItem("QualitesteToken") ?
@@ -266,4 +267,9 @@ export function queryProducts(brandName : string | undefined) : Promise<AxiosRes
     let path = `/products`
     if(brandName) path = path.concat(`?brandName=${brandName}`)
     return instance.get(path)
+}
+
+export function createProduct(product : ProductInputModel){
+    let path = `/products`
+    return instance.post(path,product)
 }

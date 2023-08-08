@@ -115,13 +115,16 @@ namespace Tests.RepositoryTests
             context.Sessions.Add(session);
             context.SaveChanges();
 
-            int consumerID = 3;
-            _sessionRepository.AddConsumerToSession(session.Sessionid, consumerID);
+            List<ConsumerSession> consumerSessions = new List<ConsumerSession>();
+            ConsumerSessionInputModel consumerSession = new ConsumerSessionInputModel { sessionTime = "12:00", consumerId = 3 };
+            consumerSessions.Add(consumerSession.toDbConsumerSession());
+
+            _sessionRepository.AddConsumerToSession(session.Sessionid, consumerSessions);
             context.SaveChanges();
             //Check if consumer is in session
-            ConsumerSession csession = context.Sessions.Single(s => s.Sessionid == session.Sessionid).ConsumerSessions.Single(cs => cs.Consumerid == consumerID);
+            ConsumerSession csession = context.Sessions.Single(s => s.Sessionid == session.Sessionid).ConsumerSessions.Single(cs => cs.Consumerid == consumerSession.consumerId);
             Assert.NotNull(csession);
-            Assert.That(csession.Consumerid, Is.EqualTo(consumerID));
+            Assert.That(csession.Consumerid, Is.EqualTo(consumerSession.consumerId));
             //Clean up
             context.ConsumerSessions.Remove(csession);
             context.Sessions.Remove(session);

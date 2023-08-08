@@ -7,6 +7,8 @@ public partial class Product
 {
     public int Productid { get; set; }
 
+    public string Ref { get; set; } = null!;
+
     public string? Designation { get; set; }
 
     public string? Brand { get; set; }

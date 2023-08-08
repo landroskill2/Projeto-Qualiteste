@@ -30,6 +30,7 @@ CREATE TABLE SESSION(
 
 CREATE TABLE PRODUCT(
     ProductID int PRIMARY KEY,
+    Ref varchar(50) UNIQUE NOT NULL,
     Designation varchar(200),
     Brand varchar(50)
 ); 
@@ -154,14 +155,14 @@ INSERT INTO CONSUMER(Id, FullName, NIF, Sex, DateOfBirth, Contact, Email) VALUES
 (412, 'TELMA BRITES VIEIRA', 444444444444444, 'F', '1984-11-03', 89342, null),
 (426, 'JOYCE LIRA BACRY', 727362636263, 'F', '1981-08-31', 723252532, null);
 
-INSERT INTO PRODUCT(ProductID, Designation, Brand) VALUES
-(122332, 'Yogurte Grego', 'Continente'),
-(132321, 'Yogurte Grego', 'Pingo Doce'),
-(231233, 'Yogurte Grego', 'Intermarché'),
-(321332, 'Fiambre Fatiado', 'Continente'),
-(324231, 'Fiambre Fatiado', 'Pingo Doce'),
-(573626, 'Pastel de Nata', 'Auchan'),
-(123123, 'Mala Eastpack', 'Continente');
+INSERT INTO PRODUCT(ProductID, Ref, Designation, Brand) VALUES
+(122332, 'JM-2312-01', 'Yogurte Grego', 'Continente'),
+(132321, 'PD-2312-01', 'Yogurte Grego', 'Pingo Doce'),
+(231233, 'IM-2312-01', 'Yogurte Grego', 'Intermarché'),
+(321332, 'JM-2313-01', 'Fiambre Fatiado', 'Continente'),
+(324231, 'PD-2313-01', 'Fiambre Fatiado', 'Pingo Doce'),
+(573626, 'AC-2312-01', 'Pastel de Nata', 'Auchan'),
+(123123, 'JM-2314-01', 'Mala Eastpack', 'Continente');
 
 INSERT INTO SESSION(SessionID, SessionDate, ConsumersNumber) VALUES
 ('040423', '2023-04-04', 10),
@@ -240,6 +241,7 @@ INSERT INTO CONSUMER_HT(TestID, ConsumerID, DeliveryDate, DueDate, ResponseDate,
 
 INSERT INTO ROLES(RoleDesignation) VALUES
 ('ADMIN'),
+('FUNCIONARIO'),
 ('CLIENT');
 
 INSERT INTO USERS(Username, Pwd, Role) VALUES
