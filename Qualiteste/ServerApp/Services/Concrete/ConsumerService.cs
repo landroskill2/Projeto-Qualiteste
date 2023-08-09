@@ -3,7 +3,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Qualiteste.ServerApp.DataAccess;
 using Qualiteste.ServerApp.Dtos;
 using Qualiteste.ServerApp.Models;
-using Qualiteste.ServerApp.Services.Errors;
+using Qualiteste.ServerApp.Services.Replies;
+using Qualiteste.ServerApp.Services.Replies.Errors;
 using Qualiteste.ServerApp.Utils;
 
 namespace Qualiteste.ServerApp.Services.Concrete
@@ -43,11 +44,11 @@ namespace Qualiteste.ServerApp.Services.Concrete
                     var state = dbException.Data["SqlState"];
                     var constraint = dbException.Data["ConstraintName"];
                     if (state.Equals("23505") && constraint.Equals("consumer_pkey")) 
-                        return new ConsumerWithIdAlreadyPresent();
+                        return new ConsumerErrors.ConsumerWithIdAlreadyPresent();
                     else if (state.Equals("23505") && constraint.Equals("consumer_contact_key"))
-                        return new ConsumerWithContactAlreadyPresent();
+                        return new ConsumerErrors.ConsumerWithContactAlreadyPresent();
                     else if (state.Equals("23505") && constraint.Equals("consumer_nif_key"))
-                        return new ConsumerWithNifAlreadyPresent();
+                        return new ConsumerErrors.ConsumerWithNifAlreadyPresent();
                 }
                 throw ex;
             }     
@@ -61,14 +62,14 @@ namespace Qualiteste.ServerApp.Services.Concrete
                 _unitOfWork.Consumers.Remove(c);
                 return c.ToOutputModel();
             }
-            else return new NoConsumerFoundWithId();
+            else return new ConsumerErrors.NoConsumerFoundWithId();
         }
 
         public Either<CustomError, ConsumerPageModel> GetConsumerById(int id)
         {
             Consumer? consumer = _unitOfWork.Consumers.GetConsumerById(id);
 
-            if (consumer == null) return new NoConsumerFoundWithId();
+            if (consumer == null) return new ConsumerErrors.NoConsumerFoundWithId();
 
             IEnumerable<SessionOutputModel> sessions = consumer.ConsumerSessions.Select(cs => cs.Session.toOutputModel());
             IEnumerable<TestOutputModel> tests = consumer.ConsumerHts.Select(cht => cht.Test.toOutputModel());
@@ -103,7 +104,7 @@ namespace Qualiteste.ServerApp.Services.Concrete
                 int.TryParse(minAge, out minIAge);
                 int.TryParse(maxAge, out maxIAge);
                 //if (iage < 0) return new ConsumerFilterNotValid();
-                if (!(sex == null|| sex.ToUpper().Equals("M") || sex.ToUpper().Equals("F"))) return new ConsumerFilterNotValid();
+                if (!(sex == null|| sex.ToUpper().Equals("M") || sex.ToUpper().Equals("F"))) return new ConsumerErrors.ConsumerFilterNotValid();
 
                 //Might be a problem, there are consumers with no specified dateOfBirth
                 IEnumerable<ConsumerOutputModel> consumers = _unitOfWork.Consumers.GetConsumersFiltered(sex, minIAge, maxIAge, name)
@@ -111,7 +112,7 @@ namespace Qualiteste.ServerApp.Services.Concrete
                 return consumers.ToList();
             }
             catch(FormatException ex){
-                return new ConsumerFilterNotValid();
+                return new ConsumerErrors.ConsumerFilterNotValid();
             }
             catch(Exception ex)
             {
@@ -145,9 +146,9 @@ namespace Qualiteste.ServerApp.Services.Concrete
                     var state = dbException.Data["SqlState"];
                     var constraint = dbException.Data["ConstraintName"];
                     if (state.Equals("23505") && constraint.Equals("consumer_contact_key"))
-                        return new ConsumerWithContactAlreadyPresent();
+                        return new ConsumerErrors.ConsumerWithContactAlreadyPresent();
                     else if (state.Equals("23505") && constraint.Equals("consumer_nif_key"))
-                        return new ConsumerWithNifAlreadyPresent();
+                        return new ConsumerErrors.ConsumerWithNifAlreadyPresent();
                 }
                 throw ex;
             }

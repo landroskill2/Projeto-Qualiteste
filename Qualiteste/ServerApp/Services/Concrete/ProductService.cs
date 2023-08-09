@@ -1,7 +1,9 @@
 ﻿using Qualiteste.ServerApp.DataAccess;
 using Qualiteste.ServerApp.Dtos;
 using Qualiteste.ServerApp.Models;
-using Qualiteste.ServerApp.Services.Errors;
+using Qualiteste.ServerApp.Services.Replies;
+using Qualiteste.ServerApp.Services.Replies.Errors;
+using Qualiteste.ServerApp.Services.Replies.Successes;
 using Qualiteste.ServerApp.Utils;
 
 namespace Qualiteste.ServerApp.Services.Concrete
@@ -15,7 +17,7 @@ namespace Qualiteste.ServerApp.Services.Concrete
             _unitOfWork = unitOfWork;
         }
 
-        public Either<CustomError, string> CreateNewProduct(ProductInputModel product)
+        public Either<CustomError, ProductSuccesses> CreateNewProduct(ProductInputModel product)
         {
             try
             {
@@ -24,7 +26,7 @@ namespace Qualiteste.ServerApp.Services.Concrete
                 
                 _unitOfWork.Products.Add(newP);
                 _unitOfWork.Complete();
-                return "Product created successfully";
+                return new ProductSuccesses.CreateProductSuccess();
             }catch (Exception ex)
             {
                 _unitOfWork.UntrackChanges();
@@ -35,7 +37,7 @@ namespace Qualiteste.ServerApp.Services.Concrete
                     var constraint = dbException.Data["ConstraintName"];
                     if(state.Equals("23505") && constraint.Equals("product_ref_key"))
                     {
-                        return new ProductWithRefAlreadyPresent();
+                        return new ProductErrors.ProductWithRefAlreadyPresent();
                     }
                 }
                 throw ex;

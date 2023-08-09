@@ -1,5 +1,4 @@
 ﻿using Qualiteste.ServerApp.Models;
-using Qualiteste.ServerApp.Services.Errors;
 
 namespace Qualiteste.ServerApp.DataAccess.Repository
 {

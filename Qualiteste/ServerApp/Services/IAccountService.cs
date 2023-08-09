@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Qualiteste.ServerApp.Dtos;
-using Qualiteste.ServerApp.Services.Errors;
+using Qualiteste.ServerApp.Services.Replies;
+using Qualiteste.ServerApp.Services.Replies.Errors;
 using Qualiteste.ServerApp.Utils;
 
 namespace Qualiteste.ServerApp.Services

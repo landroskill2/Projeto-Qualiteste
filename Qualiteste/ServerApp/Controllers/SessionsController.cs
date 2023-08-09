@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using Qualiteste.ServerApp.Dtos;
 using Qualiteste.ServerApp.Services;
 using Qualiteste.ServerApp.Services.Concrete;
-using Qualiteste.ServerApp.Services.Errors;
+using Qualiteste.ServerApp.Services.Replies;
+using Qualiteste.ServerApp.Services.Replies.Errors;
+using Qualiteste.ServerApp.Services.Replies.Successes;
 using Qualiteste.ServerApp.Utils;
 
 namespace Qualiteste.ServerApp.Controllers
@@ -109,7 +111,7 @@ namespace Qualiteste.ServerApp.Controllers
         {
             try
             {
-                Either<CustomError, string> c = _sessionService.AddTestToSession(id, test);
+                Either<CustomError, SessionSuccesses> c = _sessionService.AddTestToSession(id, test);
                 return c.Match(
                     error => Problem(statusCode: error.StatusCode, title: error.Message),
                     success => Ok(success)
@@ -128,7 +130,7 @@ namespace Qualiteste.ServerApp.Controllers
         {
             try
             { 
-                Either<CustomError, string> c = _sessionService.AddConsumerToSession(id, consumerSession);
+                Either<CustomError, SessionSuccesses> c = _sessionService.AddConsumerToSession(id, consumerSession);
                 return c.Match(
                     error => Problem(statusCode: error.StatusCode, title: error.Message),
                     success => Ok(success)
@@ -146,7 +148,7 @@ namespace Qualiteste.ServerApp.Controllers
         {
             try
             {
-                Either<CustomError, string> c = _sessionService.RemoveInvitedConsumerFromSession(id, selection);
+                Either<CustomError, SessionSuccesses> c = _sessionService.RemoveInvitedConsumerFromSession(id, selection);
                 return c.Match(
                     error => Problem(statusCode: error.StatusCode, title: error.Message),
                     success => Ok(success)
@@ -164,7 +166,7 @@ namespace Qualiteste.ServerApp.Controllers
         {
             try
             {
-                Either<CustomError, string> c = _sessionService.ConfirmConsumerSession(id, consumerSession);
+                Either<CustomError, SessionSuccesses> c = _sessionService.ConfirmConsumerSession(id, consumerSession);
                 return c.Match(
                     error => Problem(statusCode: error.StatusCode, title: error.Message),
                     success => Ok(success)

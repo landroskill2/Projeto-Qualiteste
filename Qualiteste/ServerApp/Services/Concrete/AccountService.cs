@@ -3,7 +3,8 @@ using Microsoft.IdentityModel.Tokens;
 using Qualiteste.ServerApp.DataAccess;
 using Qualiteste.ServerApp.Dtos;
 using Qualiteste.ServerApp.Models;
-using Qualiteste.ServerApp.Services.Errors;
+using Qualiteste.ServerApp.Services.Replies;
+using Qualiteste.ServerApp.Services.Replies.Errors;
 using Qualiteste.ServerApp.Utils;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -26,11 +27,11 @@ namespace Qualiteste.ServerApp.Services.Concrete
         {
 
             User? DbUser = _unitOfWork.Users.GetById(user.Username);
-            if(DbUser == null) return new UsernameNotFound(); 
+            if(DbUser == null) return new AccountErrors.UsernameNotFound(); 
 
             string encryptedPassword = SHA256Encryption.EncryptString(user.Password);
 
-            if (encryptedPassword != DbUser.Pwd) return new IncorrectPassword();
+            if (encryptedPassword != DbUser.Pwd) return new AccountErrors.IncorrectPassword();
 
             return GenerateToken(DbUser);
 

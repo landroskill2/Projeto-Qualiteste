@@ -4,7 +4,9 @@ using Qualiteste.ServerApp.Dtos;
 using Qualiteste.ServerApp.Models;
 using Qualiteste.ServerApp.Services;
 using Qualiteste.ServerApp.Services.Concrete;
-using Qualiteste.ServerApp.Services.Errors;
+using Qualiteste.ServerApp.Services.Replies;
+using Qualiteste.ServerApp.Services.Replies.Errors;
+using Qualiteste.ServerApp.Services.Replies.Successes;
 using Qualiteste.ServerApp.Utils;
 
 namespace Qualiteste.ServerApp.Controllers
@@ -123,7 +125,7 @@ namespace Qualiteste.ServerApp.Controllers
         {
             try
             {
-                Either<CustomError, string> c = _testService.AddConsumerToTest(id, consumer);
+                Either<CustomError, TestSucesses> c = _testService.AddConsumerToTest(id, consumer);
                 return c.Match(
                     error => Problem(statusCode: error.StatusCode, title: error.Message),
                     success => Ok(success)
@@ -156,7 +158,7 @@ namespace Qualiteste.ServerApp.Controllers
             try
             {
                 //change string to object
-                Either<CustomError, string> result = _testService.UpdateAttributeAlias(id, alias);
+                Either<CustomError, TestSucesses> result = _testService.UpdateAttributeAlias(id, alias);
                 return result.Match(
                     error => Problem(statusCode: 500, title: "Something went wrong"),
                     success => Ok(success)

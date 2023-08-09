@@ -1,5 +1,7 @@
 ﻿using Qualiteste.ServerApp.Dtos;
-using Qualiteste.ServerApp.Services.Errors;
+using Qualiteste.ServerApp.Services.Replies;
+using Qualiteste.ServerApp.Services.Replies.Errors;
+using Qualiteste.ServerApp.Services.Replies.Successes;
 using Qualiteste.ServerApp.Utils;
 
 namespace Qualiteste.ServerApp.Services
@@ -13,7 +15,7 @@ namespace Qualiteste.ServerApp.Services
         // - IEnumerable<Brand>?
         Either<CustomError, BrandOutputModel> GetAllBrands();
 
-        Either<CustomError, string> CreateNewProduct(ProductInputModel product);
+        Either<CustomError, ProductSuccesses> CreateNewProduct(ProductInputModel product);
 
     }
 }

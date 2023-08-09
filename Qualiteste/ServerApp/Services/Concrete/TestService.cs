@@ -1,7 +1,9 @@
 ﻿using Qualiteste.ServerApp.DataAccess;
 using Qualiteste.ServerApp.Dtos;
 using Qualiteste.ServerApp.Models;
-using Qualiteste.ServerApp.Services.Errors;
+using Qualiteste.ServerApp.Services.Replies;
+using Qualiteste.ServerApp.Services.Replies.Errors;
+using Qualiteste.ServerApp.Services.Replies.Successes;
 using Qualiteste.ServerApp.Utils;
 using System.Diagnostics;
 
@@ -17,7 +19,7 @@ namespace Qualiteste.ServerApp.Services.Concrete
 
        
 
-        public Either<CustomError, IEnumerable<TestOutputModel>> GetTestsList()
+        public Either<CustomError,IEnumerable<TestOutputModel>> GetTestsList()
         {
            
             return _unitOfWork.Tests.ListTestsByDate().Select(t => t.toOutputModel()).ToList();
@@ -31,7 +33,7 @@ namespace Qualiteste.ServerApp.Services.Concrete
                 return _unitOfWork.Tests.ListTestsWithFilters(type).Select(t => t.toOutputModel()).ToList();
             }catch(Exception e)
             {
-                return null;
+                throw e;
             }
         }
 
@@ -39,7 +41,7 @@ namespace Qualiteste.ServerApp.Services.Concrete
         {
             SessionOutputModel? session = null;
             Test? test = _unitOfWork.Tests.GetTestById(id);
-            if (test == null) return new NoTestFoundWithGivenID();
+            if (test == null) return new TestErrors.NoTestFoundWithGivenID();
 
             if (test.Testtype.Equals("SP")) session = test.Session?.toOutputModel();
             IEnumerable<ConsumerOutputModel>? consumers = _unitOfWork.Tests.GetConsumersInTest(id)?.Select(c => c.ToOutputModel());
@@ -70,13 +72,13 @@ namespace Qualiteste.ServerApp.Services.Concrete
                     var state = dbException.Data["SqlState"];
                     var constraint = dbException.Data["ConstraintName"];
                     if (state.Equals("22001"))
-                        return new TestFieldIsToLong();
+                        return new TestErrors.TestFieldIsToLong();
                     else if (state.Equals("23514") && constraint.Equals("test_testtype_check"))
-                        return new InvalidTestType();
+                        return new TestErrors.InvalidTestType();
                     else if (state.Equals("23505") && constraint.Equals("test_pkey"))
-                        return new TestWithSameIdAlreadyPresent();
+                        return new TestErrors.TestWithSameIdAlreadyPresent();
                     else if (state.Equals("23503") && constraint.Equals("test_product_fkey"))
-                        return new TestReferencesNonExistingProduct();
+                        return new TestErrors.TestReferencesNonExistingProduct();
                 }
                 throw ex;
             }
@@ -84,7 +86,7 @@ namespace Qualiteste.ServerApp.Services.Concrete
         /**
          * bulk update attributes on test
          */
-        public Either<CustomError, string> UpdateAttributeAlias(string testId, FizzAliasDto[] alias)
+        public Either<CustomError, TestSucesses> UpdateAttributeAlias(string testId, FizzAliasDto[] alias)
         {
             try
             {
@@ -97,7 +99,7 @@ namespace Qualiteste.ServerApp.Services.Concrete
                 }
                 _unitOfWork.Complete();
                 //return updated attributes
-                return "Updated Succesfully";
+                return new TestSucesses.UpdateAttributeAliasSuccess();
             }
             catch (Exception e)
             {
@@ -129,15 +131,15 @@ namespace Qualiteste.ServerApp.Services.Concrete
             }
         }
 
-        public Either<CustomError, string> AddConsumerToTest(string id, IEnumerable<int> consumer)
+        public Either<CustomError, TestSucesses> AddConsumerToTest(string id, IEnumerable<int> consumer)
         {
             try
             {
                 _unitOfWork.Tests.AddConsumerToTest(id, consumer);
                 _unitOfWork.Complete();
-                return "Provador adicionado com sucesso";
+                return new TestSucesses.AddConsumerToTestSuccess();
             }catch(InvalidOperationException ex){
-                return new ConsumerAlreadyInTest();
+                return new TestErrors.ConsumerAlreadyInTest();
             }catch(Exception ex)
             {
                 _unitOfWork.UntrackChanges();

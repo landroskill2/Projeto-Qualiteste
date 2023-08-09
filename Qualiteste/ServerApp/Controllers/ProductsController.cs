@@ -2,12 +2,14 @@
 using Microsoft.AspNetCore.Mvc;
 using Qualiteste.ServerApp.Dtos;
 using Qualiteste.ServerApp.Services;
-using Qualiteste.ServerApp.Services.Errors;
+using Qualiteste.ServerApp.Services.Replies;
+using Qualiteste.ServerApp.Services.Replies.Errors;
+using Qualiteste.ServerApp.Services.Replies.Successes;
 using Qualiteste.ServerApp.Utils;
 
 namespace Qualiteste.ServerApp.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ProductsController : ControllerBase
@@ -19,7 +21,7 @@ namespace Qualiteste.ServerApp.Controllers
             _productService = productService;
         }
 
-        [Authorize(Roles = "ADMIN")]
+        //[Authorize(Roles = "ADMIN")]
         [HttpGet]
         [ProducesResponseType(200, Type = typeof(IEnumerable<ProductOutputModel>))]
         [ProducesResponseType(500)]
@@ -42,7 +44,7 @@ namespace Qualiteste.ServerApp.Controllers
         }
 
 
-        [Authorize(Roles = "ADMIN")]
+        //[Authorize(Roles = "ADMIN")]
         [HttpGet("brands")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<string>))]
         [ProducesResponseType(500)]
@@ -63,14 +65,14 @@ namespace Qualiteste.ServerApp.Controllers
                 return Problem(statusCode: 500, title: "Ocorreu um erro inesperado");
             }
         }
-        [Authorize(Roles = "ADMIN")]
+        //[Authorize(Roles = "ADMIN")]
         [HttpPost]
         [ProducesResponseType(201)]
         public IActionResult CreateNewProduct([FromBody] ProductInputModel product)
         {
             try
             {
-                Either<CustomError, string> result = _productService.CreateNewProduct(product);
+                Either<CustomError, ProductSuccesses> result = _productService.CreateNewProduct(product);
                 var actionName = product.Ref;
 
                 return result.Match(

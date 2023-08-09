@@ -55,12 +55,12 @@ export default function Session() : React.ReactElement{
     const resp = await removeNotConfirmedConsumers(sessionId, selection).catch(err => {
       addToast({id: "error", title: "Erro", description: err.response.data.title, status: "error"})
     })
-
+    console.log(resp)
     if(resp?.status === 200){
       setIsLoading(true)
       populateData().then(() => {
         setIsLoading(false)
-        addToast({id: "success", title: "Sucesso", description: resp.data, status: "success"})
+        addToast({id: "success", title: "Sucesso", description: resp.data.message, status: "success"})
       })
     } 
   }
@@ -74,7 +74,7 @@ export default function Session() : React.ReactElement{
       setIsLoading(true)
       populateData().then(() => {
         setIsLoading(false)
-        addToast({id: "success", title: "Sucesso", description: resp.data, status: "success"})
+        addToast({id: "success", title: "Sucesso", description: resp.data.message, status: "success"})
       })
     }
   }
@@ -87,7 +87,7 @@ export default function Session() : React.ReactElement{
       setIsLoading(true)
       populateData().then(() => {
         setIsLoading(false)
-        addToast({id: "success", title: "Sucesso", description: "Teste adicionado com sucesso.", status: "success"})
+        addToast({id: "success", title: "Sucesso", description: resp.data.message, status: "success"})
       })
     }
   }
@@ -97,11 +97,12 @@ export default function Session() : React.ReactElement{
     const resp = await addConsumerToSession(id!, body).catch(err => {
       addToast({id: "error", title: "Erro", description: err.response.data.title, status: "error"})
     }) 
+    console.log(resp)
     if(resp?.status === 200){
       setIsLoading(true)
       populateData().then(() => {
         setIsLoading(false)
-        addToast({id: "success", title: "Sucesso", description: "Provador adicionado com sucesso.", status: "success"})
+        addToast({id: "success", title: "Sucesso", description: resp.data.message, status: "success"})
       })   
     }
     
