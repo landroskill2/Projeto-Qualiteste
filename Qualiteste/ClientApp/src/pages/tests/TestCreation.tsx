@@ -7,11 +7,18 @@ import {
   Input,
   Select,
   Button,
+  Table,
+  Tbody,
+  Tr,
+  Td,
 } from "@chakra-ui/react";
 import { ITestInputModel } from "../../common/Interfaces/Tests";
-import { createTest } from "../../common/APICalls";
+import { createProduct, createTest } from "../../common/APICalls";
 import { useGlobalToast } from "../../common/useGlobalToast";
 import { useNavigate } from "react-router-dom";
+import ProductsTable from "../../components/tables/ProductsTable";
+import { ProductInputModel, ProductOutputModel } from "../../common/Interfaces/Products";
+import CreateProductModal from "../../components/modals/CreateProductModal";
 
 const initialFormValues: ITestInputModel = {
   id: "",
@@ -22,8 +29,27 @@ const initialFormValues: ITestInputModel = {
 
 export default function TestCreation(): React.ReactElement {
   const [formValues, setFormValues] = useState<ITestInputModel>(initialFormValues);
+  const [addedProducts, setAddedProducts] = useState<ProductOutputModel[]>([])
   const { addToast, isToastActive } = useGlobalToast() 
   const navigate = useNavigate()
+
+  console.log(addedProducts)
+
+  const onCreateProduct = async (product : ProductInputModel) => {
+    const resp = await createProduct(product).catch(err => {
+      if(!isToastActive("error")){
+        addToast({
+          id: "error",
+          title: "Erro",
+          description: err.response.data.title,
+          status: "error"
+        })
+      }
+    })
+    if(resp?.status === 201){
+      setAddedProducts(prevProducts => [...prevProducts, (product as ProductOutputModel)])
+    }
+  }
   
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -71,103 +97,128 @@ export default function TestCreation(): React.ReactElement {
   const isHomeTest = formValues.testType === "HT";
 
   return (
-    <Box className="bg-slate-800 shadow-slate-600 p-6 rounded-lg shadow-md w-96 ">
-      <div className="flex flex-col items-center mb-4">
-        <h1 className="text-center text-3xl font-bold text-white">Criar Teste</h1>
+    <div className="flex flex-col bg-slate-800 shadow-slate-600 p-6 rounded-lg shadow-md ">
+        <div className="flex flex-col items-center mb-4">
+          <h1 className="text-center text-3xl font-bold text-white">Criar Teste</h1>
+        </div>
+        <div className="flex flex-row gap-10">
+          <div className="flex flex-row">
+            <form onSubmit={handleSubmit}>
+              <FormControl id="id" isRequired>
+                <FormLabel textColor={"white"}>ID</FormLabel>
+                <Input
+                  name="id"
+                  type="text"
+                  value={formValues.id}
+                  onChange={handleInputChange}
+                  background="white"
+
+                />
+              </FormControl>
+
+              <FormControl id="testType" isRequired>
+                <FormLabel textColor={"white"}>Tipo</FormLabel>
+                <Select
+                  name="testType"
+                  value={formValues.testType}
+                  onChange={handleInputChange}
+                  background="white"
+                >
+                  <option value="SP">Sala de Provas</option>
+                  <option value="HT">Home Test</option>
+                </Select>
+              </FormControl>
+
+              <FormControl id="consumersNumber" isRequired>
+                <FormLabel textColor={"white"}>Número de Provadores</FormLabel>
+                <Input
+                  name="consumersNumber"
+                  type="number"
+                  value={formValues.consumersNumber}
+                  onChange={handleInputChange}
+                  background="white"
+
+                />
+              </FormControl>
+
+              <FormControl id="requestDate" isRequired>
+                <FormLabel textColor={"white"}>Data de Pedido</FormLabel>
+                <Input
+                  name="requestDate"
+                  type="date"
+                  value={formValues.requestDate}
+                  onChange={handleInputChange}
+                  background="white"
+
+                />
+              </FormControl>
+
+              {isHomeTest && (
+                <>
+                  <FormControl id="validationDate">
+                    <FormLabel textColor={"white"}>Validation Date</FormLabel>
+                    <Input
+                      name="validationDate"
+                      type="date"
+                      value={formValues.validationDate}
+                      onChange={handleInputChange}
+                      background="white"
+              
+                      />
+                  </FormControl>
+              
+                  <FormControl id="dueDate">
+                    <FormLabel textColor={"white"}>Due Date</FormLabel>
+                      <Input
+                        name="dueDate"
+                        type="date"
+                        value={formValues.dueDate}
+                        onChange={handleInputChange}
+                        background="white"
+              
+                      />
+                  </FormControl>
+              
+                  <FormControl id="reportDeliveryDate">
+                    <FormLabel textColor={"white"}>Report Delivery Date</FormLabel>
+                      <Input
+                        name="reportDeliveryDate"
+                        type="date"
+                        value={formValues.reportDeliveryDate}
+                        onChange={handleInputChange}
+                        background="white"
+                      />
+                  </FormControl>
+                </>
+              )}
+
+              <Button type="submit" mt={4} colorScheme="blue">
+                  Submit
+              </Button>
+            </form>
+          </div>
+        <div className="flex flex-col gap-4">
+          <div className="w-full flex-grow bg-white">
+            <Table variant="simple" overflow="auto" size="sm">
+              <Tbody>
+                {addedProducts && <>
+                  {addedProducts.map((p) => (
+                    <Tr key={p.productid} onClick ={() => {console.log("Redirect to product page")}} >
+                      <Td>{p.ref}</Td>
+                      <Td>{p.designation}</Td>
+                      <Td>{p.brand}</Td>
+                    </Tr>
+                  ))}
+                </>}             
+              </Tbody>
+            </Table>
+          </div>
+          <div className="flex w-full gap-4">
+            <Button>Adicionar Produto Existente</Button>
+            <CreateProductModal onSubmit={onCreateProduct}/>
+          </div>
+        </div>
       </div>
-      <form onSubmit={handleSubmit}>
-        <FormControl id="id" isRequired>
-          <FormLabel textColor={"white"}>ID</FormLabel>
-          <Input
-            name="id"
-            type="text"
-            value={formValues.id}
-            onChange={handleInputChange}
-            background="white"
-
-          />
-        </FormControl>
-
-        <FormControl id="testType" isRequired>
-          <FormLabel textColor={"white"}>Type</FormLabel>
-          <Select
-            name="testType"
-            value={formValues.testType}
-            onChange={handleInputChange}
-            background="white"
-          >
-            <option value="SP">Sala de Provas</option>
-            <option value="HT">Home Test</option>
-          </Select>
-        </FormControl>
-
-        <FormControl id="consumersNumber" isRequired>
-          <FormLabel textColor={"white"}>Consumers Number</FormLabel>
-          <Input
-            name="consumersNumber"
-            type="number"
-            value={formValues.consumersNumber}
-            onChange={handleInputChange}
-            background="white"
-
-          />
-        </FormControl>
-
-        <FormControl id="requestDate" isRequired>
-          <FormLabel textColor={"white"}>Request Date</FormLabel>
-          <Input
-            name="requestDate"
-            type="date"
-            value={formValues.requestDate}
-            onChange={handleInputChange}
-            background="white"
-
-          />
-        </FormControl>
-
-        {isHomeTest && (
-          <>
-            <FormControl id="validationDate">
-              <FormLabel textColor={"white"}>Validation Date</FormLabel>
-              <Input
-                name="validationDate"
-                type="date"
-                value={formValues.validationDate}
-                onChange={handleInputChange}
-                background="white"
-
-                />
-            </FormControl>
-
-            <FormControl id="dueDate">
-              <FormLabel textColor={"white"}>Due Date</FormLabel>
-                <Input
-                  name="dueDate"
-                  type="date"
-                  value={formValues.dueDate}
-                  onChange={handleInputChange}
-                  background="white"
-
-                />
-            </FormControl>
-
-            <FormControl id="reportDeliveryDate">
-              <FormLabel textColor={"white"}>Report Delivery Date</FormLabel>
-                <Input
-                  name="reportDeliveryDate"
-                  type="date"
-                  value={formValues.reportDeliveryDate}
-                  onChange={handleInputChange}
-                  background="white"
-                />
-            </FormControl>
-          </>
-        )}
-
-        <Button type="submit" mt={4} colorScheme="blue">
-            Submit
-        </Button>
-      </form>
-    </Box>
+    </div>
   );
 }

@@ -18,7 +18,7 @@ const initialConsumer: IConsumerInputModel = {
     nif: "",
     sex: "M",
     dateofbirth: "",
-    contact: 0,
+    contact: null,
   };
   
   export default function ConsumerCreation(): React.ReactElement {
@@ -78,7 +78,7 @@ const initialConsumer: IConsumerInputModel = {
             </FormControl>  
 
             <FormControl id="fullname" isRequired>
-              <FormLabel textColor="white">Full Name</FormLabel>
+              <FormLabel textColor="white">Nome Completo</FormLabel>
               <Input
                 name="fullname"
                 type="text"
@@ -104,7 +104,7 @@ const initialConsumer: IConsumerInputModel = {
               </FormControl>
       
               <FormControl id="sex" isRequired>
-                <FormLabel textColor="white">Sex</FormLabel>
+                <FormLabel textColor="white">Sexo</FormLabel>
                 <Select
                   name="sex"
                   value={consumer.sex}
@@ -120,7 +120,7 @@ const initialConsumer: IConsumerInputModel = {
             
             <div className="flex flex-row justify-between gap-3">
               <FormControl id="dateofbirth" isRequired>
-                <FormLabel textColor="white">Date of Birth</FormLabel>
+                <FormLabel textColor="white">Data de Nascimento</FormLabel>
                 <Input
                   name="dateofbirth"
                   type="date"
@@ -131,7 +131,7 @@ const initialConsumer: IConsumerInputModel = {
               </FormControl>
       
               <FormControl id="contact" isRequired>
-                <FormLabel textColor="white">Contact</FormLabel>
+                <FormLabel textColor="white">Contacto</FormLabel>
                 <Input
                   name="contact"
                   type="text"

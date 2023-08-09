@@ -87,7 +87,7 @@ export default function Products(): React.ReactElement{
       )}
       <div className="content-end justify-end items-baseline">
         <WithPermission roleRequired="ADMIN">
-          <div className="p-6 bg-white" style={{ flexShrink: 0 }}>
+          <div className="p-6 bg-white " style={{ flexShrink: 0 }}>
             <CreateProductModal onSubmit={onSubmitProduct}/>
           </div>
         </WithPermission>

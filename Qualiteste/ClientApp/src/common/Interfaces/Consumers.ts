@@ -13,6 +13,6 @@ export interface IConsumerInputModel {
     nif: string;
     sex: "M" | "F";
     dateofbirth: string;
-    contact: number;
+    contact: number | null;
     email?: string
 }

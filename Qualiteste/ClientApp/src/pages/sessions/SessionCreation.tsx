@@ -88,7 +88,7 @@ export default function SessionCreation(): React.ReactElement {
           </FormControl>
 
           <FormControl id="date" isRequired>
-            <FormLabel textColor="white">Date</FormLabel>
+            <FormLabel textColor="white">Data da Sessão</FormLabel>
             <Input
               name="date"
               type="date"
@@ -99,7 +99,7 @@ export default function SessionCreation(): React.ReactElement {
           </FormControl>
 
           <FormControl id="consumersNumber" isRequired>
-            <FormLabel textColor="white">Consumers Number</FormLabel>
+            <FormLabel textColor="white">Número de Provadores</FormLabel>
             <Input
               name="consumersNumber"
               type="number"
@@ -111,7 +111,7 @@ export default function SessionCreation(): React.ReactElement {
           </FormControl>
 
           <Button type="submit" mt={4} colorScheme="blue">
-            Submit
+            Criar
           </Button>
         </form>
       </Box>
