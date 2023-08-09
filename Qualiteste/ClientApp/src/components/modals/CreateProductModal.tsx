@@ -51,18 +51,18 @@ export default function CreateProductModal({onSubmit} : ModalProps) : React.Reac
         }));
       };
     return (
-        <div>
+        <div >
         <Button
             onClick={onOpen}
             m={4}
             >{`Criar Produto`}
         </Button>
-        <Modal onClose={onClose} size="sm"  isOpen={isOpen}>
+        <Modal onClose={onClose} size="sm" isOpen={isOpen} isCentered>
             <ModalOverlay />
             <ModalContent>
-                <ModalHeader className="bg-slate-800 shadow-slate-600 shadow-md p-6 gap-4 text-white" >Criar Produto</ModalHeader>
+                <ModalHeader className="bg-slate-800 shadow-slate-600 shadow-md p-6 gap-4 text-white rounded-t-md" >Criar Produto</ModalHeader>
                 <ModalCloseButton color={"white"} />
-                <ModalBody className="bg-slate-800 shadow-slate-600 shadow-md p-6 gap-4">
+                <ModalBody className="bg-slate-800 shadow-slate-600 shadow-md p-6 gap-4 rounded-b-md">
                 <div>
             <form onSubmit={handleSubmit}>
                 <Box>
