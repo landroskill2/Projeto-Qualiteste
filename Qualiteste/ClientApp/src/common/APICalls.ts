@@ -235,6 +235,7 @@ export async function loginUser(
 export async function registerUser(
     user: IAccountOutput
 ) : Promise<AxiosResponse>{
+    let path = ""
     return instance.post(path, user)
 }
 

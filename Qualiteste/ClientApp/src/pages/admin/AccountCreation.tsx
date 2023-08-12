@@ -18,20 +18,9 @@ const initialAccount : IAccountOutput = {
     password : "",
     role : "ADMIN"
 }
-
-type ClientAttributes = {
-    id : string,
-    name : string
-}
-
-const initialClient : ClientAttributes = {
-    id : "",
-    name : ""
-}
   
   export default function AccountCreation(): React.ReactElement {
     const [accountCredentials, setAccountCredentials] = useState<IAccountOutput>(initialAccount);
-    const [clientAttributes, setClientAttributes] = useState<ClientAttributes>(initialClient)
     const { addToast, isToastActive } = useGlobalToast() 
     const navigate = useNavigate()
   
@@ -45,16 +34,6 @@ const initialClient : ClientAttributes = {
         [name]: value,
       }));
     };
-
-    const handleClientInputChange = (
-      e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-      ) => {
-        const { name, value} = e.target
-        setClientAttributes((prevClientAttributes) => ({
-          ...prevClientAttributes,
-          [name] : value
-        }))
-      }
   
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
@@ -131,27 +110,27 @@ const initialClient : ClientAttributes = {
                     name="id"
                     type="text"
                     min={1}
-                    value={clientAttributes.id}
-                    onChange={handleClientInputChange}
+                    value={accountCredentials.id}
+                    onChange={handleAccountInputChange}
                     background="white"
                   />
                 </FormControl>  
     
-                <FormControl id="name" isRequired>
+                <FormControl id="designation" isRequired>
                   <FormLabel textColor="white">Designação de cliente</FormLabel>
                   <Input
-                    name="name"
+                    name="designation"
                     type="text"
                     maxLength={40}
-                    value={clientAttributes.name}
-                    onChange={handleClientInputChange}
+                    value={accountCredentials.designation}
+                    onChange={handleAccountInputChange}
                     background="white"
                   />
                 </FormControl>
               </div>
             }
           
-            <Button type="submit" mt={4} colorScheme="blue">
+            <Button type="submit" mt={4} colorScheme="blue" onSubmit={handleSubmit}>
               Criar
             </Button>
             </Box>

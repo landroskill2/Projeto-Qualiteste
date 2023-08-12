@@ -67,7 +67,24 @@ namespace Qualiteste.ServerApp.Services.Concrete
 
         public Either<CustomError, string> CreateAccount(UserDto user)
         {
-            throw new NotImplementedException();
+            User dbUser = new()
+            {
+                Username = user.Username,
+                Pwd = user.Password,
+                Role = _unitOfWork.Users.GetRoleIDByDesignation(user.Role)
+            };
+
+            _unitOfWork.Users.Add(dbUser);
+
+            if(user.Role == "CLIENT") 
+            {
+                Client dbClient = new()
+                {
+                    Acronym = user.Id,
+                    Companyname = user.Designation
+                };
+                _unitOfWork.Clients.Add(dbClient);
+            }
         }
     }
 }
