@@ -9,6 +9,7 @@ namespace Qualiteste.ServerApp.DataAccess
         ISessionRepository Sessions { get; }
         IUserRepository Users { get; }
         IProductRepository Products { get; }
+        IClientRepository Clients { get; }
         int Complete();
         void UntrackChanges();
     }

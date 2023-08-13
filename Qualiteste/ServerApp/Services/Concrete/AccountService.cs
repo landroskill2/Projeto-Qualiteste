@@ -78,6 +78,8 @@ namespace Qualiteste.ServerApp.Services.Concrete
 
             if(user.Role == "CLIENT") 
             {
+                if(user.Id == null || user.Designation == null) {/* return custom error */}
+
                 Client dbClient = new()
                 {
                     Acronym = user.Id,
@@ -85,6 +87,10 @@ namespace Qualiteste.ServerApp.Services.Concrete
                 };
                 _unitOfWork.Clients.Add(dbClient);
             }
+
+            _unitOfWork.Complete();
+
+            return "Account Created";
         }
     }
 }

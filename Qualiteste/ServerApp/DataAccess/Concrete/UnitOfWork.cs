@@ -16,6 +16,7 @@ namespace Qualiteste.ServerApp.DataAccess.Concrete
             Sessions = new SessionRepository(_context);
             Users = new UserRepository(_context);
             Products = new ProductRepository(_context);
+            Clients = new ClientRepository(_context);
         }
 
         public IConsumerRepository Consumers { get; private set; }
@@ -28,7 +29,9 @@ namespace Qualiteste.ServerApp.DataAccess.Concrete
 
         public IProductRepository Products { get; private set; }
 
-    public int Complete()
+        public IClientRepository Clients { get; private set; }
+
+        public int Complete()
         {
             return _context.SaveChanges();
         }
