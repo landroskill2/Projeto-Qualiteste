@@ -254,10 +254,13 @@ public partial class PostgresContext : DbContext
 
             entity.ToTable("sample");
 
+            entity.HasIndex(e => new { e.Testid, e.Presentationposition }, "unq_presentationposition").IsUnique();
+
             entity.Property(e => e.Testid)
                 .HasMaxLength(20)
                 .HasColumnName("testid");
             entity.Property(e => e.Productid).HasColumnName("productid");
+            entity.Property(e => e.Presentationposition).HasColumnName("presentationposition");
             entity.Property(e => e.Receptiondate).HasColumnName("receptiondate");
 
             entity.HasOne(d => d.Product).WithMany(p => p.Samples)
@@ -270,6 +273,7 @@ public partial class PostgresContext : DbContext
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("sample_testid_fkey");
         });
+
 
         modelBuilder.Entity<Session>(entity =>
         {

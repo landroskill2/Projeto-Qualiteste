@@ -103,11 +103,11 @@ namespace Qualiteste.ServerApp.Services.Concrete
             }
         }
 
-        public Either<CustomError, SessionSuccesses> AddConsumerToSession(string id, IEnumerable<ConsumerSessionInputModel> consumerSession)
+        public Either<CustomError, SessionSuccesses> AddConsumerToSession(string id, ConsumerSessionInputModel consumerSession)
         {
             try
             {
-                IEnumerable<ConsumerSession> cs = consumerSession.Select(c => c.toDbConsumerSession());
+                IEnumerable<ConsumerSession> cs = consumerSession.Consumers.Select(c => new ConsumerSession { Consumerid = c , Sessionid = id });
                 _unitOfWork.Sessions.AddConsumerToSession(id, cs);
                 _unitOfWork.Complete();
                 return new SessionSuccesses.AddConsumerToSessionSuccess();
@@ -161,21 +161,40 @@ namespace Qualiteste.ServerApp.Services.Concrete
             }
         }
 
-        public Either<CustomError, SessionSuccesses> ConfirmConsumerSession(string sessionId, ConsumerSessionInputModel cSession)
+        public Either<CustomError, SessionSuccesses> ConfirmConsumerSession(string sessionId, int consumerId, SessionTimeInputModel cSession)
         {
             try
             {
                 Session targetSession = _unitOfWork.Sessions.GetSessionById(sessionId);
                 if(targetSession == null) return new SessionErrors.NoSessionFoundWithId();
-                ConsumerSession toUpdate = _unitOfWork.Sessions.GetConsumerSession(sessionId, cSession.consumerId);
+                ConsumerSession toUpdate = _unitOfWork.Sessions.GetConsumerSession(sessionId, consumerId);
                 if (toUpdate == null) return new SessionErrors.ConsumerIsNotPresentInSession();
-                toUpdate.Sessiontime = cSession.toDbConsumerSession().Sessiontime;
+                if (!TimeOnly.TryParse(cSession.sessionTime, out TimeOnly sessionTime)) return new SessionErrors.InvalidSessionTimeValue();
+                toUpdate.Sessiontime = sessionTime;
                 _unitOfWork.Complete();
                 return new SessionSuccesses.ConfirmConsumerSuccess();
                 
             }
             catch(Exception ex)
             {
+                _unitOfWork.UntrackChanges();
+                throw ex;
+            }
+        }
+
+        public Either<CustomError, SessionSuccesses> UpdateAttendanceOfConsumerSession(string sessionId, int cId, SessionAttendanceInputModel cSession)
+        {
+            try
+            {
+                Session targetSession = _unitOfWork.Sessions.GetSessionById(sessionId);
+                if (targetSession == null) return new SessionErrors.NoSessionFoundWithId();
+                ConsumerSession toUpdate = _unitOfWork.Sessions.GetConsumerSession(sessionId, cId);
+                if (toUpdate == null) return new SessionErrors.ConsumerIsNotPresentInSession();
+                toUpdate.Attendance = cSession.Attendance;
+                _unitOfWork.Complete();
+                return new SessionSuccesses.UpdateAttendanceSuccess();
+            }
+            catch(Exception ex) {
                 _unitOfWork.UntrackChanges();
                 throw ex;
             }
@@ -196,6 +215,8 @@ namespace Qualiteste.ServerApp.Services.Concrete
             return res;
 
         }
+
+
 
         public Either<CustomReply, string> GetNotConfirmedConsumersInSession(string sessionId)
         {

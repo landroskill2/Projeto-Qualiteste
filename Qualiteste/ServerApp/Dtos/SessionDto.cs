@@ -40,18 +40,18 @@ namespace Qualiteste.ServerApp.Dtos
 
     public record ConsumerSessionInputModel
     {
-        public int consumerId { get; init; }
-        public string? sessionTime { get; init; }
+        public IEnumerable<int> Consumers { get; init; }
 
+    }
 
-        public ConsumerSession toDbConsumerSession()
-        {
-            return new ConsumerSession
-            {
-                Consumerid = consumerId,
-                Sessiontime = sessionTime != null ? TimeOnly.Parse(sessionTime) : null,
-            };
-        }
+    public record SessionTimeInputModel
+    {
+        public string sessionTime { get; init; }
+    }
+
+    public record SessionAttendanceInputModel
+    {
+        public bool Attendance { get; init; }
     }
 
     public record SessionPageModel

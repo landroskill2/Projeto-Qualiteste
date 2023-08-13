@@ -9,6 +9,8 @@ public partial class Sample
 
     public int Productid { get; set; }
 
+    public int Presentationposition { get; set; }
+
     public DateOnly? Receptiondate { get; set; }
 
     public virtual Product Product { get; set; } = null!;

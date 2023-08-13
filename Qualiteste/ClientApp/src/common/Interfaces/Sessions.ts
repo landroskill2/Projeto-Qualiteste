@@ -14,8 +14,3 @@ export interface IConsumerSessionOutputModel {
     attendance: boolean;
     stampdate: string | undefined;
 }
-
-export interface IConsumerSessionInputModel{
-    consumerId : number
-    sessionTime : string | null
-}

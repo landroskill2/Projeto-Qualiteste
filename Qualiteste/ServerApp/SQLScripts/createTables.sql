@@ -1,3 +1,4 @@
+
 CREATE TABLE CONSUMER(
     Id int PRIMARY KEY,
     FullName varchar(200) NOT NULL,
@@ -15,11 +16,11 @@ CREATE TABLE SESSION(
 );
 
 CREATE TABLE PRODUCT(
-    ProductID int GENERATED ALWAYS PRIMARY KEY,
+    ProductID int PRIMARY KEY,
     Ref varchar(50) UNIQUE NOT NULL,
     Designation varchar(200),
     Brand varchar(50)
-);
+); 
 
 CREATE TABLE TEST(
     InternalID varchar(20) PRIMARY KEY,
@@ -41,8 +42,10 @@ CREATE TABLE CLIENT(
 CREATE TABLE SAMPLE(
     TestID varchar(20) REFERENCES TEST(InternalID),
     ProductID int REFERENCES PRODUCT(ProductID),
+    PresentationPosition int NOT NULL,
     ReceptionDate date,
-    primary key(TestID, ProductID)
+    primary key(TestID, ProductID),
+    CONSTRAINT unq_PresentationPosition UNIQUE (TestID, PresentationPosition)
 );
 
 CREATE TABLE CONSUMER_HT(
@@ -82,13 +85,13 @@ CREATE TABLE CONSUMER_SESSION(
     primary key(ConsumerID, SessionID)
 );
 
-CREATE TABLE USER(
+CREATE TABLE ROLES(
+    RoleID int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    RoleDesignation varchar(20)
+);
+
+CREATE TABLE USERS(
     Username varchar(20) PRIMARY KEY,
     Pwd varchar(256),
     Role int REFERENCES ROLES(RoleID)
 );
-
-CREATE TABLE ROLES(
-    RoleID int GENERATED ALWAYS AS IDENTITY,
-    RoleDesignation varchar(20)
-)

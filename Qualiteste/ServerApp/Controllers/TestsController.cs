@@ -157,7 +157,6 @@ namespace Qualiteste.ServerApp.Controllers
         {
             try
             {
-                //change string to object
                 Either<CustomError, TestSucesses> result = _testService.UpdateAttributeAlias(id, alias);
                 return result.Match(
                     error => Problem(statusCode: 500, title: "Something went wrong"),

@@ -15,7 +15,7 @@ import {
   Spinner,
 } from "@chakra-ui/react";
 import { ISessionModel } from '../../common/Interfaces/Sessions'
-import { IConsumerSessionOutputModel, IConsumerSessionInputModel } from '../../common/Interfaces/Sessions'
+import { IConsumerSessionOutputModel } from '../../common/Interfaces/Sessions'
 import { ITestOutputModel } from "../../common/Interfaces/Tests";
 import { addConsumerToSession, addTestToSession, fetchSessionById, removeNotConfirmedConsumers, confirmConsumerSession } from '../../common/APICalls';
 import { useLocation, useNavigate, useParams } from "react-router-dom";
@@ -66,8 +66,7 @@ export default function Session() : React.ReactElement{
   }
 
   async function confirmSessionTime (sessionId : string, consumerId : number, sessionTime : string){
-    let body = {consumerId : consumerId, sessionTime : sessionTime} as IConsumerSessionInputModel
-    const resp = await confirmConsumerSession(sessionId, body).catch(err => {
+    const resp = await confirmConsumerSession(sessionId, consumerId, sessionTime).catch(err => {
       addToast({id: "error", title: "Erro", description: err.response.data.title, status: "error"})
     })
     if(resp?.status === 200){
@@ -93,8 +92,7 @@ export default function Session() : React.ReactElement{
   }
 
   const addConsumers = async (consumersID : number[]) => {
-    let body = consumersID.map(n => { return {consumerId : n} as IConsumerSessionInputModel} )
-    const resp = await addConsumerToSession(id!, body).catch(err => {
+    const resp = await addConsumerToSession(id!, consumersID).catch(err => {
       addToast({id: "error", title: "Erro", description: err.response.data.title, status: "error"})
     }) 
     console.log(resp)

@@ -22,14 +22,21 @@
 
         public class RemoveInvitedConsumerFromSessionSuccess : SessionSuccesses
         {
-            public RemoveInvitedConsumerFromSessionSuccess() : base("Consumidor removido da sessão com sucesso", 200)
+            public RemoveInvitedConsumerFromSessionSuccess() : base("Consumidor removido da sessão com sucesso.", 200)
             {
             }
         }
 
         public class ConfirmConsumerSuccess : SessionSuccesses
         {
-            public ConfirmConsumerSuccess() : base("Consumidor confirmado para a sessão com sucesso", 200)
+            public ConfirmConsumerSuccess() : base("Consumidor confirmado para a sessão com sucesso.", 200)
+            {
+            }
+        }
+
+        public class UpdateAttendanceSuccess : SessionSuccesses
+        {
+            public UpdateAttendanceSuccess() : base("Presença do consumidor actualizada com sucesso.", 200)
             {
             }
         }
