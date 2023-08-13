@@ -59,6 +59,11 @@ namespace Qualiteste.ServerApp.Services.Concrete
             try
             {
                 Test dbTest = testInput.toDbTest();
+                IEnumerable<Sample> samples = testInput.Samples.Select(c => c.toDbSample(testInput.ID));
+                foreach (Sample sample in samples)
+                {
+                    dbTest.Samples.Add(sample);
+                }
                 _unitOfWork.Tests.Add(dbTest);
                 _unitOfWork.Complete();
                 return dbTest.Internalid;
@@ -79,6 +84,10 @@ namespace Qualiteste.ServerApp.Services.Concrete
                         return new TestErrors.TestWithSameIdAlreadyPresent();
                     else if (state.Equals("23503") && constraint.Equals("test_product_fkey"))
                         return new TestErrors.TestReferencesNonExistingProduct();
+                    else if (state.Equals("23505") && constraint.Equals("unq_presentationposition"))
+                        return new TestErrors.SamplePresentationPositionOverlapping();
+                    else if (state.Equals("23503") && constraint.Equals("sample_productid_fkey"))
+                        return new TestErrors.SampleRefersNonExistingProduct();
                 }
                 throw ex;
             }

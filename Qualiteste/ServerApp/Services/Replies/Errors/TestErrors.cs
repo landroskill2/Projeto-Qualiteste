@@ -1,4 +1,6 @@
-﻿namespace Qualiteste.ServerApp.Services.Replies.Errors
+﻿using Qualiteste.ServerApp.Utils;
+
+namespace Qualiteste.ServerApp.Services.Replies.Errors
 {
 
     public abstract class TestErrors : CustomError
@@ -64,6 +66,19 @@
             }
         }
 
+        public class SamplePresentationPositionOverlapping : TestErrors
+        {
+            public SamplePresentationPositionOverlapping() : base("Ordem de apresentação das amostras está em conflito, verifique a ordem de apresentação.", 409)
+            {
+            }
+        }
+
+        public class SampleRefersNonExistingProduct : TestErrors
+        {
+            public SampleRefersNonExistingProduct() : base("Amostra referência um produto que não existe.", 409)
+            {
+            }
+        }
     }
 
 }

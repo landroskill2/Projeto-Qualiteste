@@ -55,8 +55,10 @@ CREATE TABLE CLIENT(
 CREATE TABLE SAMPLE(
     TestID varchar(20) REFERENCES TEST(InternalID),
     ProductID int REFERENCES PRODUCT(ProductID),
+    PresentationPosition int NOT NULL,
     ReceptionDate date,
-    primary key(TestID, ProductID)
+    primary key(TestID, ProductID),
+    CONSTRAINT unq_PresentationPosition UNIQUE (TestID, PresentationPosition)
 );
 
 CREATE TABLE CONSUMER_HT(
@@ -174,12 +176,12 @@ INSERT INTO TEST(InternalID, Product, TestType, ConsumersNumber, RequestDate, Va
 ('583828', 573626, 'SP', 36, '2023-05-20', null, null, null, '250523'),
 ('041234', 123123, 'HT', 10, '2023-03-29', null, null, null, null);
 
-INSERT INTO SAMPLE(TestID, ProductID, ReceptionDate) VALUES
-('443244', 132321, '2023-03-24'),
-('443244', 231233, '2023-03-25'),
-('343123', 321332, '2023-04-01'),
-('583828', 573626, '2023-05-16'),
-('041234', 123123, '2023-04-01');
+INSERT INTO SAMPLE(TestID, ProductID, PresentationPosition, ReceptionDate) VALUES
+('443244', 132321, 1, '2023-03-24'),
+('443244', 231233, 2, '2023-03-25'),
+('343123', 321332, 1, '2023-04-01'),
+('583828', 573626, 1, '2023-05-16'),
+('041234', 123123, 1, '2023-04-01');
 
 INSERT INTO CONSUMER_SESSION(SessionID, ConsumerID, ContactedDate, ConfirmationDate, SessionTime, Attendance, StampDate) VALUES
 ('040423', 6, '2023-03-01', '2023-03-02', '11:00', null, null),
@@ -241,7 +243,6 @@ INSERT INTO CONSUMER_HT(TestID, ConsumerID, DeliveryDate, DueDate, ResponseDate,
 
 INSERT INTO ROLES(RoleDesignation) VALUES
 ('ADMIN'),
-('FUNCIONARIO'),
 ('CLIENT');
 
 INSERT INTO USERS(Username, Pwd, Role) VALUES

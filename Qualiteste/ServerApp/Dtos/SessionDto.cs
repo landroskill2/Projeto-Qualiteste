@@ -54,6 +54,12 @@ namespace Qualiteste.ServerApp.Dtos
         }
     }
 
+    public record SessionAttendanceInputModel
+    {
+        public int ConsumerId { get; init; }
+        public bool? Attendance { get; init; }
+    }
+
     public record SessionPageModel
     {
         public SessionOutputModel Session { get; init; }
