@@ -1,6 +1,6 @@
 import axios, { AxiosInstance, AxiosResponse } from "axios"
 import { IConsumerInputModel } from "./Interfaces/Consumers"
-import { IConsumerSessionInputModel, ISessionModel } from "./Interfaces/Sessions"
+import { ISessionModel } from "./Interfaces/Sessions"
 import { ITestInputModel } from "./Interfaces/Tests"
 import FizzAttribute from "./Interfaces/FizzAttributes"
 import IAccountOutput from "./Interfaces/Accounts"
@@ -193,19 +193,20 @@ export async function removeNotConfirmedConsumers(
 
 export async function confirmConsumerSession(
     sessionID : string,
-    consumerSession : IConsumerSessionInputModel
+    consumerId : number,
+    sessionTime : string
 ){
-    let path = `/sessions/${sessionID}/consumers`
-    return instance.put(path, consumerSession)
+    let path = `/sessions/${sessionID}/consumers/${consumerId}/time`
+    return instance.put(path, {sessionTime : sessionTime})
 }
 
 export async function addConsumerToSession(
     sessionID : string,
-    consumers : IConsumerSessionInputModel[]
+    consumers : number[]
 ) : Promise<AxiosResponse>{
     let path = `/sessions/${sessionID}/consumers`
     
-    return instance.post(path, consumers)
+    return instance.post(path, { consumers : consumers})
     // return fetch(path, {
     //     method: "POST",
     //     headers: {

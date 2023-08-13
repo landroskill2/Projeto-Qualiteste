@@ -10,7 +10,7 @@ using Qualiteste.ServerApp.Utils;
 
 namespace Qualiteste.ServerApp.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class SessionsController : ControllerBase
@@ -126,7 +126,7 @@ namespace Qualiteste.ServerApp.Controllers
 
         [Authorize(Roles = "ADMIN")]
         [HttpPost("{id}/consumers")]
-        public IActionResult AddConsumerToSession(string id, [FromBody] IEnumerable<ConsumerSessionInputModel> consumerSession)
+        public IActionResult AddConsumerToSession(string id, [FromBody] ConsumerSessionInputModel consumerSession)
         {
             try
             { 
@@ -160,13 +160,35 @@ namespace Qualiteste.ServerApp.Controllers
             }
         }
 
-        [Authorize(Roles = "ADMIN")]
-        [HttpPut("{id}/consumers")]
-        public IActionResult UpdateConsumerSessionTime(string id, [FromBody] ConsumerSessionInputModel consumerSession)
+        [HttpPut("{id}/consumers/{cId}/time")]
+        public IActionResult UpdateConsumerSessionTime(string id, int cId, [FromBody] SessionTimeInputModel consumerSession)
         {
             try
             {
-                Either<CustomError, SessionSuccesses> c = _sessionService.ConfirmConsumerSession(id, consumerSession);
+                Either<CustomError, SessionSuccesses> c = _sessionService.ConfirmConsumerSession(id, cId, consumerSession);
+                return c.Match(
+                    error => Problem(statusCode: error.StatusCode, title: error.Message),
+                    success => Ok(success)
+                    );
+            }
+            catch (Exception e)
+            {
+                return Problem(statusCode: 500, title: "Ocorreu um erro inesperado");
+            }
+        }
+
+
+        /**
+         * Não sei se o endpoint faz sentido, secalhar mudar o UpdateConsumerSessionTime para o URI ter o id do consumidor e a attendance ser
+         * "{id}/consumers/{cId}/attendance" ou então "{id}/consumers/attendance"
+         */
+        [HttpPut("{id}/consumers/{cId}/attendance")]
+        public IActionResult UpdateConsumerAttendance(string id, int cId, [FromBody] SessionAttendanceInputModel cSession)
+        {
+            try
+            {
+                
+                Either<CustomError, SessionSuccesses> c = _sessionService.UpdateAttendanceOfConsumerSession(id, cId, cSession);
                 return c.Match(
                     error => Problem(statusCode: error.StatusCode, title: error.Message),
                     success => Ok(success)

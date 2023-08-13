@@ -52,9 +52,9 @@ namespace Qualiteste.ServerApp.DataAccess.Repository.Concrete
             PostgresContext.ConsumerSessions.RemoveRange(cSessions);
         }
 
-        public ConsumerSession GetConsumerSession(string sessionId, int consumerId)
+        public ConsumerSession? GetConsumerSession(string sessionId, int consumerId)
         {
-            ConsumerSession cSession = GetSessionById(sessionId).ConsumerSessions.Single(cs => cs.Consumerid == consumerId);
+            ConsumerSession cSession = GetSessionById(sessionId).ConsumerSessions.SingleOrDefault(cs => cs.Consumerid == consumerId);
             return cSession;
         }
 
