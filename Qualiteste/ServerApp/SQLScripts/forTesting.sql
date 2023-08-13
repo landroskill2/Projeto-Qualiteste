@@ -48,7 +48,7 @@ CREATE TABLE TEST(
 );
 
 CREATE TABLE CLIENT(
-    Acronym varchar(10) PRIMARY KEY,
+    Acronym varchar(20) PRIMARY KEY,
     CompanyName varchar(50) NOT NULL
 );
 

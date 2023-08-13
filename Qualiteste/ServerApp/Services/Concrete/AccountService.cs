@@ -67,10 +67,12 @@ namespace Qualiteste.ServerApp.Services.Concrete
 
         public Either<CustomError, string> CreateAccount(UserDto user)
         {
+
+            var encryptedPassword = SHA256Encryption.EncryptString(user.Password);
             User dbUser = new()
             {
                 Username = user.Username,
-                Pwd = user.Password,
+                Pwd = encryptedPassword,
                 Role = _unitOfWork.Users.GetRoleIDByDesignation(user.Role)
             };
 

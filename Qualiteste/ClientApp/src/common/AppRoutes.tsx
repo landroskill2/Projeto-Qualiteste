@@ -30,20 +30,22 @@ export default function AppRoutes() {
         {/* Authenticated Routes */}
         <Route element={<RequireAuth/>}>
           <Route element={<RequireRole allowedRoles={["ADMIN"]} />}>
-            <Route path="admin" element={<Admin/>}/>
-            <Route path="admin/register-account" element={<AccountCreation />} /> {/** mudar href */}
+            <Route element={<RequireRole allowedRoles={["ADMIN"]} />}>
+              <Route path="admin" element={<Admin/>}/>
+              <Route path="admin/register-account" element={<AccountCreation />} /> {/** mudar href */}
+            </Route>
+            <Route path="consumers" element ={<Consumers />} />
+            <Route path="consumers/create" element={<ConsumerCreation />} />
+            <Route path="consumers/:id" element={<Consumer />} />
+            <Route path="sessions" element={<Sessions />} />
+            <Route path="sessions/create" element={<SessionCreation />} />
+            <Route path="sessions/:id" element={<Session />} />
+            <Route path="tests" element={<Tests />} />
+            <Route path="tests/create" element={<TestCreation />} />
+            <Route path="tests/:id" element={<Test />} />
+            <Route path="tests/:id/fizz" element={<FizzResults />} />
+            <Route path="products" element ={<Products />} />
           </Route>
-          <Route path="consumers" element ={<Consumers />} />
-          <Route path="consumers/create" element={<ConsumerCreation />} />
-          <Route path="consumers/:id" element={<Consumer />} />
-          <Route path="sessions" element={<Sessions />} />
-          <Route path="sessions/create" element={<SessionCreation />} />
-          <Route path="sessions/:id" element={<Session />} />
-          <Route path="tests" element={<Tests />} />
-          <Route path="tests/create" element={<TestCreation />} />
-          <Route path="tests/:id" element={<Test />} />
-          <Route path="tests/:id/fizz" element={<FizzResults />} />
-          <Route path="products" element ={<Products />} />
         </Route>
       </Route>
     </Routes>
