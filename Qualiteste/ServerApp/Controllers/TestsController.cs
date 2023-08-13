@@ -11,7 +11,7 @@ using Qualiteste.ServerApp.Utils;
 
 namespace Qualiteste.ServerApp.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class TestsController : ControllerBase
@@ -78,7 +78,7 @@ namespace Qualiteste.ServerApp.Controllers
 
         }
 
-        //[Authorize(Roles = "ADMIN")]
+        [Authorize(Roles = "ADMIN")]
         [HttpPost]
         [ProducesResponseType(201)]
         public IActionResult CreateNewTest([FromBody] TestInputModel testInput)
@@ -157,7 +157,6 @@ namespace Qualiteste.ServerApp.Controllers
         {
             try
             {
-                //change string to object
                 Either<CustomError, TestSucesses> result = _testService.UpdateAttributeAlias(id, alias);
                 return result.Match(
                     error => Problem(statusCode: 500, title: "Something went wrong"),
