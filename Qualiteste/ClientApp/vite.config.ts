@@ -10,7 +10,7 @@ export default defineConfig({
     server: {
         port: 44410,
         strictPort: true,
-        https: generateCerts(),
+        //https: generateCerts(),
         proxy: {
             // proxy API requests to the ASP.NET backend
             "/api": {

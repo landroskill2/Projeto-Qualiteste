@@ -178,10 +178,6 @@ namespace Qualiteste.ServerApp.Controllers
         }
 
 
-        /**
-         * Não sei se o endpoint faz sentido, secalhar mudar o UpdateConsumerSessionTime para o URI ter o id do consumidor e a attendance ser
-         * "{id}/consumers/{cId}/attendance" ou então "{id}/consumers/attendance"
-         */
         [HttpPut("{id}/consumers/{cId}/attendance")]
         public IActionResult UpdateConsumerAttendance(string id, int cId, [FromBody] SessionAttendanceInputModel cSession)
         {

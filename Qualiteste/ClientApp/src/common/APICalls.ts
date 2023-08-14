@@ -216,6 +216,16 @@ export async function addConsumerToSession(
     // })
 }
 
+export async function updateConsumerAttendance(
+    sessionID: string,
+    consumerId : number,
+    attendance : boolean
+) : Promise<AxiosResponse>{
+    let path = `/sessions/${sessionID}/consumers/${consumerId}/attendance`
+    
+    return instance.put(path, { Attendance : attendance})
+}
+
 // Authentication
 
 export async function loginUser(
