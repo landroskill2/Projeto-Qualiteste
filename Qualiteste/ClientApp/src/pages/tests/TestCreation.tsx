@@ -11,6 +11,7 @@ import {
   Tbody,
   Tr,
   Td,
+  Thead,
 } from "@chakra-ui/react";
 import { ITestInputModel } from "../../common/Interfaces/Tests";
 import { createProduct, createTest } from "../../common/APICalls";
@@ -19,12 +20,16 @@ import { useNavigate } from "react-router-dom";
 import ProductsTable from "../../components/tables/ProductsTable";
 import { ProductInputModel, ProductOutputModel } from "../../common/Interfaces/Products";
 import CreateProductModal from "../../components/modals/CreateProductModal";
+import AddProductsModal from "../../components/modals/AddProductModal";
+import DraggableProductTable from "../../components/tables/DraggableProductTable";
 
 const initialFormValues: ITestInputModel = {
   id: "",
   testType: "SP",
   consumersNumber: 0,
+  product : NaN,
   requestDate: "",
+  samples : []
 };
 
 export default function TestCreation(): React.ReactElement {
@@ -94,6 +99,10 @@ export default function TestCreation(): React.ReactElement {
     }
   };
 
+  function addProductToTest(product : ProductOutputModel) {
+    setAddedProducts([...addedProducts, product])
+  }
+
   const isHomeTest = formValues.testType === "HT";
 
   return (
@@ -115,7 +124,6 @@ export default function TestCreation(): React.ReactElement {
 
                 />
               </FormControl>
-
               <FormControl id="testType" isRequired>
                 <FormLabel textColor={"white"}>Tipo</FormLabel>
                 <Select
@@ -199,22 +207,10 @@ export default function TestCreation(): React.ReactElement {
           </div>
         <div className="flex flex-col gap-4">
           <div className="w-full flex-grow bg-white">
-            <Table variant="simple" overflow="auto" size="sm">
-              <Tbody>
-                {addedProducts && <>
-                  {addedProducts.map((p) => (
-                    <Tr key={p.productid} onClick ={() => {console.log("Redirect to product page")}} >
-                      <Td>{p.ref}</Td>
-                      <Td>{p.designation}</Td>
-                      <Td>{p.brand}</Td>
-                    </Tr>
-                  ))}
-                </>}             
-              </Tbody>
-            </Table>
+            <DraggableProductTable elements={addedProducts} setElements={setAddedProducts}></DraggableProductTable>
           </div>
           <div className="flex w-full gap-4">
-            <Button>Adicionar Produto Existente</Button>
+            <AddProductsModal onClickProduct={addProductToTest}/>
             <CreateProductModal onSubmit={onCreateProduct}/>
           </div>
         </div>

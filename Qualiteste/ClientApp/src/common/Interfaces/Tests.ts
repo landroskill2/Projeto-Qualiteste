@@ -13,9 +13,16 @@ export interface ITestInputModel{
     testType: "SP" | "HT";
     consumersNumber: number;
     requestDate: string;
+    product : number,
     validationDate?: string;
     dueDate?: string;
     reportDeliveryDate?: string;
+    samples : ISampleInputModel[];
+}
+
+interface ISampleInputModel{
+    ProductId : number,
+    PresentationPosition : number,
 }
 
 export interface IFizzValues {
