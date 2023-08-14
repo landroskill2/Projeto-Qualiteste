@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { CheckIcon, CloseIcon } from "@chakra-ui/icons";
+import { Icon, CloseIcon } from "@chakra-ui/icons";
 
 import {
   Button,
@@ -17,7 +17,7 @@ import {
 import { ISessionModel } from '../../common/Interfaces/Sessions'
 import { IConsumerSessionOutputModel } from '../../common/Interfaces/Sessions'
 import { ITestOutputModel } from "../../common/Interfaces/Tests";
-import { addConsumerToSession, addTestToSession, fetchSessionById, removeNotConfirmedConsumers, confirmConsumerSession } from '../../common/APICalls';
+import { addConsumerToSession, addTestToSession, fetchSessionById, removeNotConfirmedConsumers, confirmConsumerSession, updateConsumerAttendance } from '../../common/APICalls';
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { IConsumerOutputModel} from "../../common/Interfaces/Consumers";
 import AddConsumersModal from "../../components/modals/AddConsumersModal";
@@ -27,7 +27,12 @@ import { useGlobalToast } from "../../common/useGlobalToast";
 
 type ConsumersInSession = {
   sessionTime: string,
-  consumers: IConsumerOutputModel[]
+  consumersInfo: ConsumerAttendance[]
+}
+
+type ConsumerAttendance = {
+  attendance? : boolean,
+  consumer : IConsumerOutputModel
 }
 
 export default function Session() : React.ReactElement{
@@ -42,6 +47,44 @@ export default function Session() : React.ReactElement{
   const navigate = useNavigate()
   const { addToast, isToastActive } = useGlobalToast() 
   const {state} = useLocation()
+
+  const CircleIcon = (props) => (
+    <Icon viewBox='0 0 100 200' {...props}>
+      <path
+        fill='currentColor'
+        d='M 50, 100 m -75, 0 a 75,75 0 1,0 150,0 a 75,75 0 1,0 -150,0'
+      />
+    </Icon>
+  )
+
+  const updateAttendance = async (sessionId : string, consumerId : number, attendance : boolean | undefined) => {
+    if(attendance == undefined) attendance = true
+    else {
+      attendance = !attendance
+    }
+    const resp = await updateConsumerAttendance(sessionId, consumerId, attendance).catch(err => {
+      console.log(err)
+      addToast({id: "error", title: "Erro", description: err.response.data.title, status: "error"})
+    })
+    console.log(resp)
+    if(resp?.status === 200){
+      setIsLoading(true)
+      populateData().then(() => {
+        setIsLoading(false)
+        addToast({id: "success", title: "Sucesso", description: resp.data.message, status: "success"})
+      })
+    } 
+  }
+  const useCircleIcon = (attendance : boolean | undefined, onClick : () => void) => {
+    let currColor = "grey"
+    if(attendance != undefined){
+      currColor = attendance == true ? "green.500" : "red.500"
+    }
+
+    return (
+      <CircleIcon boxSize={4} onClick={onClick} color={currColor}></CircleIcon>
+    )
+  }
 
   const redirectToConsumerPage = (id: number) => {
     navigate(`/consumers/${id}`)
@@ -129,29 +172,29 @@ export default function Session() : React.ReactElement{
   }
 
   // Helper function to group the consumerSessions by sessionTime
-  const groupConsumerSessionsByTime = (): {confirmed : ConsumersInSession[], invited : ConsumersInSession[]} => {
-    const grouped: { [key: string]: IConsumerOutputModel[] } = {};
+  const groupConsumerSessionsByTime = (): {confirmed : ConsumersInSession[], invited? : ConsumersInSession} => {
+    const grouped: { [key: string]: ConsumerAttendance[] } = {};
     if (consumerSessions) {
       consumerSessions.forEach((consumerSession) => {
         if (grouped[consumerSession.sessiontime!!]) {
-          grouped[consumerSession.sessiontime!!].push(consumerSession.consumer);
+          grouped[consumerSession.sessiontime!!].push({attendance : consumerSession.attendance, consumer : consumerSession.consumer});
         } else {
-          grouped[consumerSession.sessiontime!!] = [consumerSession.consumer];
+          grouped[consumerSession.sessiontime!!] = [{attendance : consumerSession.attendance, consumer : consumerSession.consumer}];
         }
       });
     }
     // convert the grouped object to an array of objects with sessionTime and consumers properties
     const confirmed = [];
-    const invited = []
-    for (const [sessionTime, consumers] of Object.entries(grouped)) {
-      if(sessionTime === "null") invited.push({ sessionTime : "Convidados", consumers });
-      else confirmed.push({ sessionTime, consumers });
+    let invited : ConsumersInSession | undefined
+    for (const [sessionTime, consumersInfo] of Object.entries(grouped)) {
+      if(sessionTime === "null") invited = { sessionTime : "Convidados", consumersInfo };
+      else confirmed.push({ sessionTime, consumersInfo });
     }
-
     return {confirmed, invited};
   };
-  let sortedConsumerSessions : {confirmed : ConsumersInSession[], invited : ConsumersInSession[]} = groupConsumerSessionsByTime()
+  let sortedConsumerSessions : {confirmed : ConsumersInSession[], invited? : ConsumersInSession} = groupConsumerSessionsByTime()
   let availableSessionTimes = sortedConsumerSessions.confirmed.map(cSession => cSession.sessionTime)
+  console.log(sortedConsumerSessions.confirmed)
   // Render the component
   return (
     <>
@@ -194,7 +237,7 @@ export default function Session() : React.ReactElement{
             </Tbody>
           </Table>
           
-          {sortedConsumerSessions.invited.length>0
+          {sortedConsumerSessions.invited!
            && (
            <>
            <Heading>Provadores Convidados</Heading>
@@ -202,25 +245,26 @@ export default function Session() : React.ReactElement{
            <Table variant="simple">
            <Tbody>
               <Tr>
-                {sortedConsumerSessions.invited.map(({ consumers }) => (
-                  <Td key={consumers[0].id}>
-                    {consumers.map((consumer) => (
-                      <div className="flex items-center justify-center">
-                        <Tr key={consumer.id} onClick={() => redirectToConsumerPage(consumer.id)}>
-                          <Td className="hover:bg-slate-200 cursor-pointer">{consumer.fullname}</Td>
-                        </Tr>
-                        <div className="flex gap-4 items-center content-between">
-                          <div className="hover:bg-slate-200 cursor-pointer px-1">
-                            <CloseIcon boxSize="0.7em" onClick={() => {removeNotConfirmed(session!.id, consumer.id)}} />
-                          </div>
-                          
-                          <div className="hover:bg-slate-200 cursor-pointer px-1">
-                            <SessionTimeSelector consumerId={consumer.id} sessionId={session!.id} availableSessionTimes={availableSessionTimes} onSubmit={confirmSessionTime}></SessionTimeSelector>
+                {sortedConsumerSessions.invited.consumersInfo.map(( cInfo ) => (
+                  <Td key={sortedConsumerSessions.invited?.sessionTime}>
+                      <div className="flex justify-center">
+                        <div className="flex items-center justify-center">
+                          <Tr key={cInfo.consumer.id} onClick={() => redirectToConsumerPage(cInfo.consumer.id)}>
+                            <Td className="hover:bg-slate-200 cursor-pointer">{cInfo.consumer.fullname}</Td>
+                          </Tr>
+                          <div className="flex gap-4 items-center content-between">
+                            <div className="hover:bg-slate-200 cursor-pointer px-1">
+                              <CloseIcon boxSize="0.7em" onClick={() => {removeNotConfirmed(session!.id, cInfo.consumer.id)}} />
+                            </div>
+                            
+                            <div className="hover:bg-slate-200 cursor-pointer px-1">
+                              <SessionTimeSelector consumerId={cInfo.consumer.id} sessionId={session!.id} availableSessionTimes={availableSessionTimes} onSubmit={confirmSessionTime}></SessionTimeSelector>
+                            </div>
                           </div>
                         </div>
                       </div>
                       
-                    ))}
+                   
                   </Td>
                 ))}
               </Tr>
@@ -239,12 +283,19 @@ export default function Session() : React.ReactElement{
             </Thead>
             <Tbody>
               <Tr>
-                {sortedConsumerSessions.confirmed.map(({ consumers }) => (
-                  <Td key={consumers[0].id}>
-                    {consumers.map((consumer) => (
-                      <Tr key={consumer.id} onClick={() => redirectToConsumerPage(consumer.id)}>
-                        <Td className="hover:bg-slate-200 cursor-pointer">{consumer.fullname}</Td>
-                      </Tr>
+                {sortedConsumerSessions.confirmed.map(({ consumersInfo }) => (
+                  <Td key={consumersInfo[0].consumer.id}>
+                    {consumersInfo.map((consumerInfo) => (
+                      <div className="flex items-center">
+                        <Tr key={consumerInfo.consumer.id} onClick={() => redirectToConsumerPage(consumerInfo.consumer.id)}>
+                          <Td className="hover:bg-slate-200 cursor-pointer">{consumerInfo.consumer.fullname}</Td>
+                        </Tr>
+                        <div className="hover:bg-slate-200 cursor-pointer">
+                          {useCircleIcon(consumerInfo.attendance, (() => updateAttendance(session!.id, consumerInfo.consumer.id, consumerInfo.attendance)))}
+                        </div>
+                        
+                      </div>
+                      
                     ))}
                   </Td>
                 ))}

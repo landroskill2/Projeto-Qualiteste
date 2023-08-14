@@ -1,12 +1,6 @@
 ﻿using Qualiteste.ServerApp.DataAccess.Repository.Concrete;
 using Qualiteste.ServerApp.Dtos;
 using Qualiteste.ServerApp.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace Tests.RepositoryTests
 {
     [TestFixture]

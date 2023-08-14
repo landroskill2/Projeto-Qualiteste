@@ -3,6 +3,7 @@ using Qualiteste.ServerApp.DataAccess.Concrete;
 using Qualiteste.ServerApp.Dtos;
 using Qualiteste.ServerApp.Models;
 using Qualiteste.ServerApp.Services.Concrete;
+using Qualiteste.ServerApp.Services.Replies.Errors;
 using Qualiteste.ServerApp.Utils;
 
 
@@ -198,7 +199,7 @@ namespace Tests.ServiceTests
             );
 
 
-            Assert.That(e, Is.TypeOf(typeof(ConsumerFilterNotValid)));
+            Assert.That(e, Is.TypeOf(typeof(ConsumerErrors.ConsumerFilterNotValid)));
         }
         [Test]
         public void GetConsumersWithInvalidAgeFilter()
@@ -214,14 +215,14 @@ namespace Tests.ServiceTests
                 success => throw new Exception("Test is suposed to fail, not succeed")
                 );
 
-            Assert.That(e, Is.TypeOf(typeof(ConsumerFilterNotValid)));
+            Assert.That(e, Is.TypeOf(typeof(ConsumerErrors.ConsumerFilterNotValid)));
 
             res = consumerService.GetConsumersFiltered("*", ageFilter2, ageFilter2, "*");
             e = res.Match(error => error,
                           success => throw new Exception()
                           );
 
-            Assert.That(e, Is.TypeOf(typeof(ConsumerFilterNotValid)));
+            Assert.That(e, Is.TypeOf(typeof(ConsumerErrors.ConsumerFilterNotValid)));
 
         }
 
@@ -246,7 +247,7 @@ namespace Tests.ServiceTests
                     success => throw new Exception("This is supposed to fail")
                 );
 
-            Assert.That(e, Is.TypeOf(typeof(ConsumerWithContactAlreadyPresent)));
+            Assert.That(e, Is.TypeOf(typeof(ConsumerErrors.ConsumerWithContactAlreadyPresent)));
         }
 
         [Test]
@@ -269,7 +270,7 @@ namespace Tests.ServiceTests
                     success => throw new Exception("This is supposed to fail")
                 );
 
-            Assert.That(e, Is.TypeOf(typeof(ConsumerWithIdAlreadyPresent)));
+            Assert.That(e, Is.TypeOf(typeof(ConsumerErrors.ConsumerWithIdAlreadyPresent)));
         }
         [Test]
         public void CreateConsumerWithConflictingNif()
@@ -290,7 +291,7 @@ namespace Tests.ServiceTests
                     success => throw new Exception("This is supposed to fail")
                 );
 
-            Assert.That(e, Is.TypeOf(typeof(ConsumerWithNifAlreadyPresent)));
+            Assert.That(e, Is.TypeOf(typeof(ConsumerErrors.ConsumerWithNifAlreadyPresent)));
         }
 
         [Test]
@@ -314,7 +315,7 @@ namespace Tests.ServiceTests
                 error => error,
                 success => throw new Exception("This is supposed to fail")
             );
-            Assert.That(e, Is.TypeOf(typeof(ConsumerWithNifAlreadyPresent)));
+            Assert.That(e, Is.TypeOf(typeof(ConsumerErrors.ConsumerWithNifAlreadyPresent)));
         }
 
         [Test]
@@ -338,7 +339,7 @@ namespace Tests.ServiceTests
                 error => error,
                 success => throw new Exception("This is supposed to fail")
             );
-            Assert.That(e, Is.TypeOf(typeof(ConsumerWithContactAlreadyPresent)));
+            Assert.That(e, Is.TypeOf(typeof(ConsumerErrors.ConsumerWithContactAlreadyPresent)));
         }
     }
 }
