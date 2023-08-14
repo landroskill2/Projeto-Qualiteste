@@ -82,7 +82,7 @@ export default function Session() : React.ReactElement{
     }
 
     return (
-      <CircleIcon boxSize={6} onClick={onClick} color={currColor}></CircleIcon>
+      <CircleIcon boxSize={4} onClick={onClick} color={currColor}></CircleIcon>
     )
   }
 

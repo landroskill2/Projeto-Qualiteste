@@ -108,8 +108,10 @@ export default function AddConsumersModal({onSubmit} : ModalProps) : React.React
                         )}
                     </ModalBody>
                     <ModalFooter>
-                        <Button onClick={onModalClose}>Close</Button>
-                        <Button onClick={onComplete}>Adicionar Consumidores</Button>
+                        <div className='flex gap-4'>
+                            <Button onClick={onModalClose}>Fechar</Button>
+                            <Button onClick={onComplete}>Adicionar Consumidores</Button>
+                        </div>
                     </ModalFooter>
                 </ModalContent>
             </Modal>
