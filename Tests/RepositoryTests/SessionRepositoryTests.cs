@@ -48,7 +48,7 @@ namespace Tests.RepositoryTests
 
 
             Session s = _sessionRepository.GetSessionById(sessionID);
-            Assert.That(s, Is.EqualTo(null)); 
+            Assert.That(s, Is.EqualTo(null));
         }
 
 
@@ -71,10 +71,10 @@ namespace Tests.RepositoryTests
             string[] expectedOrder = { "250523", "040423" };
             Session[] sessions = _sessionRepository.GetSessionsByDate().ToArray();
             int length = sessions.Length;
-            for(int i = 0; i < length; i++)
+            for (int i = 0; i < length; i++)
             {
                 Assert.That(sessions[0].Sessionid, Is.EqualTo(expectedOrder[0]));
-            }   
+            }
         }
 
         [Test]
@@ -137,7 +137,7 @@ namespace Tests.RepositoryTests
             string sessionId = "040423";
             int[] expectedConsumerIds = { 6, 263, 48, 86, 87, 23, 168, 143, 373, 67 };
             IEnumerable<Consumer> consumerInSession = _sessionRepository.GetConsumersInSession(sessionId);
-            foreach(int id in expectedConsumerIds)
+            foreach (int id in expectedConsumerIds)
             {
                 Assert.True(consumerInSession.Any(c => c.Id == id));
             }

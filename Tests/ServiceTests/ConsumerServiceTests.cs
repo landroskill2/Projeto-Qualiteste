@@ -3,7 +3,6 @@ using Qualiteste.ServerApp.DataAccess.Concrete;
 using Qualiteste.ServerApp.Dtos;
 using Qualiteste.ServerApp.Models;
 using Qualiteste.ServerApp.Services.Concrete;
-using Qualiteste.ServerApp.Services.Errors;
 using Qualiteste.ServerApp.Utils;
 
 
@@ -185,7 +184,7 @@ namespace Tests.ServiceTests
         }
 
         //Test Errors returned from ConsumerServices
-        [Test]  
+        [Test]
         public void GetConsumersWithInvalidSexFilter()
         {
             var sexFilter = "T";
@@ -229,7 +228,7 @@ namespace Tests.ServiceTests
         [Test]
         public void CreateConsumerWithConflictingContact()
         {
-           
+
 
             var conflictingConsumer = new ConsumerInputModel
             {

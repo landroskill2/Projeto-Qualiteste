@@ -7,6 +7,8 @@ public partial class Test
 {
     public string Internalid { get; set; } = null!;
 
+    public string? Clientid { get; set; }
+
     public int? Product { get; set; }
 
     public string Testtype { get; set; } = null!;
@@ -24,6 +26,8 @@ public partial class Test
     public uint Version { get; set; }
 
     public string? Sessionid { get; set; }
+
+    public virtual Client? Client { get; set; }
 
     public virtual ICollection<ConsumerHt> ConsumerHts { get; } = new List<ConsumerHt>();
 

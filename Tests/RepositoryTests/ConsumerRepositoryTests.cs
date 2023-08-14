@@ -1,7 +1,6 @@
 ﻿using Qualiteste.ServerApp.DataAccess.Repository.Concrete;
 using Qualiteste.ServerApp.Dtos;
 using Qualiteste.ServerApp.Models;
-using Qualiteste.ServerApp.Services.Errors;
 using System;
 using System.Collections.Generic;
 using System.Linq;

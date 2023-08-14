@@ -11,7 +11,6 @@ DROP TABLE IF EXISTS ATTRIBUTE_VALUES CASCADE;
 DROP TABLE IF EXISTS ROLES CASCADE;
 DROP TABLE IF EXISTS USERS CASCADE;
 
-
 CREATE TABLE CONSUMER(
     Id int PRIMARY KEY,
     FullName varchar(200) NOT NULL,
@@ -35,8 +34,26 @@ CREATE TABLE PRODUCT(
     Brand varchar(50)
 ); 
 
+CREATE TABLE ROLES(
+    RoleID int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    RoleDesignation varchar(20)
+);
+
+CREATE TABLE USERS(
+    Username varchar(20) PRIMARY KEY,
+    Pwd varchar(256),
+    Role int REFERENCES ROLES(RoleID)
+);
+
+CREATE TABLE CLIENT(
+    Id varchar(20) PRIMARY KEY,
+    Designation varchar(50) NOT NULL,
+    Username varchar(20) REFERENCES USERS(Username)
+);
+
 CREATE TABLE TEST(
     InternalID varchar(20) PRIMARY KEY,
+    ClientID varchar(20) REFERENCES CLIENT(Id),
     Product int REFERENCES PRODUCT(ProductID),
     TestType varchar(2) NOT NULL check (TestType in ('HT', 'SP')),
     ConsumersNumber int NOT NULL,
@@ -45,11 +62,6 @@ CREATE TABLE TEST(
     DueDate date,
     ReportDeliveryDate date,
     SessionID varchar(8) REFERENCES SESSION(SessionID)
-);
-
-CREATE TABLE CLIENT(
-    Acronym varchar(20) PRIMARY KEY,
-    CompanyName varchar(50) NOT NULL
 );
 
 CREATE TABLE SAMPLE(
@@ -96,17 +108,6 @@ CREATE TABLE CONSUMER_SESSION(
     Attendance boolean,
     StampDate date,
     primary key(ConsumerID, SessionID)
-);
-
-CREATE TABLE ROLES(
-    RoleID int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    RoleDesignation varchar(20)
-);
-
-CREATE TABLE USERS(
-    Username varchar(20) PRIMARY KEY,
-    Pwd varchar(256),
-    Role int REFERENCES ROLES(RoleID)
 );
 
 INSERT INTO CONSUMER(Id, FullName, NIF, Sex, DateOfBirth, Contact, Email) VALUES 
@@ -170,11 +171,22 @@ INSERT INTO SESSION(SessionID, SessionDate, ConsumersNumber) VALUES
 ('040423', '2023-04-04', 10),
 ('250523', '2023-05-25', 36);
 
-INSERT INTO TEST(InternalID, Product, TestType, ConsumersNumber, RequestDate, ValidationDate, DueDate, ReportDeliveryDate, SessionID) VALUES
-('443244', 122332, 'SP', 10, '2023-03-21', null, null, null, '040423'),
-('343123', 324231, 'SP', 10, '2023-03-29', null, null, null, '040423'),
-('583828', 573626, 'SP', 36, '2023-05-20', null, null, null, '250523'),
-('041234', 123123, 'HT', 10, '2023-03-29', null, null, null, null);
+INSERT INTO ROLES(RoleDesignation) VALUES
+('ADMIN'),
+('CLIENT');
+
+INSERT INTO USERS(Username, Pwd, Role) VALUES
+('admin', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', 1),
+('client', '948fe603f61dc036b5c596dc09fe3ce3f3d30dc90f024c85f3c82db2ccab679d', 2);
+
+INSERT INTO CLIENT(Id, Designation, Username) VALUES
+('clientID', 'client', 'client');
+
+INSERT INTO TEST(InternalID, ClientID, Product, TestType, ConsumersNumber, RequestDate, ValidationDate, DueDate, ReportDeliveryDate, SessionID) VALUES
+('443244', 'clientID', 122332, 'SP', 10, '2023-03-21', null, null, null, '040423'),
+('343123', 'clientID', 324231, 'SP', 10, '2023-03-29', null, null, null, '040423'),
+('583828', 'clientID', 573626, 'SP', 36, '2023-05-20', null, null, null, '250523'),
+('041234', 'clientID', 123123, 'HT', 10, '2023-03-29', null, null, null, null);
 
 INSERT INTO SAMPLE(TestID, ProductID, PresentationPosition, ReceptionDate) VALUES
 ('443244', 132321, 1, '2023-03-24'),
@@ -240,10 +252,3 @@ INSERT INTO CONSUMER_HT(TestID, ConsumerID, DeliveryDate, DueDate, ResponseDate,
 ('041234', 143, '2023-03-01', null, null, null),
 ('041234', 373, '2023-03-01', null, null, null),
 ('041234', 67, '2023-03-01', null, null, null);
-
-INSERT INTO ROLES(RoleDesignation) VALUES
-('ADMIN'),
-('CLIENT');
-
-INSERT INTO USERS(Username, Pwd, Role) VALUES
-('admin', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', 1);

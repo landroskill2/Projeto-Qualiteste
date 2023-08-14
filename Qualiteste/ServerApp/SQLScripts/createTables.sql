@@ -1,4 +1,3 @@
-
 CREATE TABLE CONSUMER(
     Id int PRIMARY KEY,
     FullName varchar(200) NOT NULL,
@@ -22,8 +21,26 @@ CREATE TABLE PRODUCT(
     Brand varchar(50)
 ); 
 
+CREATE TABLE ROLES(
+    RoleID int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    RoleDesignation varchar(20)
+);
+
+CREATE TABLE USERS(
+    Username varchar(20) PRIMARY KEY,
+    Pwd varchar(256),
+    Role int REFERENCES ROLES(RoleID)
+);
+
+CREATE TABLE CLIENT(
+    Id varchar(20) PRIMARY KEY,
+    Designation varchar(50) NOT NULL,
+    Username varchar(20) REFERENCES USERS(Username)
+);
+
 CREATE TABLE TEST(
     InternalID varchar(20) PRIMARY KEY,
+    ClientID varchar(20) REFERENCES CLIENT(Id),
     Product int REFERENCES PRODUCT(ProductID),
     TestType varchar(2) NOT NULL check (TestType in ('HT', 'SP')),
     ConsumersNumber int NOT NULL,
@@ -32,11 +49,6 @@ CREATE TABLE TEST(
     DueDate date,
     ReportDeliveryDate date,
     SessionID varchar(8) REFERENCES SESSION(SessionID)
-);
-
-CREATE TABLE CLIENT(
-    Acronym varchar(10) PRIMARY KEY,
-    CompanyName varchar(50) NOT NULL
 );
 
 CREATE TABLE SAMPLE(
@@ -83,15 +95,4 @@ CREATE TABLE CONSUMER_SESSION(
     Attendance boolean,
     StampDate date,
     primary key(ConsumerID, SessionID)
-);
-
-CREATE TABLE ROLES(
-    RoleID int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    RoleDesignation varchar(20)
-);
-
-CREATE TABLE USERS(
-    Username varchar(20) PRIMARY KEY,
-    Pwd varchar(256),
-    Role int REFERENCES ROLES(RoleID)
 );

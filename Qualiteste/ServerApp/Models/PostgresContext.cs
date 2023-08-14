@@ -92,16 +92,23 @@ public partial class PostgresContext : DbContext
 
         modelBuilder.Entity<Client>(entity =>
         {
-            entity.HasKey(e => e.Acronym).HasName("client_pkey");
+            entity.HasKey(e => e.Id).HasName("client_pkey");
 
             entity.ToTable("client");
 
-            entity.Property(e => e.Acronym)
-                .HasMaxLength(10)
-                .HasColumnName("acronym");
-            entity.Property(e => e.Companyname)
+            entity.Property(e => e.Id)
+                .HasMaxLength(20)
+                .HasColumnName("id");
+            entity.Property(e => e.Designation)
                 .HasMaxLength(50)
-                .HasColumnName("companyname");
+                .HasColumnName("designation");
+            entity.Property(e => e.Username)
+                .HasMaxLength(20)
+                .HasColumnName("username");
+
+            entity.HasOne(d => d.UsernameNavigation).WithMany(p => p.Clients)
+                .HasForeignKey(d => d.Username)
+                .HasConstraintName("client_username_fkey");
         });
 
         modelBuilder.Entity<Consumer>(entity =>
@@ -297,6 +304,9 @@ public partial class PostgresContext : DbContext
             entity.Property(e => e.Internalid)
                 .HasMaxLength(20)
                 .HasColumnName("internalid");
+            entity.Property(e => e.Clientid)
+                .HasMaxLength(20)
+                .HasColumnName("clientid");
             entity.Property(e => e.Consumersnumber).HasColumnName("consumersnumber");
             entity.Property(e => e.Duedate).HasColumnName("duedate");
             entity.Property(e => e.Product).HasColumnName("product");
@@ -309,6 +319,10 @@ public partial class PostgresContext : DbContext
                 .HasMaxLength(2)
                 .HasColumnName("testtype");
             entity.Property(e => e.Validationdate).HasColumnName("validationdate");
+
+            entity.HasOne(d => d.Client).WithMany(p => p.Tests)
+                .HasForeignKey(d => d.Clientid)
+                .HasConstraintName("test_clientid_fkey");
 
             entity.HasOne(d => d.ProductNavigation).WithMany(p => p.Tests)
                 .HasForeignKey(d => d.Product)
