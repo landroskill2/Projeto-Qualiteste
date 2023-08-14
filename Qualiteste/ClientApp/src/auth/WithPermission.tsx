@@ -2,15 +2,18 @@ import { useAuth } from "./useAuth"
 
 
 type Props = {
-    roleRequired: string,
+    allowedRoles: string[],
     children? : React.ReactNode
 }
 
-const WithPermission = ({roleRequired, children}: Props) => {
+const WithPermission = ({allowedRoles, children}: Props) => {
     const account = useAuth()
+    const isAllowed: Boolean = !!allowedRoles?.find(
+        role => account?.role === role
+    )
     return (
         <>
-            {roleRequired === account?.role && children}
+            {isAllowed && children}
         </>
     )
 }

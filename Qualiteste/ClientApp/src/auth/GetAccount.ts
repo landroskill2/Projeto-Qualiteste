@@ -9,7 +9,7 @@ export default function GetAccount(): IAccountOutput | undefined {
     //console.log(decodedToken)
     if(decodedToken!.exp! * 1000 < new Date().getTime()) return undefined
     return {
-        username: decodedToken.username as string,
+        username: decodedToken.nameid as string,
         role: decodedToken.role as string
     }
 }

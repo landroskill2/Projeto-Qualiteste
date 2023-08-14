@@ -54,35 +54,43 @@ export default function NavMenu() {
                 </CustomNavLink>
               </li>
               {account ? (
-                <>                  
-                  <li className="text-white">
-                    <CustomNavLink href="/consumers" toggleNavBar={changeToggle}>
-                      Provadores
-                    </CustomNavLink>
-                  </li>
-                  <li className="text-white">
-                    <CustomNavLink href="/tests" toggleNavBar={changeToggle}>
-                      Testes
-                    </CustomNavLink>
-                  </li>
-                  <li className="text-white">
-                    <CustomNavLink href="/sessions" toggleNavBar={changeToggle}>
-                      Sessões
-                    </CustomNavLink>
-                  </li>
-                  <li className="text-white">
-                    <CustomNavLink href="/products" toggleNavBar={changeToggle}>
-                      Produtos
-                    </CustomNavLink>
-                  </li>
-                  <WithPermission roleRequired='ADMIN'>
+                <>             
+                  <WithPermission allowedRoles={['ADMIN']}>
+                    <li className="text-white">
+                      <CustomNavLink href="/consumers" toggleNavBar={changeToggle}>
+                        Provadores
+                      </CustomNavLink>
+                    </li>
+                    <li className="text-white">
+                      <CustomNavLink href="/tests" toggleNavBar={changeToggle}>
+                        Testes
+                      </CustomNavLink>
+                    </li>
+                    <li className="text-white">
+                      <CustomNavLink href="/sessions" toggleNavBar={changeToggle}>
+                        Sessões
+                      </CustomNavLink>
+                    </li>
+                    <li className="text-white">
+                      <CustomNavLink href="/products" toggleNavBar={changeToggle}>
+                        Produtos
+                      </CustomNavLink>
+                    </li>
+                    <WithPermission allowedRoles={['ADMIN']}>
+                      <li>
+                        <CustomNavLink href="/admin" toggleNavBar={changeToggle}>
+                          <SettingsIcon />
+                        </CustomNavLink>
+                      </li>
+                    </WithPermission>
+                  </WithPermission>
+                  <WithPermission allowedRoles={['CLIENT']}>
                     <li>
-                      <CustomNavLink href="/admin" toggleNavBar={changeToggle}>
-                        <SettingsIcon />
+                      <CustomNavLink href={`/tests/${account.username}`} toggleNavBar={changeToggle}>
+                        Testes
                       </CustomNavLink>
                     </li>
                   </WithPermission>
-
                   <li className="text-white">
                     <CustomNavLink href="/" toggleNavBar={changeToggle} onClick={() => {localStorage.clear(); navigate("/")}}>
                       Logout
