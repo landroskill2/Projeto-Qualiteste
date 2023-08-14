@@ -180,5 +180,17 @@ namespace Qualiteste.ServerApp.Services.Concrete
                 throw ex;
             }
         }
+
+        public Either<CustomError, IEnumerable<TestOutputModel>> GetClientsTests(string clientID)
+        {
+            try
+            {
+                return _unitOfWork.Tests.GetTestsByClient(clientID).Select(x => x.toOutputModel()).ToList();
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

@@ -18,5 +18,6 @@ namespace Qualiteste.ServerApp.DataAccess.Repository
         Dictionary<string, string> GetFizzColumns(int id);
         IEnumerable<IGrouping<int, AttributeValue>> GetFizzValuesGroupedByConsumer(int id);
         void AddConsumerToTest(string id, IEnumerable<int> consumer);
+        IEnumerable<Test> GetTestsByClient(string clientID);
     }
 }

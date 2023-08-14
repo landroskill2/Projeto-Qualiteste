@@ -18,6 +18,8 @@ import Admin from "../pages/admin/Admin";
 import AccountCreation from "../pages/admin/AccountCreation";
 import Page404 from "../pages/Page404";
 import Products from "../pages/products/ProductsList";
+import ClientTestsList from "../pages/tests/clients/ClientTestsList";
+import ClientTestRequisition from "../pages/tests/clients/ClientTestRequisition";
 
 export default function AppRoutes() {
   return (
@@ -29,6 +31,10 @@ export default function AppRoutes() {
         <Route path="*" element={<Page404 />} />
         {/* Authenticated Routes */}
         <Route element={<RequireAuth/>}>
+          <Route element={<RequireRole allowedRoles={["CLIENT"]} />}>
+            <Route path=":client/tests" element={<ClientTestsList />} />
+            <Route path=":client/tests/create" element={<ClientTestRequisition />} />
+          </Route>
           <Route element={<RequireRole allowedRoles={["ADMIN"]} />}>
             <Route element={<RequireRole allowedRoles={["ADMIN"]} />}>
               <Route path="admin" element={<Admin/>}/>

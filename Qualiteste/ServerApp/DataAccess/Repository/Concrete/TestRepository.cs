@@ -88,6 +88,11 @@ namespace Qualiteste.ServerApp.DataAccess.Repository.Concrete
             return attr.Alias != null ? attr.Alias : attr.Attribute;
         }
 
+        public IEnumerable<Test> GetTestsByClient(string clientID)
+        {
+            return PostgresContext.Tests.Where(c => c.Clientid == clientID).OrderByDescending(t => t.Requestdate);
+        }
+
         public PostgresContext PostgresContext
         {
             get { return Context as PostgresContext; }

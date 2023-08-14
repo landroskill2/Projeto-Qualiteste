@@ -86,7 +86,7 @@ export default function NavMenu() {
                   </WithPermission>
                   <WithPermission allowedRoles={['CLIENT']}>
                     <li>
-                      <CustomNavLink href={`/tests/${account.username}`} toggleNavBar={changeToggle}>
+                      <CustomNavLink href={`/${account.username}/tests`} toggleNavBar={changeToggle}>
                         Testes
                       </CustomNavLink>
                     </li>
