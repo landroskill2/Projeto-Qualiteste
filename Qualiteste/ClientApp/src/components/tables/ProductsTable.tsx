@@ -10,10 +10,17 @@ import {ProductOutputModel} from "../../common/Interfaces/Products"
 
 type TableProps = {
     products : ProductOutputModel[],
-    onClickProduct? : (id: string) => void
+    onClickProduct? : (product : ProductOutputModel) => void
 }
 
+
 export default function ProductsTable( {products, onClickProduct} : TableProps) : React.ReactElement{
+    const handleClick = (product : ProductOutputModel) => {
+        if(onClickProduct) {
+            onClickProduct(product)
+        }
+    }
+    
     return (
         <Table variant="simple" overflow="auto">
             <Thead>
@@ -26,7 +33,7 @@ export default function ProductsTable( {products, onClickProduct} : TableProps) 
             <Tbody>
                 {products && <>
                     {products.map((p) => (
-                        <Tr className="hover:bg-slate-200 cursor-pointer" key={p.productid} onClick ={() => {console.log("Redirect to product page")}} >
+                        <Tr className="hover:bg-slate-200 cursor-pointer" key={p.productid} onClick={() => {handleClick(p)}} >
                             <Td>{p.ref}</Td>
                             <Td>{p.designation}</Td>
                             <Td>{p.brand}</Td>
