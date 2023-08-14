@@ -84,8 +84,8 @@ namespace Qualiteste.ServerApp.Services.Concrete
 
                 Client dbClient = new()
                 {
-                    Acronym = user.Id,
-                    Companyname = user.Designation
+                    Id = user.Id,
+                    Designation = user.Designation
                 };
                 _unitOfWork.Clients.Add(dbClient);
             }
