@@ -53,8 +53,9 @@ export default function DraggableProductTable({elements, setElements, productToT
 
 
     return (
-        <>
+        <>  
             <Table variant="simple" overflow="auto" size="sm">
+                
                 <Tbody onDragOver={(e) => e.preventDefault()}>
                     {elements && <>
                     {elements.map((p, idx) => (

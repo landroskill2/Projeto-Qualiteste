@@ -30,7 +30,7 @@ const initialFormValues: ITestInputModel = {
   testType: "SP",
   consumersNumber: 0,
   product : undefined,
-  clientId : undefined,
+  clientId : "cliente",
   requestDate: "",
   samples : []
 };
@@ -149,7 +149,7 @@ export default function TestCreation(): React.ReactElement {
                 />
               </FormControl>
 
-              <FormControl id="client" isRequired>
+              <FormControl id="clientId" isRequired>
                 <FormLabel textColor={"white"}>Cliente</FormLabel>
                 <Select
                   name="clientId"
@@ -158,7 +158,7 @@ export default function TestCreation(): React.ReactElement {
                   background="white"
                 >
                   {availableClients && availableClients.map(c => (
-                    <option value={c.clientId}>{c.clientDesignation}</option>
+                    <option key={c.clientId} value={c.clientId}>{c.clientDesignation}</option>
                   ))}
                 </Select>
               </FormControl>
@@ -188,7 +188,7 @@ export default function TestCreation(): React.ReactElement {
                 />
               </FormControl>
 
-              <FormControl id="requestDate" isRequired>
+              <FormControl className="flex flex-col p-2" id="requestDate" isRequired>
                 <FormLabel textColor={"white"}>Data de Pedido</FormLabel>
                 <Input
                   name="requestDate"
@@ -202,7 +202,7 @@ export default function TestCreation(): React.ReactElement {
 
               {isHomeTest && (
                 <>
-                  <FormControl id="validationDate">
+                  <FormControl className="flex flex-col p-2" id="validationDate">
                     <FormLabel textColor={"white"}>Validation Date</FormLabel>
                     <Input
                       name="validationDate"
@@ -214,7 +214,7 @@ export default function TestCreation(): React.ReactElement {
                       />
                   </FormControl>
               
-                  <FormControl id="dueDate">
+                  <FormControl className="flex flex-col p-2" id="dueDate">
                     <FormLabel textColor={"white"}>Due Date</FormLabel>
                       <Input
                         name="dueDate"
@@ -226,7 +226,7 @@ export default function TestCreation(): React.ReactElement {
                       />
                   </FormControl>
               
-                  <FormControl id="reportDeliveryDate">
+                  <FormControl className="flex flex-col p-2" id="reportDeliveryDate">
                     <FormLabel textColor={"white"}>Report Delivery Date</FormLabel>
                       <Input
                         name="reportDeliveryDate"
@@ -238,12 +238,11 @@ export default function TestCreation(): React.ReactElement {
                   </FormControl>
                 </>
               )}
-              <div className="bg-slate-600 rounded-lg flex">
-                <FormControl id="product" className=" flex flex-col items-center" isRequired>
+              
+                <FormControl id="product" className="bg-slate-600 rounded-lg flex flex-col items-center" isRequired>
                   <FormLabel textColor={"white"}>Produto em teste</FormLabel>
                   {productToTestReference === "" ? (
                       <div>
-                        
                         <AddProductsModal onClickProduct={setProductToTest} excludeProducts={addedProducts} buttonText={"Associar produto"}/>
                       </div>
                   ) : 
@@ -260,7 +259,7 @@ export default function TestCreation(): React.ReactElement {
                     </Input>
                   )}
                 </FormControl>
-              </div>
+              
               
               <Button type="submit" mt={4} colorScheme="blue">
                   Submit
@@ -268,7 +267,8 @@ export default function TestCreation(): React.ReactElement {
             </form>
           </div>
         <div className="flex flex-col gap-4">
-          <div className="w-full flex-grow bg-white">
+          <h2 className="text-white">Ordem de amostragem</h2>
+          <div className="w-full flex-grow bg-white rounded-md ">
             <DraggableProductTable elements={addedProducts} setElements={setAddedProducts} productToTest={formValues.product}></DraggableProductTable>
           </div>
           <div className="flex w-full gap-4">
