@@ -19,9 +19,10 @@ import {ProductOutputModel} from "../../common/Interfaces/Products";
 interface TableProperties {
     elements : ProductOutputModel[],
     setElements : React.Dispatch<React.SetStateAction<ProductOutputModel[]>>
+    productToTest : number | undefined
 }
 
-export default function DraggableProductTable({elements, setElements} : TableProperties) : React.ReactElement{
+export default function DraggableProductTable({elements, setElements, productToTest} : TableProperties) : React.ReactElement{
 
     const dragItem = React.useRef<any>(null)
     const dragOverItem = React.useRef<any>(null)
@@ -54,27 +55,27 @@ export default function DraggableProductTable({elements, setElements} : TablePro
     return (
         <>
             <Table variant="simple" overflow="auto" size="sm">
-                <Tbody>
+                <Tbody onDragOver={(e) => e.preventDefault()}>
                     {elements && <>
                     {elements.map((p, idx) => (
-                        <div className="flex cursor-move" draggable
-                        onDragStart={() => {dragItem.current = idx}}
-                        onDragEnter={() => {dragOverItem.current = idx}}
-                        onDragEnd={handleSort} 
-                        >
-                            <Tr key={p.productid}>
+                            <Tr key={p.productid}
+                            className="flex cursor-move" 
+                            draggable
+                            onDragStart={() => {dragItem.current = idx}}
+                            onDragOver={(e)=> e.preventDefault()}//
+                            onDragEnter={() => {dragOverItem.current = idx}}
+                            onDragEnd={handleSort} 
+                            >
                             <Td>{idx+1}</Td>
                             <Td>{p.ref}</Td>
                             <Td>{p.designation}</Td>
                             <Td>{p.brand}</Td>
-                            <Td>
-                                <div className="cursor-default" onClick={() => {removeItem(idx)}}>
-                                <CloseIcon/>
-                                </div>
-                            </Td>
+                            {p.productid != productToTest && (
+                                <Td className="cursor-default" onClick={() => {removeItem(idx)}}>
+                                    <CloseIcon/>
+                                </Td>
+                            )}
                             </Tr>
-                        </div>
-                        
                     ))}
                     </>}             
                 </Tbody>

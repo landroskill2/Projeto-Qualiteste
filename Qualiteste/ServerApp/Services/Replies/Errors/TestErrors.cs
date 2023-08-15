@@ -79,6 +79,13 @@ namespace Qualiteste.ServerApp.Services.Replies.Errors
             {
             }
         }
+
+        public class TestHasNoSamples : TestErrors
+        {
+            public TestHasNoSamples() : base("O teste não possui amostras.", 400)
+            {
+            }
+        }
     }
 
 }

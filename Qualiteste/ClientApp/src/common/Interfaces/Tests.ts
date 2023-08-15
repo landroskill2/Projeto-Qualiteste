@@ -13,14 +13,14 @@ export interface ITestInputModel{
     testType: "SP" | "HT";
     consumersNumber: number;
     requestDate: string;
-    product : number,
+    product : number | undefined,
     validationDate?: string;
     dueDate?: string;
     reportDeliveryDate?: string;
     samples : ISampleInputModel[];
 }
 
-interface ISampleInputModel{
+export interface ISampleInputModel{
     ProductId : number,
     PresentationPosition : number,
 }

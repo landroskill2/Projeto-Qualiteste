@@ -7,13 +7,14 @@ import {
   Input,
   Select,
   Button,
+  Text,
   Table,
   Tbody,
   Tr,
   Td,
   Thead,
 } from "@chakra-ui/react";
-import { ITestInputModel } from "../../common/Interfaces/Tests";
+import { ITestInputModel, ISampleInputModel } from "../../common/Interfaces/Tests";
 import { createProduct, createTest } from "../../common/APICalls";
 import { useGlobalToast } from "../../common/useGlobalToast";
 import { useNavigate } from "react-router-dom";
@@ -27,7 +28,7 @@ const initialFormValues: ITestInputModel = {
   id: "",
   testType: "SP",
   consumersNumber: 0,
-  product : NaN,
+  product : undefined,
   requestDate: "",
   samples : []
 };
@@ -35,10 +36,9 @@ const initialFormValues: ITestInputModel = {
 export default function TestCreation(): React.ReactElement {
   const [formValues, setFormValues] = useState<ITestInputModel>(initialFormValues);
   const [addedProducts, setAddedProducts] = useState<ProductOutputModel[]>([])
+  const [productToTestReference, setProductToTestReference] = useState<string>("")
   const { addToast, isToastActive } = useGlobalToast() 
   const navigate = useNavigate()
-
-  console.log(addedProducts)
 
   const onCreateProduct = async (product : ProductInputModel) => {
     const resp = await createProduct(product).catch(err => {
@@ -80,7 +80,7 @@ export default function TestCreation(): React.ReactElement {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     
-
+    formValues.samples = addedProducts.map((p, idx) => ({ProductId: p.productid, PresentationPosition : idx})) as ISampleInputModel[]
     const resp = await createTest(formValues).catch(err => {
       console.log(err)
       if(!isToastActive("error")){
@@ -99,8 +99,25 @@ export default function TestCreation(): React.ReactElement {
     }
   };
 
-  function addProductToTest(product : ProductOutputModel) {
+  function addSampleToTest(product : ProductOutputModel) {
     setAddedProducts([...addedProducts, product])
+  }
+
+  function setProductToTest(product : ProductOutputModel) {
+    setAddedProducts([...addedProducts, product])
+    formValues.product = product.productid
+    setProductToTestReference(product.ref)
+  }
+
+  function cleanProductToTest(){
+    let _addedProducts = [...addedProducts]
+    let toRemove = addedProducts.findIndex(v => v.productid == formValues.product)
+    if(toRemove != -1) {
+      _addedProducts.splice(toRemove, 1)
+      setAddedProducts([..._addedProducts])
+    }
+    formValues.product = NaN
+    setProductToTestReference("")
   }
 
   const isHomeTest = formValues.testType === "HT";
@@ -199,7 +216,30 @@ export default function TestCreation(): React.ReactElement {
                   </FormControl>
                 </>
               )}
-
+              <div className="bg-slate-600 rounded-lg flex">
+                <FormControl id="product" className=" flex flex-col items-center" isRequired>
+                  <FormLabel textColor={"white"}>Produto em teste</FormLabel>
+                  {productToTestReference === "" ? (
+                      <div>
+                        
+                        <AddProductsModal onClickProduct={setProductToTest} excludeProducts={addedProducts} buttonText={"Associar produto"}/>
+                      </div>
+                  ) : 
+                  (
+                    <Input className="text-neutral-50 items-center"
+                      name="product"
+                      type="text"
+                      value={productToTestReference}
+                      isReadOnly
+                      border={"hidden"}
+                      textAlign={"center"}
+                      onDoubleClick={() => cleanProductToTest()}
+                    >                     
+                    </Input>
+                  )}
+                </FormControl>
+              </div>
+              
               <Button type="submit" mt={4} colorScheme="blue">
                   Submit
               </Button>
@@ -207,10 +247,10 @@ export default function TestCreation(): React.ReactElement {
           </div>
         <div className="flex flex-col gap-4">
           <div className="w-full flex-grow bg-white">
-            <DraggableProductTable elements={addedProducts} setElements={setAddedProducts}></DraggableProductTable>
+            <DraggableProductTable elements={addedProducts} setElements={setAddedProducts} productToTest={formValues.product}></DraggableProductTable>
           </div>
           <div className="flex w-full gap-4">
-            <AddProductsModal onClickProduct={addProductToTest}/>
+            <AddProductsModal onClickProduct={addSampleToTest} excludeProducts={addedProducts} buttonText="Adicionar amostras"/>
             <CreateProductModal onSubmit={onCreateProduct}/>
           </div>
         </div>
