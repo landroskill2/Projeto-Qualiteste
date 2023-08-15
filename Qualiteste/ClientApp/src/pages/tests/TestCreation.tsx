@@ -15,7 +15,7 @@ import {
   Thead,
 } from "@chakra-ui/react";
 import { ITestInputModel, ISampleInputModel } from "../../common/Interfaces/Tests";
-import { createProduct, createTest } from "../../common/APICalls";
+import { createProduct, createTest, fetchAllClients } from "../../common/APICalls";
 import { useGlobalToast } from "../../common/useGlobalToast";
 import { useNavigate } from "react-router-dom";
 import ProductsTable from "../../components/tables/ProductsTable";
@@ -23,12 +23,14 @@ import { ProductInputModel, ProductOutputModel } from "../../common/Interfaces/P
 import CreateProductModal from "../../components/modals/CreateProductModal";
 import AddProductsModal from "../../components/modals/AddProductModal";
 import DraggableProductTable from "../../components/tables/DraggableProductTable";
+import { IClientOutputModel } from "../../common/Interfaces/Clients";
 
 const initialFormValues: ITestInputModel = {
   id: "",
   testType: "SP",
   consumersNumber: 0,
   product : undefined,
+  clientId : undefined,
   requestDate: "",
   samples : []
 };
@@ -37,6 +39,7 @@ export default function TestCreation(): React.ReactElement {
   const [formValues, setFormValues] = useState<ITestInputModel>(initialFormValues);
   const [addedProducts, setAddedProducts] = useState<ProductOutputModel[]>([])
   const [productToTestReference, setProductToTestReference] = useState<string>("")
+  const [availableClients, setAvailableClients] = useState<IClientOutputModel[]>([])
   const { addToast, isToastActive } = useGlobalToast() 
   const navigate = useNavigate()
 
@@ -75,6 +78,8 @@ export default function TestCreation(): React.ReactElement {
           [name]: value,
         }));
       }
+
+      console.log(formValues)
   }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -99,6 +104,7 @@ export default function TestCreation(): React.ReactElement {
     }
   };
 
+
   function addSampleToTest(product : ProductOutputModel) {
     setAddedProducts([...addedProducts, product])
   }
@@ -121,7 +127,7 @@ export default function TestCreation(): React.ReactElement {
   }
 
   const isHomeTest = formValues.testType === "HT";
-
+  fetchAllClients().then(res => setAvailableClients(res.data)) 
   return (
     <div className="flex flex-col bg-slate-800 shadow-slate-600 p-6 rounded-lg shadow-md ">
         <div className="flex flex-col items-center mb-4">
@@ -130,7 +136,8 @@ export default function TestCreation(): React.ReactElement {
         <div className="flex flex-row gap-10">
           <div className="flex flex-row">
             <form onSubmit={handleSubmit}>
-              <FormControl id="id" isRequired>
+
+              <FormControl id="client" isRequired>
                 <FormLabel textColor={"white"}>ID</FormLabel>
                 <Input
                   name="id"
@@ -141,6 +148,21 @@ export default function TestCreation(): React.ReactElement {
 
                 />
               </FormControl>
+
+              <FormControl id="client" isRequired>
+                <FormLabel textColor={"white"}>Cliente</FormLabel>
+                <Select
+                  name="clientId"
+                  value={formValues.clientId}
+                  onChange={handleInputChange}
+                  background="white"
+                >
+                  {availableClients && availableClients.map(c => (
+                    <option value={c.clientId}>{c.clientDesignation}</option>
+                  ))}
+                </Select>
+              </FormControl>
+
               <FormControl id="testType" isRequired>
                 <FormLabel textColor={"white"}>Tipo</FormLabel>
                 <Select

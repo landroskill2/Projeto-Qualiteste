@@ -181,6 +181,10 @@ INSERT INTO USERS(Username, Pwd, Role) VALUES
 
 INSERT INTO CLIENT(Id, Designation, Username) VALUES
 ('clientID', 'client', 'client');
+('Conti', 'Continente', 'continente');
+('JM', 'Jerónimo Martins', 'JM-quali');
+('IM', 'Intermarché', 'intermarche');
+('PD', 'Pingo Doce', 'PD-quali');
 
 INSERT INTO TEST(InternalID, ClientID, Product, TestType, ConsumersNumber, RequestDate, ValidationDate, DueDate, ReportDeliveryDate, SessionID) VALUES
 ('443244', 'clientID', 122332, 'SP', 10, '2023-03-21', null, null, null, '040423'),

@@ -18,6 +18,8 @@ namespace Qualiteste.ServerApp.Dtos
         public string ID { get; init; }
         public string TestType { get; init; }
         public int Product { get; init; }
+
+        public string ClientID { get; init; }
         public int ConsumersNumber { get; init; }
         public DateOnly RequestDate { get; init; }
         public DateOnly? ValidationDate { get; init; }
@@ -32,6 +34,7 @@ namespace Qualiteste.ServerApp.Dtos
             {
                 Internalid = ID,
                 Product = Product,
+                Clientid = ClientID,
                 Testtype = TestType,
                 Consumersnumber = ConsumersNumber,
                 Requestdate = RequestDate,
