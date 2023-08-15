@@ -182,11 +182,30 @@ namespace Qualiteste.ServerApp.Services.Concrete
             }
         }
 
-        public Either<CustomError, IEnumerable<TestOutputModel>> GetClientsTests(string clientID)
+        public Either<CustomError, IEnumerable<TestOutputModel>> GetClientsTests(string clientUsername)
         {
             try
             {
+                string clientID = _unitOfWork.Clients.GetClientIDByUsername(clientUsername);
                 return _unitOfWork.Tests.GetTestsByClient(clientID).Select(x => x.toOutputModel()).ToList();
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public Either<CustomError, TestPageModel> GetClientsTestByID(string clientUsername, string id)
+        {
+             try
+            {
+                string clientID = _unitOfWork.Clients.GetClientIDByUsername(clientUsername);
+                Test? test = _unitOfWork.Tests.GetClientTestsByID(clientID, id);
+                if (test == null) return new TestErrors.NoTestFoundWithGivenID();
+
+                return new TestPageModel {
+                    Test = test.toOutputModel()
+                };
             }
             catch(Exception ex)
             {

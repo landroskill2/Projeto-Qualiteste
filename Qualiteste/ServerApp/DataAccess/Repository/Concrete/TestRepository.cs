@@ -93,6 +93,11 @@ namespace Qualiteste.ServerApp.DataAccess.Repository.Concrete
             return PostgresContext.Tests.Where(c => c.Clientid == clientID).OrderByDescending(t => t.Requestdate);
         }
 
+        public Test? GetClientTestsByID(string clientID, string id)
+        {
+            return PostgresContext.Tests.SingleOrDefault(c => c.Clientid == clientID && c.Internalid == id);
+        }
+
         public PostgresContext PostgresContext
         {
             get { return Context as PostgresContext; }

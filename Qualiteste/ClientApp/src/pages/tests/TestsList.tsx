@@ -14,15 +14,18 @@ import {
 } from "@chakra-ui/react";
 import { ITestOutputModel } from "../../common/Interfaces/Tests";
 import { useNavigate } from "react-router-dom";
-import { fetchTests } from "../../common/APICalls";
+import { fetchClientsTests, fetchTests } from "../../common/APICalls";
 import TestTypeFilter from "../../components/TestTypeFilter";
 import TestsTable from "../../components/tables/TestsTable";
+import { useAuth } from "../../auth/useAuth";
+import WithPermission from "../../auth/WithPermission";
 
 
 export default function Tests(): React.ReactElement{
     const [tests, setTests] = useState<ITestOutputModel[] | null>(null);
     const [type, setType] = useState<string | null>(null)
     const [isLoading, setIsLoading] = useState<boolean>(true);
+    const user = useAuth()
     const navigate = useNavigate()
 
   useEffect(() => {
@@ -43,7 +46,12 @@ export default function Tests(): React.ReactElement{
       type === null ? null : {type: type},
     )
 
-    const response = await fetchTests(filters)
+    let response
+    if(user?.role === 'CLIENT'){
+      response = await fetchClientsTests()
+    }else {
+      response = await fetchTests(filters)
+    }
     setTests(response.data)
     setIsLoading(false)
   }
@@ -58,18 +66,22 @@ export default function Tests(): React.ReactElement{
           </div>
         ) : (
           <div className="mt-6 px-6 min-h-full w-full flex flex-col flex-grow">
-            <TestTypeFilter type={type} setType={setType} />
+            <WithPermission allowedRoles={["ADMIN"]}>
+              <TestTypeFilter type={type} setType={setType} />
+            </WithPermission>
             <div className="mt-10" style={{ maxHeight: 'calc(100vh - 220px)', overflowY: 'auto' }}>
               <TestsTable tests={tests} onClickTest={redirectToTestPage} />
             </div>
           </div>
           )}
       
-      <div className="p-6 bg-white" style={{ flexShrink: 0 }}>
-        <Button colorScheme="blue" onClick={redirectToTestCreation}>
-          Criar Teste
-        </Button>
-      </div>
+      <WithPermission allowedRoles={["ADMIN"]}>
+        <div className="p-6 bg-white" style={{ flexShrink: 0 }}>
+          <Button colorScheme="blue" onClick={redirectToTestCreation}>
+            Criar Teste
+          </Button>
+        </div>
+      </WithPermission>
     </div>
   );
 }

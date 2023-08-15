@@ -16,6 +16,7 @@ namespace Qualiteste.ServerApp.Services
         Either<CustomError, TestPageModel> GetTestById(string id);
         Either<CustomError, IEnumerable<TestOutputModel>> GetTestsList();
         Either<CustomError, TestOutputModel> UpdateTest(int id, TestInputModel testInput);
-        Either<CustomError, IEnumerable<TestOutputModel>> GetClientsTests(string clientID);
+        Either<CustomError, IEnumerable<TestOutputModel>> GetClientsTests(string clientUsername);
+        Either<CustomError, TestPageModel> GetClientsTestByID(string clientUsername, string id);
     }
 }

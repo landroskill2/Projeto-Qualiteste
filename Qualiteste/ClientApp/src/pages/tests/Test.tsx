@@ -2,11 +2,13 @@ import { Box, Table, Thead, Tbody, Tr, Th, Td, Spinner, Button, Input } from "@c
 import { IConsumerOutputModel } from '../../common/Interfaces/Consumers';
 import { ISessionModel } from '../../common/Interfaces/Sessions';
 import { ITestOutputModel } from '../../common/Interfaces/Tests';
-import { addConsumerToTest, fetchTestById, uploadFile } from '../../common/APICalls';
+import { addConsumerToTest, fetchClientTestById, fetchTestById, uploadFile } from '../../common/APICalls';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from "react";
 import AddConsumersModal from "../../components/modals/AddConsumersModal";
 import { useGlobalToast } from "../../common/useGlobalToast";
+import { useAuth } from "../../auth/useAuth";
+import WithPermission from "../../auth/WithPermission";
 
 export default function Test(): React.ReactElement {
   const [session, setSession] = useState<ISessionModel | null>(null);
@@ -17,6 +19,7 @@ export default function Test(): React.ReactElement {
   const navigate = useNavigate();
   const { addToast, isToastActive } = useGlobalToast() 
   const {state} = useLocation()
+  const user = useAuth()
 
   const redirectToSessionPage = (id: string) => {
     navigate(`/sessions/${id}`);
@@ -53,7 +56,14 @@ export default function Test(): React.ReactElement {
 
   async function populateData(){
     try {
-      const response = await fetchTestById(id!!)
+      let response
+      if(user?.role === 'CLIENT'){
+        response = await fetchClientTestById(id!!)
+      }
+      else{
+        response = await fetchTestById(id!!)
+    }
+      
       const data = response.data
 
       setSession(data.session);
@@ -106,24 +116,30 @@ export default function Test(): React.ReactElement {
             TestID = {test?.id} 
           </Box>
 
-          {isHomeTest && 
-            <Box>
-              <AddConsumersModal onSubmit={addConsumers}/>
-            </Box>
-          }
+          <WithPermission allowedRoles={["ADMIN"]}>
+            {isHomeTest && 
+              <Box>
+                <AddConsumersModal onSubmit={addConsumers}/>
+              </Box>
+            }
+          </WithPermission>
+          
           {!isHomeTest &&
           <>
             <Box>
               <Button onClick={() => navigate("fizz")}>Fizz Results</Button>
             </Box>
-            <Box>
-              <Input type="file" accept=".txt,.csv" onChange={handleFileUpload} display="none" id="file-upload" />
-                <label htmlFor="file-upload">
-                <Button as="span" colorScheme="blue" mr={2}>
-                  Upload File
-                </Button>
-              </label>
-            </Box>
+            <WithPermission allowedRoles={["ADMIN"]}>
+              <Box>
+                <Input type="file" accept=".txt,.csv" onChange={handleFileUpload} display="none" id="file-upload" />
+                  <label htmlFor="file-upload">
+                  <Button as="span" colorScheme="blue" mr={2}>
+                    Upload File
+                  </Button>
+                </label>
+              </Box>
+            </WithPermission>
+            
           </>
           }
 
@@ -135,40 +151,43 @@ export default function Test(): React.ReactElement {
         <Box as="h1" fontSize="2xl" fontWeight="bold" mb={4}>
           Number of Consumers: {test?.consumersNumber.toString()}
         </Box>
-        <Table variant="simple">
-          <Thead>
-            <Tr>
-              <Th>ID</Th>
-              <Th>Full Name</Th>
-              <Th>Age</Th>
-              <Th>Sex</Th>
-              <Th>Contact</Th>
-              <Th>Email</Th>
-            </Tr>
-          </Thead>
-          <Tbody>
+        <WithPermission allowedRoles={["ADMIN"]}>
+          <Table variant="simple">
+            <Thead>
+              <Tr>
+                <Th>ID</Th>
+                <Th>Full Name</Th>
+                <Th>Age</Th>
+                <Th>Sex</Th>
+                <Th>Contact</Th>
+                <Th>Email</Th>
+              </Tr>
+            </Thead>
+            <Tbody>
 
-            {consumers && (
-              <>
-                {consumers.map(consumer => (
-                  <Tr className="hover:bg-slate-200 cursor-pointer" key={consumer.id} onClick={() => redirectToConsumerPage(consumer.id)}>
-                    <Td>{consumer.id}</Td>
-                    <Td>{consumer.fullname}</Td>
-                    <Td>{consumer.age}</Td>
-                    <Td>{consumer.sex}</Td>
-                    <Td>{consumer.contact}</Td>
-                    <Td>{consumer.email || "-"}</Td>
-                  </Tr>
-                ))}
-              </>
-            )}
-            {!consumers && (
-              <>
-                <p>Sem dados.</p>
-              </>
-            )}
-          </Tbody>
-        </Table>
+              {consumers && (
+                <>
+                  {consumers.map(consumer => (
+                    <Tr className="hover:bg-slate-200 cursor-pointer" key={consumer.id} onClick={() => redirectToConsumerPage(consumer.id)}>
+                      <Td>{consumer.id}</Td>
+                      <Td>{consumer.fullname}</Td>
+                      <Td>{consumer.age}</Td>
+                      <Td>{consumer.sex}</Td>
+                      <Td>{consumer.contact}</Td>
+                      <Td>{consumer.email || "-"}</Td>
+                    </Tr>
+                  ))}
+                </>
+              )}
+              {!consumers && (
+                <>
+                  <p>Sem dados.</p>
+                </>
+              )}
+            </Tbody>
+          </Table>
+        </WithPermission>
+        
       </Box>
     </div>
   );
