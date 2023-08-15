@@ -79,12 +79,33 @@ namespace Qualiteste.ServerApp.Controllers
         }
 
         [Authorize(Roles = "CLIENT")]
-        [Route("/api/{clientid}/tests")]
+        [Route("/api/client/tests")]
         [HttpGet]
-        public IActionResult GetClientTests(string clientID){
+        public IActionResult GetClientTests(){
             try
             {
-                Either<CustomError, IEnumerable<TestOutputModel>> result = _testService.GetClientsTests(clientID);
+                var user = HttpContext.User.Claims.FirstOrDefault().Value;
+                Either<CustomError, IEnumerable<TestOutputModel>> result = _testService.GetClientsTests(user);
+                return result.Match(
+                    error => Problem(statusCode: error.StatusCode, title: error.Message),
+                    success => Ok(success)
+                    );
+            }
+            catch(Exception ex)
+            {
+                return Problem(statusCode: 500, title: "Ocorreu um erro inesperado");
+            }
+        }
+
+        [Authorize(Roles = "CLIENT")]
+        [Route("/api/client/tests/{id}")]
+        [HttpGet]
+        public IActionResult GetClientTestByID(string id)
+        {
+            try
+            {
+                var user = HttpContext.User.Claims.FirstOrDefault().Value;
+                Either<CustomError, TestPageModel> result = _testService.GetClientsTestByID(user, id);
                 return result.Match(
                     error => Problem(statusCode: error.StatusCode, title: error.Message),
                     success => Ok(success)

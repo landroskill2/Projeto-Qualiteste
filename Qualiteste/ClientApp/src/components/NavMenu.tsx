@@ -61,11 +61,13 @@ export default function NavMenu() {
                         Provadores
                       </CustomNavLink>
                     </li>
-                    <li className="text-white">
-                      <CustomNavLink href="/tests" toggleNavBar={changeToggle}>
-                        Testes
-                      </CustomNavLink>
-                    </li>
+                  </WithPermission>
+                  <li className="text-white">
+                    <CustomNavLink href="/tests" toggleNavBar={changeToggle}>
+                      Testes
+                    </CustomNavLink>
+                  </li>
+                  <WithPermission allowedRoles={['ADMIN']}>
                     <li className="text-white">
                       <CustomNavLink href="/sessions" toggleNavBar={changeToggle}>
                         Sessões
@@ -83,13 +85,6 @@ export default function NavMenu() {
                         </CustomNavLink>
                       </li>
                     </WithPermission>
-                  </WithPermission>
-                  <WithPermission allowedRoles={['CLIENT']}>
-                    <li>
-                      <CustomNavLink href={`/${account.username}/tests`} toggleNavBar={changeToggle}>
-                        Testes
-                      </CustomNavLink>
-                    </li>
                   </WithPermission>
                   <li className="text-white">
                     <CustomNavLink href="/" toggleNavBar={changeToggle} onClick={() => {localStorage.clear(); navigate("/")}}>

@@ -63,15 +63,19 @@ export async function fetchTests(
     let path = "/tests"
     path = addFiltersToQuery(path, filters)
     return instance.get(path)
-    //return fetch(path)
 }
 
 export async function fetchClientsTests(
-    clientID : string
 ) : Promise<AxiosResponse>{
-    let path = `/${clientID}/tests`
+    let path = `/client/tests`
     return instance.get(path)
-    //return fetch(path)
+}
+
+export async function fetchClientTestById(
+    id: String
+) : Promise<AxiosResponse>{
+    let path = `client/tests/${id}`
+    return instance.get(path)
 }
 
 export async function fetchTestById(
