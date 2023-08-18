@@ -77,6 +77,7 @@ export default function AddConsumersModal({onSubmit} : ModalProps) : React.React
             <Button
                 onClick={onOpen}
                 m={4}
+                bgColor={"gray.300"}
                 >{`Adicionar Provadores`}
             </Button>
             <Modal scrollBehavior='inside'  onClose={onModalClose} size="5xl" isOpen={isOpen}>

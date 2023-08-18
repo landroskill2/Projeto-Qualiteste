@@ -75,6 +75,7 @@ export default function Session() : React.ReactElement{
       })
     } 
   }
+
   const useCircleIcon = (attendance : boolean | undefined, onClick : () => void) => {
     let currColor = "grey"
     if(attendance != undefined){
@@ -98,7 +99,6 @@ export default function Session() : React.ReactElement{
     const resp = await removeNotConfirmedConsumers(sessionId, selection).catch(err => {
       addToast({id: "error", title: "Erro", description: err.response.data.title, status: "error"})
     })
-    console.log(resp)
     if(resp?.status === 200){
       setIsLoading(true)
       populateData().then(() => {
@@ -199,131 +199,144 @@ export default function Session() : React.ReactElement{
   return (
     <>
       {isLoading && 
-        <div className="flex flex-col justify-center items-center h-full">
+        <div className="flex flex-col justify-center items-center h-screen">
           <Spinner size="lg" />
         </div> || 
-        <>
-          <Box
-            display="flex"
-            justifyContent="space-between"
-            alignItems="center"
-            mb={4}
-          >
+        <div className="flex flex-col w-full h-[calc(100vh-72px)] overflow-y-hidden">
+          <div className="flex justify-between content-center m-4">
             <Box as="h1" fontSize="2xl" fontWeight="bold">
               <Heading>{session!.id}</Heading>
             </Box>
 
-            <Box>
-              <AddTestsModal onClickTest={addTest}/>
-            </Box>
-
-            <Box>
-              <AddConsumersModal onSubmit={addConsumers}/>
-            </Box>
-          </Box>
-          
-          <Table>
-            <Thead>
-              <Tr>
-                <Th>Date</Th>
-                <Th>Number of Consumers</Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              <Tr>
-                <Td>{session!.date}</Td>
-                <Td>{session!.consumersNumber.toString()}</Td>
-              </Tr>
-            </Tbody>
-          </Table>
-          
-          {sortedConsumerSessions.invited!
-           && (
-           <>
-           <Heading>Provadores Convidados</Heading>
-           <Button onClick={() => {removeNotConfirmed(session!.id)}}>Limpar Convidados</Button>
-           <Table variant="simple">
-           <Tbody>
-              <Tr>
-                {sortedConsumerSessions.invited.consumersInfo.map(( cInfo ) => (
-                  <Td key={sortedConsumerSessions.invited?.sessionTime}>
-                      <div className="flex justify-center">
-                        <div className="flex items-center justify-center">
-                          <Tr key={cInfo.consumer.id} onClick={() => redirectToConsumerPage(cInfo.consumer.id)}>
-                            <Td className="hover:bg-slate-200 cursor-pointer">{cInfo.consumer.fullname}</Td>
-                          </Tr>
-                          <div className="flex gap-4 items-center content-between">
-                            <div className="hover:bg-slate-200 cursor-pointer px-1">
-                              <CloseIcon boxSize="0.7em" onClick={() => {removeNotConfirmed(session!.id, cInfo.consumer.id)}} />
-                            </div>
-                            
-                            <div className="hover:bg-slate-200 cursor-pointer px-1">
-                              <SessionTimeSelector consumerId={cInfo.consumer.id} sessionId={session!.id} availableSessionTimes={availableSessionTimes} onSubmit={confirmSessionTime}></SessionTimeSelector>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      
-                   
-                  </Td>
-                ))}
-              </Tr>
-            </Tbody>
-           </Table>
-           </>
-           )}
-          <Heading>Provadores Confirmados</Heading>
-          <Table variant="simple">
-            <Thead>
-              <Tr>
-                {sortedConsumerSessions.confirmed.map(({ sessionTime }) => (
-                  sessionTime && <Th key={sessionTime}>{sessionTime}</Th>
-                ))}
-              </Tr>
-            </Thead>
-            <Tbody>
-              <Tr>
-                {sortedConsumerSessions.confirmed.map(({ consumersInfo }) => (
-                  <Td key={consumersInfo[0].consumer.id}>
-                    {consumersInfo.map((consumerInfo) => (
-                      <div className="flex items-center">
-                        <Tr key={consumerInfo.consumer.id} onClick={() => redirectToConsumerPage(consumerInfo.consumer.id)}>
-                          <Td className="hover:bg-slate-200 cursor-pointer">{consumerInfo.consumer.fullname}</Td>
-                        </Tr>
-                        <div className="hover:bg-slate-200 cursor-pointer">
-                          {useCircleIcon(consumerInfo.attendance, (() => updateAttendance(session!.id, consumerInfo.consumer.id, consumerInfo.attendance)))}
-                        </div>
-                        
-                      </div>
-                      
-                    ))}
-                  </Td>
-                ))}
-              </Tr>
-            </Tbody>
-          </Table>
-          <Heading>Tests</Heading>
+            {/*
             <Table>
               <Thead>
                 <Tr>
-                  <Th>Test ID</Th>
-                  <Th>Type</Th>
+                  <Th>Date</Th>
                   <Th>Number of Consumers</Th>
-                  <Th>Request Date</Th>
                 </Tr>
               </Thead>
-            <Tbody>
-              {tests.map((test) => (
-                <Tr className="hover:bg-slate-200 cursor-pointer" key={test.id} onClick={() => redirectToTestPage(test.id)}>
-                  <Td>{test.id}</Td>
-                  <Td>{test.type}</Td>
-                  <Td>{test.consumersNumber.toString()}</Td>
-                  <Td>{test.requestDate ?? "-"}</Td>
+              <Tbody>
+                <Tr>
+                  <Td>{session!.date}</Td>
+                  <Td>{session!.consumersNumber.toString()}</Td>
                 </Tr>
-              ))}
-            </Tbody>
-          </Table>
-        </>
+              </Tbody>
+            </Table>
+            */}
+
+            <Box>
+              
+            </Box>
+
+            <Box>
+              
+            </Box>
+          </div>
+          <div className="flex flex-row flex-grow w-full h-full">
+            <div className="flex flex-col content-center justify-center">
+              <div className="flex flex-col shadow-2xl m-5 self-center rounded-xl bg-slate-200 h-2/3">
+                <div className="flex justify-between">
+                  <Heading className="self-center ml-4">Testes da Sessão</Heading>
+                  <AddTestsModal onClickTest={addTest}/>
+                </div>
+                <div className=" border-2 h-1/2 overflow-y-auto m-4 rounded-lg border-slate-500 flex-grow">
+                  <Table variant={"simple"}>
+                    <Thead>
+                      <Tr className=" bg-slate-300">
+                        <Th>ID</Th>
+                        <Th>Tipo de teste</Th>
+                        <Th>Número de provadores</Th>
+                        <Th>Data de pedido</Th>
+                      </Tr>
+                    </Thead>
+                    <Tbody>
+                      {tests.map((test) => (
+                        <Tr className="hover:bg-slate-200 cursor-pointer h-4" key={test.id} onClick={() => redirectToTestPage(test.id)}>
+                          <Td>{test.id}</Td>
+                          <Td>{test.type}</Td>
+                          <Td>{test.consumersNumber.toString()}</Td>
+                          <Td>{test.requestDate ?? "-"}</Td>
+                        </Tr>
+                      ))}
+                    </Tbody>
+                  </Table>
+                </div>                 
+              </div>              
+            </div>
+            <div className="flex flex-col w-2/3 mx-10 flex-grow justify-center content-center">
+              { sortedConsumerSessions.invited! && 
+                <div className="flex flex-col shadow-2xl w-full m-5 self-center rounded-xl bg-slate-200 h-2/3">
+                  <div className="flex justify-between">
+                    <Heading className="self-center ml-4">Provadores Convidados</Heading>
+                    <Button bgColor={"gray.300"} className="self-center" onClick={() => {removeNotConfirmed(session!.id)}}>Limpar Convidados</Button>
+                    <AddConsumersModal onSubmit={addConsumers}/>
+                  </div>
+                  <div className=" border-2 h-1/2 overflow-y-auto m-4 rounded-lg border-slate-500 flex-grow">
+                    <Table variant="simple">
+                    <Tbody>
+                         {sortedConsumerSessions.invited.consumersInfo.map(( cInfo ) => (
+                           <Tr key={sortedConsumerSessions.invited?.sessionTime}>
+                               <div className="flex justify-center">
+                                 <div className="flex items-center justify-center">
+                                   <Tr key={cInfo.consumer.id} onClick={() => redirectToConsumerPage(cInfo.consumer.id)}>
+                                     <Td className="hover:bg-slate-200 cursor-pointer">{cInfo.consumer.fullname}</Td>
+                                   </Tr>
+                                   <div className="flex gap-4 items-center content-between">
+                                     <div className="hover:bg-slate-200 cursor-pointer px-1">
+                                       <CloseIcon boxSize="0.7em" onClick={() => {removeNotConfirmed(session!.id, cInfo.consumer.id)}} />
+                                     </div>
+
+                                     <div className="hover:bg-slate-200 cursor-pointer px-1">
+                                       <SessionTimeSelector consumerId={cInfo.consumer.id} sessionId={session!.id} availableSessionTimes={availableSessionTimes} onSubmit={confirmSessionTime}></SessionTimeSelector>
+                                     </div>
+                                   </div>
+                                 </div>
+                               </div>
+
+                              </Tr>
+                         ))}
+                       
+                     </Tbody>
+                    </Table>
+                  </div>
+                </div>
+              }
+              { sortedConsumerSessions.confirmed.length != 0 && 
+                <div className="flex-grow">
+                  <Heading>Provadores Confirmados</Heading>
+                  <Table variant="simple">
+                    <Thead>
+                      <Tr>
+                        {sortedConsumerSessions.confirmed.map(({ sessionTime }) => (
+                          sessionTime && <Th key={sessionTime}>{sessionTime}</Th>
+                        ))}
+                      </Tr>
+                    </Thead>
+                    <Tbody>
+                      <Tr>
+                        {sortedConsumerSessions.confirmed.map(({ consumersInfo }) => (
+                          <Td key={consumersInfo[0].consumer.id}>
+                            {consumersInfo.map((consumerInfo) => (
+                              <div className="flex items-center">
+                                <Tr key={consumerInfo.consumer.id} onClick={() => redirectToConsumerPage(consumerInfo.consumer.id)}>
+                                  <Td className="hover:bg-slate-200 cursor-pointer">{consumerInfo.consumer.fullname}</Td>
+                                </Tr>
+                                <div className="hover:bg-slate-200 cursor-pointer">
+                                  {useCircleIcon(consumerInfo.attendance, (() => updateAttendance(session!.id, consumerInfo.consumer.id, consumerInfo.attendance)))}
+                                </div>                           
+                              </div>
+                            ))}
+                          </Td>
+                        ))}
+                      </Tr>
+                    </Tbody>
+                  </Table>
+                </div>
+              }
+            </div>
+          </div>
+        </div>
       }
     </>
   );
