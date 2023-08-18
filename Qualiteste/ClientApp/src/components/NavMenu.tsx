@@ -31,7 +31,7 @@ export default function NavMenu() {
   return (
     <header
       id="navmenu"
-      className={"sticky top-0 !z-[1000] shadow-sm shadow-slate-600"}
+      className={"shadow-sm shadow-slate-600"}
     >
       <nav className="bg-slate-900 border-gray-200 px-2 sm:px-4 py-2.5">
         <div className="container-fluid flex flex-wrap w-full items-center">

@@ -199,10 +199,10 @@ export default function Session() : React.ReactElement{
   return (
     <>
       {isLoading && 
-        <div className="flex flex-col justify-center items-center h-full">
+        <div className="flex flex-col justify-center items-center h-screen">
           <Spinner size="lg" />
         </div> || 
-        <div className="flex flex-col w-full h-full flex-shrink">
+        <div className="flex flex-col w-full h-[calc(100vh-72px)] overflow-y-hidden">
           <div className="flex justify-between content-center m-4">
             <Box as="h1" fontSize="2xl" fontWeight="bold">
               <Heading>{session!.id}</Heading>
@@ -226,53 +226,57 @@ export default function Session() : React.ReactElement{
             */}
 
             <Box>
-              <AddTestsModal onClickTest={addTest}/>
+              
             </Box>
 
             <Box>
-              <AddConsumersModal onSubmit={addConsumers}/>
+              
             </Box>
           </div>
-          <div className="flex flex-row flex-grow w-full h-full m-4">
+          <div className="flex flex-row flex-grow w-full h-full">
             <div className="flex flex-col content-center justify-center">
-              <div className="self-center">
-                <Heading>Tests</Heading>
-              </div>
-              <div className="shadow-2xl h-fit m-5 self-center">
-                  <Table>
+              <div className="flex flex-col shadow-2xl m-5 self-center rounded-xl bg-slate-200 h-2/3">
+                <div className="flex justify-between">
+                  <Heading className="self-center ml-4">Testes da Sessão</Heading>
+                  <AddTestsModal onClickTest={addTest}/>
+                </div>
+                <div className=" border-2 h-1/2 overflow-y-auto m-4 rounded-lg border-slate-500 flex-grow">
+                  <Table variant={"simple"}>
                     <Thead>
-                      <Tr>
-                        <Th>Test ID</Th>
-                        <Th>Type</Th>
-                        <Th>Number of Consumers</Th>
-                        <Th>Request Date</Th>
+                      <Tr className=" bg-slate-300">
+                        <Th>ID</Th>
+                        <Th>Tipo de teste</Th>
+                        <Th>Número de provadores</Th>
+                        <Th>Data de pedido</Th>
                       </Tr>
                     </Thead>
-                  <Tbody>
-                    {tests.map((test) => (
-                      <Tr className="hover:bg-slate-200 cursor-pointer" key={test.id} onClick={() => redirectToTestPage(test.id)}>
-                        <Td>{test.id}</Td>
-                        <Td>{test.type}</Td>
-                        <Td>{test.consumersNumber.toString()}</Td>
-                        <Td>{test.requestDate ?? "-"}</Td>
-                      </Tr>
-                    ))}
-                  </Tbody>
-                </Table>
-              </div>
-              
+                    <Tbody>
+                      {tests.map((test) => (
+                        <Tr className="hover:bg-slate-200 cursor-pointer h-4" key={test.id} onClick={() => redirectToTestPage(test.id)}>
+                          <Td>{test.id}</Td>
+                          <Td>{test.type}</Td>
+                          <Td>{test.consumersNumber.toString()}</Td>
+                          <Td>{test.requestDate ?? "-"}</Td>
+                        </Tr>
+                      ))}
+                    </Tbody>
+                  </Table>
+                </div>                 
+              </div>              
             </div>
-            <div className="flex flex-col">
+            <div className="flex flex-col w-2/3 mx-10 flex-grow justify-center content-center">
               { sortedConsumerSessions.invited! && 
-                <div className="flex-shrink">
-                  <>
-                    <Heading>Provadores Convidados</Heading>
-                    <Button onClick={() => {removeNotConfirmed(session!.id)}}>Limpar Convidados</Button>
+                <div className="flex flex-col shadow-2xl w-full m-5 self-center rounded-xl bg-slate-200 h-2/3">
+                  <div className="flex justify-between">
+                    <Heading className="self-center ml-4">Provadores Convidados</Heading>
+                    <Button bgColor={"gray.300"} className="self-center" onClick={() => {removeNotConfirmed(session!.id)}}>Limpar Convidados</Button>
+                    <AddConsumersModal onSubmit={addConsumers}/>
+                  </div>
+                  <div className=" border-2 h-1/2 overflow-y-auto m-4 rounded-lg border-slate-500 flex-grow">
                     <Table variant="simple">
                     <Tbody>
-                       <Tr>
                          {sortedConsumerSessions.invited.consumersInfo.map(( cInfo ) => (
-                           <Td key={sortedConsumerSessions.invited?.sessionTime}>
+                           <Tr key={sortedConsumerSessions.invited?.sessionTime}>
                                <div className="flex justify-center">
                                  <div className="flex items-center justify-center">
                                    <Tr key={cInfo.consumer.id} onClick={() => redirectToConsumerPage(cInfo.consumer.id)}>
@@ -290,17 +294,16 @@ export default function Session() : React.ReactElement{
                                  </div>
                                </div>
 
-
-                           </Td>
+                              </Tr>
                          ))}
-                       </Tr>
+                       
                      </Tbody>
                     </Table>
-                  </>
+                  </div>
                 </div>
               }
-              { sortedConsumerSessions.confirmed! && 
-                <div className="flex-shrink">
+              { sortedConsumerSessions.confirmed.length != 0 && 
+                <div className="flex-grow">
                   <Heading>Provadores Confirmados</Heading>
                   <Table variant="simple">
                     <Thead>

@@ -39,6 +39,7 @@ export default function AddTestsModal({onClickTest} : ModalProps) : React.ReactE
             <Button
                 onClick={onOpen}
                 m={4}
+                bgColor={"gray.300"}
                 >{`Adicionar Teste`}
             </Button>
             <Modal onClose={onClose} size="5xl" isOpen={isOpen}>
