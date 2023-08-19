@@ -171,7 +171,7 @@ export default function Session() : React.ReactElement{
     setTests(tests);
     
   }
-
+  
   // Helper function to group the consumerSessions by sessionTime
   const groupConsumerSessionsByTime = (): {confirmed : ConsumersInSession[], invited? : ConsumersInSession} => {
     const grouped: { [key: string]: ConsumerAttendance[] } = {};
@@ -238,10 +238,10 @@ export default function Session() : React.ReactElement{
             <div className="flex flex-col content-center justify-center">
               <div className="flex flex-col shadow-2xl m-5 self-center rounded-xl bg-slate-100 h-2/3">
                 <div className="flex justify-between">
-                  <Heading className="self-center ml-4">Testes da Sessão</Heading>
+                  <Heading size={"md"} className="self-center ml-4">Testes da Sessão</Heading>
                   <AddTestsModal onClickTest={addTest}/>
                 </div>
-                <div className=" border-2 h-1/2 overflow-y-auto m-4 rounded-lg border-slate-500 flex-grow">
+                <div className=" border-2 h-1/2 overflow-y-auto m-4 rounded-lg border-slate-500 flex-grow scrollbar-thin scrollbar-thumb-slate-300 scrollbar-thumb-rounded-lg scrollbar-track-slate-300'">
                   <Table variant={"simple"}>
                     <Thead>
                       <Tr className=" bg-slate-200">
@@ -268,56 +268,65 @@ export default function Session() : React.ReactElement{
             <div className="flex flex-col w-2/3 mx-10 flex-grow justify-center content-center">
               <div className="flex flex-row shadow-2xl w-full m-5 self-center rounded-xl bg-slate-100 h-2/3 gap-4 justify-between">              
                 <div className="flex flex-col w-2/5 justify-between">
-                  {/* <Button bgColor={"gray.300"} className="self-center" onClick={() => {removeNotConfirmed(session!.id)}}>Limpar Convidados</Button>
-                  <AddConsumersModal onSubmit={addConsumers}/> */}
-                  <Heading className="self-center mx-4">Provadores Convidados</Heading>
-                  <div className="flex flex-col border-2 h-full overflow-y-auto m-4 rounded-lg border-slate-500 ">
-                    <div className="flex flex-grow">
-                      <Table variant="simple" size="sm">
-                        <Tbody>
-                          {sortedConsumerSessions.invited?.consumersInfo.map(( cInfo ) => (
-                            <Tr className="flex flex-grow w-full flex-row" key={sortedConsumerSessions.invited?.sessionTime}>
-                              <Td className="hover:bg-slate-300 cursor-pointer flex flex-grow" onClick={() => redirectToConsumerPage(cInfo.consumer.id)}>{cInfo.consumer.fullname}</Td>
-                              <Td className=" hover:bg-red-400 cursor-pointer flex justify-center content-center"><CloseIcon className="self-center" boxSize="0.7em" onClick={() => {removeNotConfirmed(session!.id, cInfo.consumer.id)}} /></Td>
-                              <Td className="hover:bg-green-300 cursor-pointer flex justify-center content-center"><SessionTimeSelector consumerId={cInfo.consumer.id} sessionId={session!.id} availableSessionTimes={availableSessionTimes} onSubmit={confirmSessionTime}></SessionTimeSelector></Td>
-                            </Tr>
-                          ))}                     
-                        </Tbody>
-                      </Table>
+                  <div className="flex justify-between content-center overflow-hidden">
+                    <Heading size={"md"} className="self-center mx-4 mt-2">Provadores Convidados</Heading>
+                    <AddConsumersModal onSubmit={addConsumers}/>
+                  </div>
+                  <div className="flex flex-col border-2 h-full m-4 rounded-lg border-slate-500 overflow-hidden">
+                    <div className="flex flex-col flex-shrink overflow-y-auto scrollbar-thin scrollbar-thumb-slate-300 scrollbar-thumb-rounded-lg scrollbar-track-slate-300'">
+                      <div className="flex flex-grow">
+                        <Table variant="simple" size="sm">
+                          <Tbody>
+                            {sortedConsumerSessions.invited?.consumersInfo.map(( cInfo ) => (
+                              <Tr className="flex flex-grow w-full flex-row" key={sortedConsumerSessions.invited?.sessionTime}>
+                                <Td className="hover:bg-slate-300 cursor-pointer flex flex-grow" onClick={() => redirectToConsumerPage(cInfo.consumer.id)}>{cInfo.consumer.fullname}</Td>
+                                <Td className=" hover:bg-red-400 cursor-pointer flex justify-center content-center"><CloseIcon className="self-center" boxSize="0.7em" onClick={() => {removeNotConfirmed(session!.id, cInfo.consumer.id)}} /></Td>
+                                <Td className="hover:bg-green-300 cursor-pointer flex justify-center content-center"><SessionTimeSelector consumerId={cInfo.consumer.id} sessionId={session!.id} availableSessionTimes={availableSessionTimes} onSubmit={confirmSessionTime}></SessionTimeSelector></Td>
+                              </Tr>
+                            ))}                     
+                          </Tbody>
+                        </Table>
+                      </div>
+                    </div>
+                    <div className="flex w-full bg-slate-300 self-baseline hover:bg-slate-200">
+                      <Button bgColor={"gray.300"} className="flex grow w-full rounded-b-lg rounded-t-none" onClick={() => {removeNotConfirmed(session!.id)}}>Limpar Convidados</Button>
                     </div>
                   </div>
                 </div>              
                 <div className="flex flex-col w-3/5">
-                  <Heading className="justify-center self-center">Provadores Confirmados</Heading>
-                  <div className=" border-2 h-full 2-full overflow-y-auto m-4 rounded-lg border-slate-500 ">
-                    <Table variant="simple">
-                      <Thead>
-                        <Tr>
-                          {sortedConsumerSessions.confirmed.map(({ sessionTime }) => (
-                            sessionTime && <Th key={sessionTime}>{sessionTime}</Th>
-                          ))}
-                        </Tr>
-                      </Thead>
-                      <Tbody>
-                        <Tr>
-                          {sortedConsumerSessions.confirmed.map(({ consumersInfo }) => (
-                            <Td key={consumersInfo[0].consumer.id}>
-                              {consumersInfo.map((consumerInfo) => (
-                                <div className="flex items-center">
-                                  <Tr key={consumerInfo.consumer.id} onClick={() => redirectToConsumerPage(consumerInfo.consumer.id)}>
-                                    <Td className="hover:bg-slate-200 cursor-pointer">{consumerInfo.consumer.fullname}</Td>
-                                  </Tr>
-                                  <div className="hover:bg-slate-200 cursor-pointer">
-                                    {useCircleIcon(consumerInfo.attendance, (() => updateAttendance(session!.id, consumerInfo.consumer.id, consumerInfo.attendance)))}
-                                  </div>                           
-                                </div>
+                  <Heading size={"md"} className="justify-center self-center">Provadores Confirmados</Heading>
+                  <div className="flex flex-row border-2 h-full w-full m-4 rounded-lg border-slate-500 overflow-y-hidden overflow-x-auto">
+                    {sortedConsumerSessions.confirmed.map(({ sessionTime, consumersInfo }) => (
+                      sessionTime && (
+                        <div className=" overflow-y-auto overflow-x-hidden w-1/2 rounded-lg border-slate-500 scrollbar-thin scrollbar-thumb-slate-300 scrollbar-thumb-rounded-lg scrollbar-track-slate-300'">
+                          <Table variant="simple" size={"sm"}>
+                            <Thead>
+                              <Tr className=" bg-slate-200">
+                                <Th>
+                                  {sessionTime}
+                                </Th> 
+                              </Tr>
+                            </Thead>
+                            <Tbody>
+                              {consumersInfo.map((consumer => (
+                                  <Tr key={consumer.consumer.id} onClick={() => redirectToConsumerPage(consumer.consumer.id)}>
+                                    <Td className="flex flex-row">
+                                      <div>
+                                        {useCircleIcon(consumer.attendance, (() => updateAttendance(session!.id, consumer.consumer.id, consumer.attendance)))}
+                                      </div>
+                                      <div className="hover:bg-slate-200 cursor-pointer">
+                                        {consumer.consumer.fullname}
+                                      </div>
+                                      </Td>
+                                  </Tr>           
+                                )
                               ))}
-                            </Td>
-                          ))}
-                        </Tr>
-                      </Tbody>
-                    </Table>
-                  </div>
+                            </Tbody>
+                          </Table>
+                        </div>
+                      )
+                    ))}    
+                  </div>                  
                 </div>
               </div>  
             </div>
