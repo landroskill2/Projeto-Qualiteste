@@ -53,7 +53,7 @@ export default function Consumer(): React.ReactElement {
       </div>
       <div>
         <div className='flex-grow justify-center items-center'>
-          <div className='p-10 rounded-lg shadow-lg'>
+          <div className='p-10 rounded-lg shadow-2xl'>
             <Box as="h2" fontSize="xl" fontWeight="bold" mb={4}>
                Dados do Provador
              </Box>
@@ -82,7 +82,7 @@ export default function Consumer(): React.ReactElement {
       </div>
       <div className='flex flex-row flex-grow gap-10'>
         <div className="min-h-full w-fit flex-grow">
-          <div className='min-h-full p-10 rounded-lg shadow-lg max-w-lg'>
+          <div className='min-h-full p-10 rounded-lg shadow-2xl max-w-lg'>
             <Box as="h2" fontSize="xl" fontWeight="bold" mb={4}>
                Sessões do Provador
              </Box>
@@ -107,7 +107,7 @@ export default function Consumer(): React.ReactElement {
         </div>
 
         <div className='min-h-full w-fit justify-center items-center flex-grow'>
-          <div className='p-10 rounded-lg shadow-lg min-h-full'>
+          <div className='p-10 rounded-lg shadow-2xl min-h-full'>
             <Box as="h2" fontSize="xl" fontWeight="bold" mb={4}>
               Testes HT
             </Box>

@@ -45,7 +45,7 @@ export default function SessionTimeSelector({consumerId, sessionId, availableSes
              closeOnBlur={true}
             >
                 <PopoverTrigger>
-                    <CheckIcon boxSize="0.9em"/>
+                    <CheckIcon className="self-center" boxSize="0.9em"/>
                 </PopoverTrigger>
                 <PopoverContent p={5}>
                     <FocusLock persistentFocus={false}>
