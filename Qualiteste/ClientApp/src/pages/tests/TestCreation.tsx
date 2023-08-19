@@ -243,7 +243,7 @@ export default function TestCreation(): React.ReactElement {
                   <FormLabel textColor={"white"}>Produto em teste</FormLabel>
                   {productToTestReference === "" ? (
                       <div>
-                        <AddProductsModal onClickProduct={setProductToTest} excludeProducts={addedProducts} buttonText={"Associar produto"}/>
+                        <AddProductsModal onClickProduct={setProductToTest} excludeProducts={addedProducts} onClickCreateProduct={onCreateProduct} buttonText={"Associar produto"}/>
                       </div>
                   ) : 
                   (
@@ -272,8 +272,7 @@ export default function TestCreation(): React.ReactElement {
             <DraggableProductTable elements={addedProducts} setElements={setAddedProducts} productToTest={formValues.product}></DraggableProductTable>
           </div>
           <div className="flex w-full gap-4">
-            <AddProductsModal onClickProduct={addSampleToTest} excludeProducts={addedProducts} buttonText="Adicionar amostras"/>
-            <CreateProductModal onSubmit={onCreateProduct}/>
+            <AddProductsModal onClickProduct={addSampleToTest} excludeProducts={addedProducts} onClickCreateProduct={onCreateProduct} buttonText="Adicionar amostras"/>
           </div>
         </div>
       </div>

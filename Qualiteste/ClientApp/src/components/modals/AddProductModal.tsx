@@ -11,17 +11,19 @@ import {
     Spinner,
   } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
-import { ProductOutputModel } from '../../common/Interfaces/Products';
+import { ProductInputModel, ProductOutputModel } from '../../common/Interfaces/Products';
 import { queryProducts } from '../../common/APICalls';
 import ProductsTable from '../tables/ProductsTable';
+import CreateProductModal from './CreateProductModal';
 
 type ModalProps = {
     onClickProduct? : (product : ProductOutputModel) => void
+    onClickCreateProduct : (product : ProductInputModel) => void
     buttonText? : string
     excludeProducts? : ProductOutputModel[]
 }
 
-export default function AddProductsModal({onClickProduct, buttonText, excludeProducts} : ModalProps, ) : React.ReactElement {
+export default function AddProductsModal({onClickProduct, buttonText, onClickCreateProduct, excludeProducts} : ModalProps, ) : React.ReactElement {
     const [products, setProducts] = useState<ProductOutputModel[] | null>(null);
     const { isOpen, onOpen, onClose } = useDisclosure()
 
@@ -69,6 +71,7 @@ export default function AddProductsModal({onClickProduct, buttonText, excludePro
                         )}
                     </ModalBody>
                     <ModalFooter>
+                        <CreateProductModal onSubmit={onClickCreateProduct}/>
                         <Button onClick={onClose}>Close</Button>
                     </ModalFooter>
                 </ModalContent>
