@@ -25,6 +25,7 @@ import AddConsumersModal from "../../components/modals/AddConsumersModal";
 import SessionTimeSelector from "../../components/SessionTimeSelector";
 import AddTestsModal from "../../components/modals/AddTestsModal";
 import { useGlobalToast } from "../../common/useGlobalToast";
+import { CircleIconDiv } from "../../components/CIrcleIconDiv";
 
 type ConsumersInSession = {
   sessionTime: string,
@@ -84,8 +85,22 @@ export default function Session() : React.ReactElement{
     }
 
     return (
-      <CircleIcon boxSize={4} onClick={onClick} color={currColor}></CircleIcon>
+      <div className="flex hover:bg-slate-300 cursor-pointer justify-center items-center content-center" onClick={onClick} onMouseOver={() => {currColor = nextColorState(attendance)}}>
+        <CircleIcon boxSize={4} className="self-center" color={currColor}></CircleIcon>
+      </div>
     )
+  }
+
+  function nextColorState(attendance : boolean | undefined) : string {
+    console.log(attendance)
+    switch(attendance){
+      case true:
+        return 'red.500'
+      case false:
+        return 'green.500'
+      default : 
+        return 'green.500'
+    }
   }
 
   const redirectToConsumerPage = (id: number) => {
@@ -204,12 +219,20 @@ export default function Session() : React.ReactElement{
           <Spinner size="lg" />
         </div> || 
         <div className="flex flex-col w-full h-[calc(100vh-72px)] overflow-y-hidden">
-          <div className="flex justify-between content-center m-4">
-            <Box as="h1" fontSize="2xl" fontWeight="bold">
+          <div className="flex justify-between content-center m-4 flex-grow h-1/6">
+            <div className="flex flex-col flex-grow shadow-2xl self-center rounded-xl bg-slate-100 h-full m-4 mt-10 pb-7">
+              <div className="flex justify-center content-center">
+                <Heading size={"lg"} className="self-center ml-4">Dados da Sessão</Heading>
+              </div>
+              <div className=" border-2 h-1/2 overflow-y-auto m-4 rounded-lg border-slate-500 flex-grow scrollbar-thin scrollbar-thumb-slate-300 scrollbar-thumb-rounded-lg scrollbar-track-slate-300'">
+
+              </div>
+            </div>
+            {/* <Box as="h1" fontSize="2xl" fontWeight="bold">
               <Heading>{session!.id}</Heading>
             </Box>
 
-            {/*
+            
             <Table>
               <Thead>
                 <Tr>
@@ -224,7 +247,7 @@ export default function Session() : React.ReactElement{
                 </Tr>
               </Tbody>
             </Table>
-            */}
+           
 
             <Box>
               
@@ -232,11 +255,11 @@ export default function Session() : React.ReactElement{
 
             <Box>
               
-            </Box>
+            </Box> */}
           </div>
-          <div className="flex flex-row flex-grow w-full h-full">
-            <div className="flex flex-col content-center justify-center">
-              <div className="flex flex-col shadow-2xl m-5 self-center rounded-xl bg-slate-100 h-2/3">
+          <div className="flex flex-row flex-grow w-full h-3/5">
+            <div className="flex flex-col content-center justify-center h-full flex-grow">
+              <div className="flex flex-col flex-grow shadow-2xl m-5 self-center rounded-xl bg-slate-100 h-2/3">
                 <div className="flex justify-between">
                   <Heading size={"md"} className="self-center ml-4">Testes da Sessão</Heading>
                   <AddTestsModal onClickTest={addTest}/>
@@ -266,14 +289,14 @@ export default function Session() : React.ReactElement{
               </div>              
             </div>
             <div className="flex flex-col w-2/3 mx-10 flex-grow justify-center content-center">
-              <div className="flex flex-row shadow-2xl w-full m-5 self-center rounded-xl bg-slate-100 h-2/3 gap-4 justify-between">              
+              <div className="flex flex-row flex-grow shadow-2xl w-full m-5 self-center rounded-xl bg-slate-100 h-2/3 gap-4 justify-between">              
                 <div className="flex flex-col w-2/5 justify-between">
                   <div className="flex justify-between content-center overflow-hidden">
                     <Heading size={"md"} className="self-center mx-4 mt-2">Provadores Convidados</Heading>
                     <AddConsumersModal onSubmit={addConsumers}/>
                   </div>
                   <div className="flex flex-col border-2 h-full m-4 rounded-lg border-slate-500 overflow-hidden">
-                    <div className="flex flex-col flex-shrink overflow-y-auto scrollbar-thin scrollbar-thumb-slate-300 scrollbar-thumb-rounded-lg scrollbar-track-slate-300'">
+                    <div className="flex flex-col flex-grow overflow-y-auto scrollbar-thin scrollbar-thumb-slate-300 scrollbar-thumb-rounded-lg scrollbar-track-slate-300'">
                       <div className="flex flex-grow">
                         <Table variant="simple" size="sm">
                           <Tbody>
@@ -295,12 +318,12 @@ export default function Session() : React.ReactElement{
                 </div>              
                 <div className="flex flex-col w-3/5">
                   <Heading size={"md"} className="justify-center self-center">Provadores Confirmados</Heading>
-                  <div className="flex flex-row border-2 h-full w-full m-4 rounded-lg border-slate-500 overflow-y-hidden overflow-x-auto">
+                  <div className=" flex overflow-x-auto flex-shrink border-2 h-full m-4 rounded-lg border-slate-500 overflow-y-hidden scrollbar-thin scrollbar-thumb-slate-300 scrollbar-thumb-rounded-lg scrollbar-track-slate-300'">
                     {sortedConsumerSessions.confirmed.map(({ sessionTime, consumersInfo }) => (
                       sessionTime && (
-                        <div className=" overflow-y-auto overflow-x-hidden w-1/2 rounded-lg border-slate-500 scrollbar-thin scrollbar-thumb-slate-300 scrollbar-thumb-rounded-lg scrollbar-track-slate-300'">
+                        <div className="flex-shrink-0 overflow-y-auto overflow-x-hidden flex-grow min-w-1/3 border-r border-slate-500 scrollbar-thin scrollbar-thumb-slate-300 scrollbar-thumb-rounded-lg scrollbar-track-slate-300'">
                           <Table variant="simple" size={"sm"}>
-                            <Thead>
+                            <Thead top={0} zIndex="docked" position={"sticky"} className="rounded-lg bg-slate-300 ">
                               <Tr className=" bg-slate-200">
                                 <Th>
                                   {sessionTime}
@@ -309,15 +332,14 @@ export default function Session() : React.ReactElement{
                             </Thead>
                             <Tbody>
                               {consumersInfo.map((consumer => (
-                                  <Tr key={consumer.consumer.id} onClick={() => redirectToConsumerPage(consumer.consumer.id)}>
-                                    <Td className="flex flex-row">
-                                      <div>
-                                        {useCircleIcon(consumer.attendance, (() => updateAttendance(session!.id, consumer.consumer.id, consumer.attendance)))}
-                                      </div>
-                                      <div className="hover:bg-slate-200 cursor-pointer">
+                                  <Tr key={consumer.consumer.id}>
+                                    <div className="flex flex-grow w-full"> 
+                                      <CircleIconDiv attendance={consumer.attendance} onClick={() => updateAttendance(session!.id, consumer.consumer.id, consumer.attendance)}></CircleIconDiv>                                                               
+                                      <Td className="flex flex-row flex-grow hover:bg-slate-300 cursor-pointer" onClick={() => redirectToConsumerPage(consumer.consumer.id)}>                                    
                                         {consumer.consumer.fullname}
-                                      </div>
                                       </Td>
+                                    </div>
+                                    
                                   </Tr>           
                                 )
                               ))}
