@@ -75,7 +75,7 @@ export default function Consumers(): React.ReactElement{
         </div>
       )}
       <div className="content-end justify-end items-baseline">
-        <WithPermission roleRequired="ADMIN">
+        <WithPermission allowedRoles={["ADMIN"]}>
           <div className="p-6 bg-white" style={{ flexShrink: 0 }}>
             <Button colorScheme="blue" onClick={redirectToConsumerCreation}>
               Criar Provador

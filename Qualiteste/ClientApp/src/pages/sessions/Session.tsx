@@ -43,6 +43,8 @@ export default function Session() : React.ReactElement{
   const [consumerSessions, setConsumerSessions] = useState<IConsumerSessionOutputModel[]>([]);
   const [tests, setTests] = useState<ITestOutputModel[]>([]);
   const [isLoading, setIsLoading] = useState(true)
+  let invitedConsumersNumber = 0
+  let confirmedConsumersNumber = 0
   
 
   const {id} = useParams()
@@ -183,8 +185,7 @@ export default function Session() : React.ReactElement{
 
     setSession(session);
     setConsumerSessions(consumers);
-    setTests(tests);
-    
+    setTests(tests);    
   }
   
   // Helper function to group the consumerSessions by sessionTime
@@ -202,9 +203,16 @@ export default function Session() : React.ReactElement{
     // convert the grouped object to an array of objects with sessionTime and consumers properties
     const confirmed = [];
     let invited : ConsumersInSession | undefined
+
     for (const [sessionTime, consumersInfo] of Object.entries(grouped)) {
-      if(sessionTime === "null") invited = { sessionTime : "Convidados", consumersInfo };
-      else confirmed.push({ sessionTime, consumersInfo });
+      if(sessionTime === "null"){
+        invited = { sessionTime : "Convidados", consumersInfo };
+        invitedConsumersNumber++
+      } 
+      else{
+        confirmed.push({ sessionTime, consumersInfo });
+        confirmedConsumersNumber++
+      } 
     }
     return {confirmed, invited};
   };
@@ -224,8 +232,47 @@ export default function Session() : React.ReactElement{
               <div className="flex justify-center content-center">
                 <Heading size={"lg"} className="self-center ml-4">Dados da Sessão</Heading>
               </div>
-              <div className=" border-2 h-1/2 overflow-y-auto m-4 rounded-lg border-slate-500 flex-grow scrollbar-thin scrollbar-thumb-slate-300 scrollbar-thumb-rounded-lg scrollbar-track-slate-300'">
-
+              <div className="flex flex-row justify-center content-center border-2 h-1/2 overflow-y-auto m-4 rounded-lg border-slate-500 flex-grow scrollbar-thin scrollbar-thumb-slate-300 scrollbar-thumb-rounded-lg scrollbar-track-slate-300'">
+                <div className="flex flex-row w-1/5">
+                  <div className="w-1/2">
+                    Id da Sessão
+                  </div>
+                  <div  className="w-1/2">
+                    {session?.id}
+                  </div>
+                </div>
+                <div className="flex flex-row w-1/5">
+                  <div  className="w-1/2">
+                    Data da Sessão
+                  </div>
+                  <div  className="w-1/2">
+                    {session?.date}
+                  </div>
+                </div>
+                <div className="flex flex-row w-1/5">
+                  <div  className="w-1/2">
+                    Número de provadores pretendidos
+                  </div>
+                  <div  className="w-1/2">
+                    {session?.consumersNumber}
+                  </div>
+                </div>
+                <div className="flex flex-row w-1/5">
+                  <div  className="w-1/2">
+                    Número de provadores convidados
+                  </div>
+                  <div  className="w-1/2">
+                    {invitedConsumersNumber}
+                  </div>
+                </div>
+                <div className="flex flex-row w-1/5">
+                  <div  className="w-1/2">
+                    Número de provadores confirmados
+                  </div>
+                  <div  className="w-1/2">
+                    {confirmedConsumersNumber}
+                  </div>
+                </div>
               </div>
             </div>
             {/* <Box as="h1" fontSize="2xl" fontWeight="bold">
