@@ -165,6 +165,7 @@ INSERT INTO PRODUCT(ProductID, Ref, Designation, Brand) VALUES
 (321332, 'JM-2313-01', 'Fiambre Fatiado', 'Continente'),
 (324231, 'PD-2313-01', 'Fiambre Fatiado', 'Pingo Doce'),
 (573626, 'AC-2312-01', 'Pastel de Nata', 'Auchan'),
+(321321, 'PD-2312-05', 'Pastel de Nata', 'Pingo Doce'),
 (123123, 'JM-2314-01', 'Mala Eastpack', 'Continente');
 
 INSERT INTO SESSION(SessionID, SessionDate, ConsumersNumber) VALUES
@@ -177,27 +178,31 @@ INSERT INTO ROLES(RoleDesignation) VALUES
 
 INSERT INTO USERS(Username, Pwd, Role) VALUES
 ('admin', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', 1),
-('client', '948fe603f61dc036b5c596dc09fe3ce3f3d30dc90f024c85f3c82db2ccab679d', 2);
+('client', '948fe603f61dc036b5c596dc09fe3ce3f3d30dc90f024c85f3c82db2ccab679d', 2),
+('continente', '948fe603f61dc036b5c596dc09fe3ce3f3d30dc90f024c85f3c82db2ccab679d', 2),
+('JM-quali', '948fe603f61dc036b5c596dc09fe3ce3f3d30dc90f024c85f3c82db2ccab679d', 2),
+('intermarche', '948fe603f61dc036b5c596dc09fe3ce3f3d30dc90f024c85f3c82db2ccab679d', 2),
+('PD-quali', '948fe603f61dc036b5c596dc09fe3ce3f3d30dc90f024c85f3c82db2ccab679d', 2);
+
 
 INSERT INTO CLIENT(Id, Designation, Username) VALUES
-('clientID', 'client', 'client');
-('Conti', 'Continente', 'continente');
-('JM', 'Jerónimo Martins', 'JM-quali');
-('IM', 'Intermarché', 'intermarche');
+('clientID', 'client', 'client'),
+('Conti', 'Continente', 'continente'),
+('JM', 'Jerónimo Martins', 'JM-quali'),
+('IM', 'Intermarché', 'intermarche'),
 ('PD', 'Pingo Doce', 'PD-quali');
 
 INSERT INTO TEST(InternalID, ClientID, Product, TestType, ConsumersNumber, RequestDate, ValidationDate, DueDate, ReportDeliveryDate, SessionID) VALUES
-('443244', 'clientID', 122332, 'SP', 10, '2023-03-21', null, null, null, '040423'),
+('443244', 'clientID', 321321, 'SP', 10, '2023-03-21', null, null, null, '040423'),
 ('343123', 'clientID', 324231, 'SP', 10, '2023-03-29', null, null, null, '040423'),
 ('583828', 'clientID', 573626, 'SP', 36, '2023-05-20', null, null, null, '250523'),
 ('041234', 'clientID', 123123, 'HT', 10, '2023-03-29', null, null, null, null);
 
 INSERT INTO SAMPLE(TestID, ProductID, PresentationPosition, ReceptionDate) VALUES
-('443244', 132321, 1, '2023-03-24'),
-('443244', 231233, 2, '2023-03-25'),
-('343123', 321332, 1, '2023-04-01'),
-('583828', 573626, 1, '2023-05-16'),
-('041234', 123123, 1, '2023-04-01');
+('443244', 321321, 0, '2023-03-24'),
+('343123', 321332, 0, '2023-04-01'),
+('583828', 573626, 0, '2023-05-16'),
+('041234', 123123, 0, '2023-04-01');
 
 INSERT INTO CONSUMER_SESSION(SessionID, ConsumerID, ContactedDate, ConfirmationDate, SessionTime, Attendance, StampDate) VALUES
 ('040423', 6, '2023-03-01', '2023-03-02', '11:00', null, null),

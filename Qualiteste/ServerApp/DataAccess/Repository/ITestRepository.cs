@@ -15,8 +15,8 @@ namespace Qualiteste.ServerApp.DataAccess.Repository
 
         void AddAliasToFizzAttribute(string testId, FizzAliasDto[] alias);
         void AddAttributeValue(AttributeValue attributeValue);
-        Dictionary<string, string> GetFizzColumns(int id);
-        IEnumerable<IGrouping<int, AttributeValue>> GetFizzValuesGroupedByConsumer(int id);
+        Dictionary<string, string> GetFizzColumns(string id);
+        IEnumerable<IGrouping<int, AttributeValue>> GetFizzValuesGroupedByConsumer(string id);
         void AddConsumerToTest(string id, IEnumerable<int> consumer);
         IEnumerable<Test> GetTestsByClient(string clientID);
         Test? GetClientTestsByID(string clientID, string id);

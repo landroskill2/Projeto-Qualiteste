@@ -141,7 +141,7 @@ namespace Qualiteste.ServerApp.Controllers
         [Authorize(Roles = "ADMIN")]
         [HttpPut("{id}")]
         [ProducesResponseType(200, Type = typeof(TestOutputModel))]
-        public IActionResult UpdateTest(int id, [FromBody] TestInputModel testInput)
+        public IActionResult UpdateTest(string id, [FromBody] TestInputModel testInput)
         {
             try
             {
@@ -177,7 +177,7 @@ namespace Qualiteste.ServerApp.Controllers
         }
         [Authorize(Roles = "ADMIN")]
         [HttpGet("{id}/fizz")]
-        public IActionResult GetFizzTable(int id)
+        public IActionResult GetFizzTable(string id)
         {
             try
             {
@@ -211,7 +211,7 @@ namespace Qualiteste.ServerApp.Controllers
 
         [Authorize(Roles = "ADMIN")]
         [HttpPost("{id}/upload")]
-        public async Task<IActionResult> UploadCSV(int id, IFormFile csvFile)
+        public async Task<IActionResult> UploadCSV(string id, IFormFile csvFile)
         {
             try
             {
