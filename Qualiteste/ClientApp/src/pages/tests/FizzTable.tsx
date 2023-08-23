@@ -3,10 +3,11 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import React from "react";
 import { useEffect, useState } from "react";
 import { IFizzValues, ISampleOutputModel } from '../../common/Interfaces/Tests';
-import { Box, Table, Thead, Tbody, Tr, Th, Td, Button, Heading, Spinner } from "@chakra-ui/react";
+import { Box, Table, Thead, Tbody, Tr, Th, Td, Button, Heading, Spinner, Collapse } from "@chakra-ui/react";
 import { AttributeAliasField } from '../../components/AttributeAliasField';
 import FizzAttribute from '../../common/Interfaces/FizzAttributes';
 import { useGlobalToast } from '../../common/useGlobalToast';
+import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
 
 export default function FizzResults(): React.ReactElement {
   const [data, setData] = useState<IFizzValues | null>(null);
@@ -19,6 +20,8 @@ export default function FizzResults(): React.ReactElement {
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const {addToast, isToastActive} = useGlobalToast()
   const {state} = useLocation()
+  const [show, setShow] = useState<boolean[]>()
+  const navigate = useNavigate()
 
   //test id
   const { id } = useParams();
@@ -43,11 +46,14 @@ export default function FizzResults(): React.ReactElement {
     )
   }
 
+  const handleShowToggle = (index : number) => {
+    show![index] = !show![index]
+    setShow([...show!])
+  }
+
   async function onSave() {
     setEditMode(false)
-    console.log(changedAlias)
     const resp = await changeFizzAttributesAlias(id!, changedAlias)
-    console.log(resp)
     if(resp.status === 200) {
       setIsLoading(true)
       populateValues().then(() => {
@@ -90,14 +96,14 @@ export default function FizzResults(): React.ReactElement {
         }
         //adds consumer id to the productObj
         productObj["CJ"] = values.columns["CJ"]
-
         // Add the column to the product object
         productObj[columnName] = columnValue;
-        //if(columnName == "CJ")productObj["CJ"] = data!.consumersInfo.find(e => e.id == Number(columnValue) )!.consumerName
+
       }
     }
     setCommonColumns(newCommonColumns);
     setProductColumns(newProductColumns);
+    setShow(Array(newProductColumns.length).fill(false))
   }
   //set missing consumers on session as red
   data?.consumersInfo.filter(e => e.presence == 1).forEach(e => {
@@ -106,98 +112,109 @@ export default function FizzResults(): React.ReactElement {
 
   return (
     <>
-      <div className='flex justify-center items-center border-2 rounded-lg m-4 h-12 bg-slate-300'>
-        Insert Test Id, date and belonging session here
-      </div>
       {isLoading && 
         <div className="flex flex-col justify-center items-center h-full">
           <Spinner size="lg" />
         </div>||
-        <div className='flex w-full flex-grow flex-col '>
-          <div className='flex flex-col rounded-md m-4 h-96'>
-            {data && (
-              <div className='border-2 rounded-lg border-slate-300 h-96 overflow-y-scroll scrollbar-thin scrollbar-thumb-slate-600 scrollbar-thumb-rounded-lg scrollbar-track-slate-300'>
-                <Table variant="simple" size="sm" >
-                  <Thead position='sticky' top={0} zIndex="docked" className="rounded-lg bg-slate-300 ">
-                    <Tr className='flex-grow w-full '>
-                      {Object.entries(commonColumns).map(([columnName, columnValue]) => (
-                        <Th key={columnName}>
-                          <AttributeAliasField name={columnName} value={columnValue} editMode={editMode} addChangedAlias={addChangedAlias}></AttributeAliasField>
-                        </Th>
-                      ))}
-                    </Tr>
-                  </Thead>
-                  <Tbody className="w-full h-96" overflowY={"scroll"}>
-                      {data.rows.map((row, index) => (
-                        <Tr className={"row"+Number(row["CJ"]).toString()}>
-                          {Object.entries(commonColumns).map(([columnName, _]) => (
-                            <Td key={columnName}>{row[columnName]}</Td>
-                          ))}
-                        </Tr>
-                      ))}
-                  </Tbody>
-                </Table>
+        <div className='flex flex-col flex-grow justify-center items-center w-full m-4'>
+          <div className='flex flex-row w-full'>
+            <div className='flex flex-row flex-grow justify-between mx-4 rounded-lg bg-slate-100 border-2 items-center'>
+              <div className='ml-1 hover:bg-slate-300 cursor-pointer rounded-lg ' onClick={()=> navigate(`/tests/${id}`)}>
+                <Heading px={4} >Teste {id}</Heading>
               </div>
-            )}
-            <div className='gap-4 py-2'>
-              {!editMode && 
-                <Button onClick={() => setEditMode(true)}>Editar nomes</Button>
-                ||
-                <div className='flex flex-row w-1/5 gap-2'>
-                  <Button onClick={() => onSave()}>Guardar</Button>
-                  <Button onClick={() => setEditMode(false)}>Cancelar</Button>
-                </div>
-                }
-            </div>
-          </div>
-          <div>
-            {
-              productColumns.map((product, index) =>{
-                return (
-                  <>
-                    <Heading className='mx-6 mt-3'>{(productOrder.find(p => p.presentationPosition === index)?.productRef)} - {(productOrder.find(p => p.presentationPosition === (index))?.productDesignation)}</Heading>
-                    <div key={product.productKey} className='flex flex-col m-4 h-96 border-2 rounded-lg border-slate-300 overflow-y-scroll scrollbar-thin scrollbar-thumb-slate-600 scrollbar-thumb-rounded-lg scrollbar-track-slate-300'>
-                      <Table variant="simple" size="sm" >
-                        <Thead position='sticky' top={0} zIndex="docked" className="rounded-lg bg-slate-300 ">
-                          <Tr className='flex-grow w-full'>{
-                            Object.entries(product).map(([columnName, columnValue]) => {
-                              if (columnName !== "productKey") {
-                                return <Th key={columnName}> 
-                                       <AttributeAliasField name={columnName} value={columnValue} editMode={editMode} addChangedAlias={addChangedAlias}></AttributeAliasField>
-                                      </Th>;
-                              }
-                            })
-                          }</Tr>
-                      </Thead>
-                      <Tbody>
-                      {data?.rows.map((row, rowIndex) => (
-                      <Tr className={"row"+Number(row["CJ"]).toString()}>
-                        {Object.entries(product).map(([columnName, _]) => {
-                          if (columnName !== "productKey") {
-                            return <Td key={columnName}>{row[columnName]}</Td>;
-                          }
-                          return null;
-                        })}
-                      </Tr>
-                    ))}
-                      </Tbody>
-                    </Table>
-                    
-                </div>
-                <div className='gap-4 py-2'>
-                    {!editMode && 
-                      <Button onClick={() => setEditMode(true)}>Editar nomes</Button>
-                      ||
-                    <div className='flex flex-row w-1/5 gap-2'>
-                      <Button onClick={() => onSave()}>Guardar</Button>
-                      <Button onClick={() => setEditMode(false)}>Cancelar</Button>
+              
+              <div className='gap-4 py-2 mr-4'>
+                  {!editMode && 
+                    <Button bgColor={"gray.300"} onClick={() => setEditMode(true)}>Editar nomes</Button>
+                    ||
+                    <div className='flex flex-row gap-2'>
+                      <Button bgColor={"gray.300"} onClick={() => onSave()}>Guardar</Button>
+                      <Button bgColor={"gray.300"} onClick={() => setEditMode(false)}>Cancelar</Button>
                     </div>
                     }
+              </div>
+            </div>  
+          </div>
+          <div className='flex w-full flex-grow flex-col '>
+            <div className='flex flex-col rounded-md m-4 h-96'>
+              {data && (
+                <div className='border-2 rounded-lg border-slate-300 h-96 overflow-y-scroll scrollbar-thin scrollbar-thumb-slate-600 scrollbar-thumb-rounded-lg scrollbar-track-slate-300'>
+                  <Table variant="simple" size="sm" >
+                    <Thead position='sticky' top={0} zIndex="docked" className="rounded-lg bg-slate-300 ">
+                      <Tr className='flex-grow w-full '>
+                        {Object.entries(commonColumns).map(([columnName, columnValue]) => (
+                          <Th key={columnName}>
+                            <AttributeAliasField name={columnName} value={columnValue} editMode={editMode} addChangedAlias={addChangedAlias}></AttributeAliasField>
+                          </Th>
+                        ))}
+                      </Tr>
+                    </Thead>
+                    <Tbody className="w-full h-96" overflowY={"scroll"}>
+                        {data.rows.map((row, index) => (
+                          <Tr className={"row"+Number(row["CJ"]).toString()}>
+                            {Object.entries(commonColumns).map(([columnName, _]) => {
+                              {if(columnName == "CJ"){
+                                let value = data!.consumersInfo.find(e => e.id == Number(row[columnName])) ? data!.consumersInfo.find(e => e.id == Number(row[columnName]))?.consumerName : row[columnName]
+                                return <Td className='hover:bg-slate-200 cursor-pointer' onClick={()=>navigate(`/consumers/${row[columnName]}`)} key={columnName}>{value}</Td>;
+                              }}
+                              return <Td key={columnName}>{row[columnName]}</Td>
+                            }
+                            )}
+                          </Tr>
+                        ))}
+                    </Tbody>
+                  </Table>
                 </div>
-              </>
-            )         
-          })
-        }
+              )}
+              
+            </div>
+            <div>
+              {
+                productColumns.map((product, index) =>{
+                  return (
+                      <div className='flex flex-col rounded-md m-4 border-slate-300 border-2 shadow-md'>
+                        <div className='flex justify-between hover:bg-slate-300 cursor-pointer' onClick={() => handleShowToggle(index)}>
+                        <Heading className='m-4' >{(productOrder.find(p => p.presentationPosition === index)?.productRef)} - {(productOrder.find(p => p.presentationPosition === (index))?.productDesignation)}</Heading>
+                        {!show![index] && <ChevronDownIcon className="self-center mr-4" boxSize={8}></ChevronDownIcon> || <ChevronUpIcon className="self-center mr-4" boxSize={8}></ChevronUpIcon>}
+                        </div>
+                        <Collapse in={show![index]}>
+                        <div key={product.productKey} className='h-96 overflow-y-scroll scrollbar-thin scrollbar-thumb-slate-600 scrollbar-thumb-rounded-lg scrollbar-track-slate-300'>
+                          <Table variant="simple" size="sm" >
+                            <Thead position='sticky' top={0} zIndex="docked" className="rounded-lg bg-slate-300 ">
+                              <Tr className='flex-grow w-full'>{
+                                Object.entries(product).map(([columnName, columnValue]) => {
+                                  if (columnName !== "productKey") {
+                                    return <Th key={columnName}> 
+                                          <AttributeAliasField name={columnName} value={columnValue} editMode={editMode} addChangedAlias={addChangedAlias}></AttributeAliasField>
+                                          </Th>;
+                                  }
+                                })
+                              }</Tr>
+                            </Thead>
+                            <Tbody>
+                              {data?.rows.map((row, rowIndex) => (
+                                <Tr className={"row"+Number(row["CJ"]).toString()}>
+                                  {Object.entries(product).map(([columnName, _]) => {
+                                    if (columnName !== "productKey") {
+                                      {if(columnName == "CJ"){
+                                        let value = data!.consumersInfo.find(e => e.id == Number(row[columnName])) ? data!.consumersInfo.find(e => e.id == Number(row[columnName]))?.consumerName : row[columnName]
+                                        return <Td className='hover:bg-slate-200 cursor-pointer' key={columnName} onClick={()=>navigate(`/consumers/${row[columnName]}`)}>{value}</Td>;
+                                      }}
+                                      return <Td key={columnName}>{row[columnName]}</Td>;
+                                    }
+                                  return null;
+                                  })}
+                                </Tr>
+                              ))}
+                            </Tbody>
+                          </Table>
+                        </div>
+                        </Collapse>
+                    </div>                  
+              )
+            })
+          }
+          </div>
         </div>
       </div>
       }
