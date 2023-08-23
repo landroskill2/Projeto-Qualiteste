@@ -39,13 +39,6 @@ namespace Qualiteste.ServerApp.DataAccess.Repository.Concrete
             }
             //GetSessionById(id).ConsumerSessions.Add(cs);
         }
-
-        public void RemoveInvitedConsumerFromSession(string sessionId, int consumerId)
-        {
-            ConsumerSession cs = GetSessionById(sessionId).ConsumerSessions.SingleOrDefault(cs => consumerId == cs.Consumerid);
-            PostgresContext.ConsumerSessions.Remove(cs);
-        }
-
         public void RemoveAllInvitedConsumersFromSession(string sessionId)
         {
             IEnumerable<ConsumerSession> cSessions = GetSessionById(sessionId).ConsumerSessions.Where(cs => cs.Sessiontime == null);
@@ -88,7 +81,17 @@ namespace Qualiteste.ServerApp.DataAccess.Repository.Concrete
             return GetSessionById(id).ConsumerSessions.Select(cs => cs.Consumer).ToList();
         }
 
-        
+        public void RemoveAllConfirmedConsumersFromSession(string id)
+        {
+            IEnumerable<ConsumerSession> cSessions = GetSessionById(id).ConsumerSessions.Where(cs => cs.Sessiontime != null);
+            PostgresContext.ConsumerSessions.RemoveRange(cSessions);
+        }
+
+        public void RemoveConsumerFromSession(string id, int consumerId)
+        {
+            ConsumerSession cs = GetSessionById(id).ConsumerSessions.SingleOrDefault(cs => consumerId == cs.Consumerid);
+            PostgresContext.ConsumerSessions.Remove(cs);
+        }
 
         public PostgresContext PostgresContext
         {

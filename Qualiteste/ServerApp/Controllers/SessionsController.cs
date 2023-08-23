@@ -144,11 +144,11 @@ namespace Qualiteste.ServerApp.Controllers
 
         [Authorize(Roles = "ADMIN")]
         [HttpDelete("{id}/consumers")]
-        public IActionResult RemoveInvitedConsumerFromSession(string id, [FromQuery] string selection)
+        public IActionResult RemoveConsumerFromSession(string id, [FromQuery] string selection)
         {
             try
             {
-                Either<CustomError, SessionSuccesses> c = _sessionService.RemoveInvitedConsumerFromSession(id, selection);
+                Either<CustomError, SessionSuccesses> c = _sessionService.RemoveConsumerFromSession(id, selection);
                 return c.Match(
                     error => Problem(statusCode: error.StatusCode, title: error.Message),
                     success => Ok(success)

@@ -126,41 +126,6 @@ namespace Qualiteste.ServerApp.Services.Concrete
             }
         }
 
-        public Either<CustomError, SessionSuccesses> RemoveInvitedConsumerFromSession(string sessionId, string selection)
-        {
-
-            try
-            {
-                int consumerId;
-                if (selection.ToLower().Equals("all"))
-                {
-                    _unitOfWork.Sessions.RemoveAllInvitedConsumersFromSession(sessionId);
-                }
-                else if (int.TryParse(selection, out consumerId))
-                {
-                    _unitOfWork.Sessions.RemoveInvitedConsumerFromSession(sessionId, consumerId);
-                }
-                else
-                {
-                    return new SessionErrors.InvalidQueryParameterValue();
-                }
-                _unitOfWork.Complete();
-                return new SessionSuccesses.RemoveInvitedConsumerFromSessionSuccess();
-            }catch(Exception ex)
-            {
-                _unitOfWork.UntrackChanges();
-                if (ex is ArgumentNullException)
-                {
-                    return new ConsumerErrors.NoConsumerFoundWithId();
-                }
-                else if(ex is NullReferenceException)
-                {
-                    return new SessionErrors.NoSessionFoundWithId();
-                }
-                throw ex;
-            }
-        }
-
         public Either<CustomError, SessionSuccesses> ConfirmConsumerSession(string sessionId, int consumerId, SessionTimeInputModel cSession)
         {
             try
@@ -221,6 +186,43 @@ namespace Qualiteste.ServerApp.Services.Concrete
         public Either<CustomReply, string> GetNotConfirmedConsumersInSession(string sessionId)
         {
             throw new NotImplementedException();
+        }
+
+        public Either<CustomError, SessionSuccesses> RemoveConsumerFromSession(string id, string selection)
+        {
+            try
+            {
+                int consumerId;
+                if (selection.ToLower().Equals("invited"))
+                {
+                    _unitOfWork.Sessions.RemoveAllInvitedConsumersFromSession(id);
+                }
+                else if(selection.ToLower().Equals("confirmed")){
+                    _unitOfWork.Sessions.RemoveAllConfirmedConsumersFromSession(id);
+                }
+                else if (int.TryParse(selection, out consumerId))
+                {
+                    _unitOfWork.Sessions.RemoveConsumerFromSession(id, consumerId);
+                }
+                else
+                {
+                    return new SessionErrors.InvalidQueryParameterValue();
+                }
+                _unitOfWork.Complete();
+                return new SessionSuccesses.RemoveInvitedConsumerFromSessionSuccess();
+            }catch(Exception ex)
+            {
+                _unitOfWork.UntrackChanges();
+                if (ex is ArgumentNullException)
+                {
+                    return new ConsumerErrors.NoConsumerFoundWithId();
+                }
+                else if(ex is NullReferenceException)
+                {
+                    return new SessionErrors.NoSessionFoundWithId();
+                }
+                throw ex;
+            }
         }
     }
 }
