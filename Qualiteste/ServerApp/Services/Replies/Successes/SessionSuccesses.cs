@@ -1,4 +1,7 @@
-﻿namespace Qualiteste.ServerApp.Services.Replies.Successes
+﻿using Qualiteste.ServerApp.Services.Replies.Errors;
+using Qualiteste.ServerApp.Utils;
+
+namespace Qualiteste.ServerApp.Services.Replies.Successes
 {
     public abstract class SessionSuccesses : CustomSuccess
     {
@@ -37,6 +40,13 @@
         public class UpdateAttendanceSuccess : SessionSuccesses
         {
             public UpdateAttendanceSuccess() : base("Presença do consumidor actualizada com sucesso.", 200)
+            {
+            }
+        }
+
+        public class RemoveConfirmedConsumerFromSessionSuccess : SessionSuccesses
+        {
+            public RemoveConfirmedConsumerFromSessionSuccess() : base("Consumidor removido da sessão com sucesso.", 200)
             {
             }
         }

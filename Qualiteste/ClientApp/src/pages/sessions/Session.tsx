@@ -359,7 +359,7 @@ export default function Session() : React.ReactElement{
                       </div>
                     </div>
                     <div className="flex w-full bg-slate-300 self-baseline hover:bg-slate-200">
-                      <Button bgColor={"gray.300"} className="flex grow w-full rounded-b-lg rounded-t-none" onClick={() => {removeNotConfirmed(session!.id)}}>Limpar Convidados</Button>
+                      <Button bgColor={"gray.300"} className="flex grow w-full rounded-b-lg rounded-t-none" onClick={() => {removeNotConfirmed(session!.id, "invited")}}>Limpar Convidados</Button>
                     </div>
                   </div>
                 </div>              
@@ -385,6 +385,9 @@ export default function Session() : React.ReactElement{
                                       <Td className="flex flex-row flex-grow hover:bg-slate-300 cursor-pointer" onClick={() => redirectToConsumerPage(consumer.consumer.id)}>                                    
                                         {consumer.consumer.fullname}
                                       </Td>
+                                      <div className="hover:bg-red-400 cursor-pointer flex justify-center content-center p-2">
+                                        <CloseIcon className="self-center" boxSize="0.7em" onClick={() => {removeNotConfirmed(session!.id, consumer.consumer.id)}} />
+                                      </div>
                                     </div>
                                     
                                   </Tr>           

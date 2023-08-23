@@ -14,10 +14,9 @@ namespace Qualiteste.ServerApp.DataAccess.Repository
 
         ConsumerSession GetConsumerSession(string sessionId, int consumerId);
         void AddConsumerToSession(string id, IEnumerable<ConsumerSession> consumerSessions);
-
-        void RemoveInvitedConsumerFromSession(string sessionId, int consumerId);
-
         void RemoveAllInvitedConsumersFromSession(string sessionId);
         void AddTestToSession(string id, Test test);
+        void RemoveAllConfirmedConsumersFromSession(string id);
+        void RemoveConsumerFromSession(string id, int consumerId);
     }
 }
