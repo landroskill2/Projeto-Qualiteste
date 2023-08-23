@@ -8,6 +8,7 @@ import { AttributeAliasField } from '../../components/AttributeAliasField';
 import FizzAttribute from '../../common/Interfaces/FizzAttributes';
 import { useGlobalToast } from '../../common/useGlobalToast';
 import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
+import WithPermission from '../../auth/WithPermission';
 
 export default function FizzResults(): React.ReactElement {
   const [data, setData] = useState<IFizzValues | null>(null);
@@ -32,10 +33,20 @@ export default function FizzResults(): React.ReactElement {
         addToast(state)
       }
     }
-
     populateValues().then(() => setIsLoading(false))
-    
   }, []);
+
+  useEffect(()=>{
+     //set missing consumers on session as red
+     data?.consumersInfo.filter(e => e.presence == 1).forEach(e => {
+      document.querySelectorAll('.row'+e.id.toString()).forEach(c => {
+        c.classList.add("bg-red-300")
+      })
+      document.querySelectorAll('.td'+e.id.toString()).forEach(c => {
+        c.classList.replace("hover:bg-slate-200", "hover:bg-red-400")
+      })
+    })
+  }, [data])
 
   function addChangedAlias(attr : FizzAttribute){
     setChangedAlias(
@@ -105,10 +116,7 @@ export default function FizzResults(): React.ReactElement {
     setProductColumns(newProductColumns);
     setShow(Array(newProductColumns.length).fill(false))
   }
-  //set missing consumers on session as red
-  data?.consumersInfo.filter(e => e.presence == 1).forEach(e => {
-    document.querySelectorAll('.row'+e.id.toString()).forEach(c => c.classList.add("bg-red-300"))
-  })
+  
 
   return (
     <>
@@ -142,24 +150,37 @@ export default function FizzResults(): React.ReactElement {
                   <Table variant="simple" size="sm" >
                     <Thead position='sticky' top={0} zIndex="docked" className="rounded-lg bg-slate-300 ">
                       <Tr className='flex-grow w-full '>
-                        {Object.entries(commonColumns).map(([columnName, columnValue]) => (
-                          <Th key={columnName}>
-                            <AttributeAliasField name={columnName} value={columnValue} editMode={editMode} addChangedAlias={addChangedAlias}></AttributeAliasField>
-                          </Th>
-                        ))}
+                        {Object.entries(commonColumns).map(([columnName, columnValue]) => {
+                          if(columnName == "CJ"){
+                            return <WithPermission allowedRoles={["ADMIN"]}>
+                                      <Th key={columnName}> 
+                                        <AttributeAliasField name={columnName} value={columnValue} editMode={editMode} addChangedAlias={addChangedAlias}></AttributeAliasField>
+                                      </Th>
+                                    </WithPermission>
+                          }
+                          return <Th key={columnName}>
+                                    <AttributeAliasField name={columnName} value={columnValue} editMode={editMode} addChangedAlias={addChangedAlias}></AttributeAliasField>
+                                </Th>
+                        }
+                        )}
                       </Tr>
                     </Thead>
                     <Tbody className="w-full h-96" overflowY={"scroll"}>
                         {data.rows.map((row, index) => (
                           <Tr className={"row"+Number(row["CJ"]).toString()}>
-                            {Object.entries(commonColumns).map(([columnName, _]) => {
-                              {if(columnName == "CJ"){
-                                let value = data!.consumersInfo.find(e => e.id == Number(row[columnName])) ? data!.consumersInfo.find(e => e.id == Number(row[columnName]))?.consumerName : row[columnName]
-                                return <Td className='hover:bg-slate-200 cursor-pointer' onClick={()=>navigate(`/consumers/${row[columnName]}`)} key={columnName}>{value}</Td>;
-                              }}
-                              return <Td key={columnName}>{row[columnName]}</Td>
-                            }
-                            )}
+                            
+                              {Object.entries(commonColumns).map(([columnName, _]) => {
+                                {if(columnName == "CJ"){
+                                  let value = data!.consumersInfo.find(e => e.id == Number(row[columnName])) ? data!.consumersInfo.find(e => e.id == Number(row[columnName]))?.consumerName : row[columnName]
+                                  return (
+                                    <WithPermission allowedRoles={["ADMIN"]}>
+                                      <Td className={"td"+Number(row["CJ"]).toString()+' hover:bg-slate-200 cursor-pointer'} onClick={()=>navigate(`/consumers/${row[columnName]}`)} id={"td"+Number(row["CJ"]).toString()}>{value}</Td>
+                                    </WithPermission>
+                                  )
+                                }}
+                                return <Td key={columnName}>{row[columnName]}</Td>
+                              }
+                              )}
                           </Tr>
                         ))}
                     </Tbody>
@@ -184,9 +205,16 @@ export default function FizzResults(): React.ReactElement {
                               <Tr className='flex-grow w-full'>{
                                 Object.entries(product).map(([columnName, columnValue]) => {
                                   if (columnName !== "productKey") {
+                                    if(columnName == "CJ"){
+                                      return <WithPermission allowedRoles={["ADMIN"]}>
+                                                <Th key={columnName}> 
+                                                  <AttributeAliasField name={columnName} value={columnValue} editMode={editMode} addChangedAlias={addChangedAlias}></AttributeAliasField>
+                                                </Th>
+                                              </WithPermission>
+                                    }
                                     return <Th key={columnName}> 
-                                          <AttributeAliasField name={columnName} value={columnValue} editMode={editMode} addChangedAlias={addChangedAlias}></AttributeAliasField>
-                                          </Th>;
+                                            <AttributeAliasField name={columnName} value={columnValue} editMode={editMode} addChangedAlias={addChangedAlias}></AttributeAliasField>
+                                           </Th>;
                                   }
                                 })
                               }</Tr>
@@ -198,7 +226,11 @@ export default function FizzResults(): React.ReactElement {
                                     if (columnName !== "productKey") {
                                       {if(columnName == "CJ"){
                                         let value = data!.consumersInfo.find(e => e.id == Number(row[columnName])) ? data!.consumersInfo.find(e => e.id == Number(row[columnName]))?.consumerName : row[columnName]
-                                        return <Td className='hover:bg-slate-200 cursor-pointer' key={columnName} onClick={()=>navigate(`/consumers/${row[columnName]}`)}>{value}</Td>;
+                                        return (
+                                          <WithPermission allowedRoles={["ADMIN"]}>
+                                            <Td className={"td"+Number(row["CJ"]).toString()+' hover:bg-slate-200 cursor-pointer'} onClick={()=>navigate(`/consumers/${row[columnName]}`)} id={"td"+Number(row["CJ"]).toString()}>{value}</Td>
+                                        </WithPermission>
+                                        )
                                       }}
                                       return <Td key={columnName}>{row[columnName]}</Td>;
                                     }

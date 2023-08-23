@@ -175,7 +175,7 @@ namespace Qualiteste.ServerApp.Controllers
                 return Problem(statusCode: 500, title: "Ocorreu um erro inesperado");
             }
         }
-        [Authorize(Roles = "ADMIN")]
+        [Authorize(Roles = "ADMIN,CLIENT")]
         [HttpGet("{id}/fizz")]
         public IActionResult GetFizzTable(string id)
         {
