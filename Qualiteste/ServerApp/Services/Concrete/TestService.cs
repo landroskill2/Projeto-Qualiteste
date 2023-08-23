@@ -5,7 +5,9 @@ using Qualiteste.ServerApp.Services.Replies;
 using Qualiteste.ServerApp.Services.Replies.Errors;
 using Qualiteste.ServerApp.Services.Replies.Successes;
 using Qualiteste.ServerApp.Utils;
+using System.Collections.Immutable;
 using System.Diagnostics;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Qualiteste.ServerApp.Services.Concrete
 {
@@ -125,7 +127,7 @@ namespace Qualiteste.ServerApp.Services.Concrete
          * Test.ReportDeliveryDate pode ser alterado
          * 
          * **/
-        public Either<CustomError, TestOutputModel> UpdateTest(int id, TestInputModel testInput)
+        public Either<CustomError, TestOutputModel> UpdateTest(string id, TestInputModel testInput)
         {
             try
             {
@@ -157,20 +159,35 @@ namespace Qualiteste.ServerApp.Services.Concrete
             }
         }
 
-        public Either<CustomError, FizzTableModel> GetFizzTable(int id)
+        public Either<CustomError, FizzTableModel> GetFizzTable(string id)
         {
             try
             {
-                Dictionary<string, string> columns = _unitOfWork.Tests.GetFizzColumns(id);
+                Test test = _unitOfWork.Tests.GetTestById(id);
+                if (test == null) return new TestErrors.NoTestFoundWithGivenID();
 
+                Dictionary<string, string> columns = _unitOfWork.Tests.GetFizzColumns(id);
                 var values = _unitOfWork.Tests.GetFizzValuesGroupedByConsumer(id);
 
+                //Get consumer name
+                var cIds = values.Select(v => v.Key).ToList();
+                var consumersInfo = GetInfoOnConsumers(cIds, test);
                 IEnumerable<Dictionary<string, string>> rows = values.Select(v => v.ToDictionary(attr => attr.Attribute, attr => attr.Attrvalue));
+
+                IEnumerable<SampleOutputModel> samplesInTest = test.Samples.Select(s => new SampleOutputModel
+                {
+                    PresentationPosition = s.Presentationposition,
+                    ProductRef = s.Product.Ref,
+                    ProductDesignation = s.Product.Designation,
+                    ProductId = s.Productid
+                }).OrderBy(s => s.PresentationPosition);
 
                 FizzTableModel fizzTable = new FizzTableModel
                 {
                     Columns = columns,
-                    Rows = rows
+                    Rows = rows,
+                    SamplesOrder = samplesInTest,
+                    ConsumersInfo = consumersInfo
                 };
 
                 return fizzTable;
@@ -211,6 +228,51 @@ namespace Qualiteste.ServerApp.Services.Concrete
             {
                 throw ex;
             }
+        }
+
+
+        /**
+         * Presence:
+         *  - 0 -> is in FizzTable and Test Session
+         *  - 1 -> is in FizzTable but not Test Session
+         *  - 2 -> is not on FizzTable but is on Test Session
+         */
+        private IEnumerable<FizzConsumerInfo> GetInfoOnConsumers(List<int> cIds, Test test) {
+            var consumersSession = test.Session.ConsumerSessions;
+            List<FizzConsumerInfo> result = new List<FizzConsumerInfo>();
+            foreach (var cId in cIds) {
+                if (consumersSession.Any(cs => cs.Consumerid == cId))
+                {
+                    var info = new FizzConsumerInfo
+                    {
+                        Id = cId,
+                        ConsumerName = consumersSession.Single(cs => cs.Consumerid == cId).Consumer.Fullname,
+                        Presence = 0
+                    };
+                    result.Add(info);
+                    
+                }
+                else
+                {
+                    var info = new FizzConsumerInfo
+                    {
+                        Id = cId,
+                        ConsumerName = consumersSession.Single(cs => cs.Consumerid == cId).Consumer.Fullname,
+                        Presence = 1
+                    };
+                    result.Add(info);
+                }
+            }
+            var notInFizzTable = consumersSession.Select(cs => cs.Consumerid).Except(cIds).ToList();
+            notInFizzTable.ForEach(id =>
+                result.Add(new FizzConsumerInfo
+                {
+                    Id = id,
+                    ConsumerName = _unitOfWork.Consumers.GetConsumerById(id).Fullname,
+                    Presence = 2
+                })
+            );
+            return result;
         }
     }
 }

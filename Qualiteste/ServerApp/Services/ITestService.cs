@@ -12,10 +12,10 @@ namespace Qualiteste.ServerApp.Services
         Either<CustomError, string> CreateNewTest(TestInputModel testInput);
         Either<CustomError, TestSucesses> UpdateAttributeAlias(string testId, FizzAliasDto[] alias);
         Either<CustomError, IEnumerable<TestOutputModel>> GetFilteredTestsList(string type);
-        Either<CustomError, FizzTableModel> GetFizzTable(int id);
+        Either<CustomError, FizzTableModel> GetFizzTable(string id);
         Either<CustomError, TestPageModel> GetTestById(string id);
         Either<CustomError, IEnumerable<TestOutputModel>> GetTestsList();
-        Either<CustomError, TestOutputModel> UpdateTest(int id, TestInputModel testInput);
+        Either<CustomError, TestOutputModel> UpdateTest(string id, TestInputModel testInput);
         Either<CustomError, IEnumerable<TestOutputModel>> GetClientsTests(string clientUsername);
         Either<CustomError, TestPageModel> GetClientsTestByID(string clientUsername, string id);
     }

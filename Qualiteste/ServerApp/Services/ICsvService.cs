@@ -2,6 +2,6 @@
 {
     public interface ICsvService
     {
-        Task ParseCsv(IFormFile csvFile, int id);
+        Task ParseCsv(IFormFile csvFile, string id);
     }
 }

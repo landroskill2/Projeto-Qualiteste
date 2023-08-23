@@ -15,7 +15,7 @@ namespace Qualiteste.ServerApp.Services.Concrete
             _unitOfWork = unitOfWork;
         }
 
-        public async Task ParseCsv(IFormFile csvFile, int id)
+        public async Task ParseCsv(IFormFile csvFile, string id)
         {
             using (var reader = new StreamReader(csvFile.OpenReadStream()))
             {
@@ -36,7 +36,7 @@ namespace Qualiteste.ServerApp.Services.Concrete
             }
         }
 
-        private void insertValuesInDb(string[] headers, string[] row, int id, int consumerIndex)
+        private void insertValuesInDb(string[] headers, string[] row, string id, int consumerIndex)
         {
             if (row.All(value => value == "")) return;
 
@@ -59,7 +59,7 @@ namespace Qualiteste.ServerApp.Services.Concrete
 
         }
 
-        private void insertHeadersInDb(string[] headers, int id)
+        private void insertHeadersInDb(string[] headers, string id)
         {
             string strID = id.ToString();
             foreach (var header in headers)

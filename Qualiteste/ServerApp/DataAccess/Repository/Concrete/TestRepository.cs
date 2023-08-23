@@ -73,12 +73,12 @@ namespace Qualiteste.ServerApp.DataAccess.Repository.Concrete
             }
         }
 
-        public Dictionary<string, string> GetFizzColumns(int id)
+        public Dictionary<string, string> GetFizzColumns(string id)
         {
             return PostgresContext.FizzAttributes.Where(c => c.Testid == id.ToString()).ToDictionary(c => c.Attribute, c=> ReturnAliasIfNotNull(c));
         }
        
-        public IEnumerable<IGrouping<int, AttributeValue>> GetFizzValuesGroupedByConsumer(int id)
+        public IEnumerable<IGrouping<int, AttributeValue>> GetFizzValuesGroupedByConsumer(string id)
         { 
             return PostgresContext.AttributeValues.Where(attr => attr.Testid == id.ToString()).GroupBy(attr => attr.Consumerid);
         }

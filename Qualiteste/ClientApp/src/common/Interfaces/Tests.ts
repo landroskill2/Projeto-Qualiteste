@@ -26,7 +26,22 @@ export interface ISampleInputModel{
     PresentationPosition : number,
 }
 
+export interface ISampleOutputModel{
+    productId : number,
+    presentationPosition : number,
+    productRef : string,
+    productDesignation : string,
+}
+
+
+interface IConsumerInfo{
+    id : number,
+    consumerName : string,
+    presence : number
+}
 export interface IFizzValues {
     columns: Record<string, string>,
-    rows: Record<string, string>[]
+    rows: Record<string, string>[],
+    samplesOrder : ISampleOutputModel[],
+    consumersInfo : IConsumerInfo[]
 }
