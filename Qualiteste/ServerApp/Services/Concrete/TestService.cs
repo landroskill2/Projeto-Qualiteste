@@ -7,6 +7,7 @@ using Qualiteste.ServerApp.Services.Replies.Successes;
 using Qualiteste.ServerApp.Utils;
 using System.Collections.Immutable;
 using System.Diagnostics;
+using System.Security.Cryptography;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace Qualiteste.ServerApp.Services.Concrete
@@ -257,7 +258,7 @@ namespace Qualiteste.ServerApp.Services.Concrete
                     var info = new FizzConsumerInfo
                     {
                         Id = cId,
-                        ConsumerName = consumersSession.Single(cs => cs.Consumerid == cId).Consumer.Fullname,
+                        ConsumerName = _unitOfWork.Consumers.GetConsumerById(cId).Fullname,
                         Presence = 1
                     };
                     result.Add(info);
@@ -268,7 +269,7 @@ namespace Qualiteste.ServerApp.Services.Concrete
                 result.Add(new FizzConsumerInfo
                 {
                     Id = id,
-                    ConsumerName = _unitOfWork.Consumers.GetConsumerById(id).Fullname,
+                    ConsumerName = consumersSession.Single(cs => cs.Consumerid == id).Consumer.Fullname,
                     Presence = 2
                 })
             );
