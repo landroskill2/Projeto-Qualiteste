@@ -207,11 +207,11 @@ export default function Session() : React.ReactElement{
     for (const [sessionTime, consumersInfo] of Object.entries(grouped)) {
       if(sessionTime === "null"){
         invited = { sessionTime : "Convidados", consumersInfo };
-        invitedConsumersNumber++
+        invitedConsumersNumber = invitedConsumersNumber + consumersInfo.length
       } 
       else{
         confirmed.push({ sessionTime, consumersInfo });
-        confirmedConsumersNumber++
+        confirmedConsumersNumber = confirmedConsumersNumber + consumersInfo.length
       } 
     }
     return {confirmed, invited};
@@ -227,82 +227,60 @@ export default function Session() : React.ReactElement{
           <Spinner size="lg" />
         </div> || 
         <div className="flex flex-col w-full h-[calc(100vh-72px)] overflow-y-hidden">
-          <div className="flex justify-between content-center m-4 flex-grow h-1/6">
-            <div className="flex flex-col flex-grow shadow-2xl self-center rounded-xl bg-slate-100 h-full m-4 mt-10 pb-7">
+          <div className="flex justify-between content-center m-4 h-fit">
+            <div className="flex flex-col flex-grow shadow-2xl self-center rounded-xl bg-slate-100 h-full m-4 mt-10">
               <div className="flex justify-center content-center">
                 <Heading size={"lg"} className="self-center ml-4">Dados da Sessão</Heading>
               </div>
-              <div className="flex flex-row justify-center content-center border-2 h-1/2 overflow-y-auto m-4 rounded-lg border-slate-500 flex-grow scrollbar-thin scrollbar-thumb-slate-300 scrollbar-thumb-rounded-lg scrollbar-track-slate-300'">
-                <div className="flex flex-row w-1/5">
-                  <div className="w-1/2">
-                    Id da Sessão
+              <div className="flex flex-row justify-center content-center border-2 h-fit overflow-x-auto overflow-y-hidden m-4 rounded-lg border-slate-500 flex-grow scrollbar-thin scrollbar-thumb-slate-300 scrollbar-thumb-rounded-lg scrollbar-track-slate-300'">
+                <div className="flex flex-col w-1/5 border-r-2 border-slate-500">
+                  <div className="flex justify-center items-center p-4 border-b-2 border-slate-500 h-1/3 bg-slate-300">
+                    <Heading size={"md"}>Id da Sessão</Heading>
                   </div>
-                  <div  className="w-1/2">
-                    {session?.id}
-                  </div>
-                </div>
-                <div className="flex flex-row w-1/5">
-                  <div  className="w-1/2">
-                    Data da Sessão
-                  </div>
-                  <div  className="w-1/2">
-                    {session?.date}
+                  <div  className="flex h-2/3 justify-center items-center">
+                    <Heading size={"md"}>{session?.id}</Heading>    
                   </div>
                 </div>
-                <div className="flex flex-row w-1/5">
-                  <div  className="w-1/2">
-                    Número de provadores pretendidos
+                <div className="flex flex-col w-1/5 border-r-2 border-slate-500">
+                  <div  className="flex justify-center items-center p-4 border-b-2 border-slate-500 h-1/3 bg-slate-300">                    
+                    <Heading size={"md"}>Data da Sessão</Heading>
                   </div>
-                  <div  className="w-1/2">
-                    {session?.consumersNumber}
-                  </div>
-                </div>
-                <div className="flex flex-row w-1/5">
-                  <div  className="w-1/2">
-                    Número de provadores convidados
-                  </div>
-                  <div  className="w-1/2">
-                    {invitedConsumersNumber}
+                  <div  className="flex h-2/3 justify-center items-center">
+                    
+                    <Heading size={"md"}>{session?.date}</Heading>   
                   </div>
                 </div>
-                <div className="flex flex-row w-1/5">
-                  <div  className="w-1/2">
-                    Número de provadores confirmados
+                <div className="flex flex-col w-1/5 border-r-2 border-slate-500">
+                  <div  className="flex h-1/3 items-center border-b-2 p-4 border-slate-500 bg-slate-300 justify-center">
+                    
+                    <Heading size={"md"}>Número de provadores pretendidos</Heading>
                   </div>
-                  <div  className="w-1/2">
-                    {confirmedConsumersNumber}
+                  <div  className="flex h-2/3 justify-center items-center">
+                    
+                    <Heading size={"md"}>{session?.consumersNumber}</Heading>
+                  </div>
+                </div>
+                <div className="flex flex-col w-1/5 border-r-2 border-slate-500">
+                  <div  className="flex justify-center border-b-2 p-4 border-slate-500 items-center h-1/3 bg-slate-300">
+                    
+                    <Heading size={"md"}>Número de provadores convidados</Heading>
+                  </div>
+                  <div  className="flex h-2/3  justify-center items-center">
+                    <Heading size={"md"}>{invitedConsumersNumber}</Heading>
+                    
+                  </div>
+                </div>
+                <div className="flex flex-col w-1/5">
+                  <div  className="flex justify-center border-b-2 p-4 border-slate-500 h-1/3 items-center bg-slate-300">
+                    
+                    <Heading size={"md"}>Número de provadores confirmados</Heading>
+                  </div>
+                  <div  className="flex h-2/3  justify-center items-center">
+                    <Heading size={"md"}>{confirmedConsumersNumber}</Heading>
                   </div>
                 </div>
               </div>
             </div>
-            {/* <Box as="h1" fontSize="2xl" fontWeight="bold">
-              <Heading>{session!.id}</Heading>
-            </Box>
-
-            
-            <Table>
-              <Thead>
-                <Tr>
-                  <Th>Date</Th>
-                  <Th>Number of Consumers</Th>
-                </Tr>
-              </Thead>
-              <Tbody>
-                <Tr>
-                  <Td>{session!.date}</Td>
-                  <Td>{session!.consumersNumber.toString()}</Td>
-                </Tr>
-              </Tbody>
-            </Table>
-           
-
-            <Box>
-              
-            </Box>
-
-            <Box>
-              
-            </Box> */}
           </div>
           <div className="flex flex-row flex-grow w-full h-3/5">
             <div className="flex flex-col content-center justify-center h-full flex-grow">
@@ -313,7 +291,7 @@ export default function Session() : React.ReactElement{
                 </div>
                 <div className=" border-2 h-1/2 overflow-y-auto m-4 rounded-lg border-slate-500 flex-grow scrollbar-thin scrollbar-thumb-slate-300 scrollbar-thumb-rounded-lg scrollbar-track-slate-300'">
                   <Table variant={"simple"}>
-                    <Thead>
+                    <Thead top={0} zIndex="docked" position={"sticky"} className="rounded-lg bg-slate-300 border-b-2 border-slate-500">
                       <Tr className=" bg-slate-200">
                         <Th>ID</Th>
                         <Th>Tipo de teste</Th>
@@ -370,7 +348,7 @@ export default function Session() : React.ReactElement{
                       sessionTime && (
                         <div className="flex-shrink-0 overflow-y-auto overflow-x-hidden flex-grow min-w-1/3 border-r border-slate-500 scrollbar-thin scrollbar-thumb-slate-300 scrollbar-thumb-rounded-lg scrollbar-track-slate-300'">
                           <Table variant="simple" size={"sm"}>
-                            <Thead top={0} zIndex="docked" position={"sticky"} className="rounded-lg bg-slate-300 ">
+                            <Thead top={0} zIndex="docked" position={"sticky"} className="rounded-lg bg-slate-300 border-b-2 border-slate-500">
                               <Tr className=" bg-slate-200">
                                 <Th>
                                   {sessionTime}
