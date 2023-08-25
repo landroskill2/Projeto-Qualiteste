@@ -1,4 +1,4 @@
-import { Box, Table, Thead, Tbody, Tr, Th, Td, Spinner, Button, Input } from "@chakra-ui/react";
+import { Box, Table, Thead, Tbody, Tr, Th, Td, Spinner, Button, Input, Heading } from "@chakra-ui/react";
 import { IConsumerOutputModel } from '../../common/Interfaces/Consumers';
 import { ISessionModel } from '../../common/Interfaces/Sessions';
 import { ITestOutputModel } from '../../common/Interfaces/Tests';
@@ -104,7 +104,90 @@ export default function Test(): React.ReactElement {
   }
 
   return (
-    <div className='flex flex-col flex-grow w-full min-h-full p-6'>
+    <>
+      {isLoading && 
+        <div className="flex flex-col justify-center items-center h-screen">
+          <Spinner size="lg" />
+        </div> || 
+        <div className="flex flex-col w-full h-[calc(100vh-72px)] overflow-y-hidden">
+          <div className="flex justify-between content-center m-4 h-fit">
+            <div className="flex flex-col flex-grow shadow-2xl self-center rounded-xl bg-slate-100 h-full m-4 mt-10">
+              <div className="flex justify-center content-center">
+                <Heading size={"lg"} className="self-center ml-4">Dados do Teste</Heading>
+              </div>
+              <div className="flex flex-row justify-center content-center border-2 h-fit overflow-x-auto overflow-y-hidden m-4 rounded-lg border-slate-500 flex-grow scrollbar-thin scrollbar-thumb-slate-300 scrollbar-thumb-rounded-lg scrollbar-track-slate-300'">
+                <div className="flex flex-col w-1/5 border-r-2 border-slate-500">
+                  <div className="flex justify-center items-center p-4 border-b-2 border-slate-500 h-1/3 bg-slate-300">
+                    <Heading size={"md"}>Id do Teste</Heading>
+                  </div>
+                  <div  className="flex h-2/3 justify-center items-center">
+                    <Heading size={"md"}>{}</Heading>    
+                  </div>
+                </div>
+                <div className="flex flex-col w-1/5 border-r-2 border-slate-500">
+                  <div  className="flex justify-center items-center p-4 border-b-2 border-slate-500 h-1/3 bg-slate-300">                    
+                    <Heading size={"md"}>Tipo de Teste</Heading>
+                  </div>
+                  <div  className="flex h-2/3 justify-center items-center">
+                    
+                    <Heading size={"md"}>{}</Heading>   
+                  </div>
+                </div>
+                <div className="flex flex-col w-1/5 border-r-2 border-slate-500">
+                  <div  className="flex h-1/3 items-center border-b-2 p-4 border-slate-500 bg-slate-300 justify-center">
+                    
+                    <Heading size={"md"}>Número de provadores pretendidos</Heading>
+                  </div>
+                  <div  className="flex h-2/3 justify-center items-center">
+                    
+                    <Heading size={"md"}>{}</Heading>
+                  </div>
+                </div>
+                <div className="flex flex-col w-1/5 border-r-2 border-slate-500">
+                  <div  className="flex justify-center border-b-2 p-4 border-slate-500 items-center h-1/3 bg-slate-300">
+                    
+                    <Heading size={"md"}>Produto principal</Heading>
+                  </div>
+                  <div  className="flex h-2/3  justify-center items-center">
+                    <Heading size={"md"}>{}</Heading>
+                    
+                  </div>
+                </div>
+                <div className="flex flex-col w-1/5">
+                  <div  className="flex justify-center border-b-2 p-4 border-slate-500 h-1/3 items-center bg-slate-300">
+                    
+                    <Heading size={"md"}>Data de pedido</Heading>
+                  </div>
+                  <div  className="flex h-2/3  justify-center items-center">
+                    <Heading size={"md"}>{}</Heading>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="flex flex-row flex-grow w-fit h-3/5 self-center">
+            <div className="flex flex-col w-2/3 mx-10 flex-grow justify-center content-center">
+              <div className="flex flex-row flex-grow shadow-2xl w-full m-5 self-center rounded-xl bg-slate-100 h-2/3 gap-4 justify-center">  
+                <WithPermission allowedRoles={["ADMIN"]}>
+                  <div className="flex flex-col min-w-1/2">
+                    <div className="flex flex-col border-2 h-full m-4 rounded-lg border-slate-500 overflow-hidden">
+                      
+                    </div>
+                  </div>              
+                </WithPermission>            
+                
+                <div className="flex flex-col min-w-1/2">      
+                  <div className=" flex overflow-x-auto border-2 h-full m-4 rounded-lg border-slate-500 overflow-y-hidden scrollbar-thin scrollbar-thumb-slate-300 scrollbar-thumb-rounded-lg scrollbar-track-slate-300'">
+                    
+                     
+                  </div>                  
+                </div>
+              </div>  
+            </div>
+          </div>
+        </div>
+      }
+    {/* <div className='flex flex-col flex-grow w-full min-h-full p-6'>
       <Box>
         <Box
           display="flex"
@@ -189,6 +272,7 @@ export default function Test(): React.ReactElement {
         </WithPermission>
         
       </Box>
-    </div>
+    </div> */}
+    </>
   );
 }

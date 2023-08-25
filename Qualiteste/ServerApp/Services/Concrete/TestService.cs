@@ -25,7 +25,7 @@ namespace Qualiteste.ServerApp.Services.Concrete
         public Either<CustomError,IEnumerable<TestOutputModel>> GetTestsList()
         {
            
-            return _unitOfWork.Tests.ListTestsByDate().Select(t => t.toOutputModel()).ToList();
+            return _unitOfWork.Tests.ListTestsByDate().ToList().Select(t => t.toOutputModel(t.ProductNavigation.toOutputModel())).ToList();
  
         }
 
@@ -33,7 +33,7 @@ namespace Qualiteste.ServerApp.Services.Concrete
         {
             try
             {
-                return _unitOfWork.Tests.ListTestsWithFilters(type).Select(t => t.toOutputModel()).ToList();
+                return _unitOfWork.Tests.ListTestsWithFilters(type).ToList().Select(t => t.toOutputModel(t.ProductNavigation.toOutputModel())).ToList();
             }catch(Exception e)
             {
                 throw e;
@@ -48,12 +48,20 @@ namespace Qualiteste.ServerApp.Services.Concrete
 
             if (test.Testtype.Equals("SP")) session = test.Session?.toOutputModel();
             IEnumerable<ConsumerOutputModel>? consumers = _unitOfWork.Tests.GetConsumersInTest(id)?.Select(c => c.ToOutputModel());
+            IEnumerable<SampleOutputModel> samples = test.Samples.Select(s => new SampleOutputModel
+                {
+                    PresentationPosition = s.Presentationposition,
+                    ProductRef = s.Product.Ref,
+                    ProductDesignation = s.Product.Designation,
+                    ProductId = s.Productid
+                }).OrderBy(s => s.PresentationPosition);
 
             return new TestPageModel
             {
-                Test = test.toOutputModel(),
+                Test = test.toOutputModel(test.ProductNavigation.toOutputModel()),
                 Session = session,
-                Consumers = consumers
+                Consumers = consumers,
+                Samples = samples
             };
         }
 
@@ -135,7 +143,7 @@ namespace Qualiteste.ServerApp.Services.Concrete
                 Test dbTest = testInput.toDbTest();
                 _unitOfWork.Tests.Update(dbTest);
                 _unitOfWork.Complete();
-                return dbTest.toOutputModel();
+                return dbTest.toOutputModel(dbTest.ProductNavigation.toOutputModel());
 
             }catch(Exception ex)
             {
@@ -205,7 +213,7 @@ namespace Qualiteste.ServerApp.Services.Concrete
             try
             {
                 string clientID = _unitOfWork.Clients.GetClientIDByUsername(clientUsername);
-                return _unitOfWork.Tests.GetTestsByClient(clientID).Select(x => x.toOutputModel()).ToList();
+                return _unitOfWork.Tests.GetTestsByClient(clientID).ToList().Select(x => x.toOutputModel(x.ProductNavigation!.toOutputModel())).ToList();
             }
             catch(Exception ex)
             {
@@ -222,7 +230,7 @@ namespace Qualiteste.ServerApp.Services.Concrete
                 if (test == null) return new TestErrors.NoTestFoundWithGivenID();
 
                 return new TestPageModel {
-                    Test = test.toOutputModel()
+                    Test = test.toOutputModel(test.ProductNavigation.toOutputModel())
                 };
             }
             catch(Exception ex)
