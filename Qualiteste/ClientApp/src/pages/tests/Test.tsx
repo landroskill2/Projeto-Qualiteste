@@ -1,7 +1,7 @@
 import { Box, Table, Thead, Tbody, Tr, Th, Td, Spinner, Button, Input, Heading } from "@chakra-ui/react";
 import { IConsumerOutputModel } from '../../common/Interfaces/Consumers';
 import { ISessionModel } from '../../common/Interfaces/Sessions';
-import { ITestOutputModel } from '../../common/Interfaces/Tests';
+import { ISampleOutputModel, ITestOutputModel } from '../../common/Interfaces/Tests';
 import { addConsumerToTest, fetchClientTestById, fetchTestById, uploadFile } from '../../common/APICalls';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from "react";
@@ -9,11 +9,13 @@ import AddConsumersModal from "../../components/modals/AddConsumersModal";
 import { useGlobalToast } from "../../common/useGlobalToast";
 import { useAuth } from "../../auth/useAuth";
 import WithPermission from "../../auth/WithPermission";
+import { ProductOutputModel } from "../../common/Interfaces/Products";
 
 export default function Test(): React.ReactElement {
   const [session, setSession] = useState<ISessionModel | null>(null);
   const [consumers, setConsumers] = useState<IConsumerOutputModel[] | null>(null);
   const [test, setTest] = useState<ITestOutputModel | null>(null);
+  const [samples, setSamples] = useState<ISampleOutputModel[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const { id } = useParams();
   const navigate = useNavigate();
@@ -69,6 +71,7 @@ export default function Test(): React.ReactElement {
       setSession(data.session);
       setConsumers(data.consumers);
       setTest(data.test);
+      setSamples(data.samples)
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -170,16 +173,67 @@ export default function Test(): React.ReactElement {
               <div className="flex flex-row flex-grow shadow-2xl w-full m-5 self-center rounded-xl bg-slate-100 h-2/3 gap-4 justify-center">  
                 <WithPermission allowedRoles={["ADMIN"]}>
                   <div className="flex flex-col min-w-1/2">
-                    <div className="flex flex-col border-2 h-full m-4 rounded-lg border-slate-500 overflow-hidden">
-                      
+                    <div className=" overflow-x-hidden border-2 h-full m-4 rounded-lg border-slate-500 overflow-y-auto scrollbar-thin scrollbar-thumb-slate-300 scrollbar-thumb-rounded-lg">
+                      <Table variant="simple" className="">
+                        <Thead top={0} zIndex="docked" position={"sticky"} className="rounded-lg bg-slate-300">
+                          <Tr>
+                            <Th>ID</Th>
+                            <Th>Full Name</Th>
+                            <Th>Age</Th>
+                            <Th>Sex</Th>
+                            <Th>Contact</Th>
+                            <Th>Email</Th>
+                          </Tr>
+                        </Thead>
+                        <Tbody>
+
+                          {consumers && (
+                            <>
+                              {consumers.map(consumer => (
+                                <Tr className="hover:bg-slate-200 cursor-pointer" key={consumer.id} onClick={() => redirectToConsumerPage(consumer.id)}>
+                                  <Td>{consumer.id}</Td>
+                                  <Td>{consumer.fullname}</Td>
+                                  <Td>{consumer.age}</Td>
+                                  <Td>{consumer.sex}</Td>
+                                  <Td>{consumer.contact}</Td>
+                                  <Td>{consumer.email || "-"}</Td>
+                                </Tr>
+                              ))}
+                            </>
+                          )}
+                          {!consumers && (
+                            <>
+                              <p>Sem dados.</p>
+                            </>
+                          )}
+                        </Tbody>
+                      </Table>
                     </div>
                   </div>              
                 </WithPermission>            
                 
                 <div className="flex flex-col min-w-1/2">      
-                  <div className=" flex overflow-x-auto border-2 h-full m-4 rounded-lg border-slate-500 overflow-y-hidden scrollbar-thin scrollbar-thumb-slate-300 scrollbar-thumb-rounded-lg scrollbar-track-slate-300'">
-                    
-                     
+                  <div className=" overflow-x-auto border-2 h-full m-4 rounded-lg border-slate-500 overflow-y-hidden scrollbar-thin scrollbar-thumb-slate-300 scrollbar-thumb-rounded-lg">
+                    <Table variant="simple" overflow="auto">
+                      <Thead top={0} zIndex="docked" position={"sticky"} className="rounded-lg bg-slate-300 border-b-2 border-slate-500">
+                        <Tr>
+                          <Th>Referência</Th>
+                          <Th>Designação</Th>
+                          <Th>Marca</Th>
+                        </Tr>
+                      </Thead>
+                      <Tbody>
+                        {samples && <>
+                          {samples.map((s) => (
+                            <Tr className="hover:bg-slate-200 cursor-pointer" key={s.product.productid} >
+                              <Td>{s.product.ref}</Td>
+                              <Td>{s.product.designation}</Td>
+                              <Td>{s.product.brand}</Td>
+                            </Tr>
+                          ))}
+                        </>}             
+                      </Tbody>
+                    </Table>                 
                   </div>                  
                 </div>
               </div>  
@@ -235,40 +289,7 @@ export default function Test(): React.ReactElement {
           Number of Consumers: {test?.consumersNumber.toString()}
         </Box>
         <WithPermission allowedRoles={["ADMIN"]}>
-          <Table variant="simple">
-            <Thead>
-              <Tr>
-                <Th>ID</Th>
-                <Th>Full Name</Th>
-                <Th>Age</Th>
-                <Th>Sex</Th>
-                <Th>Contact</Th>
-                <Th>Email</Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-
-              {consumers && (
-                <>
-                  {consumers.map(consumer => (
-                    <Tr className="hover:bg-slate-200 cursor-pointer" key={consumer.id} onClick={() => redirectToConsumerPage(consumer.id)}>
-                      <Td>{consumer.id}</Td>
-                      <Td>{consumer.fullname}</Td>
-                      <Td>{consumer.age}</Td>
-                      <Td>{consumer.sex}</Td>
-                      <Td>{consumer.contact}</Td>
-                      <Td>{consumer.email || "-"}</Td>
-                    </Tr>
-                  ))}
-                </>
-              )}
-              {!consumers && (
-                <>
-                  <p>Sem dados.</p>
-                </>
-              )}
-            </Tbody>
-          </Table>
+          
         </WithPermission>
         
       </Box>

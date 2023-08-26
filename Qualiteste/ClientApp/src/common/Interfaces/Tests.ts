@@ -30,10 +30,8 @@ export interface ISampleInputModel{
 }
 
 export interface ISampleOutputModel{
-    productId : number,
+    product : ProductOutputModel,
     presentationPosition : number,
-    productRef : string,
-    productDesignation : string,
 }
 
 

@@ -48,13 +48,7 @@ namespace Qualiteste.ServerApp.Services.Concrete
 
             if (test.Testtype.Equals("SP")) session = test.Session?.toOutputModel();
             IEnumerable<ConsumerOutputModel>? consumers = _unitOfWork.Tests.GetConsumersInTest(id)?.Select(c => c.ToOutputModel());
-            IEnumerable<SampleOutputModel> samples = test.Samples.Select(s => new SampleOutputModel
-                {
-                    PresentationPosition = s.Presentationposition,
-                    ProductRef = s.Product.Ref,
-                    ProductDesignation = s.Product.Designation,
-                    ProductId = s.Productid
-                }).OrderBy(s => s.PresentationPosition);
+            IEnumerable<SampleOutputModel> samples = test.Samples.Select(s => s.toOutputModel());
 
             return new TestPageModel
             {
@@ -183,13 +177,7 @@ namespace Qualiteste.ServerApp.Services.Concrete
                 var consumersInfo = GetInfoOnConsumers(cIds, test);
                 IEnumerable<Dictionary<string, string>> rows = values.Select(v => v.ToDictionary(attr => attr.Attribute, attr => attr.Attrvalue));
 
-                IEnumerable<SampleOutputModel> samplesInTest = test.Samples.Select(s => new SampleOutputModel
-                {
-                    PresentationPosition = s.Presentationposition,
-                    ProductRef = s.Product.Ref,
-                    ProductDesignation = s.Product.Designation,
-                    ProductId = s.Productid
-                }).OrderBy(s => s.PresentationPosition);
+                IEnumerable<SampleOutputModel> samplesInTest = test.Samples.Select(s => s.toOutputModel());
 
                 FizzTableModel fizzTable = new FizzTableModel
                 {
