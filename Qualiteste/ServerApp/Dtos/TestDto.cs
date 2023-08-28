@@ -50,5 +50,6 @@ namespace Qualiteste.ServerApp.Dtos
         public IEnumerable<SampleOutputModel>? Samples { get; init; }
         public SessionOutputModel? Session { get; init; }
         public TestOutputModel Test { get; init; }
+        public bool HasResults { get; init; }
     }
 }
