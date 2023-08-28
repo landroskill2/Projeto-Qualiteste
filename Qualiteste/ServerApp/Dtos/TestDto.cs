@@ -7,6 +7,7 @@ namespace Qualiteste.ServerApp.Dtos
         public string ID { get; init; }
         public string Type { get; init; }
         public int ConsumersNumber { get; init; }
+        public ProductOutputModel Product { get; init; }
         public DateOnly RequestDate { get; init; }
         public DateOnly? ValidationDate { get; init; }
         public DateOnly? DueDate { get; init; }
@@ -46,6 +47,7 @@ namespace Qualiteste.ServerApp.Dtos
     }
     public record TestPageModel{
         public IEnumerable<ConsumerOutputModel>? Consumers { get; init; }
+        public IEnumerable<SampleOutputModel>? Samples { get; init; }
         public SessionOutputModel? Session { get; init; }
         public TestOutputModel Test { get; init; }
     }

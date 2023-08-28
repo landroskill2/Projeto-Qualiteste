@@ -33,7 +33,7 @@ namespace Qualiteste.ServerApp.Services.Concrete
                 return new SessionErrors.NoSessionFoundWithId();
             }
             IEnumerable<ConsumerSessionOutputModel> consumerSessions = session.ConsumerSessions.OrderBy(cs => cs.Consumer.Fullname).Select(cs => cs.toOutputModel());
-            IEnumerable<TestOutputModel> tests = session.Tests.Select(t => t.toOutputModel());
+            IEnumerable<TestOutputModel> tests = session.Tests.Select(t => t.toOutputModel(t.ProductNavigation.toOutputModel()));
 
             return new SessionPageModel
             {

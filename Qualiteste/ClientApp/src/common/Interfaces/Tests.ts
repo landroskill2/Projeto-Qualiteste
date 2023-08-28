@@ -1,7 +1,10 @@
+import { ProductOutputModel } from "./Products";
+
 export interface ITestOutputModel {
     id: string,
     type: string,
     consumersNumber: Number,
+    product: ProductOutputModel,
     requestDate: string | undefined,
     validationDate?: string | undefined,
     dueDate?: string | undefined,
@@ -27,10 +30,8 @@ export interface ISampleInputModel{
 }
 
 export interface ISampleOutputModel{
-    productId : number,
+    product : ProductOutputModel,
     presentationPosition : number,
-    productRef : string,
-    productDesignation : string,
 }
 
 

@@ -21,9 +21,7 @@ namespace Qualiteste.ServerApp.Dtos
 
     public record SampleOutputModel
     {
-        public int ProductId { get; init; }
-        public string ProductRef { get; init; }
-        public string ProductDesignation { get; init; }
+        public ProductOutputModel Product { get; init; }
 
         public int PresentationPosition { get; init; }
 
