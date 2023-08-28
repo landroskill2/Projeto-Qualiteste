@@ -195,7 +195,7 @@ export default function FizzResults(): React.ReactElement {
                   return (
                       <div className='flex flex-col rounded-md m-4 border-slate-300 border-2 shadow-md'>
                         <div className='flex justify-between hover:bg-slate-300 cursor-pointer' onClick={() => handleShowToggle(index)}>
-                        <Heading className='m-4' >{(productOrder.find(p => p.presentationPosition === index)?.productRef)} - {(productOrder.find(p => p.presentationPosition === (index))?.productDesignation)}</Heading>
+                        <Heading className='m-4' >{(productOrder.find(p => p.presentationPosition === index)?.product.ref)} - {(productOrder.find(p => p.presentationPosition === (index))?.product.designation)}</Heading>
                         {!show![index] && <ChevronDownIcon className="self-center mr-4" boxSize={8}></ChevronDownIcon> || <ChevronUpIcon className="self-center mr-4" boxSize={8}></ChevronUpIcon>}
                         </div>
                         <Collapse in={show![index]}>
