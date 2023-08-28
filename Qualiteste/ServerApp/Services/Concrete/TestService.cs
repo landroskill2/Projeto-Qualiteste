@@ -50,7 +50,7 @@ namespace Qualiteste.ServerApp.Services.Concrete
             IEnumerable<ConsumerOutputModel>? consumers = _unitOfWork.Tests.GetConsumersInTest(id)?.Select(c => c.ToOutputModel());
             IEnumerable<SampleOutputModel> samples = test.Samples.Select(s => s.toOutputModel());
 
-            bool HasResults = _unitOfWork.Tests.HasResults(id);
+            bool HasResults = test.FizzAttributes.Count != 0;
 
             return new TestPageModel
             {

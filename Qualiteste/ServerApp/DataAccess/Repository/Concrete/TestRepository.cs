@@ -98,11 +98,6 @@ namespace Qualiteste.ServerApp.DataAccess.Repository.Concrete
             return PostgresContext.Tests.SingleOrDefault(c => c.Clientid == clientID && c.Internalid == id);
         }
 
-        public bool HasResults(string id)
-        {
-            return GetTestById(id).FizzAttributes. == null ? false : true;
-        }
-
         public PostgresContext PostgresContext
         {
             get { return Context as PostgresContext; }

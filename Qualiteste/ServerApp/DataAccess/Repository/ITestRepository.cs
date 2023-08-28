@@ -20,6 +20,5 @@ namespace Qualiteste.ServerApp.DataAccess.Repository
         void AddConsumerToTest(string id, IEnumerable<int> consumer);
         IEnumerable<Test> GetTestsByClient(string clientID);
         Test? GetClientTestsByID(string clientID, string id);
-        bool HasResults(string id);
     }
 }
