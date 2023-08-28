@@ -116,7 +116,7 @@ export default function Consumer(): React.ReactElement {
                 <div className="flex flex-col border-2 h-full m-4 rounded-lg border-slate-500 overflow-hidden">
                   <div className="flex flex-col flex-grow overflow-y-auto scrollbar-thin scrollbar-thumb-slate-300 scrollbar-thumb-rounded-lg scrollbar-track-slate-300'">
                     <Table variant="simple">
-                      <Thead top={0} zIndex="docked" position={"sticky"} className="rounded-lg bg-slate-300 border-b-2 border-slate-500">
+                      <Thead top={0} zIndex="docked" position={"sticky"} className="rounded-lg bg-slate-300 border-slate-500">
                         <Tr >
                           <Th>ID</Th>
                           <Th>Data</Th>
@@ -144,7 +144,7 @@ export default function Consumer(): React.ReactElement {
                 <div className="flex flex-col border-2 h-full m-4 rounded-lg border-slate-500 overflow-hidden">
                   <div className="flex flex-col flex-grow overflow-y-auto scrollbar-thin scrollbar-thumb-slate-300 scrollbar-thumb-rounded-lg scrollbar-track-slate-300'">
                       <Table variant="simple">
-                        <Thead top={0} zIndex="docked" position={"sticky"} className="rounded-lg bg-slate-300 border-b-2 border-slate-500">
+                        <Thead top={0} zIndex="docked" position={"sticky"} className="rounded-lg bg-slate-300 border-slate-500">
                           <Tr>
                             <Th>ID</Th>
                             <Th>Data do pedido</Th>

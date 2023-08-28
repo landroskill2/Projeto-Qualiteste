@@ -291,8 +291,8 @@ export default function Session() : React.ReactElement{
                 </div>
                 <div className=" border-2 h-1/2 overflow-y-auto m-4 rounded-lg border-slate-500 flex-grow scrollbar-thin scrollbar-thumb-slate-300 scrollbar-thumb-rounded-lg scrollbar-track-slate-300'">
                   <Table variant={"simple"}>
-                    <Thead top={0} zIndex="docked" position={"sticky"} className="rounded-lg bg-slate-300 border-b-2 border-slate-500">
-                      <Tr className=" bg-slate-200">
+                    <Thead top={0} zIndex="docked" position={"sticky"} className="rounded-lg bg-slate-300">
+                      <Tr>
                         <Th>ID</Th>
                         <Th>Tipo de teste</Th>
                         <Th>Número de provadores</Th>
@@ -348,8 +348,8 @@ export default function Session() : React.ReactElement{
                       sessionTime && (
                         <div className="flex-shrink-0 overflow-y-auto overflow-x-hidden flex-grow min-w-1/3 border-r border-slate-500 scrollbar-thin scrollbar-thumb-slate-300 scrollbar-thumb-rounded-lg scrollbar-track-slate-300'">
                           <Table variant="simple" size={"sm"}>
-                            <Thead top={0} zIndex="docked" position={"sticky"} className="rounded-lg bg-slate-300 border-b-2 border-slate-500">
-                              <Tr className=" bg-slate-200">
+                            <Thead top={0} zIndex="docked" position={"sticky"} className="rounded-lg bg-slate-300">
+                              <Tr>
                                 <Th>
                                   {sessionTime}
                                 </Th> 
