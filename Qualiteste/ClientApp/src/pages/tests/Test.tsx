@@ -94,16 +94,17 @@ export default function Test(): React.ReactElement {
   };
 
   const handleResultsRemoval = async (testId : string) => {
-    const response = await removeResultsFromTest(testId).catch(err => {
-      addToast({id: "error", title: "Erro", description: err.response.data.title, status: "error"})
+    await removeResultsFromTest(testId)
+    .then(response =>{
+      setIsLoading(true)
+      populateData().then(() => {
+        setIsLoading(false)
+        addToast({id: "success", title: "Sucesso", description: "Provador adicionado com sucesso.", status: "success"})
+      })
     })
-    if(response?.status === 200){
-      addToast({id: "success", title: "Sucesso", description: response.data, status: "success"})
-    }
-  }
-
-  const checkForResults = async (testId : string) => {
-    
+    .catch(err => 
+      addToast({id: "error", title: "Erro", description: err.response.data.title, status: "error"})
+    )
   }
 
   const isHomeTest = test?.type === "HT";
@@ -135,20 +136,32 @@ export default function Test(): React.ReactElement {
                 <Heading size={"lg"} className="self-center ml-4">Dados do Teste</Heading>
                 <WithPermission allowedRoles={["ADMIN"]}>
                   {!isHomeTest &&
-                    <div className="flex m-4">
-                      <Input type="file" accept=".txt,.csv" onChange={handleFileUpload} display="none" id="file-upload" />
-                      <label htmlFor="file-upload">
-                        <Button bgColor={"gray.300"} as="span" mr={2} className=" cursor-pointer">
-                          Importar resultados
-                        </Button>
-                      </label>
+                    <div className="flex m-4 gap-2">
                       { hasResults &&
-                        <div className="flex flex-grow rounded-lg p-2 self-center gap-1 hover:bg-slate-200 cursor-pointer" onClick={() => navigate("fizz")}>
-                          <Heading size={"md"} className="self-center ml-4">Resultados do Teste</Heading>
-                          <div>
-                            <ArrowForwardIcon boxSize={6}/>
-                          </div>
+                      <>
+                        <div className="flex flex-grow rounded-lg p-2 self-center gap-1 bg-red-200  hover:bg-red-300 cursor-pointer" onClick={() => handleResultsRemoval(id!)}>
+                         <Heading size={"md"} className="self-center">Eliminar Resultados</Heading>
+                        
                         </div>
+                        <div className="flex flex-grow rounded-lg p-2 self-center gap-1 bg-slate-200 hover:bg-slate-300 cursor-pointer" onClick={() => navigate("fizz")}>
+                          <Heading size={"md"} className="self-center  mr-2">Resultados do Teste</Heading>
+                          <div>
+                           <ArrowForwardIcon boxSize={6}/>
+                         </div>
+                        </div>
+                      </>
+                      }
+                      { !hasResults &&
+                      <>
+                      <div>
+                      <Input type="file" accept=".txt,.csv" onChange={handleFileUpload} display="none" id="file-upload" />
+                        <label htmlFor="file-upload">
+                          <Button bgColor={"gray.300"} as="span" mr={2} className=" cursor-pointer">
+                            Importar resultados
+                          </Button>
+                        </label>
+                      </div>
+                      </>
                       }
                       
                     </div>

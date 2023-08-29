@@ -101,18 +101,14 @@ namespace Qualiteste.ServerApp.DataAccess.Repository.Concrete
             return PostgresContext.Tests.SingleOrDefault(c => c.Clientid == clientID && c.Internalid == id);
         }
 
-        public bool HasResults(string id)
-        {
-            return true;//GetTestById(id).FizzAttributes. == null ? false : true;
-        }
-
         public void RemoveResultsFromTest(string testId)
         {
-            IEnumerable<AttributeValue> attrs = PostgresContext.AttributeValues.Where(r => r.Testid == testId);
-            if (attrs.Any())
+            IEnumerable<AttributeValue> attrsVals = PostgresContext.AttributeValues.Where(r => r.Testid == testId);
+            if (attrsVals.Any())
             {
-                PostgresContext.AttributeValues.RemoveRange(attrs);
-
+                PostgresContext.AttributeValues.RemoveRange(attrsVals);
+                IEnumerable<FizzAttribute> attrsDesignation = PostgresContext.FizzAttributes.Where(r => r.Testid == testId);
+                PostgresContext.FizzAttributes.RemoveRange(attrsDesignation);
             }
                 
         }

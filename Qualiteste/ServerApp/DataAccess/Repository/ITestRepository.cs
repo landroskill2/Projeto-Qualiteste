@@ -21,6 +21,5 @@ namespace Qualiteste.ServerApp.DataAccess.Repository
         IEnumerable<Test> GetTestsByClient(string clientID);
         Test? GetClientTestsByID(string clientID, string id);
         void RemoveResultsFromTest(string testId);
-        bool HasResults(string id);
     }
 }
