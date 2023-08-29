@@ -18,5 +18,12 @@
             {
             }
         }
+        public class RemoveResultsSuccess : TestSucesses
+        {
+            public RemoveResultsSuccess() : base("Resultados eliminados do teste com sucesso", 200)
+            {
+            }
+        }
+
     }
 }

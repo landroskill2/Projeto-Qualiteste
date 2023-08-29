@@ -230,6 +230,20 @@ namespace Qualiteste.ServerApp.Services.Concrete
             }
         }
 
+        public Either<CustomError, TestSucesses> RemoveTestResults(string testId)
+        {
+            try
+            {
+                Test t = _unitOfWork.Tests.GetTestById(testId);
+                if (t == null) return new TestErrors.NoTestFoundWithGivenID();
+                _unitOfWork.Tests.RemoveResultsFromTest(testId);
+                return new TestSucesses.RemoveResultsSuccess();
+            }catch(Exception ex)
+            {
+                throw ex;
+            }
+        }
+
 
         /**
          * Presence:

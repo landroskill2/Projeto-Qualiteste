@@ -2,7 +2,7 @@ import { Box, Table, Thead, Tbody, Tr, Th, Td, Spinner, Button, Input, Heading }
 import { IConsumerOutputModel } from '../../common/Interfaces/Consumers';
 import { ISessionModel } from '../../common/Interfaces/Sessions';
 import { ISampleOutputModel, ITestOutputModel } from '../../common/Interfaces/Tests';
-import { addConsumerToTest, fetchClientTestById, fetchTestById, uploadFile } from '../../common/APICalls';
+import { addConsumerToTest, fetchClientTestById, fetchTestById, uploadFile, removeResultsFromTest } from '../../common/APICalls';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from "react";
 import AddConsumersModal from "../../components/modals/AddConsumersModal";
@@ -92,6 +92,19 @@ export default function Test(): React.ReactElement {
       }
     }
   };
+
+  const handleResultsRemoval = async (testId : string) => {
+    const response = await removeResultsFromTest(testId).catch(err => {
+      addToast({id: "error", title: "Erro", description: err.response.data.title, status: "error"})
+    })
+    if(response?.status === 200){
+      addToast({id: "success", title: "Sucesso", description: response.data, status: "success"})
+    }
+  }
+
+  const checkForResults = async (testId : string) => {
+    
+  }
 
   const isHomeTest = test?.type === "HT";
 

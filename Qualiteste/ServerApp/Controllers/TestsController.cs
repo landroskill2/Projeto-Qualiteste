@@ -191,6 +191,7 @@ namespace Qualiteste.ServerApp.Controllers
                 return Problem(statusCode: 500, title: "Ocorreu um erro inesperado");
             }
         }
+        [Authorize(Roles = "ADMIN")]
         [HttpPost("{id}/fizz")]
         public IActionResult UpdateAttributeAlias(string id, [FromBody] FizzAliasDto[] alias)
         {
@@ -205,6 +206,24 @@ namespace Qualiteste.ServerApp.Controllers
             catch (Exception e)
             {
                 Console.WriteLine(e.GetBaseException().ToString());
+                return Problem(statusCode: 500, title: "Ocorreu um erro inesperado");
+            }
+        }
+
+        [Authorize(Roles = "ADMIN")]
+        [HttpGet("{id}/fizz/remove")]
+        public IActionResult RemoveFizzValuesFromTest(string id)
+        {
+            try
+            {
+                Either<CustomError, TestSucesses> result = _testService.RemoveTestResults(id);
+                return result.Match(
+                    error => Problem(statusCode: error.StatusCode, title: error.Message),
+                    success => Ok(success)
+                    );
+            }
+            catch (Exception e)
+            {
                 return Problem(statusCode: 500, title: "Ocorreu um erro inesperado");
             }
         }
