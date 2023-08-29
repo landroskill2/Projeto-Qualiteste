@@ -1,7 +1,11 @@
-﻿namespace Qualiteste.ServerApp.Services
+﻿using Qualiteste.ServerApp.Services.Replies.Errors;
+using Qualiteste.ServerApp.Services.Replies.Successes;
+using Qualiteste.ServerApp.Utils;
+
+namespace Qualiteste.ServerApp.Services
 {
     public interface ICsvService
     {
-        Task ParseCsv(IFormFile csvFile, string id);
+        Task<Either<CustomError,TestSuccesses>> ParseCsv(IFormFile csvFile, string id);
     }
 }

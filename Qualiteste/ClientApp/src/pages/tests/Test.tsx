@@ -83,12 +83,15 @@ export default function Test(): React.ReactElement {
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if(file) {
-      const resp = await uploadFile(id!, file)
-      console.log(resp)
-      if(resp.status === 201) {
+      const resp = await uploadFile(id!, file).catch(err => {
+        addToast({id: "error", title: "Erro", description: err.response.data.title, status: "error"})
+      })
+      if(resp?.status === 201) {
         const toastObj = {id: "success", title: "Sucesso", description: "Ficheiro processado com sucesso.", status: "success"}
         const location = resp!.headers.location.split("/api")[1]
         navigate(location, {state: toastObj})
+      }else {
+
       }
     }
   };

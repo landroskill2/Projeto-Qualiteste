@@ -1,5 +1,5 @@
 import { Outlet, useNavigate } from "react-router-dom";
-import { FaUser } from "react-icons/fa";
+import { FaUser, FaUsers } from "react-icons/fa";
 
 export default function Admin() : React.ReactElement {
     const navigate = useNavigate()
@@ -31,6 +31,14 @@ export default function Admin() : React.ReactElement {
               title={"Criar conta"}
               onClick={() => navigate("/admin/register-account") } //mudar href
               icon={<FaUser />}
+            />
+            <Outlet />
+          </div>
+          <div className="flex flex-row flex-1 flex-wrap gap-10 sm:gap-20 justify-between p-3 sm:mb-0">
+            <Option
+              title={"Contas existentes"}
+              onClick={() => navigate("/admin/accounts") } //mudar href
+              icon={<FaUsers />}
             />
             <Outlet />
           </div>

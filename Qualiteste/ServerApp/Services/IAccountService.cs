@@ -10,5 +10,6 @@ namespace Qualiteste.ServerApp.Services
     {
         Either<CustomError, string> Login(UserDto user);
         Either<CustomError, string> CreateAccount(UserDto user);
+        Either<CustomError, IEnumerable<UserDto>> GetAccounts();
     }
 }

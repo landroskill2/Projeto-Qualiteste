@@ -58,5 +58,22 @@ namespace Qualiteste.ServerApp.Controllers
                 return Problem(statusCode: 500, title: "Ocorreu um erro inesperado");
             }
         }
+        [Authorize(Roles = "ADMIN")]
+        [HttpGet]
+        public IActionResult GetAccounts()
+        {
+            try{
+                Either<CustomError, IEnumerable<UserDto>> result = _accountService.GetAccounts();
+
+                return result.Match(
+                    error => Problem(statusCode: error.StatusCode, title: error.Message),
+                    success => Ok(success)
+                );
+
+            }catch(Exception e)
+            {
+                return Problem(statusCode: 500, title: "Ocorreu um erro inesperado");
+            }
+        }
     }
 }

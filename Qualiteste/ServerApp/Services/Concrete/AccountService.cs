@@ -94,5 +94,17 @@ namespace Qualiteste.ServerApp.Services.Concrete
 
             return "Account Created";
         }
+
+        public Either<CustomError, IEnumerable<UserDto>> GetAccounts()
+        {
+            try
+            {
+                List<UserDto> users = _unitOfWork.Users.GetAll().Select(u => u.toOutputModel()).ToList();
+                return users;
+            }catch(Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }
