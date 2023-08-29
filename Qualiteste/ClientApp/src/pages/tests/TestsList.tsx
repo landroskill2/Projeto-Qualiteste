@@ -65,7 +65,8 @@ export default function Tests(): React.ReactElement{
             <Spinner size="lg" />
           </div>
         ) : (
-          <div className="mt-6 px-6 min-h-full w-full flex flex-col flex-grow">
+          tests.length > 0 ? (
+            <div className="mt-6 px-6 min-h-full w-full flex flex-col flex-grow">
             <WithPermission allowedRoles={["ADMIN"]}>
               <TestTypeFilter type={type} setType={setType} />
             </WithPermission>
@@ -73,6 +74,13 @@ export default function Tests(): React.ReactElement{
               <TestsTable tests={tests} onClickTest={redirectToTestPage} />
             </div>
           </div>
+          ) : (
+             //Add stuff here in case there is no data to show
+            <div className="mt-6 px-6 min-h-full w-full flex flex-col flex-grow items-center justify-center">
+            <Heading>This is empty...*Temporary*</Heading>
+              <img src="https://gifdb.com/images/high/tumbleweed-hills-u6pgl9vwk7x1wfor.gif"></img>
+          </div>
+          )
           )}
       
       <WithPermission allowedRoles={["ADMIN"]}>

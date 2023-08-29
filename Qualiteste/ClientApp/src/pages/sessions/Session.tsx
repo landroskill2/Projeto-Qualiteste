@@ -10,10 +10,7 @@ import {
   Th,
   Td,
   Heading,
-  Box,
-  useToast,
   Spinner,
-  Tfoot,
 } from "@chakra-ui/react";
 import { ISessionModel } from '../../common/Interfaces/Sessions'
 import { IConsumerSessionOutputModel } from '../../common/Interfaces/Sessions'
@@ -26,6 +23,7 @@ import SessionTimeSelector from "../../components/SessionTimeSelector";
 import AddTestsModal from "../../components/modals/AddTestsModal";
 import { useGlobalToast } from "../../common/useGlobalToast";
 import { CircleIconDiv } from "../../components/CIrcleIconDiv";
+import Page404 from "../Page404";
 
 type ConsumersInSession = {
   sessionTime: string,
@@ -39,6 +37,7 @@ type ConsumerAttendance = {
 
 export default function Session() : React.ReactElement{
   // State variables to hold the session, consumerSessions, and tests data
+  const [pageStatus, setPageStatus] = useState<number|undefined>(undefined)
   const [session, setSession] = useState<ISessionModel | null>(null);
   const [consumerSessions, setConsumerSessions] = useState<IConsumerSessionOutputModel[]>([]);
   const [tests, setTests] = useState<ITestOutputModel[]>([]);
@@ -78,19 +77,6 @@ export default function Session() : React.ReactElement{
         addToast({id: "success", title: "Sucesso", description: resp.data.message, status: "success"})
       })
     } 
-  }
-
-  const useCircleIcon = (attendance : boolean | undefined, onClick : () => void) => {
-    let currColor = "grey"
-    if(attendance != undefined){
-      currColor = attendance == true ? "green.500" : "red.500"
-    }
-
-    return (
-      <div className="flex hover:bg-slate-300 cursor-pointer justify-center items-center content-center" onClick={onClick} onMouseOver={() => {currColor = nextColorState(attendance)}}>
-        <CircleIcon boxSize={4} className="self-center" color={currColor}></CircleIcon>
-      </div>
-    )
   }
 
   function nextColorState(attendance : boolean | undefined) : string {
@@ -180,9 +166,9 @@ export default function Session() : React.ReactElement{
   }, []);
 
   async function populateData() {
-    const response = await fetchSessionById(id!!)
+    const response = await fetchSessionById(id!!).catch(err => err.response)
     const { session, consumers, tests } = response.data;
-
+    setPageStatus(response.status)
     setSession(session);
     setConsumerSessions(consumers);
     setTests(tests);    
@@ -225,8 +211,10 @@ export default function Session() : React.ReactElement{
       {isLoading && 
         <div className="flex flex-col justify-center items-center h-screen">
           <Spinner size="lg" />
-        </div> || 
-        <div className="flex flex-col w-full h-[calc(100vh-72px)] overflow-y-hidden">
+        </div> || pageStatus === 404 ? (
+          <Page404></Page404>
+        ) : (
+          <div className="flex flex-col w-full h-[calc(100vh-72px)] overflow-y-hidden">
           <div className="flex justify-between content-center m-4 h-fit">
             <div className="flex flex-col flex-grow shadow-2xl self-center rounded-xl bg-slate-100 h-full m-4 mt-10">
               <div className="flex justify-center content-center">
@@ -382,6 +370,7 @@ export default function Session() : React.ReactElement{
             </div>
           </div>
         </div>
+        )   
       }
     </>
   );

@@ -8,6 +8,5 @@ namespace Qualiteste.ServerApp.DataAccess.Repository
 
         int GetLastId();
 
-        //No need for GetAllBrands operation in repository
     }
 }

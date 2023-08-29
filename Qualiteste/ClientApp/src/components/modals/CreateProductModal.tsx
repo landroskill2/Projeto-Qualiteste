@@ -53,6 +53,7 @@ export default function CreateProductModal({onSubmit} : ModalProps) : React.Reac
     return (
         <div >
         <Button
+            colorScheme="blue"
             onClick={onOpen}
             m={4}
             >{`Criar Produto`}

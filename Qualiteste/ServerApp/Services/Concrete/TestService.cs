@@ -66,6 +66,7 @@ namespace Qualiteste.ServerApp.Services.Concrete
         {
             try
             {
+                if (testInput.ClientID == null) return new TestErrors.InvalidClientId();
                 if (testInput.Samples.ToArray().Length == 0) return new TestErrors.TestHasNoSamples();
                 Test dbTest = testInput.toDbTest();
                 IEnumerable<Sample> samples = testInput.Samples.Select(c => c.toDbSample(testInput.ID));

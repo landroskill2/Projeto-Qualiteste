@@ -86,6 +86,12 @@ namespace Qualiteste.ServerApp.Services.Replies.Errors
             {
             }
         }
+        public class InvalidClientId : TestErrors
+        {
+            public InvalidClientId() : base("ClientId tem que estar definido.", 400)
+            {
+            }
+        }
     }
 
 }

@@ -11,8 +11,10 @@ import { useAuth } from "../../auth/useAuth";
 import WithPermission from "../../auth/WithPermission";
 import { ProductOutputModel } from "../../common/Interfaces/Products";
 import { ArrowForwardIcon } from "@chakra-ui/icons";
+import Page404 from "../Page404";
 
 export default function Test(): React.ReactElement {
+  const [pageStatus, setPageStatus] = useState<number|undefined>(undefined)
   const [session, setSession] = useState<ISessionModel | null>(null);
   const [consumers, setConsumers] = useState<IConsumerOutputModel[] | null>(null);
   const [test, setTest] = useState<ITestOutputModel | null>(null);
@@ -62,14 +64,13 @@ export default function Test(): React.ReactElement {
     try {
       let response
       if(user?.role === 'CLIENT'){
-        response = await fetchClientTestById(id!!)
+        response = await fetchClientTestById(id!!).catch(err => err.response)
       }
       else{
-        response = await fetchTestById(id!!)
-    }
-      
+        response = await fetchTestById(id!!).catch(err => err.response)
+      }
       const data = response.data
-
+      setPageStatus(response.status)
       setSession(data.session);
       setConsumers(data.consumers);
       setTest(data.test);
@@ -108,27 +109,14 @@ export default function Test(): React.ReactElement {
   }
 
   const isHomeTest = test?.type === "HT";
-
-  if (isLoading) {
-    // Render a loading spinner while waiting for the API response
-    return (
-      <Box
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-        height="100vh"
-      >
-        <Spinner size="xl" />
-      </Box>
-    );
-  }
-
   return (
     <>
       {isLoading && 
         <div className="flex flex-col justify-center items-center h-screen">
           <Spinner size="lg" />
-        </div> || 
+        </div> || pageStatus === 404 ? (
+          <Page404></Page404>
+        ):(
         <div className="flex flex-col w-full h-[calc(100vh-72px)] overflow-y-hidden">
           <div className="flex justify-between content-center m-4 h-fit">
             <div className="flex flex-col flex-grow shadow-2xl self-center rounded-xl bg-slate-100 h-full m-4 mt-10">
@@ -312,60 +300,8 @@ export default function Test(): React.ReactElement {
             </div>
           </div>
         </div>
+        ) 
       }
-    {/* <div className='flex flex-col flex-grow w-full min-h-full p-6'>
-      <Box>
-        <Box
-          display="flex"
-          justifyContent="space-between"
-          alignItems="center"
-          mb={4}
-        >
-          <Box as="h1" fontSize="2xl" fontWeight="bold">
-            TestID = {test?.id} 
-          </Box>
-
-          <WithPermission allowedRoles={["ADMIN"]}>
-            {isHomeTest && 
-              <Box>
-                <AddConsumersModal onSubmit={addConsumers}/>
-              </Box>
-            }
-          </WithPermission>
-          
-          {!isHomeTest &&
-          <>
-            <Box>
-              <Button onClick={() => navigate("fizz")}>Fizz Results</Button>
-            </Box>
-            <WithPermission allowedRoles={["ADMIN"]}>
-              <Box>
-                <Input type="file" accept=".txt,.csv" onChange={handleFileUpload} display="none" id="file-upload" />
-                  <label htmlFor="file-upload">
-                  <Button as="span" colorScheme="blue" mr={2}>
-                    Upload File
-                  </Button>
-                </label>
-              </Box>
-            </WithPermission>
-            
-          </>
-          }
-
-
-        </Box>
-        <Box className="hover:cursor-pointer" as="h1" fontSize="2xl" fontWeight="bold" mb={4} onClick={() => redirectToSessionPage(session!.id)}>
-          {session?.id}
-        </Box>
-        <Box as="h1" fontSize="2xl" fontWeight="bold" mb={4}>
-          Number of Consumers: {test?.consumersNumber.toString()}
-        </Box>
-        <WithPermission allowedRoles={["ADMIN"]}>
-          
-        </WithPermission>
-        
-      </Box>
-    </div> */}
     </>
   );
 }

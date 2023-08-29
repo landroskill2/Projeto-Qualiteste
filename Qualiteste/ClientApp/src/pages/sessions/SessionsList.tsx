@@ -53,7 +53,8 @@ export default function Sessions(): React.ReactElement{
           <Spinner size="lg" />
         </div>
       ) : (
-        <div className="mt-6 px-6 min-h-full w-full flex flex-col flex-grow items-center">
+      
+          <div className="mt-6 px-6 min-h-full w-full flex flex-col flex-grow items-center">
           <Table variant="simple" overflow="auto">
             <Thead>
               <Tr>
@@ -63,17 +64,25 @@ export default function Sessions(): React.ReactElement{
               </Tr>
             </Thead>
             <Tbody>
-              {sessions.map((session) => (
-                <Tr className="hover:bg-slate-200 cursor-pointer" key={session.id} onClick={() => redirectToSession(session.id)}>
-                  <Td>{session.id}</Td>
-                  <Td>{session.date}</Td>
-                  <Td>{session.consumersNumber.toString()}</Td>
+              {sessions.length > 0 ? (
+                  sessions.map((session) => (
+                    <Tr className="hover:bg-slate-200 cursor-pointer" key={session.id} onClick={() => redirectToSession(session.id)}>
+                      <Td>{session.id}</Td>
+                      <Td>{session.date}</Td>
+                      <Td>{session.consumersNumber.toString()}</Td>
+                    </Tr>
+                  ))
+                ) : (
+                  //Do something here
+                <Tr>
+                    <Heading>This is empty...*Temporary*</Heading>
                 </Tr>
-              ))}
+              )
+            }
             </Tbody>
           </Table>
         </div>
-      )}
+        )}
       <div className="p-6 bg-white" style={{ flexShrink: 0 }}>
         <Button colorScheme="blue" onClick={redirectToSessionCreation}>
           Criar Sessão

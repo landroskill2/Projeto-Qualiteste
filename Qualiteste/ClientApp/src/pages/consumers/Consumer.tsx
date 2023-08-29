@@ -6,8 +6,10 @@ import { ITestOutputModel } from '../../common/Interfaces/Tests';
 import { fetchConsumerById } from '../../common/APICalls';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useGlobalToast } from '../../common/useGlobalToast';
+import Page404 from '../Page404';
 
 export default function Consumer(): React.ReactElement {
+  const [pageStatus, setPageStatus] = useState<number|undefined>(undefined)
   const [consumerData, setConsumerData] = useState<IConsumerOutputModel | null>(null);
   const [sessionData, setSessionData] = useState<ISessionModel[]>([]);
   const [testData, setTestData] = useState<ITestOutputModel[]>([]);
@@ -40,21 +42,23 @@ export default function Consumer(): React.ReactElement {
   }, []);
 
   async function populateData(){
-    const response = await fetchConsumerById(Number(id))
-      const { consumer, sessions, tests } = response.data;
-
-      setConsumerData(consumer);
-      setSessionData(sessions);
-      setTestData(tests);
-  }
+    const response = await fetchConsumerById(Number(id)).catch(err => err.response)
+    setPageStatus(response.status)
+    const { consumer, sessions, tests } = response.data;
+    setConsumerData(consumer);
+    setSessionData(sessions);
+    setTestData(tests);
+    }
 
   return (
     <>
-      {isLoading && 
+      {isLoading &&
         <div className="flex flex-col justify-center items-center h-screen">
           <Spinner size="lg" />
-        </div> || 
-        <div className='flex flex-col flex-grow w-full min-h-full p-6'>
+        </div> || pageStatus === 404 ? (
+          <Page404></Page404>
+        ):(
+          <div className='flex flex-col flex-grow w-full min-h-full p-6'>
           <div className="justify-center items-center">
             <div className="">
               <h1 className="text-5xl font-bold text-center bg-white">{consumerData?.fullname}</h1>
@@ -171,6 +175,7 @@ export default function Consumer(): React.ReactElement {
             </div>
           </div>     
         </div>
+        )
       }
     </>
   );

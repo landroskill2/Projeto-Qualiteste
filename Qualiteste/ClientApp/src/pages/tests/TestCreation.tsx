@@ -30,7 +30,7 @@ const initialFormValues: ITestInputModel = {
   testType: "SP",
   consumersNumber: 0,
   product : undefined,
-  clientId : "cliente",
+  clientId : undefined,
   requestDate: "",
   samples : []
 };
@@ -63,11 +63,11 @@ export default function TestCreation(): React.ReactElement {
   useEffect(() => {
     fetchAllClients().then(res => setAvailableClients(res.data)) 
   }, [])
+
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
-
     if (name === "consumersNumber") {
         const parsedValue = parseInt(value, 10);
         const newValue = parsedValue >= 0 ? parsedValue : 0;
@@ -79,33 +79,32 @@ export default function TestCreation(): React.ReactElement {
       } else {
         setFormValues((prevValues) => ({
           ...prevValues,
-          [name]: value,
+          [name]: value === "none" ? undefined : value,
         }));
       }
-
-      console.log(formValues)
   }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     
-    formValues.samples = addedProducts.map((p, idx) => ({ProductId: p.productid, PresentationPosition : idx})) as ISampleInputModel[]
-    const resp = await createTest(formValues).catch(err => {
-      console.log(err)
-      if(!isToastActive("error")){
-        addToast({
-          id: "error",
-          title: "Erro",
-          description: err.response.data.title,
-          status: "error"
-        })
-      }
+      formValues.samples = addedProducts.map((p, idx) => ({ProductId: p.productid, PresentationPosition : idx})) as ISampleInputModel[]
+      const resp = await createTest(formValues).catch(err => {
+        if(!isToastActive("error")){
+          addToast({
+            id: "error",
+            title: "Erro",
+            description: err.response.data.title,
+            status: "error"
+          })
+        }
     })
     if(resp?.status === 201){
       const toastObj = {id: "success", title: "Sucesso", description: "Teste criado com sucesso.", status: "success"}
       const location = resp!.headers.location.split("/api")[1]
       navigate(location, {state: toastObj})
     }
+     
+    
   };
 
 
@@ -161,6 +160,7 @@ export default function TestCreation(): React.ReactElement {
                   onChange={handleInputChange}
                   background="white"
                 >
+                  <option value={"none"}>{"Selecione o Cliente"}</option>
                   {availableClients && availableClients.map(c => (
                     <option key={c.clientId} value={c.clientId}>{c.clientDesignation}</option>
                   ))}

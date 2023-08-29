@@ -23,7 +23,7 @@ export default function TestsTable({tests, onClickTest} : TableProps) : React.Re
                     <Th>Id</Th>
                     <Th>Tipo</Th>
                     <Th>Num. de provadores</Th>
-                    <Th>Data de pedido</Th>
+                    <Th>Data da prova</Th>
                 </Tr>
             </Thead>
             <Tbody>
