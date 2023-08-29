@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   ChakraProvider,
   Box,
@@ -59,6 +59,10 @@ export default function TestCreation(): React.ReactElement {
     }
   }
   
+
+  useEffect(() => {
+    fetchAllClients().then(res => setAvailableClients(res.data)) 
+  }, [])
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
@@ -127,7 +131,7 @@ export default function TestCreation(): React.ReactElement {
   }
 
   const isHomeTest = formValues.testType === "HT";
-  fetchAllClients().then(res => setAvailableClients(res.data)) 
+  
   return (
     <div className="flex flex-col bg-slate-800 shadow-slate-600 p-6 rounded-lg shadow-md ">
         <div className="flex flex-col items-center mb-4">

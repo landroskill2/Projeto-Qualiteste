@@ -1,4 +1,5 @@
 ﻿using Qualiteste.ServerApp.Models;
+using System.Linq.Expressions;
 
 namespace Qualiteste.ServerApp.DataAccess.Repository.Concrete
 {
@@ -6,10 +7,12 @@ namespace Qualiteste.ServerApp.DataAccess.Repository.Concrete
     {
 
         public ProductRepository(PostgresContext context) : base(context) { }
-        public IEnumerable<Product> GetAllProducts(string? brandName)
+        public IEnumerable<Product> QueryProducts(string? brandName, string? designation)
         {
-            if (brandName != null) return PostgresContext.Products.Where(p => p.Brand.ToLower() == brandName.ToLower());
-            return PostgresContext.Products.AsEnumerable();
+            Expression<Func<Product, bool>> query = p => (brandName == null ? true : p.Brand == brandName)
+                                                    && (designation == null ? true : p.Designation.ToLower().Contains(designation.ToLower()));
+
+            return PostgresContext.Products.Where(query);
         }
 
         public int GetLastId()

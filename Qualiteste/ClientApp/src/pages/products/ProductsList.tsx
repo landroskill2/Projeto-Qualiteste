@@ -27,9 +27,9 @@ export default function Products(): React.ReactElement{
     const [products, setProducts] = useState<ProductOutputModel[] | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [brands, setBrands] = useState<string[]>([])
-    const [brandFilter, setBrandFilter] = useState<string|undefined>(undefined)
     const [type, setType] = useState<string | null>(null)
-    const [searchString, setSearchString] = useState(null)
+    const [brandFilter, setBrandFilter] = useState<string|undefined>(undefined)
+    const [searchString, setSearchString] = useState<string|undefined>(undefined)
     const { addToast, isToastActive } = useGlobalToast() 
 
   useEffect(() => {
@@ -39,7 +39,12 @@ export default function Products(): React.ReactElement{
 
   
   async function populateData() {
-    const productsResponse = await queryProducts(brandFilter)
+    const filters = Object.assign(
+      {},
+      brandFilter === undefined? null : {brand: brandFilter},
+      searchString === undefined ? null : {designation: searchString}
+    )
+    const productsResponse = await queryProducts(filters)
     const availableBrands = await getAvailableBrands()
 
     setProducts(productsResponse.data)

@@ -8,7 +8,7 @@ namespace Qualiteste.ServerApp.Services
 {
     public interface IProductService
     {
-        Either<CustomError, IEnumerable<ProductOutputModel>> GetAllProducts(string? brandName);
+        Either<CustomError, IEnumerable<ProductOutputModel>> QueryProducts(string? brandName, string? designation);
 
         //Mudar para output model de brands
         // - BrandsOutputModel?

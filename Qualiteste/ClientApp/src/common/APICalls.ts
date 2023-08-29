@@ -296,9 +296,8 @@ export function getAvailableBrands() : Promise<AxiosResponse>{
     return instance.get(path)
 }
 
-export function queryProducts(brandName : string | undefined) : Promise<AxiosResponse>{
-    let path = `/products`
-    if(brandName) path = path.concat(`?brandName=${brandName}`)
+export function queryProducts(filters : Record<string, string>) : Promise<AxiosResponse>{
+    let path = addFiltersToQuery(`/products`, filters)
     return instance.get(path)
 }
 

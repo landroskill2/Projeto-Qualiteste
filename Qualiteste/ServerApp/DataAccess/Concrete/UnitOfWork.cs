@@ -33,7 +33,9 @@ namespace Qualiteste.ServerApp.DataAccess.Concrete
 
         public int Complete()
         {
-            return _context.SaveChanges();
+            int status =  _context.SaveChanges();
+            _context.Dispose();
+            return status;
         }
 
         public void Dispose()
