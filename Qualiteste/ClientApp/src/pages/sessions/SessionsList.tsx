@@ -10,7 +10,8 @@ import {
   Flex,
   Heading,
   Spinner,
-  Box
+  Box,
+  TableCaption
 } from "@chakra-ui/react";
 import { ISessionModel } from "../../common/Interfaces/Sessions";
 import { useNavigate } from "react-router-dom";
@@ -74,9 +75,8 @@ export default function Sessions(): React.ReactElement{
                   ))
                 ) : (
                   //Do something here
-                <Tr>
-                    <Heading>This is empty...*Temporary*</Heading>
-                </Tr>
+                  <Heading>This is empty...*Temporary*</Heading>
+               
               )
             }
             </Tbody>

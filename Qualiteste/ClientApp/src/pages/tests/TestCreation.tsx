@@ -18,9 +18,7 @@ import { ITestInputModel, ISampleInputModel } from "../../common/Interfaces/Test
 import { createProduct, createTest, fetchAllClients } from "../../common/APICalls";
 import { useGlobalToast } from "../../common/useGlobalToast";
 import { useNavigate } from "react-router-dom";
-import ProductsTable from "../../components/tables/ProductsTable";
 import { ProductInputModel, ProductOutputModel } from "../../common/Interfaces/Products";
-import CreateProductModal from "../../components/modals/CreateProductModal";
 import AddProductsModal from "../../components/modals/AddProductModal";
 import DraggableProductTable from "../../components/tables/DraggableProductTable";
 import { IClientOutputModel } from "../../common/Interfaces/Clients";
@@ -103,8 +101,6 @@ export default function TestCreation(): React.ReactElement {
       const location = resp!.headers.location.split("/api")[1]
       navigate(location, {state: toastObj})
     }
-     
-    
   };
 
 

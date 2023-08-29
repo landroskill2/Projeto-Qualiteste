@@ -166,15 +166,14 @@ export default function Test(): React.ReactElement {
                   </div>
                 </div>
                 <WithPermission allowedRoles={["ADMIN"]}>
-                  {!isHomeTest &&
+                  {!isHomeTest && session !== null &&
                     <div className="flex flex-col flex-grow border-r-2 border-slate-500">
                       <div  className="flex justify-center items-center p-4 border-b-2 border-slate-500 h-1/3 bg-slate-300 hover:bg-slate-400 cursor-pointer" onClick={() => {navigate(`/sessions/${session?.id}`) }}>                    
                         <Heading size={"md"}>Sessão do Teste</Heading>
                         <ArrowForwardIcon ml={1} boxSize={6}/>
                       </div>
                       <div  className="flex h-2/3 justify-center items-center">
-                        
-                        <Heading size={"md"}>{session?.id}</Heading>   
+                        <Heading size={"md"}>{session.id}</Heading>   
                       </div>
                     </div>
                   }
@@ -231,7 +230,8 @@ export default function Test(): React.ReactElement {
                       }
                     </div>
                     <div className=" overflow-x-hidden border-2 h-full m-4 rounded-lg border-slate-500 overflow-y-auto scrollbar-thin scrollbar-thumb-slate-300 scrollbar-thumb-rounded-lg">
-                      <Table variant="simple" className="">
+                    {consumers && consumers.length > 0 ? (
+                        <Table variant="simple" className="">
                         <Thead top={0} zIndex="docked" position={"sticky"} className="rounded-lg bg-slate-300">
                           <Tr>
                             <Th>ID</Th>
@@ -243,9 +243,6 @@ export default function Test(): React.ReactElement {
                           </Tr>
                         </Thead>
                         <Tbody>
-
-                          {consumers && (
-                            <>
                               {consumers.map(consumer => (
                                 <Tr className="hover:bg-slate-200 cursor-pointer" key={consumer.id} onClick={() => redirectToConsumerPage(consumer.id)}>
                                   <Td>{consumer.id}</Td>
@@ -256,15 +253,14 @@ export default function Test(): React.ReactElement {
                                   <Td>{consumer.email || "-"}</Td>
                                 </Tr>
                               ))}
-                            </>
-                          )}
-                          {!consumers && (
-                            <>
-                              <p>Sem dados.</p>
-                            </>
-                          )}
                         </Tbody>
                       </Table>
+                    ) : (
+                      <div className="flex flex-grow h-full w-96 justify-center items-center ">
+                        <Heading className=" text-center" color={"gray.500"}>Não existem provadores no teste.</Heading>
+                      </div>
+                      ) 
+                    }
                     </div>
                   </div>              
                 </WithPermission>            

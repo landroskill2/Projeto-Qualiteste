@@ -278,7 +278,8 @@ export default function Session() : React.ReactElement{
                   <AddTestsModal onClickTest={addTest}/>
                 </div>
                 <div className=" border-2 h-1/2 overflow-y-auto m-4 rounded-lg border-slate-500 flex-grow scrollbar-thin scrollbar-thumb-slate-300 scrollbar-thumb-rounded-lg scrollbar-track-slate-300'">
-                  <Table variant={"simple"}>
+                  {tests.length > 0 ? (
+                    <Table variant={"simple"}>
                     <Thead top={0} zIndex="docked" position={"sticky"} className="rounded-lg bg-slate-300">
                       <Tr>
                         <Th>ID</Th>
@@ -298,6 +299,11 @@ export default function Session() : React.ReactElement{
                       ))}
                     </Tbody>
                   </Table>
+                  ) : (
+                    <div className="flex flex-grow h-full w-96 justify-center items-center ">
+                      <Heading className=" text-center" color={"gray.500"}>Não existem testes presentes na sessão.</Heading>
+                    </div>
+                  )}
                 </div>                 
               </div>              
             </div>
@@ -310,8 +316,9 @@ export default function Session() : React.ReactElement{
                   </div>
                   <div className="flex flex-col border-2 h-full m-4 rounded-lg border-slate-500 overflow-hidden">
                     <div className="flex flex-col flex-grow overflow-y-auto scrollbar-thin scrollbar-thumb-slate-300 scrollbar-thumb-rounded-lg scrollbar-track-slate-300'">
-                      <div className="flex flex-grow">
-                        <Table variant="simple" size="sm">
+                      <div className="flex flex-col h-full">
+                        {sortedConsumerSessions.invited?.consumersInfo && sortedConsumerSessions.invited?.consumersInfo.length > 0 ? (
+                          <Table variant="simple" size="sm">
                           <Tbody>
                             {sortedConsumerSessions.invited?.consumersInfo.map(( cInfo ) => (
                               <Tr className="flex flex-grow w-full flex-row" key={sortedConsumerSessions.invited?.sessionTime}>
@@ -321,18 +328,25 @@ export default function Session() : React.ReactElement{
                               </Tr>
                             ))}                     
                           </Tbody>
-                        </Table>
+                        </Table> 
+                        ) : (
+                          <div className="flex flex-grow h-full justify-center items-center">
+                            <Heading size={"md"} className="text-center" color={"gray.500"}>Não existem provadores convidados para a sessão.</Heading>
+                          </div>
+                        )}
                       </div>
-                    </div>
-                    <div className="flex w-full bg-slate-300 self-baseline hover:bg-slate-200">
-                      <Button bgColor={"gray.300"} className="flex grow w-full rounded-b-lg rounded-t-none" onClick={() => {removeNotConfirmed(session!.id, "invited")}}>Limpar Convidados</Button>
+                      {sortedConsumerSessions.invited?.consumersInfo && sortedConsumerSessions.invited?.consumersInfo.length > 0  && 
+                      <div className="flex flex-col w-full bg-slate-300 self-baseline hover:bg-slate-200">
+                        <Button bgColor={"gray.300"} className="flex grow w-full rounded-b-lg rounded-t-none" onClick={() => {removeNotConfirmed(session!.id, "invited")}}>Limpar Convidados</Button>
+                      </div>
+                      }
                     </div>
                   </div>
                 </div>              
                 <div className="flex flex-col w-3/5">
                   <Heading size={"md"} className="justify-center self-center">Provadores Confirmados</Heading>
                   <div className=" flex overflow-x-auto flex-shrink border-2 h-full m-4 rounded-lg border-slate-500 overflow-y-hidden scrollbar-thin scrollbar-thumb-slate-300 scrollbar-thumb-rounded-lg scrollbar-track-slate-300'">
-                    {sortedConsumerSessions.confirmed.map(({ sessionTime, consumersInfo }) => (
+                    {sortedConsumerSessions.confirmed.length > 0 ? (sortedConsumerSessions.confirmed.map(({ sessionTime, consumersInfo }) => (
                       sessionTime && (
                         <div className="flex-shrink-0 overflow-y-auto overflow-x-hidden flex-grow min-w-1/3 border-r border-slate-500 scrollbar-thin scrollbar-thumb-slate-300 scrollbar-thumb-rounded-lg scrollbar-track-slate-300'">
                           <Table variant="simple" size={"sm"}>
@@ -363,7 +377,11 @@ export default function Session() : React.ReactElement{
                           </Table>
                         </div>
                       )
-                    ))}    
+                    ))) : (
+                      <div className="flex flex-grow h-full m-2 justify-center items-center ">
+                       <Heading className=" text-center" color={"gray.500"}>Não existem provadores confirmados para a sessão.</Heading>
+                      </div>)
+                  }    
                   </div>                  
                 </div>
               </div>  
