@@ -208,10 +208,12 @@ export default function Session() : React.ReactElement{
   // Render the component
   return (
     <>
-      {isLoading && 
+      {isLoading ? (
         <div className="flex flex-col justify-center items-center h-screen">
           <Spinner size="lg" />
-        </div> || pageStatus === 404 ? (
+        </div>
+      ) : (
+        pageStatus === 404 ? (
           <Page404></Page404>
         ) : (
           <div className="flex flex-col w-full h-[calc(100vh-72px)] overflow-y-hidden">
@@ -389,6 +391,7 @@ export default function Session() : React.ReactElement{
           </div>
         </div>
         )   
+      ) 
       }
     </>
   );
