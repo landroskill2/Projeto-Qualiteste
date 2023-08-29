@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   ChakraProvider,
   Box,
@@ -18,9 +18,7 @@ import { ITestInputModel, ISampleInputModel } from "../../common/Interfaces/Test
 import { createProduct, createTest, fetchAllClients } from "../../common/APICalls";
 import { useGlobalToast } from "../../common/useGlobalToast";
 import { useNavigate } from "react-router-dom";
-import ProductsTable from "../../components/tables/ProductsTable";
 import { ProductInputModel, ProductOutputModel } from "../../common/Interfaces/Products";
-import CreateProductModal from "../../components/modals/CreateProductModal";
 import AddProductsModal from "../../components/modals/AddProductModal";
 import DraggableProductTable from "../../components/tables/DraggableProductTable";
 import { IClientOutputModel } from "../../common/Interfaces/Clients";
@@ -30,7 +28,7 @@ const initialFormValues: ITestInputModel = {
   testType: "SP",
   consumersNumber: 0,
   product : undefined,
-  clientId : "cliente",
+  clientId : undefined,
   requestDate: "",
   samples : []
 };
@@ -59,11 +57,15 @@ export default function TestCreation(): React.ReactElement {
     }
   }
   
+
+  useEffect(() => {
+    fetchAllClients().then(res => setAvailableClients(res.data)) 
+  }, [])
+
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
-
     if (name === "consumersNumber") {
         const parsedValue = parseInt(value, 10);
         const newValue = parsedValue >= 0 ? parsedValue : 0;
@@ -75,27 +77,24 @@ export default function TestCreation(): React.ReactElement {
       } else {
         setFormValues((prevValues) => ({
           ...prevValues,
-          [name]: value,
+          [name]: value === "none" ? undefined : value,
         }));
       }
-
-      console.log(formValues)
   }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     
-    formValues.samples = addedProducts.map((p, idx) => ({ProductId: p.productid, PresentationPosition : idx})) as ISampleInputModel[]
-    const resp = await createTest(formValues).catch(err => {
-      console.log(err)
-      if(!isToastActive("error")){
-        addToast({
-          id: "error",
-          title: "Erro",
-          description: err.response.data.title,
-          status: "error"
-        })
-      }
+      formValues.samples = addedProducts.map((p, idx) => ({ProductId: p.productid, PresentationPosition : idx})) as ISampleInputModel[]
+      const resp = await createTest(formValues).catch(err => {
+        if(!isToastActive("error")){
+          addToast({
+            id: "error",
+            title: "Erro",
+            description: err.response.data.title,
+            status: "error"
+          })
+        }
     })
     if(resp?.status === 201){
       const toastObj = {id: "success", title: "Sucesso", description: "Teste criado com sucesso.", status: "success"}
@@ -127,7 +126,7 @@ export default function TestCreation(): React.ReactElement {
   }
 
   const isHomeTest = formValues.testType === "HT";
-  fetchAllClients().then(res => setAvailableClients(res.data)) 
+  
   return (
     <div className="flex flex-col bg-slate-800 shadow-slate-600 p-6 rounded-lg shadow-md ">
         <div className="flex flex-col items-center mb-4">
@@ -157,6 +156,7 @@ export default function TestCreation(): React.ReactElement {
                   onChange={handleInputChange}
                   background="white"
                 >
+                  <option value={"none"}>{"Selecione o Cliente"}</option>
                   {availableClients && availableClients.map(c => (
                     <option key={c.clientId} value={c.clientId}>{c.clientDesignation}</option>
                   ))}

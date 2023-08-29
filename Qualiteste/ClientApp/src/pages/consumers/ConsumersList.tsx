@@ -51,8 +51,11 @@ export default function Consumers(): React.ReactElement{
     )
 
     const response = await fetchConsumers(filters)
-    setConsumers(response.data)
-    setIsLoading(false)
+    
+      setConsumers(response.data)
+      setIsLoading(false)
+  
+    
   }
 
   return (
@@ -64,7 +67,7 @@ export default function Consumers(): React.ReactElement{
         <div className="min-h-full w-full flex flex-col flex-grow items-center justify-center">
           <Spinner size="lg" />
         </div>
-      ) : (
+      ) : ( consumers.length > 0 ? (
         <div className="mt-6 px-6 min-h-full w-full flex flex-col flex-grow items-center justify-center">
           <div className="w-full">
             <FilterBar setSex={setSex} setMinAge={setMinAge} setMaxAge={setMaxAge} setSearchString={setSearchString} searchBar />
@@ -73,6 +76,13 @@ export default function Consumers(): React.ReactElement{
             <ConsumersTable consumers={consumers} onClickConsumer={redirectToConsumerPage} />
           </div>
         </div>
+      ) : (
+        //Add stuff here in case there is no data to show
+        <div className="mt-6 px-6 min-h-full w-full flex flex-col flex-grow items-center justify-center">
+          <Heading>This is empty...*Temporary*</Heading>
+            <img src="https://gifdb.com/images/high/tumbleweed-hills-u6pgl9vwk7x1wfor.gif"></img>
+        </div>
+      )
       )}
       <div className="content-end justify-end items-baseline">
         <WithPermission allowedRoles={["ADMIN"]}>

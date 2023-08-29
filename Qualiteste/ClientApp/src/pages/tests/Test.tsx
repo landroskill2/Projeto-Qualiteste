@@ -2,7 +2,7 @@ import { Box, Table, Thead, Tbody, Tr, Th, Td, Spinner, Button, Input, Heading }
 import { IConsumerOutputModel } from '../../common/Interfaces/Consumers';
 import { ISessionModel } from '../../common/Interfaces/Sessions';
 import { ISampleOutputModel, ITestOutputModel } from '../../common/Interfaces/Tests';
-import { addConsumerToTest, fetchClientTestById, fetchTestById, uploadFile } from '../../common/APICalls';
+import { addConsumerToTest, fetchClientTestById, fetchTestById, uploadFile, removeResultsFromTest } from '../../common/APICalls';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from "react";
 import AddConsumersModal from "../../components/modals/AddConsumersModal";
@@ -11,8 +11,10 @@ import { useAuth } from "../../auth/useAuth";
 import WithPermission from "../../auth/WithPermission";
 import { ProductOutputModel } from "../../common/Interfaces/Products";
 import { ArrowForwardIcon } from "@chakra-ui/icons";
+import Page404 from "../Page404";
 
 export default function Test(): React.ReactElement {
+  const [pageStatus, setPageStatus] = useState<number|undefined>(undefined)
   const [session, setSession] = useState<ISessionModel | null>(null);
   const [consumers, setConsumers] = useState<IConsumerOutputModel[] | null>(null);
   const [test, setTest] = useState<ITestOutputModel | null>(null);
@@ -62,14 +64,13 @@ export default function Test(): React.ReactElement {
     try {
       let response
       if(user?.role === 'CLIENT'){
-        response = await fetchClientTestById(id!!)
+        response = await fetchClientTestById(id!!).catch(err => err.response)
       }
       else{
-        response = await fetchTestById(id!!)
-    }
-      
+        response = await fetchTestById(id!!).catch(err => err.response)
+      }
       const data = response.data
-
+      setPageStatus(response.status)
       setSession(data.session);
       setConsumers(data.consumers);
       setTest(data.test);
@@ -96,28 +97,31 @@ export default function Test(): React.ReactElement {
     }
   };
 
-  const isHomeTest = test?.type === "HT";
-
-  if (isLoading) {
-    // Render a loading spinner while waiting for the API response
-    return (
-      <Box
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-        height="100vh"
-      >
-        <Spinner size="xl" />
-      </Box>
-    );
+  const handleResultsRemoval = async (testId : string) => {
+    await removeResultsFromTest(testId)
+    .then(response =>{
+      setIsLoading(true)
+      populateData().then(() => {
+        setIsLoading(false)
+        addToast({id: "success", title: "Sucesso", description: "Provador adicionado com sucesso.", status: "success"})
+      })
+    })
+    .catch(err => 
+      addToast({id: "error", title: "Erro", description: err.response.data.title, status: "error"})
+    )
   }
 
+  const isHomeTest = test?.type === "HT";
   return (
     <>
-      {isLoading && 
+      {isLoading ? (
         <div className="flex flex-col justify-center items-center h-screen">
           <Spinner size="lg" />
-        </div> || 
+        </div> 
+      ) : (
+        pageStatus === 404 ? (
+          <Page404></Page404>
+        ):(
         <div className="flex flex-col w-full h-[calc(100vh-72px)] overflow-y-hidden">
           <div className="flex justify-between content-center m-4 h-fit">
             <div className="flex flex-col flex-grow shadow-2xl self-center rounded-xl bg-slate-100 h-full m-4 mt-10">
@@ -125,20 +129,32 @@ export default function Test(): React.ReactElement {
                 <Heading size={"lg"} className="self-center ml-4">Dados do Teste</Heading>
                 <WithPermission allowedRoles={["ADMIN"]}>
                   {!isHomeTest &&
-                    <div className="flex m-4">
-                      <Input type="file" accept=".txt,.csv" onChange={handleFileUpload} display="none" id="file-upload" />
-                      <label htmlFor="file-upload">
-                        <Button bgColor={"gray.300"} as="span" mr={2} className=" cursor-pointer">
-                          Importar resultados
-                        </Button>
-                      </label>
+                    <div className="flex m-4 gap-2">
                       { hasResults &&
-                        <div className="flex flex-grow rounded-lg p-2 self-center gap-1 hover:bg-slate-200 cursor-pointer" onClick={() => navigate("fizz")}>
-                          <Heading size={"md"} className="self-center ml-4">Resultados do Teste</Heading>
-                          <div>
-                            <ArrowForwardIcon boxSize={6}/>
-                          </div>
+                      <>
+                        <div className="flex flex-grow rounded-lg p-2 self-center gap-1 bg-red-200  hover:bg-red-300 cursor-pointer" onClick={() => handleResultsRemoval(id!)}>
+                         <Heading size={"md"} className="self-center">Eliminar Resultados</Heading>
+                        
                         </div>
+                        <div className="flex flex-grow rounded-lg p-2 self-center gap-1 bg-slate-200 hover:bg-slate-300 cursor-pointer" onClick={() => navigate("fizz")}>
+                          <Heading size={"md"} className="self-center  mr-2">Resultados do Teste</Heading>
+                          <div>
+                           <ArrowForwardIcon boxSize={6}/>
+                         </div>
+                        </div>
+                      </>
+                      }
+                      { !hasResults &&
+                      <>
+                      <div>
+                      <Input type="file" accept=".txt,.csv" onChange={handleFileUpload} display="none" id="file-upload" />
+                        <label htmlFor="file-upload">
+                          <Button bgColor={"gray.300"} as="span" mr={2} className=" cursor-pointer">
+                            Importar resultados
+                          </Button>
+                        </label>
+                      </div>
+                      </>
                       }
                       
                     </div>
@@ -155,15 +171,14 @@ export default function Test(): React.ReactElement {
                   </div>
                 </div>
                 <WithPermission allowedRoles={["ADMIN"]}>
-                  {!isHomeTest &&
+                  {!isHomeTest && session !== null &&
                     <div className="flex flex-col flex-grow border-r-2 border-slate-500">
                       <div  className="flex justify-center items-center p-4 border-b-2 border-slate-500 h-1/3 bg-slate-300 hover:bg-slate-400 cursor-pointer" onClick={() => {navigate(`/sessions/${session?.id}`) }}>                    
                         <Heading size={"md"}>Sessão do Teste</Heading>
                         <ArrowForwardIcon ml={1} boxSize={6}/>
                       </div>
                       <div  className="flex h-2/3 justify-center items-center">
-                        
-                        <Heading size={"md"}>{session?.id}</Heading>   
+                        <Heading size={"md"}>{session.id}</Heading>   
                       </div>
                     </div>
                   }
@@ -220,7 +235,8 @@ export default function Test(): React.ReactElement {
                       }
                     </div>
                     <div className=" overflow-x-hidden border-2 h-full m-4 rounded-lg border-slate-500 overflow-y-auto scrollbar-thin scrollbar-thumb-slate-300 scrollbar-thumb-rounded-lg">
-                      <Table variant="simple" className="">
+                    {consumers && consumers.length > 0 ? (
+                        <Table variant="simple" className="">
                         <Thead top={0} zIndex="docked" position={"sticky"} className="rounded-lg bg-slate-300">
                           <Tr>
                             <Th>ID</Th>
@@ -232,9 +248,6 @@ export default function Test(): React.ReactElement {
                           </Tr>
                         </Thead>
                         <Tbody>
-
-                          {consumers && (
-                            <>
                               {consumers.map(consumer => (
                                 <Tr className="hover:bg-slate-200 cursor-pointer" key={consumer.id} onClick={() => redirectToConsumerPage(consumer.id)}>
                                   <Td>{consumer.id}</Td>
@@ -245,15 +258,14 @@ export default function Test(): React.ReactElement {
                                   <Td>{consumer.email || "-"}</Td>
                                 </Tr>
                               ))}
-                            </>
-                          )}
-                          {!consumers && (
-                            <>
-                              <p>Sem dados.</p>
-                            </>
-                          )}
                         </Tbody>
                       </Table>
+                    ) : (
+                      <div className="flex flex-grow h-full w-96 justify-center items-center ">
+                        <Heading className=" text-center" color={"gray.500"}>Não existem provadores no teste.</Heading>
+                      </div>
+                      ) 
+                    }
                     </div>
                   </div>              
                 </WithPermission>            
@@ -289,60 +301,9 @@ export default function Test(): React.ReactElement {
             </div>
           </div>
         </div>
-      }
-    {/* <div className='flex flex-col flex-grow w-full min-h-full p-6'>
-      <Box>
-        <Box
-          display="flex"
-          justifyContent="space-between"
-          alignItems="center"
-          mb={4}
-        >
-          <Box as="h1" fontSize="2xl" fontWeight="bold">
-            TestID = {test?.id} 
-          </Box>
-
-          <WithPermission allowedRoles={["ADMIN"]}>
-            {isHomeTest && 
-              <Box>
-                <AddConsumersModal onSubmit={addConsumers}/>
-              </Box>
-            }
-          </WithPermission>
-          
-          {!isHomeTest &&
-          <>
-            <Box>
-              <Button onClick={() => navigate("fizz")}>Fizz Results</Button>
-            </Box>
-            <WithPermission allowedRoles={["ADMIN"]}>
-              <Box>
-                <Input type="file" accept=".txt,.csv" onChange={handleFileUpload} display="none" id="file-upload" />
-                  <label htmlFor="file-upload">
-                  <Button as="span" colorScheme="blue" mr={2}>
-                    Upload File
-                  </Button>
-                </label>
-              </Box>
-            </WithPermission>
-            
-          </>
-          }
-
-
-        </Box>
-        <Box className="hover:cursor-pointer" as="h1" fontSize="2xl" fontWeight="bold" mb={4} onClick={() => redirectToSessionPage(session!.id)}>
-          {session?.id}
-        </Box>
-        <Box as="h1" fontSize="2xl" fontWeight="bold" mb={4}>
-          Number of Consumers: {test?.consumersNumber.toString()}
-        </Box>
-        <WithPermission allowedRoles={["ADMIN"]}>
-          
-        </WithPermission>
-        
-      </Box>
-    </div> */}
+        ) 
+      )        
+    }
     </>
   );
 }

@@ -6,8 +6,10 @@ import { ITestOutputModel } from '../../common/Interfaces/Tests';
 import { fetchConsumerById } from '../../common/APICalls';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useGlobalToast } from '../../common/useGlobalToast';
+import Page404 from '../Page404';
 
 export default function Consumer(): React.ReactElement {
+  const [pageStatus, setPageStatus] = useState<number|undefined>(undefined)
   const [consumerData, setConsumerData] = useState<IConsumerOutputModel | null>(null);
   const [sessionData, setSessionData] = useState<ISessionModel[]>([]);
   const [testData, setTestData] = useState<ITestOutputModel[]>([]);
@@ -40,21 +42,25 @@ export default function Consumer(): React.ReactElement {
   }, []);
 
   async function populateData(){
-    const response = await fetchConsumerById(Number(id))
-      const { consumer, sessions, tests } = response.data;
-
-      setConsumerData(consumer);
-      setSessionData(sessions);
-      setTestData(tests);
-  }
+    const response = await fetchConsumerById(Number(id)).catch(err => err.response)
+    setPageStatus(response.status)
+    const { consumer, sessions, tests } = response.data;
+    setConsumerData(consumer);
+    setSessionData(sessions);
+    setTestData(tests);
+    }
 
   return (
     <>
-      {isLoading && 
+      {isLoading ? (
         <div className="flex flex-col justify-center items-center h-screen">
           <Spinner size="lg" />
-        </div> || 
-        <div className='flex flex-col flex-grow w-full min-h-full p-6'>
+        </div>
+      ) : (
+        pageStatus === 404 ? (
+          <Page404></Page404>
+        ):(
+          <div className='flex flex-col flex-grow w-full min-h-full p-6'>
           <div className="justify-center items-center">
             <div className="">
               <h1 className="text-5xl font-bold text-center bg-white">{consumerData?.fullname}</h1>
@@ -115,6 +121,7 @@ export default function Consumer(): React.ReactElement {
                 </div>
                 <div className="flex flex-col border-2 h-full m-4 rounded-lg border-slate-500 overflow-hidden">
                   <div className="flex flex-col flex-grow overflow-y-auto scrollbar-thin scrollbar-thumb-slate-300 scrollbar-thumb-rounded-lg scrollbar-track-slate-300'">
+                    {sessionData.length > 0 ? (
                     <Table variant="simple">
                       <Thead top={0} zIndex="docked" position={"sticky"} className="rounded-lg bg-slate-300 border-slate-500">
                         <Tr >
@@ -124,13 +131,18 @@ export default function Consumer(): React.ReactElement {
                       </Thead>
                       <Tbody>
                         {sessionData.map((session) => (
-                          <Tr className="hover:bg-slate-200 cursor-pointer h-4" key={session.id} onClick={ () => redirectToSessionPage(session.id)}>
+                          <Tr className="hover:bg-slate-200 cursor-pointer h-4" key={session.id} onClick={() => redirectToSessionPage(session.id)}>
                             <Td>{session.id}</Td>
                             <Td>{session.date}</Td>
                           </Tr>
                         ))}
                       </Tbody>
                     </Table>
+                    ) : (
+                    <div className="flex flex-grow h-full justify-center items-center ">
+                      <Heading className=" text-center" color={"gray.500"}>O provador não se encontra em nenhuma sessão.</Heading>
+                    </div>
+                    )}
                   </div>
                 </div>
               </div>
@@ -143,34 +155,43 @@ export default function Consumer(): React.ReactElement {
                 </div>
                 <div className="flex flex-col border-2 h-full m-4 rounded-lg border-slate-500 overflow-hidden">
                   <div className="flex flex-col flex-grow overflow-y-auto scrollbar-thin scrollbar-thumb-slate-300 scrollbar-thumb-rounded-lg scrollbar-track-slate-300'">
+                    {testData.length > 0 ? (
                       <Table variant="simple">
-                        <Thead top={0} zIndex="docked" position={"sticky"} className="rounded-lg bg-slate-300 border-slate-500">
-                          <Tr>
-                            <Th>ID</Th>
-                            <Th>Data do pedido</Th>
-                            <Th>Data de validação</Th>
-                            <Th>Data final do teste</Th>
-                            <Th>Data de entrega do relatório</Th>
+                      <Thead top={0} zIndex="docked" position={"sticky"} className="rounded-lg bg-slate-300 border-slate-500">
+                        <Tr>
+                          <Th>ID</Th>
+                          <Th>Data do pedido</Th>
+                          <Th>Data de validação</Th>
+                          <Th>Data final do teste</Th>
+                          <Th>Data de entrega do relatório</Th>
+                        </Tr>
+                      </Thead>
+                      <Tbody>
+                        {testData.map((test) => (
+                          <Tr className="hover:bg-slate-200 cursor-pointer" key={test.id} onClick={ () => redirectToTestPage(test.id)}>
+                            <Td>{test.id}</Td>
+                            <Td>{test.requestDate || '-'}</Td>
+                            <Td>{test.validationDate || '-'}</Td>
+                            <Td>{test.dueDate || '-'}</Td>
+                            <Td>{test.reportDeliveryDate || '-'}</Td>
                           </Tr>
-                        </Thead>
-                        <Tbody>
-                          {testData.map((test) => (
-                            <Tr className="hover:bg-slate-200 cursor-pointer" key={test.id} onClick={ () => redirectToTestPage(test.id)}>
-                              <Td>{test.id}</Td>
-                              <Td>{test.requestDate || '-'}</Td>
-                              <Td>{test.validationDate || '-'}</Td>
-                              <Td>{test.dueDate || '-'}</Td>
-                              <Td>{test.reportDeliveryDate || '-'}</Td>
-                            </Tr>
-                          ))}
-                        </Tbody>
-                      </Table>
+                        ))}
+                      </Tbody>
+                    </Table>
+                    ) : (
+                      <div className="flex flex-grow h-full justify-center items-center ">
+                        <Heading className=" text-center" color={"gray.500"}>O provador não se encontra em nenhum teste HT.</Heading>
+                      </div>
+                    )}
+                      
                   </div>
                 </div>
               </div>
             </div>
           </div>     
         </div>
+        )
+      ) 
       }
     </>
   );

@@ -50,7 +50,7 @@ namespace Qualiteste.ServerApp.Services.Concrete
             IEnumerable<ConsumerOutputModel>? consumers = _unitOfWork.Tests.GetConsumersInTest(id)?.Select(c => c.ToOutputModel());
             IEnumerable<SampleOutputModel> samples = test.Samples.Select(s => s.toOutputModel());
 
-            bool HasResults = test.FizzAttributes.Count != 0;
+            bool HasResults = test.FizzAttributes.Count() != 0;
 
             return new TestPageModel
             {
@@ -66,6 +66,7 @@ namespace Qualiteste.ServerApp.Services.Concrete
         {
             try
             {
+                if (testInput.ClientID == null) return new TestErrors.InvalidClientId();
                 if (testInput.Samples.ToArray().Length == 0) return new TestErrors.TestHasNoSamples();
                 Test dbTest = testInput.toDbTest();
                 IEnumerable<Sample> samples = testInput.Samples.Select(c => c.toDbSample(testInput.ID));
@@ -225,6 +226,21 @@ namespace Qualiteste.ServerApp.Services.Concrete
                 };
             }
             catch(Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public Either<CustomError, TestSucesses> RemoveTestResults(string testId)
+        {
+            try
+            {
+                Test t = _unitOfWork.Tests.GetTestById(testId);
+                if (t == null) return new TestErrors.NoTestFoundWithGivenID();
+                _unitOfWork.Tests.RemoveResultsFromTest(testId);
+                _unitOfWork.Complete();
+                return new TestSucesses.RemoveResultsSuccess();
+            }catch(Exception ex)
             {
                 throw ex;
             }

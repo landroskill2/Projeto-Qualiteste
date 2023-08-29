@@ -4,10 +4,9 @@ namespace Qualiteste.ServerApp.DataAccess.Repository
 {
     public interface IProductRepository : IRepository<Product>
     {
-        IEnumerable<Product> GetAllProducts(string? brandName);
+        IEnumerable<Product> QueryProducts(string? brandName, string? designation);
 
         int GetLastId();
 
-        //No need for GetAllBrands operation in repository
     }
 }

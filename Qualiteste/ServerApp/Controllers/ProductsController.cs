@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Qualiteste.ServerApp.Dtos;
+using Qualiteste.ServerApp.Models;
 using Qualiteste.ServerApp.Services;
 using Qualiteste.ServerApp.Services.Replies;
 using Qualiteste.ServerApp.Services.Replies.Errors;
@@ -9,7 +10,7 @@ using Qualiteste.ServerApp.Utils;
 
 namespace Qualiteste.ServerApp.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ProductsController : ControllerBase
@@ -21,14 +22,14 @@ namespace Qualiteste.ServerApp.Controllers
             _productService = productService;
         }
 
-        //[Authorize(Roles = "ADMIN")]
+        [Authorize(Roles = "ADMIN")]
         [HttpGet]
         [ProducesResponseType(200, Type = typeof(IEnumerable<ProductOutputModel>))]
         [ProducesResponseType(500)]
-        public IActionResult GetAllProducts([FromQuery] string? brandName) {
+        public IActionResult GetAllProducts([FromQuery] string? brand, [FromQuery] string? designation) {
             try
             {
-                Either<CustomError, IEnumerable<ProductOutputModel>> result = _productService.GetAllProducts(brandName);
+                Either<CustomError, IEnumerable<ProductOutputModel>> result = _productService.QueryProducts(brand, designation);
 
                 return result.Match(
                     error => Problem(statusCode: error.StatusCode, title: error.Message),
@@ -44,7 +45,7 @@ namespace Qualiteste.ServerApp.Controllers
         }
 
 
-        //[Authorize(Roles = "ADMIN")]
+        [Authorize(Roles = "ADMIN")]
         [HttpGet("brands")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<string>))]
         [ProducesResponseType(500)]
@@ -65,7 +66,7 @@ namespace Qualiteste.ServerApp.Controllers
                 return Problem(statusCode: 500, title: "Ocorreu um erro inesperado");
             }
         }
-        //[Authorize(Roles = "ADMIN")]
+        [Authorize(Roles = "ADMIN")]
         [HttpPost]
         [ProducesResponseType(201)]
         public IActionResult CreateNewProduct([FromBody] ProductInputModel product)

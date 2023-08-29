@@ -17,7 +17,7 @@ export interface ITestInputModel{
     consumersNumber: number;
     requestDate: string;
     product : number | undefined,
-    clientId : string | undefined
+    clientId? : string | undefined
     validationDate?: string;
     dueDate?: string;
     reportDeliveryDate?: string;

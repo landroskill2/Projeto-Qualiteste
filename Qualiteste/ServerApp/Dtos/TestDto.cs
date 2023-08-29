@@ -20,7 +20,7 @@ namespace Qualiteste.ServerApp.Dtos
         public string TestType { get; init; }
         public int Product { get; init; }
 
-        public string ClientID { get; init; }
+        public string? ClientID { get; init; }
         public int ConsumersNumber { get; init; }
         public DateOnly RequestDate { get; init; }
         public DateOnly? ValidationDate { get; init; }

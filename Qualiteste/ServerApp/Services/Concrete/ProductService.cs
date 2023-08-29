@@ -48,7 +48,7 @@ namespace Qualiteste.ServerApp.Services.Concrete
         {
             try
             {
-                IEnumerable<Product> ps = _unitOfWork.Products.GetAllProducts(null);
+                IEnumerable<Product> ps = _unitOfWork.Products.QueryProducts(null, null);
                 IEnumerable<string> brands = ps.Select(p => p.Brand!).Distinct();
                 return new BrandOutputModel
                 {
@@ -60,11 +60,11 @@ namespace Qualiteste.ServerApp.Services.Concrete
             }
         }
 
-        public Either<CustomError, IEnumerable<ProductOutputModel>> GetAllProducts(string? brandName)
+        public Either<CustomError, IEnumerable<ProductOutputModel>> QueryProducts(string? brandName, string? designation)
         {
             try
             {
-                return _unitOfWork.Products.GetAllProducts(brandName).Select(p => p.toOutputModel()).ToList();
+                return _unitOfWork.Products.QueryProducts(brandName, designation).Select(p => p.toOutputModel()).ToList();
             }
             catch (Exception ex)
             {

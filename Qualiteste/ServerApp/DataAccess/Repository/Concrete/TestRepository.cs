@@ -64,6 +64,9 @@ namespace Qualiteste.ServerApp.DataAccess.Repository.Concrete
             PostgresContext.AttributeValues.Add(attributeValue);
         }
 
+
+
+
         public void AddConsumerToTest(string id, IEnumerable<int> consumers)
         {
             IEnumerable<ConsumerHt> cHT = consumers.Select(cid => new ConsumerHt { Testid = id, Consumerid = cid });
@@ -96,6 +99,18 @@ namespace Qualiteste.ServerApp.DataAccess.Repository.Concrete
         public Test? GetClientTestsByID(string clientID, string id)
         {
             return PostgresContext.Tests.SingleOrDefault(c => c.Clientid == clientID && c.Internalid == id);
+        }
+
+        public void RemoveResultsFromTest(string testId)
+        {
+            IEnumerable<AttributeValue> attrsVals = PostgresContext.AttributeValues.Where(r => r.Testid == testId);
+            if (attrsVals.Any())
+            {
+                PostgresContext.AttributeValues.RemoveRange(attrsVals);
+                IEnumerable<FizzAttribute> attrsDesignation = PostgresContext.FizzAttributes.Where(r => r.Testid == testId);
+                PostgresContext.FizzAttributes.RemoveRange(attrsDesignation);
+            }
+                
         }
 
         public PostgresContext PostgresContext
