@@ -56,7 +56,7 @@ export default function Tests(): React.ReactElement{
     setIsLoading(false)
   }
   return (
-    <div  className="flex flex-col flex-grow w-full h-[calc(100vh-72px)]" >
+    <div  className="flex flex-col flex-grow w-full min-h-full" >
       <div className="mt-5">
         <h1 className="text-5xl font-bold text-center bg-white">Testes</h1>
       </div>
@@ -70,7 +70,7 @@ export default function Tests(): React.ReactElement{
               <WithPermission allowedRoles={["ADMIN"]}>
                 <TestTypeFilter type={type} setType={setType} />
               </WithPermission>
-            <div className=" border-2 h-1/2 overflow-y-auto mt-2 rounded-lg border-slate-500 bg-slate-100 flex-grow scrollbar-thin scrollbar-thumb-slate-300 scrollbar-thumb-rounded-lg">
+            <div className=" border-2 h-1/2 overflow-y-auto mt-2 rounded-lg border-slate-500 bg-slate-100 flex-grow scrollbar-thin scrollbar-thumb-slate-300 scrollbar-thumb-rounded-lg" style={{ maxHeight: 'calc(100vh - 370px)', overflowY: 'auto' }}>
               <TestsTable tests={tests} onClickTest={redirectToTestPage} />
             </div>
           </div>

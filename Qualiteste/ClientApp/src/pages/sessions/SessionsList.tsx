@@ -55,7 +55,7 @@ export default function Sessions(): React.ReactElement{
         </div>
       ) : (
       
-        <div className=" border-2 h-1/2 overflow-y-auto m-6 rounded-lg border-slate-500 bg-slate-100 flex-grow scrollbar-thin scrollbar-thumb-slate-300 scrollbar-thumb-rounded-lg">
+        <div className=" border-2 h-1/2 overflow-y-auto m-6 rounded-lg border-slate-500 bg-slate-100 flex-grow scrollbar-thin scrollbar-thumb-slate-300 scrollbar-thumb-rounded-lg" style={{ maxHeight: 'calc(100vh - 200px)', overflowY: 'auto' }}>
           <Table variant="simple" overflow="auto">
             <Thead top={0} zIndex="docked" position={"sticky"} className="bg-slate-300 rounded-lg">
               <Tr>
