@@ -221,8 +221,13 @@ namespace Qualiteste.ServerApp.Services.Concrete
                 Test? test = _unitOfWork.Tests.GetClientTestsByID(clientID, id);
                 if (test == null) return new TestErrors.NoTestFoundWithGivenID();
 
+                IEnumerable<SampleOutputModel> samples = test.Samples.Select(s => s.toOutputModel());
+                bool HasResults = test.FizzAttributes.Count() != 0;
+
                 return new TestPageModel {
-                    Test = test.toOutputModel(test.ProductNavigation.toOutputModel())
+                    Test = test.toOutputModel(test.ProductNavigation.toOutputModel()),
+                    Samples = samples,
+                    HasResults = HasResults
                 };
             }
             catch(Exception ex)

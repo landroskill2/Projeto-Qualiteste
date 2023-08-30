@@ -228,7 +228,7 @@ export default function Test(): React.ReactElement {
               <div className="flex flex-row flex-grow shadow-2xl w-full m-5 self-center rounded-xl bg-slate-100 h-2/3 gap-4 justify-center">  
                 <WithPermission allowedRoles={["ADMIN"]}>
                   <div className="flex flex-col min-w-1/2">
-                    <div className="flex justify-between">
+                    <div className="flex justify-between mt-2">
                       <Heading size={"md"} className="self-center ml-4">Provadores do Teste</Heading>
                       {isHomeTest && 
                         <AddConsumersModal onSubmit={addConsumers}/>
@@ -271,7 +271,7 @@ export default function Test(): React.ReactElement {
                 </WithPermission>            
                 
                 <div className="flex flex-col min-w-1/2">      
-                  <div className="flex justify-between">
+                  <div className="flex justify-between content-center items-center mt-2">
                     <Heading size={"md"} className="self-center ml-4">Produtos do Teste</Heading>
                   </div>
                   <div className=" overflow-x-auto border-2 h-full m-4 rounded-lg border-slate-500 overflow-y-hidden scrollbar-thin scrollbar-thumb-slate-300 scrollbar-thumb-rounded-lg">
