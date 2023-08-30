@@ -59,7 +59,7 @@ export default function Consumers(): React.ReactElement{
   }
 
   return (
-    <div className="flex flex-col flex-grow w-full h-[calc(100vh-72px)] overflow-hidden">
+    <div className="flex flex-col flex-grow w-full min-h-full">
       <div className="mt-5">
         <h1 className="text-5xl font-bold text-center bg-white">Provadores</h1>
       </div>
@@ -68,11 +68,11 @@ export default function Consumers(): React.ReactElement{
           <Spinner size="lg" />
         </div>
       ) : ( consumers.length > 0 ? (
-        <div className="mt-6 px-6 w-full flex flex-col flex-grow items-center justify-center">
+        <div className="mt-6 px-6 min-h-full w-full flex flex-col flex-grow items-center justify-center">
           <div className="w-full">
             <FilterBar setSex={setSex} setMinAge={setMinAge} setMaxAge={setMaxAge} setSearchString={setSearchString} searchBar />
           </div>
-          <div className="border-2 h-1/2 overflow-y-auto w-full m-2 rounded-lg border-slate-500 bg-slate-100 flex-grow scrollbar-thin scrollbar-thumb-slate-300 scrollbar-thumb-rounded-lg">
+          <div className="border-2 h-1/2 overflow-y-auto w-full m-2 rounded-lg border-slate-500 bg-slate-100 flex-grow scrollbar-thin scrollbar-thumb-slate-300 scrollbar-thumb-rounded-lg" style={{ maxHeight: 'calc(100vh - 370px)', overflowY: 'auto' }}>
             <ConsumersTable consumers={consumers} onClickConsumer={redirectToConsumerPage} />
           </div>
         </div>
