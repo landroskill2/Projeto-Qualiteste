@@ -18,6 +18,12 @@
             {
             }
         }
+        public class RemoveResultsSuccess : TestSuccesses
+        {
+            public RemoveResultsSuccess() : base("Resultados eliminados do teste com sucesso", 200)
+            {
+            }
+        }
         public class FileUploadSuccess : TestSuccesses
         {
             public FileUploadSuccess() : base("Ficheiro processado com sucesso.", 201)

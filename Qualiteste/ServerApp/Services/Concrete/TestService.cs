@@ -231,7 +231,7 @@ namespace Qualiteste.ServerApp.Services.Concrete
             }
         }
 
-        public Either<CustomError, TestSucesses> RemoveTestResults(string testId)
+        public Either<CustomError, TestSuccesses> RemoveTestResults(string testId)
         {
             try
             {
@@ -239,7 +239,7 @@ namespace Qualiteste.ServerApp.Services.Concrete
                 if (t == null) return new TestErrors.NoTestFoundWithGivenID();
                 _unitOfWork.Tests.RemoveResultsFromTest(testId);
                 _unitOfWork.Complete();
-                return new TestSucesses.RemoveResultsSuccess();
+                return new TestSuccesses.RemoveResultsSuccess();
             }catch(Exception ex)
             {
                 throw ex;

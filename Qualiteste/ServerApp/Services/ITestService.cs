@@ -18,6 +18,6 @@ namespace Qualiteste.ServerApp.Services
         Either<CustomError, TestOutputModel> UpdateTest(string id, TestInputModel testInput);
         Either<CustomError, IEnumerable<TestOutputModel>> GetClientsTests(string clientUsername);
         Either<CustomError, TestPageModel> GetClientsTestByID(string clientUsername, string id);
-        Either<CustomError, TestSucesses> RemoveTestResults(string testId);
+        Either<CustomError, TestSuccesses> RemoveTestResults(string testId);
     }
 }

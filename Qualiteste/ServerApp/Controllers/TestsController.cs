@@ -216,7 +216,7 @@ namespace Qualiteste.ServerApp.Controllers
         {
             try
             {
-                Either<CustomError, TestSucesses> result = _testService.RemoveTestResults(id);
+                Either<CustomError, TestSuccesses> result = _testService.RemoveTestResults(id);
                 return result.Match(
                     error => Problem(statusCode: error.StatusCode, title: error.Message),
                     success => Ok(success)
