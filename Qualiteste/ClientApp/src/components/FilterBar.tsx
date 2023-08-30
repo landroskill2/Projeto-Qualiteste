@@ -68,7 +68,7 @@ export default function FilterBar({
     function useSearchBar() {
         if(searchBar){
             return (
-                <div className="flex w-full">
+                <div className="flex w-full gap-1">
                   <Input
                     className="!bg-white"
                     id="searchBar"
@@ -81,7 +81,7 @@ export default function FilterBar({
                   />
                   <IconButton
                     aria-label='Procurar'
-                    colorScheme="blue"
+                    bgColor={"gray.300"}
                     type="button"
                     icon={<BsSearch />}
                     onClick={() => onClickSearch()}
@@ -98,13 +98,13 @@ export default function FilterBar({
                     <Menu>
                         <MenuButton
                             className="capitalize "
-                            colorScheme="blue"
+                            bgColor={"gray.300"}
                             as={Button}
                             rightIcon={<BsChevronDown/>}
                             >
                             {brandDropdownText}
                         </MenuButton>
-                        <MenuList>
+                        <MenuList zIndex={"docked"}>
                             {brands && (
                                 brands.map((b) => (
                                     <>
@@ -137,13 +137,13 @@ export default function FilterBar({
                             <Menu>
                                 <MenuButton
                                     className="capitalize "
-                                    colorScheme="blue"
+                                    bgColor={"gray.300"}
                                     as={Button}
                                     rightIcon={<BsChevronDown/>}
                                 >
                                     {dropdownText}
                                 </MenuButton>
-                                <MenuList>
+                                <MenuList zIndex={"docked"}>
                                     <MenuItem
                                         className="capitalize"
                                         onClick={() => onClickSexDropDown(undefined)}

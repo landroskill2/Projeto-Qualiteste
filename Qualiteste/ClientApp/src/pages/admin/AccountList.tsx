@@ -14,6 +14,7 @@ import {
 } from "@chakra-ui/react";
 import IAccountOutput from "../../common/Interfaces/Accounts";
 import { fetchAccounts } from "../../common/APICalls";
+import { CloseIcon } from "@chakra-ui/icons";
 
 export default function Accounts(){
     const [accounts, setAccounts] = useState<IAccountOutput[]>([])
@@ -38,13 +39,14 @@ export default function Accounts(){
               <Spinner size="lg" />
             </div>
           ) : (
-            <div className=" border-2 h-1/2 overflow-y-auto m-4 rounded-lg border-slate-500 flex-grow scrollbar-thin scrollbar-thumb-slate-300 scrollbar-thumb-rounded-lg scrollbar-track-slate-300'">
+            <div className=" border-2 h-1/2 overflow-y-auto m-10 rounded-lg border-slate-500 flex-grow scrollbar-thin scrollbar-thumb-slate-300 scrollbar-thumb-rounded-lg">
               <Table variant="simple" overflow="auto">
                 <Thead top={0} zIndex="docked" position={"sticky"} className="bg-slate-300 rounded-lg">
                   <Tr>
                     <Th>Username</Th>
                     <Th>Tipo</Th>
                     <Th>Cliente</Th>
+                    <Th></Th>
                   </Tr>
                 </Thead>
                 <Tbody>
@@ -53,6 +55,9 @@ export default function Accounts(){
                       <Td>{account.username}</Td>
                       <Td>{account.role}</Td>
                       <Td>{account.designation ? account.designation : "-"}</Td>
+                      <Td textAlign={"center"} className="hover:bg-red-400 cursor-pointer">
+                        <CloseIcon className="self-center" boxSize="0.7em" onClick={() => {removeNotConfirmed(session!.id, consumer.consumer.id)}} />
+                      </Td>
                     </Tr>
                   ))}
                 </Tbody>

@@ -86,7 +86,7 @@ export default function Products(): React.ReactElement{
           <div className="w-full">
             <FilterBar brands={brands} setBrand={setBrandFilter} setType={setType} setSearchString={setSearchString} searchBar />
           </div>
-          <div className="mt-3 w-full" style={{ maxHeight: 'calc(100vh - 370px)', overflowY: 'auto' }}>
+          <div className="border-2 h-1/2 overflow-y-auto w-full m-2 rounded-lg border-slate-500 bg-slate-100 flex-grow scrollbar-thin scrollbar-thumb-slate-300 scrollbar-thumb-rounded-lg" style={{ maxHeight: 'calc(100vh - 370px)', overflowY: 'auto' }}>
             <ProductsTable products={products}/>
           </div>
         </div>

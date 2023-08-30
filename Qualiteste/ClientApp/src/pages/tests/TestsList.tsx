@@ -67,10 +67,10 @@ export default function Tests(): React.ReactElement{
         ) : (
           tests.length > 0 ? (
             <div className="mt-6 px-6 min-h-full w-full flex flex-col flex-grow">
-            <WithPermission allowedRoles={["ADMIN"]}>
-              <TestTypeFilter type={type} setType={setType} />
-            </WithPermission>
-            <div className="mt-10" style={{ maxHeight: 'calc(100vh - 220px)', overflowY: 'auto' }}>
+              <WithPermission allowedRoles={["ADMIN"]}>
+                <TestTypeFilter type={type} setType={setType} />
+              </WithPermission>
+            <div className=" border-2 h-1/2 overflow-y-auto mt-2 rounded-lg border-slate-500 bg-slate-100 flex-grow scrollbar-thin scrollbar-thumb-slate-300 scrollbar-thumb-rounded-lg">
               <TestsTable tests={tests} onClickTest={redirectToTestPage} />
             </div>
           </div>
@@ -85,7 +85,7 @@ export default function Tests(): React.ReactElement{
       
       <WithPermission allowedRoles={["ADMIN"]}>
         <div className="p-6 bg-white" style={{ flexShrink: 0 }}>
-          <Button colorScheme="blue" onClick={redirectToTestCreation}>
+          <Button bgColor={"gray.300"} onClick={redirectToTestCreation}>
             Criar Teste
           </Button>
         </div>
