@@ -17,7 +17,8 @@ export default function Login() : React.ReactElement  {
       setErrorMessage(err.response.data.title)
     })
     if(resp?.status === 200){
-      const token = resp!.data
+      console.log(resp!.data.message)
+      const token = resp!.data.message
       localStorage.setItem("QualitesteToken", token)
       changeInstanceToken()
       const toastObj = {id: "success", title: "Sucesso", description: "Autenticação realizada com sucesso.", status: "success"}

@@ -48,10 +48,9 @@ const initialAccount : IAccountOutput = {
           })
         }
       })
-      if(resp?.status === 201){
-        const toastObj = {id: "success", title: "Sucesso", description: "Provador criado com sucesso.", status: "success"}
-        const location = resp!.headers.location.split("/api")[1]
-        navigate(location, {state: toastObj})
+      if(resp?.status=== 201){
+        const toastObj = {id: "success", title: "Sucesso", description: resp.data.message, status: "success"}
+        navigate("/admin", {state: toastObj})
       }
     };
 

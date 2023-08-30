@@ -5,6 +5,7 @@ using Qualiteste.ServerApp.Dtos;
 using Qualiteste.ServerApp.Models;
 using Qualiteste.ServerApp.Services.Replies;
 using Qualiteste.ServerApp.Services.Replies.Errors;
+using Qualiteste.ServerApp.Services.Replies.Successes;
 using Qualiteste.ServerApp.Utils;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -23,9 +24,9 @@ namespace Qualiteste.ServerApp.Services.Concrete
         }
 
         // MUDAR RETORNO COM SUCESSO DO EITHER PARA O ID TOKEN
-        Either<CustomError, string> IAccountService.Login(UserDto user)
+        
+        public Either<CustomError, AccountSuccesses> Login(UserDto user)
         {
-
             User? DbUser = _unitOfWork.Users.GetById(user.Username);
             if(DbUser == null) return new AccountErrors.UsernameNotFound(); 
 
@@ -33,7 +34,7 @@ namespace Qualiteste.ServerApp.Services.Concrete
 
             if (encryptedPassword != DbUser.Pwd) return new AccountErrors.IncorrectPassword();
 
-            return GenerateToken(DbUser);
+            return new AccountSuccesses.LoginSuccess(GenerateToken(DbUser)); 
 
         }
 
@@ -65,7 +66,7 @@ namespace Qualiteste.ServerApp.Services.Concrete
             }
         }
 
-        public Either<CustomError, string> CreateAccount(UserDto user)
+        public Either<CustomError, AccountSuccesses> CreateAccount(UserDto user)
         {
 
             var encryptedPassword = SHA256Encryption.EncryptString(user.Password);
@@ -80,7 +81,7 @@ namespace Qualiteste.ServerApp.Services.Concrete
 
             if(user.Role == "CLIENT") 
             {
-                if(user.Id == null || user.Designation == null) {/* return custom error */}
+                if(user.Id == null || user.Designation == null) return new AccountErrors.MissingFieldsOnUserCreation();
 
                 Client dbClient = new()
                 {
@@ -92,7 +93,7 @@ namespace Qualiteste.ServerApp.Services.Concrete
 
             _unitOfWork.Complete();
 
-            return "Account Created";
+            return new AccountSuccesses.CreateAccountSuccess(user.Username);
         }
 
         public Either<CustomError, IEnumerable<UserDto>> GetAccounts()

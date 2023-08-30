@@ -78,7 +78,6 @@ namespace Qualiteste.ServerApp.Controllers
 
                 return result.Match(
                     error => Problem(statusCode: error.StatusCode, title: error.Message),
-                    //TODO
                     success => CreatedAtRoute(null, success)
                 );
 

@@ -19,6 +19,13 @@
             {
             }
         }
+
+        public class MissingFieldsOnUserCreation : AccountErrors
+        {
+            public MissingFieldsOnUserCreation() : base("Campos insuficientes para criar o utilizador.", 400)
+            {
+            }
+        }
     }
 
     

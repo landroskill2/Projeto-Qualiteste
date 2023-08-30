@@ -1,8 +1,19 @@
 import { Outlet, useNavigate } from "react-router-dom";
 import { FaUser, FaUsers } from "react-icons/fa";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { FaUser } from "react-icons/fa";
+import { useEffect } from "react";
+import { useGlobalToast } from "../../common/useGlobalToast";
 
 export default function Admin() : React.ReactElement {
     const navigate = useNavigate()
+    const {state} = useLocation()
+    const {addToast, isToastActive} = useGlobalToast() 
+    useEffect(() => {
+      if(state != null){
+        if(!isToastActive("success")) addToast(state)
+      }
+    }, [])
     const Option = ({
         title,
         onClick,
