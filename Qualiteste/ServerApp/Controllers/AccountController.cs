@@ -4,6 +4,7 @@ using Qualiteste.ServerApp.Dtos;
 using Qualiteste.ServerApp.Services;
 using Qualiteste.ServerApp.Services.Replies;
 using Qualiteste.ServerApp.Services.Replies.Errors;
+using Qualiteste.ServerApp.Services.Replies.Successes;
 using Qualiteste.ServerApp.Utils;
 
 namespace Qualiteste.ServerApp.Controllers
@@ -25,7 +26,7 @@ namespace Qualiteste.ServerApp.Controllers
         {
             try
             {
-                Either<CustomError, string> result = _accountService.Login(user);
+                Either<CustomError, AccountSuccesses> result = _accountService.Login(user);
 
                 return result.Match(
                     error => Problem(statusCode: error.StatusCode, title: error.Message),
@@ -45,11 +46,11 @@ namespace Qualiteste.ServerApp.Controllers
         {
             try
             {
-                Either<CustomError, string> result = _accountService.CreateAccount(user);
+                Either<CustomError, AccountSuccesses> result = _accountService.CreateAccount(user);
 
                 return result.Match(
                     error => Problem(statusCode: error.StatusCode, title: error.Message),
-                    success => Ok(success)
+                    success => CreatedAtAction(null,success)
                 );
                 
             }catch(Exception e)

@@ -36,21 +36,9 @@ namespace Qualiteste.ServerApp.DataAccess.Repository.Concrete
             var consumers = PostgresContext.Consumers.Where(p);
             return consumers;
         }
-
-        /**private int getConsumerAge(DateOnly? dateOfBirth)
-        {
-            if(dateOfBirth == null) return 0;
-            DateOnly aux = dateOfBirth.Value;
-            DateTime bDate = aux.ToDateTime(TimeOnly.MinValue);
-            var today = DateTime.Today;
-            var age = bDate.Year - today.Year;
-            if (bDate.Date > today.AddYears(age - 1)) age--;
-            return age;
-
-        }*/
-
         public int GetLastID()
         {
+            if(!PostgresContext.Consumers.Any()) return -1;
             return PostgresContext.Consumers.Max(c => c.Id);
         }
 

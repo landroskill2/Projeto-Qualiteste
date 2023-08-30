@@ -1,4 +1,6 @@
-﻿namespace Qualiteste.ServerApp.Services.Replies.Successes
+﻿using Qualiteste.ServerApp.Models;
+
+namespace Qualiteste.ServerApp.Services.Replies.Successes
 {
     public abstract class AccountSuccesses : CustomSuccess
     {
@@ -12,12 +14,9 @@
             {
             }
         }
-
-
-        //TODO
         public class CreateAccountSuccess : AccountSuccesses
         {
-            public CreateAccountSuccess(string? message, int statusCode) : base(message, statusCode)
+            public CreateAccountSuccess(string username) : base("Utilizador " + username + " criado com sucesso", 201)
             {
             }
         }
