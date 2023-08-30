@@ -144,7 +144,7 @@ export default function Test(): React.ReactElement {
                         </div>
                       </>
                       }
-                      { !hasResults &&
+                      { !hasResults && session &&
                       <>
                       <div>
                       <Input type="file" accept=".txt,.csv" onChange={handleFileUpload} display="none" id="file-upload" />

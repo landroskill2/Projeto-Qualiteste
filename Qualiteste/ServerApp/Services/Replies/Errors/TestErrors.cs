@@ -48,7 +48,6 @@ namespace Qualiteste.ServerApp.Services.Replies.Errors
             }
         }
 
-
         //Criar erros para quando se tenta mudar um campo do teste que não pode ser alterado
         public class TestPropertyCannotBeChanged : TestErrors
         {
@@ -89,6 +88,13 @@ namespace Qualiteste.ServerApp.Services.Replies.Errors
         public class InvalidClientId : TestErrors
         {
             public InvalidClientId() : base("ClientId tem que estar definido.", 400)
+            {
+            }
+        }
+
+        public class TestMustBeAssociatedWithSession : TestErrors
+        {
+            public TestMustBeAssociatedWithSession() : base("O teste tem de estar associado a uma sessão.", 403)
             {
             }
         }
