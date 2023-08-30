@@ -45,7 +45,7 @@ export default function Sessions(): React.ReactElement{
   }
 
   return (
-    <div className="flex flex-col flex-grow h-full w-full">
+    <div className="flex flex-col flex-grow h-[calc(100vh-72px)] w-full">
       <div className="mt-5">
         <h1 className="text-5xl font-bold text-center bg-white">Sessões</h1>
       </div>

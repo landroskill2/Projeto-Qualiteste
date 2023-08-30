@@ -33,7 +33,7 @@ export default function ProductsTable( {products, onClickProduct} : TableProps) 
             <Tbody>
                 {products && <>
                     {products.map((p) => (
-                        <Tr key={p.productid}>
+                        <Tr className="hover:bg-slate-200 cursor-pointer" key={p.productid} onClick={() => {handleClick(p)}} >
                             <Td>{p.ref}</Td>
                             <Td>{p.designation}</Td>
                             <Td>{p.brand}</Td>

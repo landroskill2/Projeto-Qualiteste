@@ -56,7 +56,7 @@ export default function Tests(): React.ReactElement{
     setIsLoading(false)
   }
   return (
-    <div  className="flex flex-col flex-grow w-full min-h-full" >
+    <div  className="flex flex-col flex-grow w-full h-[calc(100vh-72px)]" >
       <div className="mt-5">
         <h1 className="text-5xl font-bold text-center bg-white">Testes</h1>
       </div>
