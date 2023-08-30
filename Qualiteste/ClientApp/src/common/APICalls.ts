@@ -125,7 +125,6 @@ export async function uploadFile(
     file : File
 ) : Promise<AxiosResponse>{
     let path = `/tests/${id}/upload`
-    
     const formData = new FormData();
     formData.append("csvFile", file);
     return instance.post(path, formData, {

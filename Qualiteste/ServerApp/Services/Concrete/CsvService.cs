@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Server.Kestrel.Core.Features;
 using Qualiteste.ServerApp.Utils;
 using Qualiteste.ServerApp.Services.Replies.Errors;
 using Qualiteste.ServerApp.Services.Replies.Successes;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Qualiteste.ServerApp.Services.Concrete
 {
@@ -21,13 +22,16 @@ namespace Qualiteste.ServerApp.Services.Concrete
         public async Task<Either<CustomError, TestSuccesses>> ParseCsv(IFormFile csvFile, string id)
         {
             try{
+                Test test = _unitOfWork.Tests.GetTestById(id);
+                if (test == null) return new TestErrors.NoTestFoundWithGivenID();
+                if (test.Session == null) return new TestErrors.TestMustBeAssociatedWithSession();
                 using (var reader = new StreamReader(csvFile.OpenReadStream()))
                 {
                     using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
-
                     await csv.ReadAsync();
                     csv.ReadHeader();
                     string[] headers = csv.HeaderRecord;
+                    if (headers.Length < 0) return new FizzParserErrors.InvalidFizzResultFormat();
                     int consumerIndex = Array.IndexOf(headers, "CJ");
                     
                     insertHeadersInDb(headers, id);

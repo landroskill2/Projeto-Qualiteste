@@ -1,7 +1,5 @@
-import { Outlet, useNavigate } from "react-router-dom";
 import { FaUser, FaUsers } from "react-icons/fa";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import { FaUser } from "react-icons/fa";
 import { useEffect } from "react";
 import { useGlobalToast } from "../../common/useGlobalToast";
 
