@@ -95,5 +95,17 @@ namespace Qualiteste.ServerApp.Services.Concrete
 
             return new AccountSuccesses.CreateAccountSuccess(user.Username);
         }
+
+        public Either<CustomError, IEnumerable<UserDto>> GetAccounts()
+        {
+            try
+            {
+                List<UserDto> users = _unitOfWork.Users.GetAll().Select(u => u.toOutputModel()).ToList();
+                return users;
+            }catch(Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

@@ -72,7 +72,7 @@ export default function Consumers(): React.ReactElement{
           <div className="w-full">
             <FilterBar setSex={setSex} setMinAge={setMinAge} setMaxAge={setMaxAge} setSearchString={setSearchString} searchBar />
           </div>
-          <div className="mt-3 w-full" style={{ maxHeight: 'calc(100vh - 370px)', overflowY: 'auto' }}>
+          <div className="border-2 h-1/2 overflow-y-auto w-full m-2 rounded-lg border-slate-500 bg-slate-100 flex-grow scrollbar-thin scrollbar-thumb-slate-300 scrollbar-thumb-rounded-lg" style={{ maxHeight: 'calc(100vh - 370px)', overflowY: 'auto' }}>
             <ConsumersTable consumers={consumers} onClickConsumer={redirectToConsumerPage} />
           </div>
         </div>
@@ -87,7 +87,7 @@ export default function Consumers(): React.ReactElement{
       <div className="content-end justify-end items-baseline">
         <WithPermission allowedRoles={["ADMIN"]}>
           <div className="p-6 bg-white" style={{ flexShrink: 0 }}>
-            <Button colorScheme="blue" onClick={redirectToConsumerCreation}>
+            <Button bgColor={"gray.300"} onClick={redirectToConsumerCreation}>
               Criar Provador
             </Button>
           </div>

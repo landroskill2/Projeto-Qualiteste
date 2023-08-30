@@ -18,7 +18,7 @@ export default function TestsTable({tests, onClickTest} : TableProps) : React.Re
     
     return (
         <Table variant="simple" overflow="auto">
-            <Thead>
+            <Thead top={0} zIndex="1" position={"sticky"} className="bg-slate-300 rounded-lg">
                 <Tr>
                     <Th>Id</Th>
                     <Th>Tipo</Th>

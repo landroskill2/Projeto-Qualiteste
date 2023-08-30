@@ -305,3 +305,10 @@ export function createProduct(product : ProductInputModel){
     let path = `/products`
     return instance.post(path,product)
 }
+
+// Accounts
+
+export function fetchAccounts(){
+    let path = `/accounts`
+    return instance.get(path)
+}

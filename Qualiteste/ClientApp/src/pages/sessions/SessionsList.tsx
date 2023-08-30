@@ -55,9 +55,9 @@ export default function Sessions(): React.ReactElement{
         </div>
       ) : (
       
-          <div className="mt-6 px-6 min-h-full w-full flex flex-col flex-grow items-center">
+        <div className=" border-2 h-1/2 overflow-y-auto m-6 rounded-lg border-slate-500 bg-slate-100 flex-grow scrollbar-thin scrollbar-thumb-slate-300 scrollbar-thumb-rounded-lg">
           <Table variant="simple" overflow="auto">
-            <Thead>
+            <Thead top={0} zIndex="docked" position={"sticky"} className="bg-slate-300 rounded-lg">
               <Tr>
                 <Th>Id</Th>
                 <Th>Data</Th>
@@ -84,7 +84,7 @@ export default function Sessions(): React.ReactElement{
         </div>
         )}
       <div className="p-6 bg-white" style={{ flexShrink: 0 }}>
-        <Button colorScheme="blue" onClick={redirectToSessionCreation}>
+        <Button bgColor={"gray.300"} onClick={redirectToSessionCreation}>
           Criar Sessão
         </Button>
       </div>

@@ -79,9 +79,9 @@ export default function AgeFilter({
                 closeOnBlur={true}
             >
                 <PopoverTrigger>
-                    <Button className="capitalize" colorScheme="blue">{filterText}</Button>
+                    <Button className="capitalize" bgColor={"gray.300"}>{filterText}</Button>
                 </PopoverTrigger>
-                <PopoverContent p={5}>
+                <PopoverContent p={5} zIndex={"docked"}>
                     <FocusLock persistentFocus={false}>
                         <PopoverArrow />
                         <PopoverCloseButton />

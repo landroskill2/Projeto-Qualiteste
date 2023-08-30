@@ -164,7 +164,7 @@ namespace Qualiteste.ServerApp.Controllers
         {
             try
             {
-                Either<CustomError, TestSucesses> c = _testService.AddConsumerToTest(id, consumer);
+                Either<CustomError, TestSuccesses> c = _testService.AddConsumerToTest(id, consumer);
                 return c.Match(
                     error => Problem(statusCode: error.StatusCode, title: error.Message),
                     success => Ok(success)
@@ -197,9 +197,9 @@ namespace Qualiteste.ServerApp.Controllers
         {
             try
             {
-                Either<CustomError, TestSucesses> result = _testService.UpdateAttributeAlias(id, alias);
+                Either<CustomError, TestSuccesses> result = _testService.UpdateAttributeAlias(id, alias);
                 return result.Match(
-                    error => Problem(statusCode: 500, title: "Something went wrong"),
+                    error => Problem(statusCode: error.StatusCode, title: error.Message),
                     success => Ok(success)
                     );
             }
@@ -216,7 +216,7 @@ namespace Qualiteste.ServerApp.Controllers
         {
             try
             {
-                Either<CustomError, TestSucesses> result = _testService.RemoveTestResults(id);
+                Either<CustomError, TestSuccesses> result = _testService.RemoveTestResults(id);
                 return result.Match(
                     error => Problem(statusCode: error.StatusCode, title: error.Message),
                     success => Ok(success)
@@ -234,9 +234,12 @@ namespace Qualiteste.ServerApp.Controllers
         {
             try
             {
-                await _csvService.ParseCsv(csvFile, id);
                 var actionName = nameof(TestsController.GetFizzTable);
-                return CreatedAtAction(actionName, new { id = id }, null);
+                Either<CustomError, TestSuccesses> result = await _csvService.ParseCsv(csvFile, id);
+                return result.Match(
+                    error => Problem(statusCode: error.StatusCode, title: error.Message),
+                    success => CreatedAtAction(actionName, new { id = id }, null)
+                );
             }catch(Exception ex)
             {
                 return Problem(statusCode: 500, title: "Ocorreu um erro inesperado");

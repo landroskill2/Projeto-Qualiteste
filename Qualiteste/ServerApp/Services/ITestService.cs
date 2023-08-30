@@ -8,9 +8,9 @@ namespace Qualiteste.ServerApp.Services
 {
     public interface ITestService
     {
-        Either<CustomError, TestSucesses> AddConsumerToTest(string id, IEnumerable<int> consumer);
+        Either<CustomError, TestSuccesses> AddConsumerToTest(string id, IEnumerable<int> consumer);
         Either<CustomError, string> CreateNewTest(TestInputModel testInput);
-        Either<CustomError, TestSucesses> UpdateAttributeAlias(string testId, FizzAliasDto[] alias);
+        Either<CustomError, TestSuccesses> UpdateAttributeAlias(string testId, FizzAliasDto[] alias);
         Either<CustomError, IEnumerable<TestOutputModel>> GetFilteredTestsList(string type);
         Either<CustomError, FizzTableModel> GetFizzTable(string id);
         Either<CustomError, TestPageModel> GetTestById(string id);
@@ -18,6 +18,6 @@ namespace Qualiteste.ServerApp.Services
         Either<CustomError, TestOutputModel> UpdateTest(string id, TestInputModel testInput);
         Either<CustomError, IEnumerable<TestOutputModel>> GetClientsTests(string clientUsername);
         Either<CustomError, TestPageModel> GetClientsTestByID(string clientUsername, string id);
-        Either<CustomError, TestSucesses> RemoveTestResults(string testId);
+        Either<CustomError, TestSuccesses> RemoveTestResults(string testId);
     }
 }

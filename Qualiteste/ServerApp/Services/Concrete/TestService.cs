@@ -105,7 +105,7 @@ namespace Qualiteste.ServerApp.Services.Concrete
         /**
          * bulk update attributes on test
          */
-        public Either<CustomError, TestSucesses> UpdateAttributeAlias(string testId, FizzAliasDto[] alias)
+        public Either<CustomError, TestSuccesses> UpdateAttributeAlias(string testId, FizzAliasDto[] alias)
         {
             try
             {
@@ -118,7 +118,7 @@ namespace Qualiteste.ServerApp.Services.Concrete
                 }
                 _unitOfWork.Complete();
                 //return updated attributes
-                return new TestSucesses.UpdateAttributeAliasSuccess();
+                return new TestSuccesses.UpdateAttributeAliasSuccess();
             }
             catch (Exception e)
             {
@@ -150,13 +150,13 @@ namespace Qualiteste.ServerApp.Services.Concrete
             }
         }
 
-        public Either<CustomError, TestSucesses> AddConsumerToTest(string id, IEnumerable<int> consumer)
+        public Either<CustomError, TestSuccesses> AddConsumerToTest(string id, IEnumerable<int> consumer)
         {
             try
             {
                 _unitOfWork.Tests.AddConsumerToTest(id, consumer);
                 _unitOfWork.Complete();
-                return new TestSucesses.AddConsumerToTestSuccess();
+                return new TestSuccesses.AddConsumerToTestSuccess();
             }catch(InvalidOperationException ex){
                 return new TestErrors.ConsumerAlreadyInTest();
             }catch(Exception ex)
@@ -231,7 +231,7 @@ namespace Qualiteste.ServerApp.Services.Concrete
             }
         }
 
-        public Either<CustomError, TestSucesses> RemoveTestResults(string testId)
+        public Either<CustomError, TestSuccesses> RemoveTestResults(string testId)
         {
             try
             {
@@ -239,7 +239,7 @@ namespace Qualiteste.ServerApp.Services.Concrete
                 if (t == null) return new TestErrors.NoTestFoundWithGivenID();
                 _unitOfWork.Tests.RemoveResultsFromTest(testId);
                 _unitOfWork.Complete();
-                return new TestSucesses.RemoveResultsSuccess();
+                return new TestSuccesses.RemoveResultsSuccess();
             }catch(Exception ex)
             {
                 throw ex;

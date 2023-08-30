@@ -3,6 +3,9 @@ using CsvHelper;
 using System.Globalization;
 using Qualiteste.ServerApp.Models;
 using Microsoft.AspNetCore.Server.Kestrel.Core.Features;
+using Qualiteste.ServerApp.Utils;
+using Qualiteste.ServerApp.Services.Replies.Errors;
+using Qualiteste.ServerApp.Services.Replies.Successes;
 
 namespace Qualiteste.ServerApp.Services.Concrete
 {
@@ -15,25 +18,31 @@ namespace Qualiteste.ServerApp.Services.Concrete
             _unitOfWork = unitOfWork;
         }
 
-        public async Task ParseCsv(IFormFile csvFile, string id)
+        public async Task<Either<CustomError, TestSuccesses>> ParseCsv(IFormFile csvFile, string id)
         {
-            using (var reader = new StreamReader(csvFile.OpenReadStream()))
-            {
-                using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
-
-                await csv.ReadAsync();
-                csv.ReadHeader();
-                string[] headers = csv.HeaderRecord;
-                int consumerIndex = Array.IndexOf(headers, "CJ");
-                
-                insertHeadersInDb(headers, id);
-                while(csv.Parser.ReadAsync().Result)
+            try{
+                using (var reader = new StreamReader(csvFile.OpenReadStream()))
                 {
-                    string[] row = csv.Parser.Record;
-                    insertValuesInDb(headers, row, id, consumerIndex);
+                    using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
+
+                    await csv.ReadAsync();
+                    csv.ReadHeader();
+                    string[] headers = csv.HeaderRecord;
+                    int consumerIndex = Array.IndexOf(headers, "CJ");
+                    
+                    insertHeadersInDb(headers, id);
+                    while(csv.Parser.ReadAsync().Result)
+                    {
+                        string[] row = csv.Parser.Record;
+                        insertValuesInDb(headers, row, id, consumerIndex);
+                    }
+                    _unitOfWork.Complete();
                 }
-                _unitOfWork.Complete();
+                return new TestSuccesses.FileUploadSuccess();
+            }catch(Exception ex){
+                throw ex;
             }
+            
         }
 
         private void insertValuesInDb(string[] headers, string[] row, string id, int consumerIndex)

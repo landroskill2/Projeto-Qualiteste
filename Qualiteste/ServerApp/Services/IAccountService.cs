@@ -9,6 +9,7 @@ namespace Qualiteste.ServerApp.Services
 {
     public interface IAccountService
     {
+        Either<CustomError, IEnumerable<UserDto>> GetAccounts();
         Either<CustomError, AccountSuccesses> Login(UserDto user);
         Either<CustomError, AccountSuccesses> CreateAccount(UserDto user);
     }

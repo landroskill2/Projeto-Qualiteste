@@ -18,6 +18,7 @@ import Admin from "../pages/admin/Admin";
 import AccountCreation from "../pages/admin/AccountCreation";
 import Page404 from "../pages/Page404";
 import Products from "../pages/products/ProductsList";
+import Accounts from "../pages/admin/AccountList";
 
 export default function AppRoutes() {
   return (
@@ -36,6 +37,7 @@ export default function AppRoutes() {
             <Route element={<RequireRole allowedRoles={["ADMIN"]} />}>
               <Route path="admin" element={<Admin/>}/>
               <Route path="admin/register-account" element={<AccountCreation />} /> {/** mudar href */}
+              <Route path="admin/accounts" element={<Accounts />}/>
             </Route>
             <Route path="consumers" element ={<Consumers />} />
             <Route path="consumers/create" element={<ConsumerCreation />} />

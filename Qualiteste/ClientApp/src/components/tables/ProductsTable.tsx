@@ -23,7 +23,7 @@ export default function ProductsTable( {products, onClickProduct} : TableProps) 
     
     return (
         <Table variant="simple" overflow="auto">
-            <Thead>
+            <Thead top={0} zIndex="1" position={"sticky"} className="bg-slate-300 rounded-lg">
                 <Tr>
                     <Th>Referência</Th>
                     <Th>Designação</Th>
@@ -33,7 +33,7 @@ export default function ProductsTable( {products, onClickProduct} : TableProps) 
             <Tbody>
                 {products && <>
                     {products.map((p) => (
-                        <Tr className="hover:bg-slate-200 cursor-pointer" key={p.productid} onClick={() => {handleClick(p)}} >
+                        <Tr key={p.productid}>
                             <Td>{p.ref}</Td>
                             <Td>{p.designation}</Td>
                             <Td>{p.brand}</Td>

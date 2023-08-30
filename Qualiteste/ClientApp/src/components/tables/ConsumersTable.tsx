@@ -27,9 +27,8 @@ export default function ConsumersTable({consumers, onClickConsumer, selectedCons
         
     }
     return (
-        <TableContainer overflowX="unset" overflowY="unset">
-        <Table variant="simple" size="md" overflow="auto" colorScheme="blackAlpha">
-            <Thead top={0} zIndex="docked">
+        <Table variant="simple" size="md" colorScheme="blackAlpha">
+            <Thead  top={0} zIndex="1" position={"sticky"} className="bg-slate-300 rounded-lg">
                 <Tr>
                     {selectedConsumers && <Th></Th>}
                     <Th>Id</Th>
@@ -64,6 +63,5 @@ export default function ConsumersTable({consumers, onClickConsumer, selectedCons
                 )}   
             </Tbody>
         </Table>
-        </TableContainer>
     )
 }
