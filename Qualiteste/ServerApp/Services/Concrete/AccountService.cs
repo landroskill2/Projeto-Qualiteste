@@ -1,4 +1,5 @@
-﻿using Microsoft.Exchange.WebServices.Data;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Exchange.WebServices.Data;
 using Microsoft.IdentityModel.Tokens;
 using Qualiteste.ServerApp.DataAccess;
 using Qualiteste.ServerApp.Dtos;
@@ -82,7 +83,7 @@ namespace Qualiteste.ServerApp.Services.Concrete
             if(user.Role == "CLIENT") 
             {
                 if(user.Id == null || user.Designation == null) return new AccountErrors.MissingFieldsOnUserCreation();
-
+                
                 Client dbClient = new()
                 {
                     Id = user.Id,
@@ -106,6 +107,32 @@ namespace Qualiteste.ServerApp.Services.Concrete
             {
                 throw ex;
             }
+        }
+
+        public Either<CustomError, AccountSuccesses> DeleteAccount([FromQuery] string username)
+        {
+            try {
+                User target = _unitOfWork.Users.GetById(username);
+                if (target == null) return new AccountErrors.UsernameNotFound();
+                Client? client = target.Clients.FirstOrDefault();
+                if (client != null)
+                {
+                    if (client.Tests.Any())
+                    {
+                        client.Tests.Clear();
+                    }
+                }
+                target.Clients.Clear();
+                _unitOfWork.Users.Remove(target);
+                _unitOfWork.Complete();
+                return new AccountSuccesses.DeleteAccountSuccess();
+            }
+            catch(Exception ex)
+            {
+                _unitOfWork.UntrackChanges();
+                throw ex;
+            }
+            
         }
     }
 }

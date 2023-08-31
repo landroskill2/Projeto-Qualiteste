@@ -10,20 +10,29 @@ import {
 
 import { useGlobalToast } from "../../common/useGlobalToast";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 import IAccountOutput from "../../common/Interfaces/Accounts";
-import { registerUser } from "../../common/APICalls";
+import { fetchAllClients, registerUser } from "../../common/APICalls";
 
 const initialAccount : IAccountOutput = {
     username : "",
     password : "",
-    role : "ADMIN"
+    role : "ADMIN",
+    id : "",
+    designation : ""
+}
+
+interface IClientOutputModel {
+  clientId : string,
+  clientDesignation : string,
 }
   
   export default function AccountCreation(): React.ReactElement {
     const [accountCredentials, setAccountCredentials] = useState<IAccountOutput>(initialAccount);
+    const [clientSelected, setClientSelected] = useState<boolean>(false)
+    const [availableClients, setAvailableClients] = useState<IClientOutputModel[]>()
     const { addToast, isToastActive } = useGlobalToast() 
     const navigate = useNavigate()
-  
     const handleAccountInputChange = (
       e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
     ) => {
@@ -34,7 +43,28 @@ const initialAccount : IAccountOutput = {
         [name]: value,
       }));
     };
-  
+
+
+    useEffect(()=> {
+      populateData()
+    }, [])
+
+
+    async function populateData(){
+      const resp = await fetchAllClients().catch(err => {
+        if(!isToastActive("error")){
+          addToast({
+            id: "error",
+            title: "Erro",
+            description: err.response.data.title,
+            status: "error"
+          })
+        }
+      })
+      if(resp?.status == 200){
+        setAvailableClients(resp.data)
+      }
+    }
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       const resp = await registerUser(accountCredentials).catch(err => {
@@ -53,7 +83,7 @@ const initialAccount : IAccountOutput = {
         navigate("/admin", {state: toastObj})
       }
     };
-
+    console.log(clientSelected)
     return (
       <div className="h-full flex flex-col items-center justify-center bg-white">
          <form onSubmit={handleSubmit}>
@@ -102,6 +132,8 @@ const initialAccount : IAccountOutput = {
             </div>
             
             {accountCredentials.role == "CLIENT" && 
+            <>
+            {!clientSelected &&
               <div className="flex flex-row justify-between gap-3">
                 <FormControl id="id" isRequired>
                   <FormLabel textColor="white">ID de cliente</FormLabel>
@@ -114,7 +146,7 @@ const initialAccount : IAccountOutput = {
                     background="white"
                   />
                 </FormControl>  
-    
+
                 <FormControl id="designation" isRequired>
                   <FormLabel textColor="white">Designação de cliente</FormLabel>
                   <Input
@@ -127,8 +159,27 @@ const initialAccount : IAccountOutput = {
                   />
                 </FormControl>
               </div>
+          }
+              <div className="flex flex-col justify-between">
+                  <FormLabel textColor="white">Associar a um cliente existente</FormLabel>
+                  <Select 
+                    name="id"
+                    value={accountCredentials.id}
+                    onChange= { e => {setClientSelected(e.target.value === ""? false : true);handleAccountInputChange(e)}}
+                    background="white"
+                    >
+                      <option value={""}>Escolher</option>
+                    {availableClients?.map(c =>
+                      <option value={c.clientId}>
+                          {c.clientDesignation}
+                      </option>
+                      
+                      
+                    )}
+                  </Select>
+                </div>
+            </>
             }
-          
             <Button type="submit" mt={4} colorScheme="blue" onSubmit={handleSubmit}>
               Criar
             </Button>

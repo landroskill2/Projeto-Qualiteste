@@ -13,21 +13,42 @@ import {
   Box
 } from "@chakra-ui/react";
 import IAccountOutput from "../../common/Interfaces/Accounts";
-import { fetchAccounts } from "../../common/APICalls";
+import { deleteAccount, fetchAccounts } from "../../common/APICalls";
+import { useGlobalToast } from "../../common/useGlobalToast";
+import { useNavigate } from "react-router-dom";
 import { CloseIcon } from "@chakra-ui/icons";
 
 export default function Accounts(){
+    const { addToast, isToastActive } = useGlobalToast() 
+    const navigate = useNavigate()
     const [accounts, setAccounts] = useState<IAccountOutput[]>([])
-
     useEffect(()=> {
-        populateData() 
+      populateData() 
     },[])
 
     async function populateData() {
-
         const response = await fetchAccounts()
         setAccounts(response.data)
+    }
+
+    async function handleClick(username:string) {
+      
+      const resp = await deleteAccount(username).catch(err => {
+        if(!isToastActive("error")){
+          addToast({
+            id: "error",
+            title: "Erro",
+            description: err.response.data.title,
+            status: "error"
+          })
+        }
+      })
+      if(resp?.status == 200){
+        populateData().then(() => {
+          addToast({id: "success", title: "Sucesso", description: resp.data.message, status: "success"})
+        })
       }
+    }
 
     return (
         <div className="flex flex-col flex-grow h-[calc(100vh-72px)] w-full">
@@ -56,7 +77,7 @@ export default function Accounts(){
                       <Td>{account.role}</Td>
                       <Td>{account.designation ? account.designation : "-"}</Td>
                       <Td textAlign={"center"} className="hover:bg-red-400 cursor-pointer">
-                        <CloseIcon className="self-center" boxSize="0.7em" onClick={() => {removeNotConfirmed(session!.id, consumer.consumer.id)}} />
+                        <CloseIcon className="self-center" boxSize="0.7em" onClick={() => {handleClick(account.username)}} />
                       </Td>
                     </Tr>
                   ))}

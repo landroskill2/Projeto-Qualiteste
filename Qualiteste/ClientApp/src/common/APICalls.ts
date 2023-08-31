@@ -311,3 +311,8 @@ export function fetchAccounts(){
     let path = `/accounts`
     return instance.get(path)
 }
+
+export function deleteAccount(username : string) : Promise<AxiosResponse>{
+    let path = `/accounts/delete?username=${username}`
+    return instance.delete(path)
+}

@@ -20,6 +20,13 @@ namespace Qualiteste.ServerApp.Services.Replies.Successes
             {
             }
         }
+
+        public class DeleteAccountSuccess : AccountSuccesses
+        {
+            public DeleteAccountSuccess() : base("Conta eliminada com sucesso.", 200)
+            {
+            }
+        }
     }
 
     
