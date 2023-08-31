@@ -199,9 +199,36 @@ export default function TestCreation(): React.ReactElement {
 
                 />
               </FormControl>
-
-              {isHomeTest && (
-                <>
+              
+                <FormControl id="product" className="bg-slate-600 rounded-lg flex flex-col items-center" isRequired>
+                  <FormLabel textColor={"white"}>Produto em teste</FormLabel>
+                  {productToTestReference === "" ? (
+                      <div>
+                        <AddProductsModal onClickProduct={setProductToTest} excludeProducts={addedProducts} onClickCreateProduct={onCreateProduct} buttonText={"Associar produto"}/>
+                      </div>
+                  ) : 
+                  (
+                    <Input className="text-neutral-50 items-center"
+                      name="product"
+                      type="text"
+                      value={productToTestReference}
+                      isReadOnly
+                      border={"hidden"}
+                      textAlign={"center"}
+                      onDoubleClick={() => cleanProductToTest()}
+                    >                     
+                    </Input>
+                  )}
+                </FormControl>
+              
+              
+              <Button type="submit" mt={4} colorScheme="blue">
+                  Submit
+              </Button>
+            </form>
+          </div>
+          {isHomeTest && (
+                <div className="flex flex-col">
                   <FormControl className="flex flex-col p-2" id="validationDate">
                     <FormLabel textColor={"white"}>Validation Date</FormLabel>
                     <Input
@@ -236,37 +263,9 @@ export default function TestCreation(): React.ReactElement {
                         background="white"
                       />
                   </FormControl>
-                </>
+                </div>
               )}
-              
-                <FormControl id="product" className="bg-slate-600 rounded-lg flex flex-col items-center" isRequired>
-                  <FormLabel textColor={"white"}>Produto em teste</FormLabel>
-                  {productToTestReference === "" ? (
-                      <div>
-                        <AddProductsModal onClickProduct={setProductToTest} excludeProducts={addedProducts} onClickCreateProduct={onCreateProduct} buttonText={"Associar produto"}/>
-                      </div>
-                  ) : 
-                  (
-                    <Input className="text-neutral-50 items-center"
-                      name="product"
-                      type="text"
-                      value={productToTestReference}
-                      isReadOnly
-                      border={"hidden"}
-                      textAlign={"center"}
-                      onDoubleClick={() => cleanProductToTest()}
-                    >                     
-                    </Input>
-                  )}
-                </FormControl>
-              
-              
-              <Button type="submit" mt={4} colorScheme="blue">
-                  Submit
-              </Button>
-            </form>
-          </div>
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col flex-grow gap-4 w-[400px]">
           <h2 className="text-white">Ordem de amostragem</h2>
           <div className="w-full flex-grow bg-white rounded-md ">
             <DraggableProductTable elements={addedProducts} setElements={setAddedProducts} productToTest={formValues.product}></DraggableProductTable>

@@ -13,6 +13,6 @@ export const RequireRole = ({ allowedRoles }: Params) => {
     return isAllowed ? (
         <Outlet />
     ) : (
-        <Navigate to="/unauthorized" state={{from: location}} replace />
+        <Navigate to="/unauthorized" state={{from: location}} />
     )
 }

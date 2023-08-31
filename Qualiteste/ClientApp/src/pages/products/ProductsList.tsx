@@ -81,7 +81,6 @@ export default function Products(): React.ReactElement{
           <Spinner size="lg" />
         </div>
       ) : (
-        products.length > 0 ? (
           <div className="mt-6 px-6 min-h-full w-full flex flex-col flex-grow items-center justify-center">
           <div className="w-full">
             <FilterBar brands={brands} setBrand={setBrandFilter} setType={setType} setSearchString={setSearchString} searchBar />
@@ -90,15 +89,8 @@ export default function Products(): React.ReactElement{
             <ProductsTable products={products}/>
           </div>
         </div>
-        ) : (
-           //Add stuff here in case there is no data to show
-          <div className="mt-6 px-6 min-h-full w-full flex flex-col flex-grow items-center justify-center">
-          <Heading>This is empty...*Temporary*</Heading>
-            <img src="https://gifdb.com/images/high/tumbleweed-hills-u6pgl9vwk7x1wfor.gif"></img>
-          </div>
-        )
-        
-      )}
+        )    
+      }
       <div className="content-end justify-end items-baseline">
         <WithPermission allowedRoles= {["ADMIN"]}>
           <div className="pl-2 pb-2 bg-white " style={{ flexShrink: 0 }}>

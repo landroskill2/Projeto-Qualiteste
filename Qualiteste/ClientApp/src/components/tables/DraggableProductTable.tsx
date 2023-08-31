@@ -60,22 +60,22 @@ export default function DraggableProductTable({elements, setElements, productToT
                     {elements && <>
                     {elements.map((p, idx) => (
                             <Tr key={p.productid}
-                            className="flex cursor-move" 
-                            draggable
-                            onDragStart={() => {dragItem.current = idx}}
-                            onDragOver={(e)=> e.preventDefault()}//
-                            onDragEnter={() => {dragOverItem.current = idx}}
-                            onDragEnd={handleSort} 
-                            >
-                            <Td>{idx+1}</Td>
-                            <Td>{p.ref}</Td>
-                            <Td>{p.designation}</Td>
-                            <Td>{p.brand}</Td>
-                            {p.productid != productToTest && (
-                                <Td className="cursor-default" onClick={() => {removeItem(idx)}}>
-                                    <CloseIcon/>
-                                </Td>
-                            )}
+                                className="cursor-move" 
+                                draggable
+                                onDragStart={() => {dragItem.current = idx}}
+                                onDragOver={(e)=> e.preventDefault()}//
+                                onDragEnter={() => {dragOverItem.current = idx}}
+                                onDragEnd={handleSort} 
+                                >
+                                <Td>{idx+1}</Td>
+                                <Td>{p.ref}</Td>
+                                <Td>{p.designation}</Td>
+                                <Td>{p.brand}</Td>
+                                {p.productid != productToTest && (
+                                    <Td className="cursor-pointer hover:bg-red-500" onClick={() => {removeItem(idx)}}>
+                                        <CloseIcon/>
+                                    </Td>
+                                )}
                             </Tr>
                     ))}
                     </>}             
