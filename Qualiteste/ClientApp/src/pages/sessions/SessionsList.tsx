@@ -16,6 +16,7 @@ import {
 import { ISessionModel } from "../../common/Interfaces/Sessions";
 import { useNavigate } from "react-router-dom";
 import { fetchSessions } from "../../common/APICalls";
+import WithPermission from "../../auth/WithPermission";
 
 
 export default function Sessions(): React.ReactElement{
@@ -64,28 +65,25 @@ export default function Sessions(): React.ReactElement{
               </Tr>
             </Thead>
             <Tbody>
-              {sessions.length > 0 ? (
+              {
                   sessions.map((session) => (
                     <Tr className="hover:bg-slate-200 cursor-pointer" key={session.id} onClick={() => redirectToSession(session.id)}>
                       <Td>{session.id}</Td>
                       <Td>{session.date}</Td>
                       <Td>{session.consumersNumber.toString()}</Td>
                     </Tr>
-                  ))
-                ) : (
-                  //Do something here
-                  <Heading>This is empty...*Temporary*</Heading>
-               
-              )
+                  ))               
             }
             </Tbody>
           </Table>
         </div>
         )}
       <div className="p-6 bg-white" style={{ flexShrink: 0 }}>
-        <Button bgColor={"gray.300"} onClick={redirectToSessionCreation}>
-          Criar Sessão
-        </Button>
+        <WithPermission allowedRoles={["ADMIN"]}>
+          <Button bgColor={"gray.300"} onClick={redirectToSessionCreation}>
+            Criar Sessão
+          </Button>
+        </WithPermission>
       </div>
     </div>
   );

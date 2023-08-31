@@ -18,20 +18,41 @@ import FilterBar from "../../components/FilterBar";
 import { fetchConsumers } from "../../common/APICalls";
 import ConsumersTable from "../../components/tables/ConsumersTable";
 import WithPermission from "../../auth/WithPermission";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 
 export default function Consumers(): React.ReactElement{
     const [consumers, setConsumers] = useState<IConsumerOutputModel[] | null>(null);
+    const [shownConsumers, setShownConsumers] = useState<IConsumerOutputModel[]>([])
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [sex, setSex] = useState(null)
     const [maxAge, setMaxAge] = useState<number>(100)
     const [minAge, setMinAge] = useState<number>(0)
     const [searchString, setSearchString] = useState(null)
+    const [currentIdx, setCurrentIdx] = useState(20)
     const navigate = useNavigate()
 
   useEffect(() => {
     populateData() 
   }, [sex, maxAge, minAge, searchString]);
+
+  useEffect(() => {
+    if(consumers != null){
+      setShownConsumers(consumers!.slice(0, currentIdx))
+    }
+    
+  },[consumers])
+
+  function updateShownConsumers()
+  {
+    let nextIdx = currentIdx + 20 > consumers!.length ? consumers!.length : currentIdx + 20
+    console.log(nextIdx)
+    const consumersToAdd = consumers!.slice(currentIdx, nextIdx)
+    setShownConsumers((prevItems) => [...prevItems, ...consumersToAdd] )
+    setCurrentIdx((prevIdx) => prevIdx+20)
+    console.log(`shown ${shownConsumers.length}`)
+    console.log(`actual ${consumers?.length}`)
+  }
 
   const redirectToConsumerCreation = () => {
     navigate("create")
@@ -67,23 +88,28 @@ export default function Consumers(): React.ReactElement{
         <div className="min-h-full w-full flex flex-col flex-grow items-center justify-center">
           <Spinner size="lg" />
         </div>
-      ) : ( consumers.length > 0 ? (
+      ) : (
         <div className="mt-6 px-6 min-h-full w-full flex flex-col flex-grow items-center justify-center">
           <div className="w-full">
             <FilterBar setSex={setSex} setMinAge={setMinAge} setMaxAge={setMaxAge} setSearchString={setSearchString} searchBar />
           </div>
-          <div className="border-2 h-1/2 overflow-y-auto w-full m-2 rounded-lg border-slate-500 bg-slate-100 flex-grow scrollbar-thin scrollbar-thumb-slate-300 scrollbar-thumb-rounded-lg" style={{ maxHeight: 'calc(100vh - 370px)', overflowY: 'auto' }}>
-            <ConsumersTable consumers={consumers} onClickConsumer={redirectToConsumerPage} />
+          <div className="border-2 h-1/2 overflow-hidden w-full m-2 rounded-lg border-slate-500 bg-slate-100 flex-grow " style={{ maxHeight: 'calc(100vh - 370px)', overflowY: 'auto' }}>
+            <InfiniteScroll
+              dataLength={shownConsumers.length}
+              next={updateShownConsumers}
+              hasMore={shownConsumers.length != consumers.length}
+              loader={<div className="flex w-full justify-center items-center"><Spinner/></div>}
+              endMessage={<></>}
+              height={560}
+              className="scrollbar-thin scrollbar-thumb-slate-300 scrollbar-thumb-rounded-lg"
+              >
+              <ConsumersTable consumers={shownConsumers} onClickConsumer={redirectToConsumerPage} />
+            </InfiniteScroll>
+            
           </div>
         </div>
-      ) : (
-        //Add stuff here in case there is no data to show
-        <div className="mt-6 px-6 min-h-full w-full flex flex-col flex-grow items-center justify-center">
-          <Heading>This is empty...*Temporary*</Heading>
-            <img src="https://gifdb.com/images/high/tumbleweed-hills-u6pgl9vwk7x1wfor.gif"></img>
-        </div>
       )
-      )}
+      }
       <div className="content-end justify-end items-baseline">
         <WithPermission allowedRoles={["ADMIN"]}>
           <div className="p-6 bg-white" style={{ flexShrink: 0 }}>

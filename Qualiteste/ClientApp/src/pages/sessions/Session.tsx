@@ -345,7 +345,7 @@ export default function Session() : React.ReactElement{
                     </div>
                   </div>
                 </div>              
-                <div className="flex flex-col w-3/5">
+                <div className="flex flex-col w-3/5 mt-2">
                   <Heading size={"md"} className="justify-center self-center">Provadores Confirmados</Heading>
                   <div className=" flex overflow-x-auto flex-shrink border-2 h-full m-4 rounded-lg border-slate-500 overflow-y-hidden scrollbar-thin scrollbar-thumb-slate-300 scrollbar-thumb-rounded-lg scrollbar-track-slate-300'">
                     {sortedConsumerSessions.confirmed.length > 0 ? (sortedConsumerSessions.confirmed.map(({ sessionTime, consumersInfo }) => (

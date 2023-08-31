@@ -103,7 +103,7 @@ export default function Test(): React.ReactElement {
       setIsLoading(true)
       populateData().then(() => {
         setIsLoading(false)
-        addToast({id: "success", title: "Sucesso", description: "Provador adicionado com sucesso.", status: "success"})
+        addToast({id: "success", title: "Sucesso", description: "Resultados removidos com sucesso.", status: "success"})
       })
     })
     .catch(err => 
@@ -127,39 +127,41 @@ export default function Test(): React.ReactElement {
             <div className="flex flex-col flex-grow shadow-2xl self-center rounded-xl bg-slate-100 h-full m-4 mt-10">
               <div className="flex justify-between items-center">
                 <Heading size={"lg"} className="self-center ml-4">Dados do Teste</Heading>
-                <WithPermission allowedRoles={["ADMIN"]}>
+                
                   {!isHomeTest &&
                     <div className="flex m-4 gap-2">
                       { hasResults &&
                       <>
-                        <div className="flex flex-grow rounded-lg p-2 self-center gap-1 bg-red-200  hover:bg-red-300 cursor-pointer" onClick={() => handleResultsRemoval(id!)}>
-                         <Heading size={"md"} className="self-center">Eliminar Resultados</Heading>
-                        
-                        </div>
+                        <WithPermission allowedRoles={["ADMIN"]}>
+                          <div className="flex flex-grow rounded-lg p-2 self-center gap-1 bg-red-200  hover:bg-red-300 cursor-pointer" onClick={() => handleResultsRemoval(id!)}>
+                            <Heading size={"md"} className="self-center">Eliminar Resultados</Heading>
+                          
+                          </div>
+                        </WithPermission>
                         <div className="flex flex-grow rounded-lg p-2 self-center gap-1 bg-slate-200 hover:bg-slate-300 cursor-pointer" onClick={() => navigate("fizz")}>
                           <Heading size={"md"} className="self-center  mr-2">Resultados do Teste</Heading>
                           <div>
                            <ArrowForwardIcon boxSize={6}/>
-                         </div>
+                          </div>
                         </div>
                       </>
                       }
-                      { !hasResults && session &&
-                      <>
-                      <div>
-                      <Input type="file" accept=".txt,.csv" onChange={handleFileUpload} display="none" id="file-upload" />
-                        <label htmlFor="file-upload">
-                          <Button bgColor={"gray.300"} as="span" mr={2} className=" cursor-pointer">
-                            Importar resultados
-                          </Button>
-                        </label>
-                      </div>
-                      </>
-                      }
-                      
+                      <WithPermission allowedRoles={["ADMIN"]}>
+                        { !hasResults && session &&
+                        <>
+                          <div>
+                            <Input type="file" accept=".txt,.csv" onChange={handleFileUpload} display="none" id="file-upload" />
+                            <label htmlFor="file-upload">
+                              <Button bgColor={"gray.300"} as="span" mr={2} className=" cursor-pointer">
+                                Importar resultados
+                              </Button>
+                            </label>
+                          </div>
+                        </>
+                        }
+                      </WithPermission>
                     </div>
                   }                                  
-                </WithPermission>
               </div>
               <div className="flex flex-row justify-center content-center border-2 h-fit overflow-x-auto overflow-y-hidden m-4 rounded-lg border-slate-500 flex-grow scrollbar-thin scrollbar-thumb-slate-300 scrollbar-thumb-rounded-lg scrollbar-track-slate-300'">
                 <div className="flex flex-col flex-grow border-r-2 border-slate-500">
@@ -182,7 +184,6 @@ export default function Test(): React.ReactElement {
                       </div>
                     </div>
                   }
-                </WithPermission>
                 <div className="flex flex-col flex-grow border-r-2 border-slate-500">
                   <div  className="flex justify-center items-center p-4 border-b-2 border-slate-500 h-1/3 bg-slate-300">                    
                     <Heading size={"md"}>Tipo de Teste</Heading>
@@ -192,6 +193,7 @@ export default function Test(): React.ReactElement {
                     <Heading size={"md"}>{test?.type}</Heading>   
                   </div>
                 </div>
+                </WithPermission>
                 <div className="flex flex-col flex-grow border-r-2 border-slate-500">
                   <div  className="flex h-1/3 items-center border-b-2 p-4 border-slate-500 bg-slate-300 justify-center">
                     
@@ -228,7 +230,7 @@ export default function Test(): React.ReactElement {
               <div className="flex flex-row flex-grow shadow-2xl w-full m-5 self-center rounded-xl bg-slate-100 h-2/3 gap-4 justify-center">  
                 <WithPermission allowedRoles={["ADMIN"]}>
                   <div className="flex flex-col min-w-1/2">
-                    <div className="flex justify-between">
+                    <div className="flex justify-between mt-2">
                       <Heading size={"md"} className="self-center ml-4">Provadores do Teste</Heading>
                       {isHomeTest && 
                         <AddConsumersModal onSubmit={addConsumers}/>
@@ -271,7 +273,7 @@ export default function Test(): React.ReactElement {
                 </WithPermission>            
                 
                 <div className="flex flex-col min-w-1/2">      
-                  <div className="flex justify-between">
+                  <div className="flex justify-between content-center items-center mt-2">
                     <Heading size={"md"} className="self-center ml-4">Produtos do Teste</Heading>
                   </div>
                   <div className=" overflow-x-auto border-2 h-full m-4 rounded-lg border-slate-500 overflow-y-hidden scrollbar-thin scrollbar-thumb-slate-300 scrollbar-thumb-rounded-lg">

@@ -19,6 +19,7 @@ import AccountCreation from "../pages/admin/AccountCreation";
 import Page404 from "../pages/Page404";
 import Products from "../pages/products/ProductsList";
 import Accounts from "../pages/admin/AccountList";
+import Unauthorized from "../pages/Unauthorized";
 
 export default function AppRoutes() {
   return (
@@ -26,6 +27,7 @@ export default function AppRoutes() {
       {/* Unauthenticated Routes */}
       <Route element= {<Layout />}>
         <Route path="login" element={<Login />}/>
+        <Route path="unauthorized" element={<Unauthorized/>} />
         <Route path="/" element={<Home/>}/>
         <Route path="*" element={<Page404 />} />
         {/* Authenticated Routes */}
