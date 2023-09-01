@@ -9,11 +9,6 @@ namespace Qualiteste.ServerApp.DataAccess.Repository.Concrete
         {
         }
 
-        public string GetClientIDByUsername(string username)
-        {
-            return PostgresContext.Clients.SingleOrDefault(c => c.Username == username).Id;
-        }
-
         public PostgresContext PostgresContext
         { 
             get { return Context as PostgresContext; }

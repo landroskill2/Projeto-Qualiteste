@@ -68,7 +68,8 @@ namespace Tests.UnitOfWorkTest
                 ID = "test",
                 TestType = "SP",
                 ConsumersNumber = 10,
-                RequestDate = DateOnly.Parse("2023-03-29")
+                RequestDate = DateOnly.Parse("2023-03-29"),
+                Product = 122332
             }.toDbTest();
 
             ctx1.Tests.Add(test);

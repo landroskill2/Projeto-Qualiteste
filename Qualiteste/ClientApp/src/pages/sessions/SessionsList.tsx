@@ -56,7 +56,6 @@ export default function Sessions(): React.ReactElement{
   };
 
   async function populateData() {
-
     const response = await fetchSessions()
     setSessions(response.data)
     setIsLoading(false)

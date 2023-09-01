@@ -35,10 +35,16 @@ export default function CreateProductModal({onSubmit} : ModalProps) : React.Reac
 
 
     const handleSubmit = async (e : React.FormEvent<HTMLFormElement>) => {
-        console.log("on handleSubmit")
         e.preventDefault()
         onSubmit(product)
+        setProduct(initialProduct)
         onClose()   
+    }
+
+    const handleOnClose = () => {
+        onClose()
+        setProduct(initialProduct)
+
     }
     const handleInputChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -58,7 +64,7 @@ export default function CreateProductModal({onSubmit} : ModalProps) : React.Reac
             m={4}
             >{`Criar Produto`}
         </Button>
-        <Modal onClose={onClose} size="sm" isOpen={isOpen} isCentered>
+        <Modal onClose={handleOnClose} size="sm" isOpen={isOpen} isCentered>
             <ModalOverlay />
             <ModalContent>
                 <ModalHeader className="bg-slate-800 shadow-slate-600 shadow-md p-6 gap-4 text-white rounded-t-md" >Criar Produto</ModalHeader>

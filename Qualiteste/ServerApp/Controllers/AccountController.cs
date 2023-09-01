@@ -76,5 +76,23 @@ namespace Qualiteste.ServerApp.Controllers
                 return Problem(statusCode: 500, title: "Ocorreu um erro inesperado");
             }
         }
+        [Authorize(Roles = "ADMIN")]
+        [HttpDelete("delete")]
+        public IActionResult DeleteAccount(string username) {
+            try {
+                bool isSame = username.Equals(HttpContext.User.Claims.FirstOrDefault().Value);
+                if (isSame) return Problem(statusCode: 403, title: "Não é possível eliminar a própria conta.");
+                Either<CustomError, AccountSuccesses> result = _accountService.DeleteAccount(username);
+                return result.Match(
+                    error => Problem(statusCode: error.StatusCode, title: error.Message),
+                    success => Ok(success)
+                );
+            }
+            catch(Exception e)
+            {
+                return Problem(statusCode: 500, title: "Ocorreu um erro inesperado");
+            }
+            
+        }
     }
 }

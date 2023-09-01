@@ -82,15 +82,18 @@ namespace Tests.RepositoryTests
         {
             //Session to where the test is inserted
             string sessionID = "250523";
+            int productToTestID = 122332;
+
             //Add test to BD
             Test test = new TestInputModel
             {
                 ID = "9999",
                 TestType = "SP",
                 ConsumersNumber = 15,
-                RequestDate = DateOnly.Parse("2023-03-24")
+                RequestDate = DateOnly.Parse("2023-03-24"),
+                Product = productToTestID
+                
             }.toDbTest();
-
             _testRepository.Add(test);
             context.SaveChanges();
 
@@ -115,16 +118,17 @@ namespace Tests.RepositoryTests
             context.Sessions.Add(session);
             context.SaveChanges();
 
+            int consumerId = 3;
+
             List<ConsumerSession> consumerSessions = new List<ConsumerSession>();
-            ConsumerSessionInputModel consumerSession = new ConsumerSessionInputModel { sessionTime = "12:00", consumerId = 3 };
-            consumerSessions.Add(consumerSession.toDbConsumerSession());
+            consumerSessions.Add(new ConsumerSession { Sessionid = session.Sessionid, Consumerid = 3 });
 
             _sessionRepository.AddConsumerToSession(session.Sessionid, consumerSessions);
             context.SaveChanges();
             //Check if consumer is in session
-            ConsumerSession csession = context.Sessions.Single(s => s.Sessionid == session.Sessionid).ConsumerSessions.Single(cs => cs.Consumerid == consumerSession.consumerId);
+            ConsumerSession csession = context.Sessions.Single(s => s.Sessionid == session.Sessionid).ConsumerSessions.Single(cs => cs.Consumerid == consumerId);
             Assert.NotNull(csession);
-            Assert.That(csession.Consumerid, Is.EqualTo(consumerSession.consumerId));
+            Assert.That(csession.Consumerid, Is.EqualTo(consumerId));
             //Clean up
             context.ConsumerSessions.Remove(csession);
             context.Sessions.Remove(session);

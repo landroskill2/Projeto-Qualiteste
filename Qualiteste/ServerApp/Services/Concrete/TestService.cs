@@ -204,7 +204,7 @@ namespace Qualiteste.ServerApp.Services.Concrete
         {
             try
             {
-                string clientID = _unitOfWork.Clients.GetClientIDByUsername(clientUsername);
+                string clientID = _unitOfWork.Users.GetClientIDByUsername(clientUsername);
                 return _unitOfWork.Tests.GetTestsByClient(clientID).ToList().Select(x => x.toOutputModel(x.ProductNavigation!.toOutputModel())).ToList();
             }
             catch(Exception ex)
@@ -217,7 +217,7 @@ namespace Qualiteste.ServerApp.Services.Concrete
         {
              try
             {
-                string clientID = _unitOfWork.Clients.GetClientIDByUsername(clientUsername);
+                string clientID = _unitOfWork.Users.GetClientIDByUsername(clientUsername);
                 Test? test = _unitOfWork.Tests.GetClientTestsByID(clientID, id);
                 if (test == null) return new TestErrors.NoTestFoundWithGivenID();
 

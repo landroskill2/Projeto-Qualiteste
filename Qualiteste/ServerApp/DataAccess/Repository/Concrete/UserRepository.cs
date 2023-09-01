@@ -19,6 +19,11 @@ namespace Qualiteste.ServerApp.DataAccess.Repository.Concrete
             return PostgresContext.Roles.SingleOrDefault(r => r.Roledesignation == role).Roleid;
         }
 
+        public string GetClientIDByUsername(string clientUsername)
+        {
+            return PostgresContext.Users.SingleOrDefault(u => u.Username == clientUsername).Client.Id;
+        }
+
         public PostgresContext PostgresContext
         {
             get { return Context as PostgresContext; }

@@ -11,6 +11,7 @@ DROP TABLE IF EXISTS ATTRIBUTE_VALUES CASCADE;
 DROP TABLE IF EXISTS ROLES CASCADE;
 DROP TABLE IF EXISTS USERS CASCADE;
 
+
 CREATE TABLE CONSUMER(
     Id int PRIMARY KEY,
     FullName varchar(200) NOT NULL,
@@ -39,17 +40,19 @@ CREATE TABLE ROLES(
     RoleDesignation varchar(20)
 );
 
+CREATE TABLE CLIENT(
+    Id varchar(20) PRIMARY KEY,
+    Designation varchar(50) NOT NULL
+);
+
+
 CREATE TABLE USERS(
     Username varchar(20) PRIMARY KEY,
     Pwd varchar(256),
-    Role int REFERENCES ROLES(RoleID)
+    Role int REFERENCES ROLES(RoleID),
+    ClientID varchar(20) REFERENCES CLIENT(Id)
 );
 
-CREATE TABLE CLIENT(
-    Id varchar(20) PRIMARY KEY,
-    Designation varchar(50) NOT NULL,
-    Username varchar(20) REFERENCES USERS(Username)
-);
 
 CREATE TABLE TEST(
     InternalID varchar(20) PRIMARY KEY,
@@ -195,29 +198,31 @@ INSERT INTO PRODUCT(ProductID, Ref, Designation, Brand) VALUES
 (777888, 'JM-2308-32', 'Lombos de Bacalhau Com Cebolada', 'Continente'),
 (123123, 'JM-2314-01', 'Mala Eastpack', 'Continente');
 
-INSERT INTO SESSION(SessionID, SessionDate, ConsumersNumber) VALUES
-('040423', '2023-04-04', 10),
-('250523', '2023-05-25', 36);
-
 INSERT INTO ROLES(RoleDesignation) VALUES
 ('ADMIN'),
 ('CLIENT');
 
+
+INSERT INTO CLIENT(Id, Designation) VALUES
+('clientID', 'client'),
+('Conti', 'Continente'),
+('JM', 'Jerónimo Martins'),
+('IM', 'Intermarché'),
+('PD', 'Pingo Doce');
+
+
 INSERT INTO USERS(Username, Pwd, Role) VALUES
-('admin', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', 1),
-('client', '948fe603f61dc036b5c596dc09fe3ce3f3d30dc90f024c85f3c82db2ccab679d', 2),
-('continente', '948fe603f61dc036b5c596dc09fe3ce3f3d30dc90f024c85f3c82db2ccab679d', 2),
-('JM-quali', '948fe603f61dc036b5c596dc09fe3ce3f3d30dc90f024c85f3c82db2ccab679d', 2),
-('intermarche', '948fe603f61dc036b5c596dc09fe3ce3f3d30dc90f024c85f3c82db2ccab679d', 2),
-('PD-quali', '948fe603f61dc036b5c596dc09fe3ce3f3d30dc90f024c85f3c82db2ccab679d', 2);
+('admin', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', 1);
+INSERT INTO USERS(Username, Pwd, Role, ClientID) VALUES
+('client', '948fe603f61dc036b5c596dc09fe3ce3f3d30dc90f024c85f3c82db2ccab679d', 2, 'clientID'),
+('continente', '948fe603f61dc036b5c596dc09fe3ce3f3d30dc90f024c85f3c82db2ccab679d', 2, 'Conti'),
+('JM-quali', '948fe603f61dc036b5c596dc09fe3ce3f3d30dc90f024c85f3c82db2ccab679d', 2, 'JM'),
+('intermarche', '948fe603f61dc036b5c596dc09fe3ce3f3d30dc90f024c85f3c82db2ccab679d', 2, 'IM'),
+('PD-quali', '948fe603f61dc036b5c596dc09fe3ce3f3d30dc90f024c85f3c82db2ccab679d', 2, 'PD');
 
-
-INSERT INTO CLIENT(Id, Designation, Username) VALUES
-('clientID', 'client', 'client'),
-('Conti', 'Continente', 'continente'),
-('JM', 'Jerónimo Martins', 'JM-quali'),
-('IM', 'Intermarché', 'intermarche'),
-('PD', 'Pingo Doce', 'PD-quali');
+INSERT INTO SESSION(SessionID, SessionDate, ConsumersNumber) VALUES
+('040423', '2023-04-04', 10),
+('250523', '2023-05-25', 36);
 
 INSERT INTO TEST(InternalID, ClientID, Product, TestType, ConsumersNumber, RequestDate, ValidationDate, DueDate, ReportDeliveryDate, SessionID) VALUES
 ('443244', 'clientID', 321321, 'SP', 10, '2023-03-21', null, null, null, '040423'),

@@ -19,7 +19,7 @@ namespace Tests.RepositoryTests
         public void GetConsumersAlphabeticallyTest()
         {
             var nifFirst = "111111111111119";
-            var nifLast = "444444444444444";
+            var nifLast = "1231517656344";
             var consumers = consumerRepository.GetConsumersAlphabetically();
             Assert.That(consumers.First().Nif, Is.EqualTo(nifFirst));
             Assert.That(consumers.Last().Nif, Is.EqualTo(nifLast));
