@@ -41,7 +41,7 @@ namespace Tests.RepositoryTests
             Test test = testRepository.GetTestById("443244");
 
             Assert.That(test.Internalid, Is.EqualTo("443244"));
-            Assert.That(test.Product, Is.EqualTo(122332));
+            Assert.That(test.Product, Is.EqualTo(321321));
             Assert.That(test.Testtype, Is.EqualTo("SP"));
             Assert.That(test.Consumersnumber, Is.EqualTo(10));
 
@@ -52,11 +52,11 @@ namespace Tests.RepositoryTests
         {
             Test test = new TestInputModel
             {
-                ID = "9999",
+                ID = "99999",
                 Product = 324231,
                 TestType = "SP",
                 ConsumersNumber = 15,
-                RequestDate = DateOnly.Parse("2023-03-24")
+                RequestDate = DateOnly.Parse("2023-03-24"),
             }.toDbTest();
 
             testRepository.Add(test);
@@ -71,7 +71,6 @@ namespace Tests.RepositoryTests
         public void UpdateConsumerTest()
         {
 
-        TODO: PERCEBER O QUE É QUE SE PODE MUDAR NUM TESTE
 
             Test test = context.Tests.SingleOrDefault(t => t.Internalid == "443244");
             string testID = test.Internalid;
@@ -84,7 +83,7 @@ namespace Tests.RepositoryTests
             consumer.Fullname = "Testing update";
             consumer.Contact = 2;
             consumer.Nif = "2";
-            consumerRepository.Update(consumer);
+            context.Consumers.Update(consumer);
 
             context.SaveChanges();
 
@@ -105,7 +104,7 @@ namespace Tests.RepositoryTests
             test.Requestdate = DateOnly.Parse("1999-04-19");
             test.Testtype = "HT";
 
-        //TODO: DAR ERRO QUANDO SE TENTA MUDAR O TIPO
+            //TODO: DAR ERRO QUANDO SE TENTA MUDAR O TIPO
         }
     }
 }

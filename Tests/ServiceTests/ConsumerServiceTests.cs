@@ -43,7 +43,7 @@ namespace Tests.ServiceTests
         public void GetConsumersAlphabeticallyTest()
         {
             var nameFirst = "ACÁCIO COELHO FONSECA";
-            var nameLast = "TELMA BRITES VIEIRA";
+            var nameLast = "VERA ALEXANDRA  BOLRÃO";
 
             IEnumerable<ConsumerOutputModel> consumers;
             Either<CustomError, IEnumerable<ConsumerOutputModel>> res = consumerService.GetConsumersAlphabetically();
@@ -163,7 +163,7 @@ namespace Tests.ServiceTests
             ConsumerInputModel consumer = new ConsumerInputModel
             {
                 Fullname = "testUpdate",
-                Nif = "2",
+                Nif = "010101010101",
                 Sex = "M",
                 DateOfBirth = DateOnly.Parse("1969-03-29"),
                 Contact = 974585213,
@@ -173,7 +173,7 @@ namespace Tests.ServiceTests
             Either<CustomError, ConsumerOutputModel> result = consumerService.UpdateConsumer(insertedID, consumer);
 
             ConsumerOutputModel updatedConsumer = result.Match(
-                error => throw new Exception(),
+                error => throw new Exception(error.Message),
                 success => success
             );
 

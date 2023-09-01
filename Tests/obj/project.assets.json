@@ -5389,19 +5389,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Leandro\\.nuget\\packages\\": {}
+    "C:\\Users\\Joao Mendes\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Leandro\\Desktop\\Qualiteste\\Projeto-Qualiteste\\Tests\\Tests.csproj",
+      "projectUniqueName": "C:\\Users\\Joao Mendes\\Desktop\\Projeto-Qualiteste\\Tests\\Tests.csproj",
       "projectName": "Tests",
-      "projectPath": "C:\\Users\\Leandro\\Desktop\\Qualiteste\\Projeto-Qualiteste\\Tests\\Tests.csproj",
-      "packagesPath": "C:\\Users\\Leandro\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Leandro\\Desktop\\Qualiteste\\Projeto-Qualiteste\\Tests\\obj\\",
+      "projectPath": "C:\\Users\\Joao Mendes\\Desktop\\Projeto-Qualiteste\\Tests\\Tests.csproj",
+      "packagesPath": "C:\\Users\\Joao Mendes\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Joao Mendes\\Desktop\\Projeto-Qualiteste\\Tests\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\Leandro\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Joao Mendes\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -5415,8 +5415,8 @@
         "net7.0": {
           "targetAlias": "net7.0",
           "projectReferences": {
-            "C:\\Users\\Leandro\\Desktop\\Qualiteste\\Projeto-Qualiteste\\Qualiteste\\Qualiteste.csproj": {
-              "projectPath": "C:\\Users\\Leandro\\Desktop\\Qualiteste\\Projeto-Qualiteste\\Qualiteste\\Qualiteste.csproj"
+            "C:\\Users\\Joao Mendes\\Desktop\\Projeto-Qualiteste\\Qualiteste\\Qualiteste.csproj": {
+              "projectPath": "C:\\Users\\Joao Mendes\\Desktop\\Projeto-Qualiteste\\Qualiteste\\Qualiteste.csproj"
             }
           }
         }
@@ -5472,7 +5472,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.306\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.305\\RuntimeIdentifierGraph.json"
       }
     }
   },

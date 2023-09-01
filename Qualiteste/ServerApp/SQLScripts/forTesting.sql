@@ -203,12 +203,12 @@ INSERT INTO ROLES(RoleDesignation) VALUES
 ('CLIENT');
 
 
-INSERT INTO CLIENT(Id, Designation, Username) VALUES
-('clientID', 'client', 'client'),
-('Conti', 'Continente', 'continente'),
-('JM', 'Jerónimo Martins', 'JM-quali'),
-('IM', 'Intermarché', 'intermarche'),
-('PD', 'Pingo Doce', 'PD-quali');
+INSERT INTO CLIENT(Id, Designation) VALUES
+('clientID', 'client'),
+('Conti', 'Continente'),
+('JM', 'Jerónimo Martins'),
+('IM', 'Intermarché'),
+('PD', 'Pingo Doce');
 
 
 INSERT INTO USERS(Username, Pwd, Role) VALUES
