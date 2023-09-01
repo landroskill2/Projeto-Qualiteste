@@ -1,19 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 
-namespace Qualiteste.ServerApp.Models;
+namespace Qualiteste.Models;
 
 public partial class PostgresContext : DbContext
 {
-    private readonly IConfiguration _configuration;
-    private readonly bool _useTestDB;
-
-    public PostgresContext(IConfiguration config, bool useTestDB = false)
+    public PostgresContext()
     {
-        _configuration = config;
-        _useTestDB = useTestDB;
+    }
+
+    public PostgresContext(DbContextOptions<PostgresContext> options)
+        : base(options)
+    {
     }
 
     public virtual DbSet<AttributeValue> AttributeValues { get; set; }
@@ -41,19 +40,8 @@ public partial class PostgresContext : DbContext
     public virtual DbSet<User> Users { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        if (!optionsBuilder.IsConfigured)
-        {
-            if(_useTestDB)
-            {
-                optionsBuilder.UseLazyLoadingProxies(true).UseNpgsql(_configuration.GetConnectionString("testDB"));
-            }
-            else
-            {
-                optionsBuilder.UseLazyLoadingProxies(true).UseNpgsql(_configuration.GetConnectionString("postgresDB"));
-            }
-        }
-    }
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseNpgsql("Host=localhost;Database=postgres;Username=postgres;Password=postgres");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -85,9 +73,6 @@ public partial class PostgresContext : DbContext
                 .HasForeignKey(d => new { d.Testid, d.Attribute })
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("attribute_values_testid_attribute_fkey");
-
-            entity.Property(e => e.Version)
-                .IsRowVersion();
         });
 
         modelBuilder.Entity<Client>(entity =>
@@ -131,8 +116,6 @@ public partial class PostgresContext : DbContext
             entity.Property(e => e.Sex)
                 .HasMaxLength(1)
                 .HasColumnName("sex");
-            entity.Property(e => e.Version)
-                .IsRowVersion();
         });
 
         modelBuilder.Entity<ConsumerHt>(entity =>
@@ -208,8 +191,6 @@ public partial class PostgresContext : DbContext
                 .HasForeignKey(d => d.Testid)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fizz_attributes_testid_fkey");
-            entity.Property(e => e.Version)
-                .IsRowVersion();
         });
 
         modelBuilder.Entity<Product>(entity =>
@@ -274,7 +255,6 @@ public partial class PostgresContext : DbContext
                 .HasConstraintName("sample_testid_fkey");
         });
 
-
         modelBuilder.Entity<Session>(entity =>
         {
             entity.HasKey(e => e.Sessionid).HasName("session_pkey");
@@ -324,8 +304,6 @@ public partial class PostgresContext : DbContext
             entity.HasOne(d => d.Session).WithMany(p => p.Tests)
                 .HasForeignKey(d => d.Sessionid)
                 .HasConstraintName("test_sessionid_fkey");
-            entity.Property(e => e.Version)
-                .IsRowVersion();
         });
 
         modelBuilder.Entity<User>(entity =>

@@ -76,8 +76,8 @@ export default function Accounts(){
                       <Td>{account.username}</Td>
                       <Td>{account.role}</Td>
                       <Td>{account.designation ? account.designation : "-"}</Td>
-                      <Td textAlign={"center"} className="hover:bg-red-400 cursor-pointer">
-                        <CloseIcon className="self-center" boxSize="0.7em" onClick={() => {handleClick(account.username)}} />
+                      <Td textAlign={"center"} className="hover:bg-red-400 cursor-pointer" onClick={() => {handleClick(account.username)}}>
+                        <CloseIcon className="self-center" boxSize="0.7em"  />
                       </Td>
                     </Tr>
                   ))}

@@ -18,8 +18,8 @@ const initialAccount : IAccountOutput = {
     username : "",
     password : "",
     role : "ADMIN",
-    id : "",
-    designation : ""
+    id : undefined,
+    designation : undefined
 }
 
 interface IClientOutputModel {
@@ -65,8 +65,23 @@ interface IClientOutputModel {
         setAvailableClients(resp.data)
       }
     }
+
+
+    const handleSelectClientChange = (e : React.ChangeEvent<HTMLSelectElement>) => {
+      let isSelected = e.target.value === "" ? false : true
+      setClientSelected(isSelected)
+      if(!isSelected){
+        setAccountCredentials((prevAccountCredentials) => ({
+          ...prevAccountCredentials,
+          ["designation"]: undefined
+        }));
+      }
+      
+      handleAccountInputChange(e)
+    }
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
+      console.log(accountCredentials)
       const resp = await registerUser(accountCredentials).catch(err => {
         console.log(err)
         if(!isToastActive("error")){
@@ -83,7 +98,6 @@ interface IClientOutputModel {
         navigate("/admin", {state: toastObj})
       }
     };
-    console.log(clientSelected)
     return (
       <div className="h-full flex flex-col items-center justify-center bg-white">
          <form onSubmit={handleSubmit}>
@@ -160,24 +174,27 @@ interface IClientOutputModel {
                 </FormControl>
               </div>
           }
-              <div className="flex flex-col justify-between">
-                  <FormLabel textColor="white">Associar a um cliente existente</FormLabel>
-                  <Select 
-                    name="id"
-                    value={accountCredentials.id}
-                    onChange= { e => {setClientSelected(e.target.value === ""? false : true);handleAccountInputChange(e)}}
-                    background="white"
-                    >
-                      <option value={""}>Escolher</option>
-                    {availableClients?.map(c =>
-                      <option value={c.clientId}>
-                          {c.clientDesignation}
-                      </option>
-                      
-                      
-                    )}
-                  </Select>
-                </div>
+          {availableClients && availableClients.length > 0 &&
+            <div className="flex flex-col justify-between">
+              <FormLabel textColor="white">Associar a um cliente existente</FormLabel>
+              <Select 
+                name="id"
+                value={accountCredentials.id}
+                onChange= {handleSelectClientChange}
+                background="white"
+                >
+                <option value={""}>Escolher</option>
+                {availableClients?.map(c =>
+                  <option value={c.clientId}>
+                      {c.clientDesignation}
+                  </option>
+                  
+                  
+                )}
+              </Select>
+            </div>
+          }
+              
             </>
             }
             <Button type="submit" mt={4} colorScheme="blue" onSubmit={handleSubmit}>

@@ -82,14 +82,22 @@ namespace Qualiteste.ServerApp.Services.Concrete
 
             if(user.Role == "CLIENT") 
             {
-                if(user.Id == null || user.Designation == null) return new AccountErrors.MissingFieldsOnUserCreation();
-                
-                Client dbClient = new()
+                if(user.Id != null && user.Designation == null)
                 {
-                    Id = user.Id,
-                    Designation = user.Designation
-                };
-                _unitOfWork.Clients.Add(dbClient);
+                    Client client = _unitOfWork.Clients.Find(c => c.Id == user.Id).SingleOrDefault();
+                    dbUser.Client = client;
+                }
+                else if(user.Id == null || user.Designation == null) return new AccountErrors.MissingFieldsOnUserCreation();
+                else
+                {
+                    Client dbClient = new()
+                    {
+                        Id = user.Id,
+                        Designation = user.Designation
+                    };
+                    dbUser.Client = dbClient;
+                    _unitOfWork.Clients.Add(dbClient);
+                }
             }
 
             _unitOfWork.Complete();
@@ -114,7 +122,7 @@ namespace Qualiteste.ServerApp.Services.Concrete
             try {
                 User target = _unitOfWork.Users.GetById(username);
                 if (target == null) return new AccountErrors.UsernameNotFound();
-                Client? client = target.Clients.FirstOrDefault();
+                Client? client = target.Client;
                 if (client != null)
                 {
                     if (client.Tests.Any())
@@ -122,7 +130,7 @@ namespace Qualiteste.ServerApp.Services.Concrete
                         client.Tests.Clear();
                     }
                 }
-                target.Clients.Clear();
+                target.Client = null;
                 _unitOfWork.Users.Remove(target);
                 _unitOfWork.Complete();
                 return new AccountSuccesses.DeleteAccountSuccess();

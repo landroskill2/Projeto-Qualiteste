@@ -9,7 +9,7 @@ public partial class User
         {
             Username = Username,
             Role = RoleNavigation?.Roledesignation,
-            Designation = Clients.FirstOrDefault()?.Designation
+            Designation = Client?.Designation
         };
     }
 }
