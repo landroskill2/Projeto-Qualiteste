@@ -46,12 +46,9 @@ export default function Consumers(): React.ReactElement{
   function updateShownConsumers()
   {
     let nextIdx = currentIdx + 20 > consumers!.length ? consumers!.length : currentIdx + 20
-    console.log(nextIdx)
     const consumersToAdd = consumers!.slice(currentIdx, nextIdx)
     setShownConsumers((prevItems) => [...prevItems, ...consumersToAdd] )
-    setCurrentIdx((prevIdx) => prevIdx+20)
-    console.log(`shown ${shownConsumers.length}`)
-    console.log(`actual ${consumers?.length}`)
+    setCurrentIdx(nextIdx)
   }
 
   const redirectToConsumerCreation = () => {

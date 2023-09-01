@@ -16,6 +16,7 @@ import { queryProducts, getAvailableBrands } from '../../common/APICalls';
 import ProductsTable from '../tables/ProductsTable';
 import CreateProductModal from './CreateProductModal';
 import FilterBar from '../FilterBar';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 type ModalProps = {
     onClickProduct? : (product : ProductOutputModel) => void
@@ -26,13 +27,31 @@ type ModalProps = {
 
 export default function AddProductsModal({onClickProduct, buttonText, onClickCreateProduct, excludeProducts} : ModalProps, ) : React.ReactElement {
     const [products, setProducts] = useState<ProductOutputModel[] | null>(null);
+    const [shownProducts, setShownProducts] = useState<ProductOutputModel[]>([])
+    const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [currentIdx, setCurrentIdx] = useState(20)
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [brands, setBrands] = useState<string[]|undefined>(undefined)
     const [brandFilter, setBrandFilter] = useState<string|undefined>(undefined)
     const [searchString, setSearchString] = useState<string|undefined>(undefined)
+
     useEffect(() => {
         populateData() 
       }, [excludeProducts, searchString, brandFilter]);
+
+    useEffect(() => {
+        if(products != null){
+            setShownProducts(products!.slice(0, currentIdx))
+        }
+    },[products])
+
+    function updateShownProducts()
+    {
+        let nextIdx = currentIdx + 20 > products!.length ? products!.length : currentIdx + 20
+        const productsToAdd = products!.slice(currentIdx, nextIdx)
+        setShownProducts((prevItems) => [...prevItems, ...productsToAdd] )
+        setCurrentIdx(nextIdx)
+    }
     
     async function populateData() {
         const filters = Object.assign(
@@ -74,12 +93,22 @@ export default function AddProductsModal({onClickProduct, buttonText, onClickCre
                             </div>
                         ) : (
                             <div className="mt-6 px-6 min-h-full w-full flex flex-col flex-grow items-center justify-center">
-                            <div className="w-full">
-                            <FilterBar brands={brands} setBrand={setBrandFilter} setSearchString={setSearchString} searchBar />
-                            </div>
-                            <div className="mt-3 w-full" style={{ maxHeight: 'calc(100vh - 370px)', overflowY: 'auto' }}>
-                            <ProductsTable products={products} onClickProduct={handleClick}/>
-                            </div>
+                                <div className="w-full">
+                                    <FilterBar brands={brands} setBrand={setBrandFilter} setSearchString={setSearchString} searchBar />
+                                </div>
+                                <div className="mt-3 w-full" style={{ maxHeight: 'calc(100vh - 370px)', overflowY: 'auto' }}>
+                                    <InfiniteScroll
+                                        dataLength={shownProducts.length}
+                                        next={updateShownProducts}
+                                        hasMore={shownProducts.length != products.length}
+                                        loader={<div className="flex w-full justify-center items-center"><Spinner/></div>}
+                                        endMessage={<></>}
+                                        height={500}
+                                        className="scrollbar-thin scrollbar-thumb-slate-300 scrollbar-thumb-rounded-lg"
+                                    >
+                                        <ProductsTable products={shownProducts} onClickProduct={handleClick}/>
+                                    </InfiniteScroll>
+                                </div>
                             </div>
                         )}
                     </ModalBody>
