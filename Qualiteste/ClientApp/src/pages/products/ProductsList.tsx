@@ -66,7 +66,7 @@ export default function Products(): React.ReactElement{
       setIsLoading(true)
       populateData().then(() => {
         setIsLoading(false)
-        addToast({id: "success", title: "Sucesso", description: resp.data, status: "success"})
+        addToast({id: "success", title: "Sucesso", description: resp.data.message, status: "success"})
       })
     }
   }
