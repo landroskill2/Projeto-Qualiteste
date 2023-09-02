@@ -80,7 +80,7 @@ export default function AddTestsModal({onClickTest} : ModalProps) : React.ReactE
                                     hasMore={shownTests.length != tests.length}
                                     loader={<div className="flex w-full justify-center items-center"><Spinner/></div>}
                                     endMessage={<></>}
-                                    height={560}
+                                    height={'calc(100vh - 400px)'}
                                     className="scrollbar-thin scrollbar-thumb-slate-300 scrollbar-thumb-rounded-lg"
                                 >
                                     <TestsTable tests={shownTests} onClickTest={onClickTest}/>

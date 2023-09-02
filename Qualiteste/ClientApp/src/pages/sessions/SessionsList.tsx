@@ -72,14 +72,14 @@ export default function Sessions(): React.ReactElement{
         </div>
       ) : (
       
-        <div className=" border-2 h-1/2 overflow-y-auto m-6 rounded-lg border-slate-500 bg-slate-100 flex-grow" style={{ maxHeight: 'calc(100vh - 200px)', overflowY: 'auto' }}>
+        <div className=" border-2 h-1/2 overflow-y-auto m-6 rounded-lg border-slate-500 bg-slate-100 flex-grow" style={{ maxHeight: 'calc(100vh - 275px)', overflowY: 'auto' }}>
           <InfiniteScroll
             dataLength={shownSessions.length}
             next={updateShownConsumers}
             hasMore={shownSessions.length != sessions.length}
             loader={<div className="flex w-full justify-center items-center"><Spinner/></div>}
             endMessage={<></>}
-            height={655}
+            height={"calc(100vh - 280px)"}
             className="scrollbar-thin scrollbar-thumb-slate-300 scrollbar-thumb-rounded-lg"
           >
             <Table variant="simple" overflow="auto">

@@ -103,7 +103,7 @@ export default function AddProductsModal({onClickProduct, buttonText, onClickCre
                                         hasMore={shownProducts.length != products.length}
                                         loader={<div className="flex w-full justify-center items-center"><Spinner/></div>}
                                         endMessage={<></>}
-                                        height={500}
+                                        height={'calc(100vh - 405px)'}
                                         className="scrollbar-thin scrollbar-thumb-slate-300 scrollbar-thumb-rounded-lg"
                                     >
                                         <ProductsTable products={shownProducts} onClickProduct={handleClick}/>

@@ -129,7 +129,7 @@ export default function AddConsumersModal({onSubmit} : ModalProps) : React.React
                                         hasMore={shownConsumers.length != consumers.length}
                                         loader={<div className="flex w-full justify-center items-center"><Spinner/></div>}
                                         endMessage={<></>}
-                                        height={500}
+                                        height={'calc(100vh - 400px)'}
                                         className="scrollbar-thin scrollbar-thumb-slate-300 scrollbar-thumb-rounded-lg"
                                         >
                                         <ConsumersTable selectedConsumers={selectedConsumers} consumers={shownConsumers} onClickConsumer={updateSelectedConsumers}/>
