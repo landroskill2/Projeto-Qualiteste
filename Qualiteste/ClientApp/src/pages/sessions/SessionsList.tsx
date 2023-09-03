@@ -17,18 +17,35 @@ import { ISessionModel } from "../../common/Interfaces/Sessions";
 import { useNavigate } from "react-router-dom";
 import { fetchSessions } from "../../common/APICalls";
 import WithPermission from "../../auth/WithPermission";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 
 export default function Sessions(): React.ReactElement{
     const [sessions, setSessions] = useState<ISessionModel[] | null>(null);
-    const [type, setType] = useState<string | null>(null)
+    const [shownSessions, setShownSessions] = useState<ISessionModel[]>([])
     const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [currentIdx, setCurrentIdx] = useState(20)
+    const [type, setType] = useState<string | null>(null)
     const navigate = useNavigate()
 
   useEffect(() => {
     populateData() 
   }, [type]);
 
+  useEffect(() => {
+    if(sessions != null){
+      setShownSessions(sessions!.slice(0, currentIdx))
+    }
+    
+  },[sessions])
+
+  function updateShownConsumers()
+  {
+    let nextIdx = currentIdx + 20 > sessions!.length ? sessions!.length : currentIdx + 20
+    const sessionsToAdd = sessions!.slice(currentIdx, nextIdx)
+    setShownSessions((prevItems) => [...prevItems, ...sessionsToAdd] )
+    setCurrentIdx(nextIdx)
+  }
 
   function redirectToSession(id: string): void {
     navigate(`${id}`)
@@ -55,27 +72,38 @@ export default function Sessions(): React.ReactElement{
         </div>
       ) : (
       
-        <div className=" border-2 h-1/2 overflow-y-auto m-6 rounded-lg border-slate-500 bg-slate-100 flex-grow scrollbar-thin scrollbar-thumb-slate-300 scrollbar-thumb-rounded-lg" style={{ maxHeight: 'calc(100vh - 200px)', overflowY: 'auto' }}>
-          <Table variant="simple" overflow="auto">
-            <Thead top={0} zIndex="docked" position={"sticky"} className="bg-slate-300 rounded-lg">
-              <Tr>
-                <Th>Id</Th>
-                <Th>Data</Th>
-                <Th>Num. de provadores</Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              {
-                  sessions.map((session) => (
-                    <Tr className="hover:bg-slate-200 cursor-pointer" key={session.id} onClick={() => redirectToSession(session.id)}>
-                      <Td>{session.id}</Td>
-                      <Td>{session.date}</Td>
-                      <Td>{session.consumersNumber.toString()}</Td>
-                    </Tr>
-                  ))               
-            }
-            </Tbody>
-          </Table>
+        <div className=" border-2 h-1/2 overflow-y-auto m-6 rounded-lg border-slate-500 bg-slate-100 flex-grow" style={{ maxHeight: 'calc(100vh - 275px)', overflowY: 'auto' }}>
+          <InfiniteScroll
+            dataLength={shownSessions.length}
+            next={updateShownConsumers}
+            hasMore={shownSessions.length != sessions.length}
+            loader={<div className="flex w-full justify-center items-center"><Spinner/></div>}
+            endMessage={<></>}
+            height={"calc(100vh - 280px)"}
+            className="scrollbar-thin scrollbar-thumb-slate-300 scrollbar-thumb-rounded-lg"
+          >
+            <Table variant="simple" overflow="auto">
+              <Thead top={0} zIndex="docked" position={"sticky"} className="bg-slate-300 rounded-lg">
+                <Tr>
+                  <Th>Id</Th>
+                  <Th>Data</Th>
+                  <Th>Num. de provadores</Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                {
+                    shownSessions.map((session) => (
+                      <Tr className="hover:bg-slate-200 cursor-pointer" key={session.id} onClick={() => redirectToSession(session.id)}>
+                        <Td>{session.id}</Td>
+                        <Td>{session.date}</Td>
+                        <Td>{session.consumersNumber.toString()}</Td>
+                      </Tr>
+                    ))               
+              }
+              </Tbody>
+            </Table>
+          </InfiniteScroll>
+          
         </div>
         )}
       <div className="p-6 bg-white" style={{ flexShrink: 0 }}>

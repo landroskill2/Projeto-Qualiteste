@@ -46,12 +46,9 @@ export default function Consumers(): React.ReactElement{
   function updateShownConsumers()
   {
     let nextIdx = currentIdx + 20 > consumers!.length ? consumers!.length : currentIdx + 20
-    console.log(nextIdx)
     const consumersToAdd = consumers!.slice(currentIdx, nextIdx)
     setShownConsumers((prevItems) => [...prevItems, ...consumersToAdd] )
-    setCurrentIdx((prevIdx) => prevIdx+20)
-    console.log(`shown ${shownConsumers.length}`)
-    console.log(`actual ${consumers?.length}`)
+    setCurrentIdx(nextIdx)
   }
 
   const redirectToConsumerCreation = () => {
@@ -100,7 +97,7 @@ export default function Consumers(): React.ReactElement{
               hasMore={shownConsumers.length != consumers.length}
               loader={<div className="flex w-full justify-center items-center"><Spinner/></div>}
               endMessage={<></>}
-              height={560}
+              height={"calc(100vh - 375px)"}
               className="scrollbar-thin scrollbar-thumb-slate-300 scrollbar-thumb-rounded-lg"
               >
               <ConsumersTable consumers={shownConsumers} onClickConsumer={redirectToConsumerPage} />
