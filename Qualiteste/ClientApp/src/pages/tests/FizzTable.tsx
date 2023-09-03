@@ -10,9 +10,23 @@ import { useGlobalToast } from '../../common/useGlobalToast';
 import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
 import WithPermission from '../../auth/WithPermission';
 
+
+const emptyCommonColumns : Record<string,string>= {
+  "CJ" : "",
+  "DATE" : "",
+  "HOUR" : "",
+  "NJ": "",
+  "NO" : "",
+  "NR" : "",
+  "NS" : "",
+  "P1_AT_1" : "",
+  "P1_TE_1" : ""
+}
+
+
 export default function FizzResults(): React.ReactElement {
   const [data, setData] = useState<IFizzValues | null>(null);
-  const [commonColumns, setCommonColumns] = useState<Record<string, string>>({});
+  const [commonColumns, setCommonColumns] = useState<Record<string, string>>(emptyCommonColumns);
   const [productColumns, setProductColumns] = useState<Record<string, string>[]>([]);
   const [productOrder, setProductOrder] = useState<ISampleOutputModel[]>([])
   const [textHeight, setTextHeight] = useState<number>(0);
@@ -26,6 +40,8 @@ export default function FizzResults(): React.ReactElement {
 
   //test id
   const { id } = useParams();
+
+  
 
   useEffect(() => {
     if(state !== null){
@@ -85,9 +101,21 @@ export default function FizzResults(): React.ReactElement {
   }
 
   function separateValues(values: IFizzValues) {
-    const newCommonColumns: Record<string, string> = {};
+    const newCommonColumns: Record<string,string> = {
+      "CJ" : "",
+      "DATE" : "",
+      "HOUR" : "",
+      "NJ" : "",
+      "NO" : "",
+      "NR" : "",
+      "NS" : "",
+      "P1_AT_1" : "",
+      "P1_TE_1" : ""
+    }
     const newProductColumns: Record<string, string>[] = [];
 
+    //set column for consumer id first so it appears first
+    //newCommonColumns["CJ"] = values.columns["CJ"]
     for (const columnName in values.columns) {
       const columnValue = values.columns[columnName];
       
@@ -112,12 +140,12 @@ export default function FizzResults(): React.ReactElement {
 
       }
     }
+    
     setCommonColumns(newCommonColumns);
     setProductColumns(newProductColumns);
     setShow(Array(newProductColumns.length).fill(false))
   }
   
-
   return (
     <>
       {isLoading && 
@@ -151,7 +179,8 @@ export default function FizzResults(): React.ReactElement {
                     <Thead position='sticky' top={0} zIndex="docked" className="rounded-lg bg-slate-300 ">
                       <Tr className='flex-grow w-full '>
                         {Object.entries(commonColumns).map(([columnName, columnValue]) => {
-                          if(columnName == "CJ"){
+                          console.log(columnName + " " + columnValue)
+                          if(columnName === "CJ"){
                             return <WithPermission allowedRoles={["ADMIN"]}>
                                       <Th key={columnName}> 
                                         <AttributeAliasField name={columnName} value={columnValue} editMode={editMode} addChangedAlias={addChangedAlias}></AttributeAliasField>

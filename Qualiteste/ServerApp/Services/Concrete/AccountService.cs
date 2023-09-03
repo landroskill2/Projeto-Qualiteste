@@ -24,7 +24,6 @@ namespace Qualiteste.ServerApp.Services.Concrete
             _unitOfWork = unitOfWork;
         }
 
-        // MUDAR RETORNO COM SUCESSO DO EITHER PARA O ID TOKEN
         
         public Either<CustomError, AccountSuccesses> Login(UserDto user)
         {
