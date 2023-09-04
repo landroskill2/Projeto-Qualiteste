@@ -10,7 +10,7 @@ using Qualiteste.ServerApp.Utils;
 
 namespace Qualiteste.ServerApp.Controllers
 {
-    //[Authorize]
+    [Authorize(Roles = "ADMIN")]
     [Route("api/[controller]")]
     [ApiController]
     public class SessionsController : ControllerBase
@@ -64,7 +64,6 @@ namespace Qualiteste.ServerApp.Controllers
 
         }
 
-        [Authorize(Roles = "ADMIN")]
         [HttpPost]
         [ProducesResponseType(201)]
         public IActionResult CreateNewSession([FromBody] SessionInputModel sessionInput)
@@ -85,7 +84,6 @@ namespace Qualiteste.ServerApp.Controllers
             }
         }
 
-        [Authorize(Roles = "ADMIN")]
         [HttpPut("{id}")]
         [ProducesResponseType(200, Type = typeof(SessionOutputModel))]
         public IActionResult UpdateSession(string id, [FromBody] SessionInputModel sessionInput)
@@ -105,7 +103,6 @@ namespace Qualiteste.ServerApp.Controllers
         }
 
 
-        [Authorize(Roles = "ADMIN")]
         [HttpPost("{id}/tests")]
         public IActionResult AddTestToSession(string id, [FromBody] string test)
         {
@@ -124,7 +121,6 @@ namespace Qualiteste.ServerApp.Controllers
         }
 
 
-        [Authorize(Roles = "ADMIN")]
         [HttpPost("{id}/consumers")]
         public IActionResult AddConsumerToSession(string id, [FromBody] ConsumerSessionInputModel consumerSession)
         {
@@ -142,7 +138,6 @@ namespace Qualiteste.ServerApp.Controllers
             }
         }
 
-        [Authorize(Roles = "ADMIN")]
         [HttpDelete("{id}/consumers")]
         public IActionResult RemoveConsumerFromSession(string id, [FromQuery] string selection)
         {
@@ -159,7 +154,6 @@ namespace Qualiteste.ServerApp.Controllers
                 return Problem(statusCode: 500, title: "Ocorreu um erro inesperado");
             }
         }
-
         [HttpPut("{id}/consumers/{cId}/time")]
         public IActionResult UpdateConsumerSessionTime(string id, int cId, [FromBody] SessionTimeInputModel consumerSession)
         {
@@ -176,7 +170,6 @@ namespace Qualiteste.ServerApp.Controllers
                 return Problem(statusCode: 500, title: "Ocorreu um erro inesperado");
             }
         }
-
 
         [HttpPut("{id}/consumers/{cId}/attendance")]
         public IActionResult UpdateConsumerAttendance(string id, int cId, [FromBody] SessionAttendanceInputModel cSession)

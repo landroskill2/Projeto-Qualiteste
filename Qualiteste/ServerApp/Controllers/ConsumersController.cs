@@ -10,7 +10,7 @@ namespace Qualiteste.ServerApp.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    [Authorize(Roles = "ADMIN")]
     public class ConsumersController : ControllerBase
     {
         private readonly IConsumerService _consumerService;
@@ -72,7 +72,6 @@ namespace Qualiteste.ServerApp.Controllers
             }
         }
 
-        [Authorize(Roles = "ADMIN")]
         [HttpPost]
         [ProducesResponseType(201)]
         public IActionResult CreateNewConsumer([FromBody] ConsumerInputModel consumer)
@@ -93,7 +92,6 @@ namespace Qualiteste.ServerApp.Controllers
             }
         }
 
-        [Authorize(Roles = "ADMIN")]
         [HttpPut("{id}")]
         [ProducesResponseType(200, Type = typeof(ConsumerOutputModel))]
 
@@ -114,7 +112,6 @@ namespace Qualiteste.ServerApp.Controllers
         }
 
 
-        [Authorize(Roles = "ADMIN")]
         [HttpDelete("{id}")]
         [ProducesResponseType(200, Type = typeof(ConsumerOutputModel))]
 

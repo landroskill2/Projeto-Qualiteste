@@ -140,8 +140,8 @@ export async function uploadFile(
 }
 
 export async function removeResultsFromTest(id: string) : Promise<AxiosResponse> {
-    let path = `/tests/${id}/fizz/remove`
-    return instance.get(path)
+    let path = `/tests/${id}/fizz`
+    return instance.delete(path)
 }
 
 export async function getFizzTableValues(

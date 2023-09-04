@@ -9,6 +9,7 @@ import FizzAttribute from '../../common/Interfaces/FizzAttributes';
 import { useGlobalToast } from '../../common/useGlobalToast';
 import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
 import WithPermission from '../../auth/WithPermission';
+import Page404 from '../Page404';
 
 
 const emptyCommonColumns : Record<string,string>= {
@@ -25,6 +26,7 @@ const emptyCommonColumns : Record<string,string>= {
 
 
 export default function FizzResults(): React.ReactElement {
+  const [pageStatus, setPageStatus] = useState<number|undefined>(undefined)
   const [data, setData] = useState<IFizzValues | null>(null);
   const [commonColumns, setCommonColumns] = useState<Record<string, string>>(emptyCommonColumns);
   const [productColumns, setProductColumns] = useState<Record<string, string>[]>([]);
@@ -93,11 +95,14 @@ export default function FizzResults(): React.ReactElement {
   }
 
   async function populateValues() {
-    const res = await getFizzTableValues(id!);
-    const jsonData = res.data
-    setData(jsonData as IFizzValues);
-    setProductOrder((jsonData as IFizzValues).samplesOrder)
-    separateValues(jsonData as IFizzValues);
+    const res = await getFizzTableValues(id!).catch(err => err.response);
+    setPageStatus(res.status)
+    if(res.status === 200){
+      const jsonData = res.data
+      setData(jsonData as IFizzValues);
+      setProductOrder((jsonData as IFizzValues).samplesOrder)
+      separateValues(jsonData as IFizzValues);
+    }
   }
 
   function separateValues(values: IFizzValues) {
@@ -148,136 +153,142 @@ export default function FizzResults(): React.ReactElement {
   
   return (
     <>
-      {isLoading && 
+      {isLoading ? (
         <div className="flex flex-col justify-center items-center h-full">
-          <Spinner size="lg" />
-        </div>||
-        <div className='flex flex-col flex-grow justify-center items-center w-full m-4'>
-          <div className='flex flex-row w-full'>
-            <div className='flex flex-row flex-grow justify-between mx-4 rounded-lg bg-slate-100 border-2 items-center'>
-              <div className='ml-1 hover:bg-slate-300 cursor-pointer rounded-lg ' onClick={()=> navigate(`/tests/${id}`)}>
-                <Heading px={4} >Teste {id}</Heading>
-              </div>
-              
-              <div className='gap-4 py-2 mr-4'>
-                  {!editMode && 
-                    <Button bgColor={"gray.300"} onClick={() => setEditMode(true)}>Editar nomes</Button>
-                    ||
-                    <div className='flex flex-row gap-2'>
-                      <Button bgColor={"gray.300"} onClick={() => onSave()}>Guardar</Button>
-                      <Button bgColor={"gray.300"} onClick={() => setEditMode(false)}>Cancelar</Button>
-                    </div>
-                    }
-              </div>
-            </div>  
-          </div>
-          <div className='flex w-full flex-grow flex-col '>
-            <div className='flex flex-col rounded-md m-4 h-96'>
-              {data && (
-                <div className='border-2 rounded-lg border-slate-300 h-96 overflow-y-scroll scrollbar-thin scrollbar-thumb-slate-600 scrollbar-thumb-rounded-lg scrollbar-track-slate-300'>
-                  <Table variant="simple" size="sm" >
-                    <Thead position='sticky' top={0} zIndex="docked" className="rounded-lg bg-slate-300 ">
-                      <Tr className='flex-grow w-full '>
-                        {Object.entries(commonColumns).map(([columnName, columnValue]) => {
-                          console.log(columnName + " " + columnValue)
-                          if(columnName === "CJ"){
-                            return <WithPermission allowedRoles={["ADMIN"]}>
-                                      <Th key={columnName}> 
-                                        <AttributeAliasField name={columnName} value={columnValue} editMode={editMode} addChangedAlias={addChangedAlias}></AttributeAliasField>
-                                      </Th>
-                                    </WithPermission>
-                          }
-                          return <Th key={columnName}>
-                                    <AttributeAliasField name={columnName} value={columnValue} editMode={editMode} addChangedAlias={addChangedAlias}></AttributeAliasField>
-                                </Th>
+            <Spinner size="lg" />
+        </div>):(
+          pageStatus === 404 ? 
+          (
+            <Page404></Page404>
+          ) : (
+            <div className='flex flex-col flex-grow justify-center items-center w-full m-4'>
+              <div className='flex flex-row w-full'>
+                <div className='flex flex-row flex-grow justify-between mx-4 rounded-lg bg-slate-100 border-2 items-center'>
+                  <div className='ml-1 hover:bg-slate-300 cursor-pointer rounded-lg ' onClick={()=> navigate(`/tests/${id}`)}>
+                    <Heading px={4} >Teste {id}</Heading>
+                  </div>
+                  
+                  <div className='gap-4 py-2 mr-4'>
+                      {!editMode && 
+                        <Button bgColor={"gray.300"} onClick={() => setEditMode(true)}>Editar nomes</Button>
+                        ||
+                        <div className='flex flex-row gap-2'>
+                          <Button bgColor={"gray.300"} onClick={() => onSave()}>Guardar</Button>
+                          <Button bgColor={"gray.300"} onClick={() => setEditMode(false)}>Cancelar</Button>
+                        </div>
                         }
-                        )}
-                      </Tr>
-                    </Thead>
-                    <Tbody className="w-full h-96" overflowY={"scroll"}>
-                        {data.rows.map((row, index) => (
-                          <Tr className={"row"+Number(row["CJ"]).toString()}>
-                            
-                              {Object.entries(commonColumns).map(([columnName, _]) => {
-                                {if(columnName == "CJ"){
-                                  let value = data!.consumersInfo.find(e => e.id == Number(row[columnName])) ? data!.consumersInfo.find(e => e.id == Number(row[columnName]))?.consumerName : row[columnName]
-                                  return (
-                                    <WithPermission allowedRoles={["ADMIN"]}>
-                                      <Td className={"td"+Number(row["CJ"]).toString()+' hover:bg-slate-200 cursor-pointer'} onClick={()=>navigate(`/consumers/${row[columnName]}`)} id={"td"+Number(row["CJ"]).toString()}>{value}</Td>
-                                    </WithPermission>
-                                  )
-                                }}
-                                return <Td key={columnName}>{row[columnName]}</Td>
-                              }
-                              )}
-                          </Tr>
-                        ))}
-                    </Tbody>
-                  </Table>
-                </div>
-              )}
-              
-            </div>
-            <div>
-              {
-                productColumns.map((product, index) =>{
-                  return (
-                      <div className='flex flex-col rounded-md m-4 border-slate-300 border-2 shadow-md'>
-                        <div className='flex justify-between hover:bg-slate-300 cursor-pointer' onClick={() => handleShowToggle(index)}>
-                        <Heading className='m-4' >{(productOrder.find(p => p.presentationPosition === index)?.product.ref)} - {(productOrder.find(p => p.presentationPosition === (index))?.product.designation)}</Heading>
-                        {!show![index] && <ChevronDownIcon className="self-center mr-4" boxSize={8}></ChevronDownIcon> || <ChevronUpIcon className="self-center mr-4" boxSize={8}></ChevronUpIcon>}
-                        </div>
-                        <Collapse in={show![index]}>
-                        <div key={product.productKey} className='h-96 overflow-y-scroll scrollbar-thin scrollbar-thumb-slate-600 scrollbar-thumb-rounded-lg scrollbar-track-slate-300'>
-                          <Table variant="simple" size="sm" >
-                            <Thead position='sticky' top={0} zIndex="docked" className="rounded-lg bg-slate-300 ">
-                              <Tr className='flex-grow w-full'>{
-                                Object.entries(product).map(([columnName, columnValue]) => {
-                                  if (columnName !== "productKey") {
-                                    if(columnName == "CJ"){
-                                      return <WithPermission allowedRoles={["ADMIN"]}>
-                                                <Th key={columnName}> 
-                                                  <AttributeAliasField name={columnName} value={columnValue} editMode={editMode} addChangedAlias={addChangedAlias}></AttributeAliasField>
-                                                </Th>
-                                              </WithPermission>
-                                    }
-                                    return <Th key={columnName}> 
+                  </div>
+                </div>  
+              </div>
+              <div className='flex w-full flex-grow flex-col '>
+                <div className='flex flex-col rounded-md m-4 h-96'>
+                  {data && (
+                    <div className='border-2 rounded-lg border-slate-300 h-96 overflow-y-scroll scrollbar-thin scrollbar-thumb-slate-600 scrollbar-thumb-rounded-lg scrollbar-track-slate-300'>
+                      <Table variant="simple" size="sm" >
+                        <Thead position='sticky' top={0} zIndex="docked" className="rounded-lg bg-slate-300 ">
+                          <Tr className='flex-grow w-full '>
+                            {Object.entries(commonColumns).map(([columnName, columnValue]) => {
+                              console.log(columnName + " " + columnValue)
+                              if(columnName === "CJ"){
+                                return <WithPermission allowedRoles={["ADMIN"]}>
+                                          <Th key={columnName}> 
                                             <AttributeAliasField name={columnName} value={columnValue} editMode={editMode} addChangedAlias={addChangedAlias}></AttributeAliasField>
-                                           </Th>;
-                                  }
-                                })
-                              }</Tr>
-                            </Thead>
-                            <Tbody>
-                              {data?.rows.map((row, rowIndex) => (
-                                <Tr className={"row"+Number(row["CJ"]).toString()}>
-                                  {Object.entries(product).map(([columnName, _]) => {
-                                    if (columnName !== "productKey") {
-                                      {if(columnName == "CJ"){
-                                        let value = data!.consumersInfo.find(e => e.id == Number(row[columnName])) ? data!.consumersInfo.find(e => e.id == Number(row[columnName]))?.consumerName : row[columnName]
-                                        return (
-                                          <WithPermission allowedRoles={["ADMIN"]}>
-                                            <Td className={"td"+Number(row["CJ"]).toString()+' hover:bg-slate-200 cursor-pointer'} onClick={()=>navigate(`/consumers/${row[columnName]}`)} id={"td"+Number(row["CJ"]).toString()}>{value}</Td>
+                                          </Th>
                                         </WithPermission>
-                                        )
-                                      }}
-                                      return <Td key={columnName}>{row[columnName]}</Td>;
-                                    }
-                                  return null;
-                                  })}
-                                </Tr>
-                              ))}
-                            </Tbody>
-                          </Table>
-                        </div>
-                        </Collapse>
-                    </div>                  
-              )
-            })
-          }
+                              }
+                              return <Th key={columnName}>
+                                        <AttributeAliasField name={columnName} value={columnValue} editMode={editMode} addChangedAlias={addChangedAlias}></AttributeAliasField>
+                                    </Th>
+                            }
+                            )}
+                          </Tr>
+                        </Thead>
+                        <Tbody className="w-full h-96" overflowY={"scroll"}>
+                            {data.rows.map((row, index) => (
+                              <Tr className={"row"+Number(row["CJ"]).toString()}>
+                                
+                                  {Object.entries(commonColumns).map(([columnName, _]) => {
+                                    {if(columnName == "CJ"){
+                                      let value = data!.consumersInfo.find(e => e.id == Number(row[columnName])) ? data!.consumersInfo.find(e => e.id == Number(row[columnName]))?.consumerName : row[columnName]
+                                      return (
+                                        <WithPermission allowedRoles={["ADMIN"]}>
+                                          <Td className={"td"+Number(row["CJ"]).toString()+' hover:bg-slate-200 cursor-pointer'} onClick={()=>navigate(`/consumers/${row[columnName]}`)} id={"td"+Number(row["CJ"]).toString()}>{value}</Td>
+                                        </WithPermission>
+                                      )
+                                    }}
+                                    return <Td key={columnName}>{row[columnName]}</Td>
+                                  }
+                                  )}
+                              </Tr>
+                            ))}
+                        </Tbody>
+                      </Table>
+                    </div>
+                  )}
+                  
+                </div>
+                <div>
+                  {
+                    productColumns.map((product, index) =>{
+                      return (
+                          <div className='flex flex-col rounded-md m-4 border-slate-300 border-2 shadow-md'>
+                            <div className='flex justify-between hover:bg-slate-300 cursor-pointer' onClick={() => handleShowToggle(index)}>
+                            <Heading className='m-4' >{(productOrder.find(p => p.presentationPosition === index)?.product.ref)} - {(productOrder.find(p => p.presentationPosition === (index))?.product.designation)}</Heading>
+                            {!show![index] && <ChevronDownIcon className="self-center mr-4" boxSize={8}></ChevronDownIcon> || <ChevronUpIcon className="self-center mr-4" boxSize={8}></ChevronUpIcon>}
+                            </div>
+                            <Collapse in={show![index]}>
+                            <div key={product.productKey} className='h-96 overflow-y-scroll scrollbar-thin scrollbar-thumb-slate-600 scrollbar-thumb-rounded-lg scrollbar-track-slate-300'>
+                              <Table variant="simple" size="sm" >
+                                <Thead position='sticky' top={0} zIndex="docked" className="rounded-lg bg-slate-300 ">
+                                  <Tr className='flex-grow w-full'>{
+                                    Object.entries(product).map(([columnName, columnValue]) => {
+                                      if (columnName !== "productKey") {
+                                        if(columnName == "CJ"){
+                                          return <WithPermission allowedRoles={["ADMIN"]}>
+                                                    <Th key={columnName}> 
+                                                      <AttributeAliasField name={columnName} value={columnValue} editMode={editMode} addChangedAlias={addChangedAlias}></AttributeAliasField>
+                                                    </Th>
+                                                  </WithPermission>
+                                        }
+                                        return <Th key={columnName}> 
+                                                <AttributeAliasField name={columnName} value={columnValue} editMode={editMode} addChangedAlias={addChangedAlias}></AttributeAliasField>
+                                              </Th>;
+                                      }
+                                    })
+                                  }</Tr>
+                                </Thead>
+                                <Tbody>
+                                  {data?.rows.map((row, rowIndex) => (
+                                    <Tr className={"row"+Number(row["CJ"]).toString()}>
+                                      {Object.entries(product).map(([columnName, _]) => {
+                                        if (columnName !== "productKey") {
+                                          {if(columnName == "CJ"){
+                                            let value = data!.consumersInfo.find(e => e.id == Number(row[columnName])) ? data!.consumersInfo.find(e => e.id == Number(row[columnName]))?.consumerName : row[columnName]
+                                            return (
+                                              <WithPermission allowedRoles={["ADMIN"]}>
+                                                <Td className={"td"+Number(row["CJ"]).toString()+' hover:bg-slate-200 cursor-pointer'} onClick={()=>navigate(`/consumers/${row[columnName]}`)} id={"td"+Number(row["CJ"]).toString()}>{value}</Td>
+                                            </WithPermission>
+                                            )
+                                          }}
+                                          return <Td key={columnName}>{row[columnName]}</Td>;
+                                        }
+                                      return null;
+                                      })}
+                                    </Tr>
+                                  ))}
+                                </Tbody>
+                              </Table>
+                            </div>
+                            </Collapse>
+                        </div>                  
+                  )
+                })
+              }
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
+          )
+        )    
       }
     </>
   );

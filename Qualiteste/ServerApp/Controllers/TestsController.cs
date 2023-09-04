@@ -211,7 +211,7 @@ namespace Qualiteste.ServerApp.Controllers
         }
 
         [Authorize(Roles = "ADMIN")]
-        [HttpGet("{id}/fizz/remove")]
+        [HttpDelete("{id}/fizz")]
         public IActionResult RemoveFizzValuesFromTest(string id)
         {
             try
