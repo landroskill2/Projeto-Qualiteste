@@ -51,7 +51,7 @@ export default function Session() : React.ReactElement{
   const { addToast, isToastActive } = useGlobalToast() 
   const {state} = useLocation()
 
-  const CircleIcon = (props) => (
+  const CircleIcon = (props : any) => (
     <Icon viewBox='0 0 100 200' {...props}>
       <path
         fill='currentColor'
@@ -99,7 +99,7 @@ export default function Session() : React.ReactElement{
     navigate(`/tests/${id}`)
   }
 
-  const removeNotConfirmed = async (sessionId : string, selection? : string | number) => {
+  const removeNotConfirmed = async (sessionId : string, selection : string | number) => {
     const resp = await removeNotConfirmedConsumers(sessionId, selection).catch(err => {
       addToast({id: "error", title: "Erro", description: err.response.data.title, status: "error"})
     })

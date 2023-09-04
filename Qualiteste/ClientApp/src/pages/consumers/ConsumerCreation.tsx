@@ -135,7 +135,7 @@ const initialConsumer: IConsumerInputModel = {
                 <Input
                   name="contact"
                   type="text"
-                  value={consumer.contact}
+                  value={consumer.contact ? (consumer.contact) : ("")}
                   onChange={handleInputChange}
                   background="white"
                 />

@@ -26,8 +26,8 @@ import {
 interface Params {
     minAge? : number,
     maxAge? : number,
-    setMinAge? : ()=>{},
-    setMaxAge? : ()=>{}
+    setMinAge? : (age : number)=>{},
+    setMaxAge? : (age: number)=>{}
 }
 
 export default function AgeFilter({
@@ -58,16 +58,21 @@ export default function AgeFilter({
 
 
     function applyFilter(){
-        setMinAge(minAgeField)
-        setMaxAge(maxAgeField)
+        if(setMinAge && setMaxAge){
+            setMinAge(minAgeField)
+            setMaxAge(maxAgeField)
+
+        }
         onClose()
     }
 
     function clearFilter(){
         setMinAgeField(0)
         setMaxAgeField(100)
-        setMinAge(0)
-        setMaxAge(100)
+        if(setMaxAge && setMinAge){
+            setMinAge(0)
+            setMaxAge(100)
+        }
     }
     return (
         <div>

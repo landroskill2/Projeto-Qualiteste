@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Box, Button, ChakraProvider, Container, FormControl, FormLabel, Image, Input, Stack, useToast } from '@chakra-ui/react';
 import { changeInstanceToken, loginUser } from '../../common/APICalls';
 import { useNavigate } from 'react-router-dom';
+import loginImage from '../../img/BigQualiteste.jpg' 
 import { useGlobalToast } from '../../common/useGlobalToast';
 
 export default function Login() : React.ReactElement  {
@@ -24,13 +25,13 @@ export default function Login() : React.ReactElement  {
       navigate("/", {state : toastObj})
     }
   }
-
+  
   return (
     <ChakraProvider>
       <Box className='h-full w-full flex flex-grow items-center justify-center'>
         <Container maxW="lg" boxShadow="lg" rounded="md" p={6}>
           <Box mx="auto" my={4} width="100%" height={32}>
-            <Image src="..\..\..\public\qualiteste.png" alt="Logo" mx="auto" width="100%" height="100%" objectFit="cover" /> {/* Replace with your actual image */}
+            <Image src={loginImage} alt="Logo" mx="auto" width="100%" height="100%" objectFit="cover" /> 
           </Box>
           <form onSubmit={handleLogin}>
             <Stack spacing={4}>

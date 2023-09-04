@@ -28,17 +28,14 @@ type ModalProps = {
 export default function AddConsumersModal({onSubmit} : ModalProps) : React.ReactElement {
     const [consumers, setConsumers] = useState<IConsumerOutputModel[] | null>(null);
     const [shownConsumers, setShownConsumers] = useState<IConsumerOutputModel[]>([])
-    const [isLoading, setIsLoading] = useState<boolean>(true);
     const [currentIdx, setCurrentIdx] = useState(20)
     const [sex, setSex] = useState(null)
     const [maxAge, setMaxAge] = useState<number>(100)
     const [minAge, setMinAge] = useState<number>(0)
-    const [sessionTime, setSessionTime] = useState(null)
     const [searchString, setSearchString] = useState(null)
     const [selectedConsumers, setSelectedConsumers] = useState<number[]>([])
     const { isOpen, onOpen, onClose } = useDisclosure()
 
-    const handleSessionTimeChange = (event) => setSessionTime(event.target.value)
 
     useEffect(() => {
         populateData() 

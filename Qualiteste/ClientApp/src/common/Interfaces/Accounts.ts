@@ -1,7 +1,7 @@
 export default interface IAccountOutput {
     username: string,
-    password: string,
-    role: "ADMIN" | "CLIENT",
+    password?: string,
+    role: string,
     id? : string,
     designation? : string
 }

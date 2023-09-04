@@ -5,7 +5,7 @@ import { useAuth } from '../auth/useAuth';
 import { useNavigate } from 'react-router-dom';
 import { SettingsIcon } from '@chakra-ui/icons'
 import WithPermission from '../auth/WithPermission';
-
+import navIcon from './../img/QualitesteIcon.png'
 
 export default function NavMenu() {
   const account = useAuth()
@@ -36,7 +36,7 @@ export default function NavMenu() {
       <nav className="bg-slate-900 border-gray-200 px-2 sm:px-4 py-2.5">
         <div className="container-fluid flex flex-wrap w-full items-center">
         <img
-          src="../../../public/QualitesteIcon.png"
+          src={navIcon}
           alt="Logo"
           className="text-white cursor-pointer"
           id="nav-title"

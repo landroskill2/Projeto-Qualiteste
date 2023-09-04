@@ -27,10 +27,6 @@ export default function Test(): React.ReactElement {
   const {state} = useLocation()
   const user = useAuth()
 
-  const redirectToSessionPage = (id: string) => {
-    navigate(`/sessions/${id}`);
-  };
-
   const redirectToConsumerPage = (id: number) => {
     navigate(`/consumers/${id}`);
   };
@@ -200,7 +196,7 @@ export default function Test(): React.ReactElement {
                     <Heading size={"md"}>Número de provadores pretendidos</Heading>
                   </div>
                   <div  className="flex h-2/3 justify-center items-center">                    
-                    <Heading size={"md"}>{test?.consumersNumber}</Heading>
+                    <Heading size={"md"}>{Number(test?.consumersNumber)}</Heading>
                   </div>
                 </div>
                 <div className="flex flex-col flex-grow border-r-2 border-slate-500">

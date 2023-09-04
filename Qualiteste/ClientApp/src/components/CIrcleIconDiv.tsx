@@ -9,7 +9,7 @@ type Props = {
 export function CircleIconDiv({attendance, onClick} : Props) : React.ReactElement {
     const [currColor, setCurrColor] = useState("grey")
 
-    const CircleIcon = (props) => (
+    const CircleIcon = (props : any) => (
         <Icon viewBox='0 0 100 200' {...props}>
           <path
             fill='currentColor'

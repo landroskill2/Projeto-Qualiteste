@@ -197,7 +197,7 @@ interface IClientOutputModel {
               
             </>
             }
-            <Button type="submit" mt={4} colorScheme="blue" onSubmit={handleSubmit}>
+            <Button type="submit" mt={4} colorScheme="blue" onSubmit={() => handleSubmit}>
               Criar
             </Button>
             </Box>
