@@ -192,7 +192,7 @@ namespace Qualiteste.ServerApp.Controllers
             }
         }
         [Authorize(Roles = "ADMIN")]
-        [HttpPost("{id}/fizz")]
+        [HttpPut("{id}/fizz")]
         public IActionResult UpdateAttributeAlias(string id, [FromBody] FizzAliasDto[] alias)
         {
             try

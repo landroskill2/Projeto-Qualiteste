@@ -22,7 +22,7 @@ import AddConsumersModal from "../../components/modals/AddConsumersModal";
 import SessionTimeSelector from "../../components/SessionTimeSelector";
 import AddTestsModal from "../../components/modals/AddTestsModal";
 import { useGlobalToast } from "../../common/useGlobalToast";
-import { CircleIconDiv } from "../../components/CIrcleIconDiv";
+import { CircleIconDiv } from "../../components/CircleIconDiv";
 import Page404 from "../Page404";
 
 type ConsumersInSession = {

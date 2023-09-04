@@ -157,7 +157,7 @@ export async function changeFizzAttributesAlias(
     attributes: FizzAttribute[]
     ) : Promise<AxiosResponse>{
        const path = `/tests/${testId}/fizz`
-       return instance.post(path, JSON.stringify(attributes))
+       return instance.put(path, JSON.stringify(attributes))
 }
 
 //Sessions
@@ -192,7 +192,7 @@ export async function addTestToSession(
     test : string
 ) : Promise<AxiosResponse> {
     let path = `/sessions/${sessionID}/tests`
-    return instance.post(path, JSON.stringify(test))
+    return instance.post(path, {id : test})
 
     // return fetch(path, {
     //     method: "POST",

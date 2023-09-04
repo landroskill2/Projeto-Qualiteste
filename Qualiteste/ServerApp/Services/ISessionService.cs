@@ -10,7 +10,7 @@ namespace Qualiteste.ServerApp.Services
     public interface ISessionService
     {
         Either<CustomError, SessionSuccesses> AddConsumerToSession(string id, ConsumerSessionInputModel consumerSession);
-        Either<CustomError, SessionSuccesses> AddTestToSession(string id, string test);
+        Either<CustomError, SessionSuccesses> AddTestToSession(string id, SessionTestInputModel test);
         Either<CustomError, string> CreateNewSession(SessionInputModel sessionInput);
         Either<CustomError, SessionPageModel> GetSessionById(string id);
         Either<CustomError, IEnumerable<SessionOutputModel>> GetSessionsList();

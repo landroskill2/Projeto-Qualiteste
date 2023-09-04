@@ -54,6 +54,11 @@ namespace Qualiteste.ServerApp.Dtos
         public bool Attendance { get; init; }
     }
 
+    public record SessionTestInputModel
+    {
+        public string id { get; init; }
+    }
+
     public record SessionPageModel
     {
         public SessionOutputModel Session { get; init; }
