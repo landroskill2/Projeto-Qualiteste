@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Qualiteste.ServerApp.Dtos;
 using Qualiteste.ServerApp.Services;
 using Qualiteste.ServerApp.Services.Replies.Errors;
@@ -6,6 +7,7 @@ using Qualiteste.ServerApp.Utils;
 
 namespace Qualiteste.ServerApp.Controllers
 {
+    [Authorize(Roles ="ADMIN")]
     [Route("api/[controller]")]
     [ApiController]
     public class ClientsController : ControllerBase
