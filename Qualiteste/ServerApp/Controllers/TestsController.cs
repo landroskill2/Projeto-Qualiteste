@@ -25,6 +25,7 @@ namespace Qualiteste.ServerApp.Controllers
             _csvService = csvService;
         }
 
+        [Authorize(Roles = "ADMIN")]
         [HttpGet]
         [ProducesResponseType(200, Type = typeof(IEnumerable<TestOutputModel>))]
         [ProducesResponseType(500)]
@@ -57,6 +58,7 @@ namespace Qualiteste.ServerApp.Controllers
             }
         }
 
+        [Authorize(Roles = "CLIENT")]
         [HttpGet("{id}")]
         [ProducesResponseType(200, Type = typeof(TestOutputModel))]
         [ProducesResponseType(500)]
