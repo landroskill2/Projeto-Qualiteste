@@ -44,7 +44,7 @@ namespace Tests
 
         public void populateDB()
         {
-            var sql = System.IO.File.ReadAllText("../../../../Qualiteste/ServerApp/SQLScripts/testConsumerData.sql");
+            var sql = System.IO.File.ReadAllText("../../../../Qualiteste/ServerApp/SQLScripts/populateDB.sql");
             _context.Database.ExecuteSqlRaw(sql);
         }
     }
