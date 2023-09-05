@@ -104,7 +104,7 @@ namespace Qualiteste.ServerApp.Controllers
 
 
         [HttpPost("{id}/tests")]
-        public IActionResult AddTestToSession(string id, [FromBody] string test)
+        public IActionResult AddTestToSession(string id, [FromBody] SessionTestInputModel test)
         {
             try
             {

@@ -85,11 +85,11 @@ namespace Qualiteste.ServerApp.Services.Concrete
             }
         }
 
-        public Either<CustomError, SessionSuccesses> AddTestToSession(string id, string test)
+        public Either<CustomError, SessionSuccesses> AddTestToSession(string id, SessionTestInputModel test)
         {
             try
             {
-                Test testToAdd = _unitOfWork.Tests.GetTestById(test);
+                Test testToAdd = _unitOfWork.Tests.GetTestById(test.id);
                 
                 if(testToAdd.Session != null) return new SessionErrors.TestAlreadyBelongsToASession();
 
