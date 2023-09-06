@@ -23,6 +23,7 @@ import SessionTimeSelector from "../../components/SessionTimeSelector";
 import AddTestsModal from "../../components/modals/AddTestsModal";
 import { useGlobalToast } from "../../common/useGlobalToast";
 import Page404 from "../Page404";
+import { CircleIconDiv } from "../../components/CIrcleIconDiv";
 
 type ConsumersInSession = {
   sessionTime: string,
