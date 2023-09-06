@@ -30,5 +30,11 @@
             {
             }
         }
+        public class TestDeletedSuccessfully : TestSuccesses
+        {
+            public TestDeletedSuccessfully() : base("O teste foi eliminado com sucesso.", 200)
+            {
+            }
+        }
     }
 }

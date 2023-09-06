@@ -167,6 +167,11 @@ export async function changeFizzAttributesAlias(
        return instance.put(path, JSON.stringify(attributes))
 }
 
+export async function deleteTest(id : string) : Promise<AxiosResponse> {
+    const path = `/tests/${id}`
+    return instance.delete(path)
+}
+
 //Sessions
 export async function fetchSessions() : Promise<AxiosResponse>{
     let path = "/sessions"

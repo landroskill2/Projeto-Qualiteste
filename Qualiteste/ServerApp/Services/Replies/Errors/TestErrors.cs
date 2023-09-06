@@ -48,14 +48,13 @@ namespace Qualiteste.ServerApp.Services.Replies.Errors
             }
         }
 
-        //Criar erros para quando se tenta mudar um campo do teste que não pode ser alterado
-        public class TestPropertyCannotBeChanged : TestErrors
+        public class CannotDeleteTest : TestErrors
         {
-            public TestPropertyCannotBeChanged() : base("TODO", 999)
+            public CannotDeleteTest() : base("Teste possui resultados ou está associado a uma sessão, não é possível eliminar o recurso.", 409)
             {
-
             }
         }
+
 
         public class ConsumerAlreadyInTest : TestErrors
         {

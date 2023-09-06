@@ -160,6 +160,25 @@ namespace Qualiteste.ServerApp.Controllers
         }
 
         [Authorize(Roles = "ADMIN")]
+        [HttpDelete("{id}")]
+        [ProducesResponseType(200, Type = typeof(TestOutputModel))]
+        public IActionResult DeleteTest(string id)
+        {
+            try
+            {
+                Either<CustomError, TestSuccesses> c = _testService.DeleteTest(id);
+                return c.Match(
+                    error => Problem(statusCode: error.StatusCode, title: error.Message),
+                    success => Ok(success)
+                    );
+            }
+            catch (Exception e)
+            {
+                return Problem(statusCode: 500, title: "Ocorreu um erro inesperado");
+            }
+        }
+
+        [Authorize(Roles = "ADMIN")]
         [HttpPost("{id}/consumers")]
         [ProducesResponseType(200, Type = typeof(string))]
         public IActionResult AddConsumerToTest(string id, [FromBody] IEnumerable<int> consumer)
