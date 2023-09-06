@@ -11,6 +11,5 @@ namespace Qualiteste.ServerApp.DataAccess
         IProductRepository Products { get; }
         IClientRepository Clients { get; }
         int Complete();
-        void UntrackChanges();
     }
 }

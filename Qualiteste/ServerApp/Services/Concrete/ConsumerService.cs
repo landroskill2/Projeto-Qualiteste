@@ -38,7 +38,6 @@ namespace Qualiteste.ServerApp.Services.Concrete
             }
             catch (Microsoft.EntityFrameworkCore.DbUpdateException ex)
             {
-                _unitOfWork.UntrackChanges();
                 var dbException = ex.InnerException as Npgsql.NpgsqlException;
                 if (dbException != null)
                 {
@@ -70,7 +69,6 @@ namespace Qualiteste.ServerApp.Services.Concrete
             }
             catch(Microsoft.EntityFrameworkCore.DbUpdateException ex)
             {
-                _unitOfWork.UntrackChanges();
                 var dbException = ex.InnerException as Npgsql.NpgsqlException;
                 if (dbException != null)
                 {
@@ -158,7 +156,6 @@ namespace Qualiteste.ServerApp.Services.Concrete
             }
             catch (Microsoft.EntityFrameworkCore.DbUpdateException ex)
             {
-                _unitOfWork.UntrackChanges();
                 var dbException = ex.InnerException as Npgsql.NpgsqlException;
                 if (dbException != null)
                 {

@@ -15,7 +15,7 @@ import {
 import { ProductInputModel, ProductOutputModel } from "../../common/Interfaces/Products";
 import { useNavigate } from "react-router-dom";
 import FilterBar from "../../components/FilterBar";
-import { getAvailableBrands, queryProducts } from "../../common/APICalls";
+import { deleteProduct, getAvailableBrands, queryProducts } from "../../common/APICalls";
 import ProductsTable from "../../components/tables/ProductsTable";
 import CreateProductModal from "../../components/modals/CreateProductModal";
 import WithPermission from "../../auth/WithPermission";
@@ -86,6 +86,16 @@ export default function Products(): React.ReactElement{
     }
   }
 
+  async function removeProduct(id : Number) {
+    const response = await deleteProduct(id).catch(err => {
+        addToast({id: "error", title: "Erro", description: err.response.data.title, status: "error"})
+      })
+      if(response?.status === 200){
+        addToast({id: "success", title: "Sucesso", description: response.data.message, status: "success"})
+        populateData()      
+      }
+}
+
   return (
     <div className="flex flex-col flex-grow w-full min-h-full">
       <div className="mt-5">
@@ -110,7 +120,7 @@ export default function Products(): React.ReactElement{
               height={560}
               className="scrollbar-thin scrollbar-thumb-slate-300 scrollbar-thumb-rounded-lg"
             >
-              <ProductsTable products={shownProducts}/>
+              <ProductsTable products={shownProducts} removeProduct={removeProduct}/>
             </InfiniteScroll>
           </div>
         </div>

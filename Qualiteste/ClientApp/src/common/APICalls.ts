@@ -193,6 +193,11 @@ export async function createSession(
     // })
 }
 
+export async function deleteSession(id : string) : Promise<AxiosResponse> {
+    const path = `/sessions/${id}`
+    return instance.delete(path)
+}
+
 export async function fetchSessionById(id: string) : Promise<AxiosResponse>{
     const path = `/sessions/${id}`
     return instance.get(path)
@@ -315,6 +320,11 @@ export function queryProducts(filters : Record<string, string>) : Promise<AxiosR
 export function createProduct(product : ProductInputModel){
     let path = `/products`
     return instance.post(path,product)
+}
+
+export async function deleteProduct(id : Number) : Promise<AxiosResponse>{
+    let path =`/products/${id}`
+    return instance.delete(path)
 }
 
 // Accounts

@@ -58,7 +58,7 @@ namespace Qualiteste.ServerApp.Services.Replies.Errors
 
         public class CannotDeleteTest : TestErrors
         {
-            public CannotDeleteTest() : base("Teste possui resultados ou está associado a uma sessão, não é possível eliminar o recurso.", 409)
+            public CannotDeleteTest() : base("Não é possível eliminar um teste que possua resultados.", 409)
             {
             }
         }

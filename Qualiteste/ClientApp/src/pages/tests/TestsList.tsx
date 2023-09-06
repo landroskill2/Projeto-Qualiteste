@@ -13,13 +13,14 @@ import {
   Box
 } from "@chakra-ui/react";
 import { ITestOutputModel } from "../../common/Interfaces/Tests";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { fetchClientsTests, fetchTests } from "../../common/APICalls";
 import TestTypeFilter from "../../components/TestTypeFilter";
 import TestsTable from "../../components/tables/TestsTable";
 import { useAuth } from "../../auth/useAuth";
 import WithPermission from "../../auth/WithPermission";
 import InfiniteScroll from "react-infinite-scroll-component";
+import { useGlobalToast } from "../../common/useGlobalToast";
 
 
 export default function Tests(): React.ReactElement{
@@ -30,8 +31,16 @@ export default function Tests(): React.ReactElement{
     const [currentIdx, setCurrentIdx] = useState(20)
     const user = useAuth()
     const navigate = useNavigate()
+    const {state} = useLocation()
+    const {addToast, isToastActive} = useGlobalToast()
 
   useEffect(() => {
+    if(state !== null){
+      if(!isToastActive("success")){
+        addToast(state)
+      }
+    }
+
     populateData() 
   }, [type]);
 
@@ -40,6 +49,8 @@ export default function Tests(): React.ReactElement{
       setShownTests(tests!.slice(0, currentIdx))
     }
   },[tests])
+
+
 
   function updateShownTests()
   {

@@ -20,6 +20,11 @@ namespace Qualiteste.ServerApp.DataAccess.Repository.Concrete
             return PostgresContext.Products.Max(c => c.Productid);
         }
 
+        public Product? GetProductById(int id)
+        {
+            return PostgresContext.Products.SingleOrDefault(p => p.Productid == id);
+        }
+
         public PostgresContext PostgresContext
         {
             get { return Context as PostgresContext; }

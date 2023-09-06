@@ -29,7 +29,6 @@ namespace Qualiteste.ServerApp.Services.Concrete
                 return new ProductSuccesses.CreateProductSuccess();
             }catch (Exception ex)
             {
-                _unitOfWork.UntrackChanges();
                 var dbException = ex.InnerException as Npgsql.NpgsqlException;
                 if (dbException != null)
                 {
@@ -42,6 +41,29 @@ namespace Qualiteste.ServerApp.Services.Concrete
                 }
                 throw ex;
             }
+        }
+
+        public Either<CustomError, ProductSuccesses> DeleteProduct(int id)
+        {
+            try{
+                Product p = _unitOfWork.Products.GetProductById(id);
+                if (p == null) return new ProductErrors.NoProductFoundWithId();
+                if(p.Tests.Count > 0 || p.Samples.Count > 0)
+                {
+                    return new ProductErrors.ProductUsedAsSample();
+                }
+                else{
+                    _unitOfWork.Products.Remove(p);
+                    
+                    _unitOfWork.Complete();
+                    return new ProductSuccesses.ProductDeletedSuccessfully();
+                }
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
+            
         }
 
         public Either<CustomError, BrandOutputModel> GetAllBrands()

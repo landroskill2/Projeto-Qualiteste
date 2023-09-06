@@ -50,5 +50,12 @@ namespace Qualiteste.ServerApp.Services.Replies.Successes
             {
             }
         }
+
+        public class SessionDeletedSuccessfully : SessionSuccesses
+        {
+            public SessionDeletedSuccessfully() : base("A sessão foi eliminada com sucesso.", 200)
+            {
+            }
+        }
     }
 }

@@ -54,7 +54,6 @@ namespace Qualiteste.ServerApp.Services.Concrete
             }
             catch (Microsoft.EntityFrameworkCore.DbUpdateException ex)
             {
-                _unitOfWork.UntrackChanges();
                 var dbException = ex.InnerException as Npgsql.NpgsqlException;
                 if (dbException != null)
                 {
@@ -98,7 +97,6 @@ namespace Qualiteste.ServerApp.Services.Concrete
                 return new SessionSuccesses.AddTestToSessionSuccess();
             }catch(Exception ex)
             {
-                _unitOfWork.UntrackChanges();
                 throw ex;
             }
         }
@@ -112,11 +110,9 @@ namespace Qualiteste.ServerApp.Services.Concrete
                 _unitOfWork.Complete();
                 return new SessionSuccesses.AddConsumerToSessionSuccess();
             }catch(InvalidOperationException ex){
-                _unitOfWork.UntrackChanges();
                 return new SessionErrors.ConsumerAlreadyInSession();
             }catch(Exception ex)
             {
-                _unitOfWork.UntrackChanges();
                 if (ex is FormatException)
                 {
                     return new SessionErrors.InvalidSessionTimeValue();
@@ -142,7 +138,6 @@ namespace Qualiteste.ServerApp.Services.Concrete
             }
             catch(Exception ex)
             {
-                _unitOfWork.UntrackChanges();
                 throw ex;
             }
         }
@@ -160,7 +155,6 @@ namespace Qualiteste.ServerApp.Services.Concrete
                 return new SessionSuccesses.UpdateAttendanceSuccess();
             }
             catch(Exception ex) {
-                _unitOfWork.UntrackChanges();
                 throw ex;
             }
         }
@@ -212,7 +206,6 @@ namespace Qualiteste.ServerApp.Services.Concrete
                 return new SessionSuccesses.RemoveInvitedConsumerFromSessionSuccess();
             }catch(Exception ex)
             {
-                _unitOfWork.UntrackChanges();
                 if (ex is ArgumentNullException)
                 {
                     return new ConsumerErrors.NoConsumerFoundWithId();
@@ -224,5 +217,27 @@ namespace Qualiteste.ServerApp.Services.Concrete
                 throw ex;
             }
         }
+
+        public Either<CustomError, SessionSuccesses> DeleteSession(string id)
+        {
+            try
+            {
+                Session s = _unitOfWork.Sessions.GetSessionById(id);
+                if (s == null) return new SessionErrors.NoSessionFoundWithId();
+                _unitOfWork.Sessions.Remove(s);
+                
+                _unitOfWork.Complete();
+                return new SessionSuccesses.SessionDeletedSuccessfully();
+            }
+            catch (Microsoft.EntityFrameworkCore.DbUpdateException ex)
+            {
+                return new SessionErrors.CantDeleteSession();
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
+        }
+
     }
 }

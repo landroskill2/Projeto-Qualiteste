@@ -19,5 +19,6 @@ namespace Qualiteste.ServerApp.Services
         Either<CustomError, SessionSuccesses> ConfirmConsumerSession(string sessionId, int consumerId, SessionTimeInputModel cSession);
         Either<CustomError, SessionSuccesses> UpdateAttendanceOfConsumerSession(string sessionId, int consumerId, SessionAttendanceInputModel cSession);
         Either<CustomError, SessionSuccesses> RemoveConsumerFromSession(string id, string selection);
+        Either<CustomError, SessionSuccesses> DeleteSession(string id);
     }
 }

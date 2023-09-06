@@ -136,7 +136,6 @@ namespace Qualiteste.ServerApp.Services.Concrete
             }
             catch(Exception ex)
             {
-                _unitOfWork.UntrackChanges();
                 throw ex;
             }
             

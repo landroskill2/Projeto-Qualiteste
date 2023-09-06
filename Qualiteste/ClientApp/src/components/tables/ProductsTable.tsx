@@ -7,14 +7,16 @@ import {
     Td,
   } from "@chakra-ui/react";
 import {ProductOutputModel} from "../../common/Interfaces/Products"
+import { CloseIcon } from "@chakra-ui/icons";
 
 type TableProps = {
     products : ProductOutputModel[],
     onClickProduct? : (product : ProductOutputModel) => void
+    removeProduct? : (id : Number) => void
 }
 
 
-export default function ProductsTable( {products, onClickProduct} : TableProps) : React.ReactElement{
+export default function ProductsTable( {products, onClickProduct, removeProduct} : TableProps) : React.ReactElement{
     const handleClick = (product : ProductOutputModel) => {
         if(onClickProduct) {
             onClickProduct(product)
@@ -28,6 +30,7 @@ export default function ProductsTable( {products, onClickProduct} : TableProps) 
                     <Th>Referência</Th>
                     <Th>Designação</Th>
                     <Th>Marca</Th>
+                    <Th></Th>
                 </Tr>
             </Thead>
             <Tbody>
@@ -37,6 +40,11 @@ export default function ProductsTable( {products, onClickProduct} : TableProps) 
                             <Td>{p.ref}</Td>
                             <Td>{p.designation}</Td>
                             <Td>{p.brand}</Td>
+                            {removeProduct && 
+                                <Td textAlign={"center"} className="hover:bg-red-400 cursor-pointer" onClick={() => {removeProduct(p.productid)}}>
+                                    <CloseIcon className="self-center" boxSize="0.7em"  />
+                                </Td>
+                            }
                         </Tr>
                     ))}
                 </>}             

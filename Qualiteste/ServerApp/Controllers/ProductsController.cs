@@ -85,5 +85,24 @@ namespace Qualiteste.ServerApp.Controllers
                 return Problem(statusCode: 500, title: "Ocorreu um erro inesperado");
             }
         }
+
+        [Authorize(Roles = "ADMIN")]
+        [HttpDelete("{id}")]
+        [ProducesResponseType(200)]
+        public IActionResult DeleteProduct(int id)
+        {
+            try
+            {
+                Either<CustomError, ProductSuccesses> c = _productService.DeleteProduct(id);
+                return c.Match(
+                    error => Problem(statusCode: error.StatusCode, title: error.Message),
+                    success => Ok(success)
+                    );
+            }
+            catch (Exception e)
+            {
+                return Problem(statusCode: 500, title: "Ocorreu um erro inesperado");
+            }
+        }
     }
 }

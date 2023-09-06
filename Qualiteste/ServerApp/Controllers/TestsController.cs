@@ -161,7 +161,7 @@ namespace Qualiteste.ServerApp.Controllers
 
         [Authorize(Roles = "ADMIN")]
         [HttpDelete("{id}")]
-        [ProducesResponseType(200, Type = typeof(TestOutputModel))]
+        [ProducesResponseType(200)]
         public IActionResult DeleteTest(string id)
         {
             try

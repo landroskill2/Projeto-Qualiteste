@@ -16,6 +16,6 @@ namespace Qualiteste.ServerApp.Services
         Either<CustomError, BrandOutputModel> GetAllBrands();
 
         Either<CustomError, ProductSuccesses> CreateNewProduct(ProductInputModel product);
-
+        Either<CustomError, ProductSuccesses> DeleteProduct(int id);
     }
 }

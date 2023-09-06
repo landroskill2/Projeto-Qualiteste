@@ -82,7 +82,7 @@ export default function Test(): React.ReactElement {
       addToast({id: "error", title: "Erro", description: err.response.data.title, status: "error"})
     })
     if(response?.status === 200){
-      const toastObj = {id: "success", title: "Sucesso", description: response.data.title, status: "success"}
+      const toastObj = {id: "success", title: "Sucesso", description: response.data.message, status: "success"}
       navigate('/tests', {state: toastObj})
     }
   }
@@ -130,7 +130,7 @@ export default function Test(): React.ReactElement {
             <div className="flex flex-col flex-grow shadow-2xl self-center rounded-xl bg-slate-100 h-full m-4 mt-10">
               <div className="flex justify-between items-center">
                 <Heading size={"lg"} className="self-center ml-4">Dados do Teste</Heading>
-                <div className="flex flex-row m-4">
+                <div className="flex flex-row m-4 gap-2">
                     {!isHomeTest &&
                       <div className="flex gap-2">
                         { hasResults &&

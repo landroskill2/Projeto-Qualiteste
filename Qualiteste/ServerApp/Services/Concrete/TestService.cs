@@ -82,7 +82,6 @@ namespace Qualiteste.ServerApp.Services.Concrete
             }
             catch (Microsoft.EntityFrameworkCore.DbUpdateException ex)
             {
-                _unitOfWork.UntrackChanges();
                 var dbException = ex.InnerException as Npgsql.NpgsqlException;
                 if (dbException != null)
                 {
@@ -123,7 +122,6 @@ namespace Qualiteste.ServerApp.Services.Concrete
             }
             catch (Exception e)
             {
-                _unitOfWork.UntrackChanges();
                 throw e;
             }
             
@@ -146,7 +144,6 @@ namespace Qualiteste.ServerApp.Services.Concrete
 
             }catch(Exception ex)
             {
-                _unitOfWork.UntrackChanges();
                 throw ex;
             }
         }
@@ -162,7 +159,6 @@ namespace Qualiteste.ServerApp.Services.Concrete
                 return new TestErrors.ConsumerAlreadyInTest();
             }catch(Exception ex)
             {
-                _unitOfWork.UntrackChanges();
                 throw ex;
             }
         }
@@ -212,7 +208,6 @@ namespace Qualiteste.ServerApp.Services.Concrete
 
             }catch(Exception ex)
             {
-                _unitOfWork.UntrackChanges();
                 throw ex;
             }
         }
@@ -330,7 +325,15 @@ namespace Qualiteste.ServerApp.Services.Concrete
             }
             catch (Microsoft.EntityFrameworkCore.DbUpdateException ex)
             {
-                _unitOfWork.UntrackChanges();
+                var dbException = ex.InnerException as Npgsql.NpgsqlException;
+                if (dbException != null)
+                {
+                    var state = dbException.Data["SqlState"];
+                    var constraint = dbException.Data["ConstraintName"];
+                    if (state.Equals("23503") && constraint.Equals("fizz_attributes_testid_fkey"))
+                        return new TestErrors.CannotDeleteTest();
+                    
+                }
                 throw ex;
             }
         }

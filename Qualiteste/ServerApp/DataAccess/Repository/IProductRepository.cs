@@ -7,6 +7,6 @@ namespace Qualiteste.ServerApp.DataAccess.Repository
         IEnumerable<Product> QueryProducts(string? brandName, string? designation);
 
         int GetLastId();
-
+        Product GetProductById(int id);
     }
 }

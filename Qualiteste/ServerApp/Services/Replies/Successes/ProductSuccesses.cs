@@ -1,4 +1,7 @@
-﻿namespace Qualiteste.ServerApp.Services.Replies.Successes
+﻿using Qualiteste.ServerApp.Services.Replies.Errors;
+using Qualiteste.ServerApp.Utils;
+
+namespace Qualiteste.ServerApp.Services.Replies.Successes
 {
 
     public abstract class ProductSuccesses : CustomSuccess
@@ -11,6 +14,14 @@
         {
             public CreateProductSuccess() : base("Produto criado com sucesso.", 201)
             {
+            }
+        }
+
+        public class ProductDeletedSuccessfully : ProductSuccesses
+        {
+            public ProductDeletedSuccessfully() : base("Produto apagado com sucesso.", 200)
+            {
+                
             }
         }
     }

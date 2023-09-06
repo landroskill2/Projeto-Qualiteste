@@ -73,6 +73,14 @@
 
             }
         }
+
+        public class CantDeleteSession : SessionErrors
+        {
+            public CantDeleteSession() : base("Não é possível eliminar uma sessão que contenha provadores ou testes", 409)
+            {
+                
+            }
+        }
     }
 
 

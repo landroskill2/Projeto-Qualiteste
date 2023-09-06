@@ -102,6 +102,24 @@ namespace Qualiteste.ServerApp.Controllers
             }
         }
 
+        [Authorize(Roles = "ADMIN")]
+        [HttpDelete("{id}")]
+        [ProducesResponseType(200)]
+        public IActionResult DeleteSession(string id)
+        {
+            try
+            {
+                Either<CustomError, SessionSuccesses> c = _sessionService.DeleteSession(id);
+                return c.Match(
+                    error => Problem(statusCode: error.StatusCode, title: error.Message),
+                    success => Ok(success)
+                    );
+            }
+            catch (Exception e)
+            {
+                return Problem(statusCode: 500, title: "Ocorreu um erro inesperado");
+            }
+        }
 
         [HttpPost("{id}/tests")]
         public IActionResult AddTestToSession(string id, [FromBody] SessionTestInputModel test)

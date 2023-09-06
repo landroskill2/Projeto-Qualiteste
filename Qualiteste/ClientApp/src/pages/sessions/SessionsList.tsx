@@ -14,10 +14,11 @@ import {
   TableCaption
 } from "@chakra-ui/react";
 import { ISessionModel } from "../../common/Interfaces/Sessions";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { fetchSessions } from "../../common/APICalls";
 import WithPermission from "../../auth/WithPermission";
 import InfiniteScroll from "react-infinite-scroll-component";
+import { useGlobalToast } from "../../common/useGlobalToast";
 
 
 export default function Sessions(): React.ReactElement{
@@ -26,9 +27,17 @@ export default function Sessions(): React.ReactElement{
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [currentIdx, setCurrentIdx] = useState(20)
     const [type, setType] = useState<string | null>(null)
+    const {state} = useLocation()
+    const {addToast, isToastActive} = useGlobalToast()
     const navigate = useNavigate()
 
   useEffect(() => {
+    if(state !== null){
+      if(!isToastActive("success")){
+        addToast(state)
+      }
+    }
+
     populateData() 
   }, [type]);
 

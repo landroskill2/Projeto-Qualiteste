@@ -15,14 +15,13 @@ import {
 import { ISessionModel } from '../../common/Interfaces/Sessions'
 import { IConsumerSessionOutputModel } from '../../common/Interfaces/Sessions'
 import { ITestOutputModel } from "../../common/Interfaces/Tests";
-import { addConsumerToSession, addTestToSession, fetchSessionById, removeNotConfirmedConsumers, confirmConsumerSession, updateConsumerAttendance } from '../../common/APICalls';
+import { addConsumerToSession, addTestToSession, fetchSessionById, removeNotConfirmedConsumers, confirmConsumerSession, updateConsumerAttendance, deleteSession } from '../../common/APICalls';
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { IConsumerOutputModel} from "../../common/Interfaces/Consumers";
 import AddConsumersModal from "../../components/modals/AddConsumersModal";
 import SessionTimeSelector from "../../components/SessionTimeSelector";
 import AddTestsModal from "../../components/modals/AddTestsModal";
 import { useGlobalToast } from "../../common/useGlobalToast";
-import { CircleIconDiv } from "../../components/CircleIconDiv";
 import Page404 from "../Page404";
 
 type ConsumersInSession = {
@@ -173,6 +172,16 @@ export default function Session() : React.ReactElement{
     setConsumerSessions(consumers);
     setTests(tests);    
   }
+
+  async function onSessionDelete(id : string) {
+    const response = await deleteSession(id).catch(err => {
+      addToast({id: "error", title: "Erro", description: err.response.data.title, status: "error"})
+    })
+    if(response?.status === 200){
+      const toastObj = {id: "success", title: "Sucesso", description: response.data.message, status: "success"}
+      navigate('/sessions', {state: toastObj})
+    }
+  }
   
   // Helper function to group the consumerSessions by sessionTime
   const groupConsumerSessionsByTime = (): {confirmed : ConsumersInSession[], invited? : ConsumersInSession} => {
@@ -219,8 +228,13 @@ export default function Session() : React.ReactElement{
           <div className="flex flex-col w-full h-[calc(100vh-72px)] overflow-y-hidden">
           <div className="flex justify-between content-center m-4 h-fit">
             <div className="flex flex-col flex-grow shadow-2xl self-center rounded-xl bg-slate-100 h-full m-4 mt-10">
-              <div className="flex justify-center content-center">
+              <div className="flex justify-between items-center">
                 <Heading size={"lg"} className="self-center ml-4">Dados da Sessão</Heading>
+                <div className="m-4">
+                  <div className="flex flex-grow rounded-lg p-2 self-center gap-1 bg-red-200  hover:bg-red-300 cursor-pointer" onClick={() => onSessionDelete(id!)}>
+                    <Heading size={"md"} className="self-center">Eliminar Sessão</Heading>
+                  </div>
+                </div>
               </div>
               <div className="flex flex-row justify-center content-center border-2 h-fit overflow-x-auto overflow-y-hidden m-4 rounded-lg border-slate-500 flex-grow scrollbar-thin scrollbar-thumb-slate-300 scrollbar-thumb-rounded-lg scrollbar-track-slate-300'">
                 <div className="flex flex-col w-1/5 border-r-2 border-slate-500">
@@ -325,7 +339,7 @@ export default function Session() : React.ReactElement{
                             {sortedConsumerSessions.invited?.consumersInfo.map(( cInfo ) => (
                               <Tr className="flex flex-grow w-full flex-row" key={sortedConsumerSessions.invited?.sessionTime}>
                                 <Td className="hover:bg-slate-300 cursor-pointer flex flex-grow" onClick={() => redirectToConsumerPage(cInfo.consumer.id)}>{cInfo.consumer.fullname}</Td>
-                                <Td className=" hover:bg-red-400 cursor-pointer flex justify-center content-center"><CloseIcon className="self-center" boxSize="0.7em" onClick={() => {removeNotConfirmed(session!.id, cInfo.consumer.id)}} /></Td>
+                                <Td className=" hover:bg-red-400 cursor-pointer flex justify-center content-center" onClick={() => {removeNotConfirmed(session!.id, cInfo.consumer.id)}} ><CloseIcon className="self-center" boxSize="0.7em"/></Td>
                                 <Td className="hover:bg-green-300 cursor-pointer flex justify-center content-center"><SessionTimeSelector consumerId={cInfo.consumer.id} sessionId={session!.id} availableSessionTimes={availableSessionTimes} onSubmit={confirmSessionTime}></SessionTimeSelector></Td>
                               </Tr>
                             ))}                     
@@ -367,8 +381,8 @@ export default function Session() : React.ReactElement{
                                       <Td className="flex flex-row flex-grow hover:bg-slate-300 cursor-pointer" onClick={() => redirectToConsumerPage(consumer.consumer.id)}>                                    
                                         {consumer.consumer.fullname}
                                       </Td>
-                                      <div className="hover:bg-red-400 cursor-pointer flex justify-center content-center p-2">
-                                        <CloseIcon className="self-center" boxSize="0.7em" onClick={() => {removeNotConfirmed(session!.id, consumer.consumer.id)}} />
+                                      <div className="hover:bg-red-400 cursor-pointer flex justify-center content-center p-2" onClick={() => {removeNotConfirmed(session!.id, consumer.consumer.id)}}>
+                                        <CloseIcon className="self-center" boxSize="0.7em"/>
                                       </div>
                                     </div>
                                     
