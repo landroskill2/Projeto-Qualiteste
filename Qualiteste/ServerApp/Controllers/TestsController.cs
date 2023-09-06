@@ -202,7 +202,8 @@ namespace Qualiteste.ServerApp.Controllers
         {
             try
             {
-                Either<CustomError, FizzTableModel> result = _testService.GetFizzTable(id);
+                var userRole = HttpContext.User.Claims.FirstOrDefault().Value;
+                Either<CustomError, FizzTableModel> result = _testService.GetFizzTable(id, userRole);
                 return result.Match(
                     error => Problem(statusCode: error.StatusCode, title: error.Message),
                     success => Ok(success)

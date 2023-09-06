@@ -57,7 +57,7 @@ namespace Tests.UnitOfWorkTest
             var currConsumer = ctx2.Consumers.GetConsumerById(consumer.Id);
             Console.WriteLine(currConsumer.Contact);
             Assert.Throws<DbUpdateConcurrencyException>(() => ctx1.Complete());
-
+            ctx2.Dispose();
         }
 
         [Test]
@@ -88,6 +88,13 @@ namespace Tests.UnitOfWorkTest
             ctx2.Complete();
 
             Assert.Throws<DbUpdateConcurrencyException>(() => ctx1.Complete());
+            ctx2.Dispose();
+        }
+
+        [OneTimeTearDown]
+        public void TearDown()
+        {
+            ctx1.Dispose();
         }
 
         private UnitOfWork createUserContext()
