@@ -40,6 +40,8 @@ namespace Tests.RepositoryTests
             Assert.That(s.Sessionid, Is.EqualTo(expectedSession.Sessionid));
             Assert.That(s.Consumersnumber, Is.EqualTo(expectedSession.Consumersnumber));
             Assert.That(s.Sessiondate, Is.EqualTo(expectedSession.Sessiondate));
+            context.ChangeTracker.Clear();
+
         }
         [Test]
         public void GetNonExistingSession()
@@ -49,6 +51,8 @@ namespace Tests.RepositoryTests
 
             Session s = _sessionRepository.GetSessionById(sessionID);
             Assert.That(s, Is.EqualTo(null));
+            context.ChangeTracker.Clear();
+
         }
 
 
@@ -63,6 +67,8 @@ namespace Tests.RepositoryTests
             {
                 Assert.True(expectedTests.Any(t => t.Equals(test.Internalid)));
             }
+            context.ChangeTracker.Clear();
+
         }
 
         [Test]
@@ -75,6 +81,8 @@ namespace Tests.RepositoryTests
             {
                 Assert.That(sessions[0].Sessionid, Is.EqualTo(expectedOrder[0]));
             }
+            context.ChangeTracker.Clear();
+
         }
 
         [Test]
@@ -103,6 +111,8 @@ namespace Tests.RepositoryTests
 
             IEnumerable<Test> tests = context.Tests.Where(t => t.Sessionid == sessionID);
             Assert.True(tests.Any(t => t.Internalid == test.Internalid));
+            context.ChangeTracker.Clear();
+
         }
 
         [Test]
@@ -133,6 +143,8 @@ namespace Tests.RepositoryTests
             context.ConsumerSessions.Remove(csession);
             context.Sessions.Remove(session);
             context.SaveChanges();
+            context.ChangeTracker.Clear();
+
         }
 
         [Test]
@@ -145,6 +157,7 @@ namespace Tests.RepositoryTests
             {
                 Assert.True(consumerInSession.Any(c => c.Id == id));
             }
+            context.ChangeTracker.Clear();
 
         }
     }

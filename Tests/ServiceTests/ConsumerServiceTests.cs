@@ -39,6 +39,7 @@ namespace Tests.ServiceTests
             unitOfWork.Complete();
         }
 
+
         [Test]
         public void GetConsumersAlphabeticallyTest()
         {
@@ -53,6 +54,7 @@ namespace Tests.ServiceTests
 
             Assert.That(consumers.First().Fullname, Is.EqualTo(nameFirst));
             Assert.That(consumers.Last().Fullname, Is.EqualTo(nameLast));
+            context.ChangeTracker.Clear();
         }
 
         [Test]
@@ -75,6 +77,9 @@ namespace Tests.ServiceTests
                 Assert.That(int.Parse(c.Age), Is.AtMost(int.Parse(maxAge)));
                 Assert.That(int.Parse(c.Age), Is.AtLeast(int.Parse(minAge)));
             }
+            context.ChangeTracker.Clear();
+
+
         }
 
         [Test]
@@ -93,6 +98,8 @@ namespace Tests.ServiceTests
             {
                 Assert.True(c.Fullname.Contains(nameFilter.ToUpper()));
             }
+            context.ChangeTracker.Clear();
+
         }
 
         [Test]
@@ -112,6 +119,8 @@ namespace Tests.ServiceTests
                 Assert.That(int.Parse(c.Age), Is.AtMost(int.Parse(maxAge)));
                 Assert.That(int.Parse(c.Age), Is.AtLeast(int.Parse(minAge)));
             }
+            context.ChangeTracker.Clear();
+
         }
 
         [Test]
@@ -129,6 +138,8 @@ namespace Tests.ServiceTests
             {
                 Assert.That(sexFilter.ToUpper(), Is.EqualTo(c.Sex));
             }
+            context.ChangeTracker.Clear();
+
         }
 
         [Test]
@@ -153,6 +164,7 @@ namespace Tests.ServiceTests
 
             Assert.That(consumer.Nif, Is.EqualTo(inserted.Nif));
             Assert.That(id, Is.EqualTo(inserted.Id));
+            context.ChangeTracker.Clear();
 
 
         }
@@ -182,6 +194,8 @@ namespace Tests.ServiceTests
             Assert.That("M", Is.EqualTo(updatedConsumer.Sex));
             Assert.That(974585213, Is.EqualTo(updatedConsumer.Contact));
             Assert.That("thisisanewemail@email.com", Is.EqualTo(updatedConsumer.Email));
+            context.ChangeTracker.Clear();
+
         }
 
         //Test Errors returned from ConsumerServices
@@ -200,6 +214,8 @@ namespace Tests.ServiceTests
 
 
             Assert.That(e, Is.TypeOf(typeof(ConsumerErrors.ConsumerFilterNotValid)));
+            context.ChangeTracker.Clear();
+
         }
         [Test]
         public void GetConsumersWithInvalidAgeFilter()
@@ -223,6 +239,7 @@ namespace Tests.ServiceTests
                           );
 
             Assert.That(e, Is.TypeOf(typeof(ConsumerErrors.ConsumerFilterNotValid)));
+            context.ChangeTracker.Clear();
 
         }
 
@@ -248,6 +265,8 @@ namespace Tests.ServiceTests
                 );
 
             Assert.That(e, Is.TypeOf(typeof(ConsumerErrors.ConsumerWithContactAlreadyPresent)));
+            context.ChangeTracker.Clear();
+
         }
 
         [Test]
@@ -271,6 +290,8 @@ namespace Tests.ServiceTests
                 );
 
             Assert.That(e, Is.TypeOf(typeof(ConsumerErrors.ConsumerWithIdAlreadyPresent)));
+            context.ChangeTracker.Clear();
+
         }
         [Test]
         public void CreateConsumerWithConflictingNif()
@@ -292,6 +313,8 @@ namespace Tests.ServiceTests
                 );
 
             Assert.That(e, Is.TypeOf(typeof(ConsumerErrors.ConsumerWithNifAlreadyPresent)));
+            context.ChangeTracker.Clear();
+
         }
 
         [Test]
@@ -316,6 +339,8 @@ namespace Tests.ServiceTests
                 success => throw new Exception("This is supposed to fail")
             );
             Assert.That(e, Is.TypeOf(typeof(ConsumerErrors.ConsumerWithNifAlreadyPresent)));
+            context.ChangeTracker.Clear();
+
         }
 
         [Test]
@@ -340,6 +365,8 @@ namespace Tests.ServiceTests
                 success => throw new Exception("This is supposed to fail")
             );
             Assert.That(e, Is.TypeOf(typeof(ConsumerErrors.ConsumerWithContactAlreadyPresent)));
+            context.ChangeTracker.Clear();
+
         }
     }
 }

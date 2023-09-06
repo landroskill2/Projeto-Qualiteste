@@ -23,6 +23,8 @@ namespace Tests.RepositoryTests
             var consumers = consumerRepository.GetConsumersAlphabetically();
             Assert.That(consumers.First().Nif, Is.EqualTo(nifFirst));
             Assert.That(consumers.Last().Nif, Is.EqualTo(nifLast));
+            context.ChangeTracker.Clear();
+
         }
         [Test]
         public void GetConsumersWithSexFilteredTest()
@@ -32,7 +34,9 @@ namespace Tests.RepositoryTests
             foreach(Consumer c in consumers){
                 Assert.That(sexFilter, Is.EqualTo(c.Sex));
             }
-           
+            context.ChangeTracker.Clear();
+
+
         }
 
         [Test]
@@ -47,6 +51,7 @@ namespace Tests.RepositoryTests
                 Assert.That(age, Is.AtMost(maxAge));
                 Assert.That(age, Is.AtLeast(minAge));
             }
+            context.ChangeTracker.Clear();
 
         }
         [Test]
@@ -58,6 +63,7 @@ namespace Tests.RepositoryTests
             {
                 Assert.True(c.Fullname.Contains(nameFilter.ToUpper()));
             }
+            context.ChangeTracker.Clear();
 
         }
 
@@ -77,6 +83,8 @@ namespace Tests.RepositoryTests
                 Assert.That(sexFilter, Is.EqualTo(c.Sex));
                 Assert.True(c.Fullname.Contains(nameFilter.ToUpper()));
             }
+            context.ChangeTracker.Clear();
+
         }
 
         [Test]
@@ -98,6 +106,8 @@ namespace Tests.RepositoryTests
 
             var fetchedConsumer = context.Consumers.SingleOrDefault(c => c.Id == consumer.Id);
             Assert.True(fetchedConsumer?.Equals(consumer));
+            context.ChangeTracker.Clear();
+
         }
 
         [Test]
@@ -121,11 +131,13 @@ namespace Tests.RepositoryTests
             Assert.True(updatedConsumer.Fullname == "Testing update");
             Assert.True(updatedConsumer.Contact == 2);
             Assert.True(updatedConsumer.Nif == "2");
+            context.ChangeTracker.Clear();
+
         }
 
 
 
-        
+
         [Test]
         public void GetLastIDTest()
         {
@@ -138,6 +150,8 @@ namespace Tests.RepositoryTests
         {
             var addedConsumer = context.Consumers.Single(c => c.Nif == "2");
             context.Consumers.Remove(addedConsumer);
+            context.ChangeTracker.Clear();
+
         }
     }
 }

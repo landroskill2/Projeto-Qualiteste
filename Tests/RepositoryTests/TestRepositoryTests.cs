@@ -32,6 +32,7 @@ namespace Tests.RepositoryTests
 
             Assert.That(tests.First().Internalid, Is.EqualTo(firstId));
             Assert.That(tests.Last().Internalid, Is.EqualTo(lastId));
+            context.ChangeTracker.Clear();
 
         }
 
@@ -44,6 +45,7 @@ namespace Tests.RepositoryTests
             Assert.That(test.Product, Is.EqualTo(321321));
             Assert.That(test.Testtype, Is.EqualTo("SP"));
             Assert.That(test.Consumersnumber, Is.EqualTo(10));
+            context.ChangeTracker.Clear();
 
         }
 
@@ -65,6 +67,8 @@ namespace Tests.RepositoryTests
             var fetchedTest = context.Tests.SingleOrDefault(t => t.Internalid == test.Internalid);
 
             Assert.True(fetchedTest?.Equals(test));
+            context.ChangeTracker.Clear();
+
         }
 
         [Test]
@@ -81,8 +85,8 @@ namespace Tests.RepositoryTests
             consumer.Sex = "F";
             consumer.Email = "testEmail";
             consumer.Fullname = "Testing update";
-            consumer.Contact = 2;
-            consumer.Nif = "2";
+            consumer.Contact = 5;
+            consumer.Nif = "5";
             context.Consumers.Update(consumer);
 
             context.SaveChanges();
@@ -92,8 +96,10 @@ namespace Tests.RepositoryTests
             Assert.True(updatedConsumer.Sex == "F");
             Assert.True(updatedConsumer.Email == "testEmail");
             Assert.True(updatedConsumer.Fullname == "Testing update");
-            Assert.True(updatedConsumer.Contact == 2);
-            Assert.True(updatedConsumer.Nif == "2");
+            Assert.True(updatedConsumer.Contact == 5);
+            Assert.True(updatedConsumer.Nif == "5");
+            context.ChangeTracker.Clear();
+
         }
 
         [Test]
@@ -103,6 +109,7 @@ namespace Tests.RepositoryTests
             string testID = test.Internalid;
             test.Requestdate = DateOnly.Parse("1999-04-19");
             test.Testtype = "HT";
+            context.ChangeTracker.Clear();
 
             //TODO: DAR ERRO QUANDO SE TENTA MUDAR O TIPO
         }
