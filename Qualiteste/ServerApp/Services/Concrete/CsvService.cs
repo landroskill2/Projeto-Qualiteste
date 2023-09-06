@@ -43,10 +43,21 @@ namespace Qualiteste.ServerApp.Services.Concrete
                     _unitOfWork.Complete();
                 }
                 return new TestSuccesses.FileUploadSuccess();
-            }catch(Exception ex){
+            }
+            catch (Microsoft.EntityFrameworkCore.DbUpdateException ex)
+            {
+                _unitOfWork.UntrackChanges();
+                var dbException = ex.InnerException as Npgsql.NpgsqlException;
+                if (dbException != null)
+                {
+                    var state = dbException.Data["SqlState"];
+                    var constraint = dbException.Data["ConstraintName"];
+                    if (state.Equals("23503") && constraint.Equals("attribute_values_consumerid_fkey"))
+                        return new TestErrors.TestResultsReferencesNonExistingConsumer();
+                }
                 throw ex;
             }
-            
+
         }
 
         private void insertValuesInDb(string[] headers, string[] row, string id, int consumerIndex)

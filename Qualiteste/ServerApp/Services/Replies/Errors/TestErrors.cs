@@ -25,6 +25,14 @@ namespace Qualiteste.ServerApp.Services.Replies.Errors
             }
         }
 
+        public class TestResultsReferencesNonExistingConsumer : TestErrors
+        {
+            public TestResultsReferencesNonExistingConsumer() : base("Os resultados referem consumidores que não existem no sistema.", 409)
+            {
+
+            }
+        }
+
         public class TestWithSameIdAlreadyPresent : TestErrors
         {
             public TestWithSameIdAlreadyPresent() : base("Ja existe um teste com o ID especificado", 409)

@@ -2,7 +2,7 @@ import { Box, Table, Thead, Tbody, Tr, Th, Td, Spinner, Button, Input, Heading }
 import { IConsumerOutputModel } from '../../common/Interfaces/Consumers';
 import { ISessionModel } from '../../common/Interfaces/Sessions';
 import { ISampleOutputModel, ITestOutputModel } from '../../common/Interfaces/Tests';
-import { addConsumerToTest, fetchClientTestById, fetchTestById, uploadFile, removeResultsFromTest } from '../../common/APICalls';
+import { addConsumerToTest, fetchClientTestById, fetchTestById, uploadFile, removeResultsFromTest, deleteTest } from '../../common/APICalls';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from "react";
 import AddConsumersModal from "../../components/modals/AddConsumersModal";
@@ -77,6 +77,15 @@ export default function Test(): React.ReactElement {
     }
   }
 
+  async function onTestDelete(id : string) {
+    const response = await deleteTest(id).catch(err => {
+      addToast({id: "error", title: "Erro", description: err.response.data.title, status: "error"})
+    })
+    if(response?.status === 200){
+      const toastObj = {id: "success", title: "Sucesso", description: response.data.title, status: "success"}
+      navigate('/tests', {state: toastObj})
+    }
+  }
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if(file) {
@@ -87,8 +96,6 @@ export default function Test(): React.ReactElement {
         const toastObj = {id: "success", title: "Sucesso", description: "Ficheiro processado com sucesso.", status: "success"}
         const location = resp!.headers.location.split("/api")[1]
         navigate(location, {state: toastObj})
-      }else {
-
       }
     }
   };
@@ -123,42 +130,48 @@ export default function Test(): React.ReactElement {
             <div className="flex flex-col flex-grow shadow-2xl self-center rounded-xl bg-slate-100 h-full m-4 mt-10">
               <div className="flex justify-between items-center">
                 <Heading size={"lg"} className="self-center ml-4">Dados do Teste</Heading>
-                
-                  {!isHomeTest &&
-                    <div className="flex m-4 gap-2">
-                      { hasResults &&
-                      <>
-                        <WithPermission allowedRoles={["ADMIN"]}>
-                          <div className="flex flex-grow rounded-lg p-2 self-center gap-1 bg-red-200  hover:bg-red-300 cursor-pointer" onClick={() => handleResultsRemoval(id!)}>
-                            <Heading size={"md"} className="self-center">Eliminar Resultados</Heading>
-                          
-                          </div>
-                        </WithPermission>
-                        <div className="flex flex-grow rounded-lg p-2 self-center gap-1 bg-slate-200 hover:bg-slate-300 cursor-pointer" onClick={() => navigate("fizz")}>
-                          <Heading size={"md"} className="self-center  mr-2">Resultados do Teste</Heading>
-                          <div>
-                           <ArrowForwardIcon boxSize={6}/>
-                          </div>
-                        </div>
-                      </>
-                      }
-                      <WithPermission allowedRoles={["ADMIN"]}>
-                        { !hasResults && session &&
+                <div className="flex flex-row m-4">
+                    {!isHomeTest &&
+                      <div className="flex gap-2">
+                        { hasResults &&
                         <>
-                          <div>
-                            <Input type="file" accept=".txt,.csv" onChange={handleFileUpload} display="none" id="file-upload" />
-                            <label htmlFor="file-upload">
-                              <Button bgColor={"gray.300"} as="span" mr={2} className=" cursor-pointer">
-                                Importar resultados
-                              </Button>
-                            </label>
+                          <WithPermission allowedRoles={["ADMIN"]}>
+                            <div className="flex flex-grow rounded-lg p-2 self-center gap-1 bg-red-200  hover:bg-red-300 cursor-pointer" onClick={() => handleResultsRemoval(id!)}>
+                              <Heading size={"md"} className="self-center">Eliminar Resultados</Heading>
+                            </div>
+                          </WithPermission>
+                          <div className="flex flex-grow rounded-lg p-2 self-center gap-1 bg-slate-200 hover:bg-slate-300 cursor-pointer" onClick={() => navigate("fizz")}>
+                            <Heading size={"md"} className="self-center  mr-2">Resultados do Teste</Heading>
+                            <div>
+                            <ArrowForwardIcon boxSize={6}/>
+                            </div>
                           </div>
                         </>
                         }
-                      </WithPermission>
-                    </div>
-                  }                                  
-              </div>
+                        <WithPermission allowedRoles={["ADMIN"]}>
+                          { !hasResults && session &&
+                          <>
+                            <div>
+                              <Input type="file" accept=".txt,.csv" onChange={handleFileUpload} display="none" id="file-upload" />
+                              <label htmlFor="file-upload">
+                                <Button bgColor={"gray.300"} as="span" mr={2} className=" cursor-pointer">
+                                  Importar resultados
+                                </Button>
+                              </label>
+                            </div>
+                          </>
+                          }
+                          
+                        </WithPermission>
+                      </div>
+                    }   
+                    <WithPermission allowedRoles={["ADMIN"]}>
+                      <div className="flex rounded-lg p-2 self-center gap-1 bg-red-200  hover:bg-red-300 cursor-pointer" onClick={() => onTestDelete(id!)}>
+                        <Heading size={"md"} className="self-center">Eliminar Teste</Heading>
+                      </div>
+                    </WithPermission>                               
+                  </div>
+                </div>
               <div className="flex flex-row justify-center content-center border-2 h-fit overflow-x-auto overflow-y-hidden m-4 rounded-lg border-slate-500 flex-grow scrollbar-thin scrollbar-thumb-slate-300 scrollbar-thumb-rounded-lg scrollbar-track-slate-300'">
                 <div className="flex flex-col flex-grow border-r-2 border-slate-500">
                   <div className="flex justify-center items-center p-4 border-b-2 border-slate-500 h-1/3 bg-slate-300">

@@ -320,19 +320,17 @@ namespace Qualiteste.ServerApp.Services.Concrete
                 Test t = _unitOfWork.Tests.GetTestById(id);
                 if (t == null) return new TestErrors.NoTestFoundWithGivenID();
                 _unitOfWork.Tests.Remove(t);
+                if(t.Samples.Any()) t.Samples.Clear();
+                if (t.Testtype.Equals("HT"))
+                {
+                    t.ConsumerHts.Clear();
+                }
                 _unitOfWork.Complete();
                 return new TestSuccesses.TestDeletedSuccessfully();
             }
             catch (Microsoft.EntityFrameworkCore.DbUpdateException ex)
             {
                 _unitOfWork.UntrackChanges();
-                var dbException = ex.InnerException as Npgsql.NpgsqlException;
-                if (dbException != null)
-                {
-                    var state = dbException.Data["SqlState"];
-                    var constraint = dbException.Data["ConstraintName"];
-                    
-                }
                 throw ex;
             }
         }
