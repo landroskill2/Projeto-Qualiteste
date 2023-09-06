@@ -6,6 +6,7 @@ using Qualiteste.ServerApp.Models;
 using Qualiteste.ServerApp.Services.Replies;
 using Qualiteste.ServerApp.Services.Replies.Errors;
 using Qualiteste.ServerApp.Utils;
+using System.Data.Common;
 
 namespace Qualiteste.ServerApp.Services.Concrete
 {
@@ -56,13 +57,31 @@ namespace Qualiteste.ServerApp.Services.Concrete
 
         public Either<CustomError, ConsumerOutputModel> DeleteConsumer(int id)
         {
-            Consumer? c = _unitOfWork.Consumers.GetConsumerById(id);
-            if (c != null)
+            try
             {
-                _unitOfWork.Consumers.Remove(c);
-                return c.ToOutputModel();
+                Consumer? c = _unitOfWork.Consumers.GetConsumerById(id);
+                if (c != null)
+                {
+                    _unitOfWork.Consumers.Remove(c);
+                    _unitOfWork.Complete();
+                    return c.ToOutputModel();
+                }
+                else return new ConsumerErrors.NoConsumerFoundWithId();
             }
-            else return new ConsumerErrors.NoConsumerFoundWithId();
+            catch(Microsoft.EntityFrameworkCore.DbUpdateException ex)
+            {
+                _unitOfWork.UntrackChanges();
+                var dbException = ex.InnerException as Npgsql.NpgsqlException;
+                if (dbException != null)
+                {
+                    var state = dbException.Data["SqlState"];
+                    var constraint = dbException.Data["ConstraintName"];
+                    if (state.Equals("23503") && constraint.Equals("attribute_values_consumerid_fkey"))
+                        return new ConsumerErrors.CannotDeleteConsumer();
+                }
+                throw ex;
+            }
+            
         }
 
         public Either<CustomError, ConsumerPageModel> GetConsumerById(int id)

@@ -3,7 +3,7 @@ import { Box, Table, Thead, Tbody, Tr, Th, Td, Heading, Spinner } from '@chakra-
 import {IConsumerOutputModel} from '../../common/Interfaces/Consumers';
 import { ISessionModel } from '../../common/Interfaces/Sessions';
 import { ITestOutputModel } from '../../common/Interfaces/Tests';
-import { fetchConsumerById } from '../../common/APICalls';
+import { deleteConsumer, fetchConsumerById } from '../../common/APICalls';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useGlobalToast } from '../../common/useGlobalToast';
 import Page404 from '../Page404';
@@ -50,6 +50,16 @@ export default function Consumer(): React.ReactElement {
     setTestData(tests);
     }
 
+
+  async function onDeleteConsumer(id : number){
+    const response = await deleteConsumer(id).catch(err => {
+      addToast({id: "error", title: "Erro", description: err.response.data.title, status: "error"})
+    })
+    if(response?.status === 200){
+      const toastObj = {id: "success", title: "Sucesso", description: "Consumidor eliminado com sucesso.", status: "success"}
+      navigate('/consumers', {state: toastObj})
+    }
+  }
   return (
     <>
       {isLoading ? (
@@ -67,9 +77,16 @@ export default function Consumer(): React.ReactElement {
             </div>
           </div>
           <div className="flex flex-col w-full  shadow-2xl self-center rounded-xl bg-slate-100 h-full m-4 pb-7">
-            <div className="flex justify-center content-center">
+            <div className="flex flex-row justify-between content-center">
               <Heading size={"lg"} className="self-center ml-4">Dados do Provador</Heading>
+              <div className="flex rounded-lg p-2 self-end gap-1 mt-2 mr-4 bg-red-200  hover:bg-red-300 cursor-pointer" onClick={() => onDeleteConsumer(Number(id!))}>
+                <Heading size={"md"} className="self-center">Eliminar Provador</Heading>                
+              </div>
+              
             </div>
+            
+            
+            
             <div className="flex flex-row justify-center content-center border-2 h-1/2 overflow-y-auto m-4 rounded-lg border-slate-500 flex-grow scrollbar-thin scrollbar-thumb-slate-300 scrollbar-thumb-rounded-lg scrollbar-track-slate-300'">
               <div className="flex flex-col w-1/5 border-r-2 border-slate-500">
                 <div className="flex justify-center items-center border-b-2 p-4 border-slate-500 h-1/3 bg-slate-300">

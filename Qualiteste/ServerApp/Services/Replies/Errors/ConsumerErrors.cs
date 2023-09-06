@@ -46,6 +46,15 @@
             }
         }
 
+        public class CannotDeleteConsumer : ConsumerErrors
+        {
+            public CannotDeleteConsumer() : base(
+                    "Não é possível eliminar o consumidor pois este encontra-se em uso por outros recursos.",
+                    409
+                )
+            {
+            }
+        }
     }
 
 }

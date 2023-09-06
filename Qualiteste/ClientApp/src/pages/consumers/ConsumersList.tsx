@@ -13,7 +13,8 @@ import {
   Box
 } from "@chakra-ui/react";
 import { IConsumerOutputModel } from "../../common/Interfaces/Consumers";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useGlobalToast } from "../../common/useGlobalToast";
 import FilterBar from "../../components/FilterBar";
 import { fetchConsumers } from "../../common/APICalls";
 import ConsumersTable from "../../components/tables/ConsumersTable";
@@ -30,10 +31,18 @@ export default function Consumers(): React.ReactElement{
     const [minAge, setMinAge] = useState<number>(0)
     const [searchString, setSearchString] = useState(null)
     const [currentIdx, setCurrentIdx] = useState(20)
+    const {state} = useLocation()
+    const { addToast, isToastActive } = useGlobalToast() 
     const navigate = useNavigate()
 
   useEffect(() => {
-    populateData() 
+    if(state !== null){
+      if(!isToastActive("success")){
+        addToast(state)
+      }
+    }
+    populateData()
+
   }, [sex, maxAge, minAge, searchString]);
 
   useEffect(() => {

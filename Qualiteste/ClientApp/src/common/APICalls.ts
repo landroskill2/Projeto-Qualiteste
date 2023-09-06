@@ -56,6 +56,13 @@ export async function createConsumer(
     // })
 }
 
+export async function deleteConsumer(
+    consumerId : number
+) : Promise<AxiosResponse> {
+    const path = `/consumers/${consumerId}`
+    return instance.delete(path)
+}
+
 //Tests
 export async function fetchTests(
     filters: Record<string, string>
