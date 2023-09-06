@@ -9,7 +9,7 @@ namespace Qualiteste.ServerApp.Dtos
 
         public IEnumerable<SampleOutputModel> SamplesOrder { get; init; }
 
-        public IEnumerable<FizzConsumerInfo> ConsumersInfo { get; init; }
+        public IEnumerable<FizzConsumerInfo>? ConsumersInfo { get; init; }
     }
 
     public record FizzAliasDto

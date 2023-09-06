@@ -6,7 +6,9 @@ using Qualiteste.ServerApp.Services.Replies.Errors;
 using Qualiteste.ServerApp.Services.Replies.Successes;
 using Qualiteste.ServerApp.Utils;
 using System.Collections.Immutable;
+using System.Data;
 using System.Diagnostics;
+using System.Net.WebSockets;
 using System.Security.Cryptography;
 using static System.Net.Mime.MediaTypeNames;
 
@@ -166,7 +168,7 @@ namespace Qualiteste.ServerApp.Services.Concrete
             }
         }
 
-        public Either<CustomError, FizzTableModel> GetFizzTable(string id)
+        public Either<CustomError, FizzTableModel> GetFizzTable(string id, string userRole)
         {
             try
             {
@@ -176,20 +178,36 @@ namespace Qualiteste.ServerApp.Services.Concrete
                 Dictionary<string, string> columns = _unitOfWork.Tests.GetFizzColumns(id);
                 var values = _unitOfWork.Tests.GetFizzValuesGroupedByConsumer(id);
 
-                //Get consumer name
-                var cIds = values.Select(v => v.Key).ToList();
-                var consumersInfo = GetInfoOnConsumers(cIds, test);
-                IEnumerable<Dictionary<string, string>> rows = values.Select(v => v.ToDictionary(attr => attr.Attribute, attr => attr.Attrvalue));
+                FizzTableModel fizzTable;
+                
+                List<Dictionary<string, string>> rows = values.Select(v => v.ToDictionary(attr => attr.Attribute, attr => attr.Attrvalue)).ToList();
 
                 IEnumerable<SampleOutputModel> samplesInTest = test.Samples.Select(s => s.toOutputModel());
 
-                FizzTableModel fizzTable = new FizzTableModel
-                {
-                    Columns = columns,
-                    Rows = rows,
-                    SamplesOrder = samplesInTest,
-                    ConsumersInfo = consumersInfo
-                };
+                //Get consumer name
+                if(userRole == "admin"){
+                    var cIds = values.Select(v => v.Key).ToList();
+                    var consumersInfo = GetInfoOnConsumers(cIds, test);
+                    
+                    fizzTable = new FizzTableModel
+                    {
+                        Columns = columns,
+                        Rows = rows,
+                        SamplesOrder = samplesInTest,
+                        ConsumersInfo = consumersInfo
+                    };
+                }else{
+                    columns.Remove("CJ");
+                    rows.ForEach(r => r.Remove("CJ"));
+                    
+                    fizzTable = new FizzTableModel
+                    {
+                        Columns = columns,
+                        Rows = rows,
+                        SamplesOrder = samplesInTest
+                    };
+                }
+                
 
                 return fizzTable;
 

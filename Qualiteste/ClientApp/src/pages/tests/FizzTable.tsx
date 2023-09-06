@@ -56,7 +56,7 @@ export default function FizzResults(): React.ReactElement {
 
   useEffect(()=>{
      //set missing consumers on session as red
-     data?.consumersInfo.filter(e => e.presence == 1).forEach(e => {
+     data?.consumersInfo?.filter(e => e.presence == 1).forEach(e => {
       document.querySelectorAll('.row'+e.id.toString()).forEach(c => {
         c.classList.add("bg-red-300")
       })
@@ -167,17 +167,18 @@ export default function FizzResults(): React.ReactElement {
                   <div className='ml-1 hover:bg-slate-300 cursor-pointer rounded-lg ' onClick={()=> navigate(`/tests/${id}`)}>
                     <Heading px={4} >Teste {id}</Heading>
                   </div>
-                  
-                  <div className='gap-4 py-2 mr-4'>
-                      {!editMode && 
-                        <Button bgColor={"gray.300"} onClick={() => setEditMode(true)}>Editar nomes</Button>
-                        ||
-                        <div className='flex flex-row gap-2'>
-                          <Button bgColor={"gray.300"} onClick={() => onSave()}>Guardar</Button>
-                          <Button bgColor={"gray.300"} onClick={() => setEditMode(false)}>Cancelar</Button>
-                        </div>
-                        }
-                  </div>
+                  <WithPermission allowedRoles={["ADMIN"]}>
+                    <div className='gap-4 py-2 mr-4'>
+                        {!editMode && 
+                          <Button bgColor={"gray.300"} onClick={() => setEditMode(true)}>Editar nomes</Button>
+                          ||
+                          <div className='flex flex-row gap-2'>
+                            <Button bgColor={"gray.300"} onClick={() => onSave()}>Guardar</Button>
+                            <Button bgColor={"gray.300"} onClick={() => setEditMode(false)}>Cancelar</Button>
+                          </div>
+                          }
+                    </div>
+                  </WithPermission>
                 </div>  
               </div>
               <div className='flex w-full flex-grow flex-col '>
@@ -189,7 +190,7 @@ export default function FizzResults(): React.ReactElement {
                           <Tr className='flex-grow w-full '>
                             {Object.entries(commonColumns).map(([columnName, columnValue]) => {
                               console.log(columnName + " " + columnValue)
-                              if(columnName === "CJ"){
+                              if(columnName === "CJ" && columnValue != ""){
                                 return <WithPermission allowedRoles={["ADMIN"]}>
                                           <Th key={columnName}> 
                                             <AttributeAliasField name={columnName} value={columnValue} editMode={editMode} addChangedAlias={addChangedAlias}></AttributeAliasField>
@@ -207,8 +208,8 @@ export default function FizzResults(): React.ReactElement {
                             {data.rows.map((row, index) => (
                               <Tr className={"row"+Number(row["CJ"]).toString()}>
                                 
-                                  {Object.entries(commonColumns).map(([columnName, _]) => {
-                                    {if(columnName == "CJ"){
+                                  {Object.entries(commonColumns).map(([columnName, columnValue]) => {
+                                    {if(columnName == "CJ" && columnValue != ""){
                                       let value = data!.consumersInfo.find(e => e.id == Number(row[columnName])) ? data!.consumersInfo.find(e => e.id == Number(row[columnName]))?.consumerName : row[columnName]
                                       return (
                                         <WithPermission allowedRoles={["ADMIN"]}>
@@ -243,7 +244,7 @@ export default function FizzResults(): React.ReactElement {
                                   <Tr className='flex-grow w-full'>{
                                     Object.entries(product).map(([columnName, columnValue]) => {
                                       if (columnName !== "productKey") {
-                                        if(columnName == "CJ"){
+                                        if(columnName == "CJ" && columnValue != undefined){
                                           return <WithPermission allowedRoles={["ADMIN"]}>
                                                     <Th key={columnName}> 
                                                       <AttributeAliasField name={columnName} value={columnValue} editMode={editMode} addChangedAlias={addChangedAlias}></AttributeAliasField>
@@ -260,9 +261,9 @@ export default function FizzResults(): React.ReactElement {
                                 <Tbody>
                                   {data?.rows.map((row, rowIndex) => (
                                     <Tr className={"row"+Number(row["CJ"]).toString()}>
-                                      {Object.entries(product).map(([columnName, _]) => {
+                                      {Object.entries(product).map(([columnName, columnValue]) => {
                                         if (columnName !== "productKey") {
-                                          {if(columnName == "CJ"){
+                                          {if(columnName == "CJ" && columnValue != undefined){
                                             let value = data!.consumersInfo.find(e => e.id == Number(row[columnName])) ? data!.consumersInfo.find(e => e.id == Number(row[columnName]))?.consumerName : row[columnName]
                                             return (
                                               <WithPermission allowedRoles={["ADMIN"]}>
