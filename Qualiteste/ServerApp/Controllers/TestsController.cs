@@ -58,7 +58,7 @@ namespace Qualiteste.ServerApp.Controllers
             }
         }
 
-        [Authorize(Roles = "CLIENT")]
+        [Authorize(Roles = "ADMIN")]
         [HttpGet("{id}")]
         [ProducesResponseType(200, Type = typeof(TestOutputModel))]
         [ProducesResponseType(500)]
